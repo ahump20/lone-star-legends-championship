@@ -1129,8 +1129,6 @@
                 this.state.battingTeam = this.state.cpuTeam;
                 this.state.fieldingTeam = this.state.playerTeam;
             }
-            // Set the inning half based on who bats first: away team hits in the top, home team in the bottom
-            this.state.halfInning = (this.state.battingTeam === this.state.cpuTeam) ? 'top' : 'bottom';
             this.startGame();
         }
         /* Initialise the game UI and state for a new game */
@@ -1272,14 +1270,12 @@
              * strikes.  Hits are further subdivided into singles, doubles,
              * triples and home runs using the player's power.
              */
-            // Base probabilities tuned to produce more realistic innings.
-            // Increase strike probability slightly and reduce hits to avoid long rallies.
-            let probStrike = 0.55;
+            let probStrike = 0.50;
             let probBall   = 0.30;
-            let probHit    = 0.15;
+            let probHit    = 0.20;
             // Adjust based on contact: raise hit chance slightly and lower strikes
-            probStrike -= (contact - 50) * 0.0005;
-            probHit    += (contact - 50) * 0.0010;
+            probStrike -= (contact - 50) * 0.0008;
+            probHit    += (contact - 50) * 0.0012;
             // Ensure probabilities remain within [0,1]
             probStrike = Math.max(0.1, Math.min(probStrike, 0.9));
             probHit    = Math.max(0.05, Math.min(probHit, 0.6));
