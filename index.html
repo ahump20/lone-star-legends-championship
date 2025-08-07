@@ -979,7 +979,42 @@
     <!-- Controls -->
     <div id="gameControls">
         <!-- When pitching, show the pitch selection instead of immediately simulating a pitch -->
-        <button class="control-btn" id="pitchBtn" onclick="game.showPitchSelection()">PITCH</button>
+        <button class="control-btn" id="pitchBtn" onclick="game.
+/*
+ * Show a visible pitch animation by moving the ball element from the
+ * pitcher towards home plate.  A callback is invoked when the ball
+ * reaches the plate to continue game logic.  This gives the batter
+ * time to see the pitch and makes swinging a timing event rather
+ * than an instant outcome.
+ */
+playPitchAnimation(callback) {
+    const ballEl = this.dom.gameBall;
+    if (!ballEl) {
+        if (callback) callback();
+        return;
+    }
+    // Reset ball appearance at the pitcher's release point
+    ballEl.style.display = 'block';
+    ballEl.style.transition = '';
+    ballEl.style.bottom = '45%';
+    ballEl.style.left = '50%';
+    ballEl.style.transform = 'translateX(-50%) scale(1)';
+    // Delay slightly then animate towards the plate
+    setTimeout(() => {
+        ballEl.style.transition = 'all 0.5s ease';
+        ballEl.style.bottom = '20%';
+        ballEl.style.transform = 'translateX(-50%) scale(0.5)';
+        // After the animation completes, hide the ball and run the callback
+        setTimeout(() => {
+            ballEl.style.display = 'none';
+            ballEl.style.transition = '';
+            if (typeof callback === 'function') {
+                callback();
+            }
+        }, 500);
+    }, 50);
+}
+showPitchSelection()">PITCH</button>
         <button class="control-btn" id="swingBtn" onclick="game.swing()">SWING</button>
         <button class="control-btn" id="stealBtn" onclick="game.attemptSteal()">STEAL</button>
     </div>
@@ -1111,6 +1146,8 @@
             });
             // Initial UI state
             this.updateDisplay();
+            // Enable or disable the steal button based on baserunners
+            this.dom.stealBtn.disabled = !this.state.bases.some(b => b);
         }
         /* Show team selection menu */
         showTeamSelect() {
@@ -1129,6 +1166,8 @@
                 this.state.battingTeam = this.state.cpuTeam;
                 this.state.fieldingTeam = this.state.playerTeam;
             }
+            // Set the half inning based on who is batting: CPU bats in the top, player bats in the bottom
+            this.state.halfInning = (this.state.battingTeam === this.state.cpuTeam) ? 'top' : 'bottom';
             this.startGame();
         }
         /* Initialise the game UI and state for a new game */
@@ -1136,7 +1175,10 @@
             this.state.gameStarted = true;
             this.state.gameOver = false;
             this.state.inning = 1;
-            this.state.halfInning = 'top';
+            // Preserve halfInning from team selection; default to 'top' if not set
+            if (!this.state.halfInning) {
+                this.state.halfInning = 'top';
+            }
             this.state.outs = 0;
             this.state.balls = 0;
             this.state.strikes = 0;
@@ -1229,6 +1271,8 @@
             this.setupField();
             // Update HUD counts
             this.updateDisplay();
+            // Enable or disable the steal button based on baserunners
+            this.dom.stealBtn.disabled = !this.state.bases.some(b => b);
             // Determine if CPU or player is batting
             if (this.state.battingTeam === this.state.cpuTeam) {
                 // CPU at bat: disable swing button, enable pitch (for player's awareness)
@@ -1243,20 +1287,34 @@
             }
         }
         /* CPU pitching logic: simply generate an outcome for the current batter */
-        cpuPitch() {
-            if (this.state.gameOver || !this.state.gameStarted) return;
-            const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
-            const outcome = this.simulateOutcome(batter);
-            this.processPitchOutcome(outcome);
-        }
+        
+cpuPitch() {
+    if (this.state.gameOver || !this.state.gameStarted) return;
+    // Show a visible pitch animation before resolving the outcome
+    this.playPitchAnimation(() => {
+        const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
+        const outcome = this.simulateOutcome(batter);
+        this.processPitchOutcome(outcome);
+    });
+}
+
         /* Player swings at the pitch */
-        swing() {
-            if (this.state.gameOver || !this.state.gameStarted) return;
-            if (this.state.battingTeam !== this.state.playerTeam) return;
-            const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
-            const outcome = this.simulateOutcome(batter);
-            this.processPitchOutcome(outcome);
+        
+swing() {
+    if (this.state.gameOver || !this.state.gameStarted) return;
+    if (this.state.battingTeam !== this.state.playerTeam) return;
+    // Disable swing button during pitch animation
+    this.dom.swingBtn.disabled = true;
+    this.playPitchAnimation(() => {
+        const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
+        const outcome = this.simulateOutcome(batter);
+        this.processPitchOutcome(outcome);
+        if (this.state.battingTeam === this.state.playerTeam) {
+            this.dom.swingBtn.disabled = false;
         }
+    });
+}
+
         /* Core outcome simulation.  Uses player contact/power to skew
            probabilities of strikes, balls, hits and extra-base hits. */
         simulateOutcome(player) {
@@ -1270,28 +1328,43 @@
              * strikes.  Hits are further subdivided into singles, doubles,
              * triples and home runs using the player's power.
              */
-            let probStrike = 0.50;
-            let probBall   = 0.30;
-            let probHit    = 0.20;
-            // Adjust based on contact: raise hit chance slightly and lower strikes
-            probStrike -= (contact - 50) * 0.0008;
-            probHit    += (contact - 50) * 0.0012;
-            // Ensure probabilities remain within [0,1]
+            // Base probabilities tuned for a more realistic balance of strikes, balls, hits and outs.
+            // Start with more strikes than balls and hits, and include an explicit "out" probability.
+            let probStrike = 0.55;
+            let probBall   = 0.25;
+            let probHit    = 0.15;
+            let probOut    = 0.05;
+            // Adjust based on contact: higher contact increases chance of a hit and decreases strikes and outs
+            probStrike -= (contact - 50) * 0.001;
+            probHit    += (contact - 50) * 0.0008;
+            probOut    -= (contact - 50) * 0.0005;
+            // Clamp probabilities to sensible ranges
             probStrike = Math.max(0.1, Math.min(probStrike, 0.9));
             probHit    = Math.max(0.05, Math.min(probHit, 0.6));
-            probBall   = 1 - (probStrike + probHit);
-            // Randomly select outcome
+            probOut    = Math.max(0.02, Math.min(probOut, 0.3));
+            // Recalculate ball probability to ensure sum to 1
+            probBall = 1 - (probStrike + probHit + probOut);
+            // Ensure ball probability has a minimum floor
+            if (probBall < 0.05) probBall = 0.05;
+            // Normalise again if needed
+            const totalProb = probStrike + probBall + probHit + probOut;
+            probStrike /= totalProb;
+            probBall   /= totalProb;
+            probHit    /= totalProb;
+            probOut    /= totalProb;
+            // Randomly select outcome based on cumulative probabilities
             const r = Math.random();
             if (r < probStrike) return { type: 'strike' };
             if (r < probStrike + probBall) return { type: 'ball' };
-            // Hit occurred: determine type based on power and a second roll
+            if (r < probStrike + probBall + probOut) return { type: 'out' };
+            // Hit occurred: determine type based on power and a secondary roll
             const hitRoll = Math.random();
-            // Home run: very high power and low probability
-            if (power > 90 && hitRoll < 0.02) return { type: 'homerun' };
+            // Home run: high power and low probability
+            if (power > 90 && hitRoll < 0.03) return { type: 'homerun' };
             // Triple: high power and slightly larger chance
-            if (power > 80 && hitRoll < 0.05) return { type: 'triple' };
+            if (power > 80 && hitRoll < 0.07) return { type: 'triple' };
             // Double: moderate chance
-            if (hitRoll < 0.25) return { type: 'double' };
+            if (hitRoll < 0.2) return { type: 'double' };
             // Otherwise, single
             return { type: 'single' };
         }
@@ -1327,6 +1400,11 @@
                     show('Home Run!', 'home-run');
                     this.advanceRunners(4);
                     break;
+                case 'out':
+                    // Direct fielding out (pop up or ground out)
+                    this.showFeedback('Out!', '');
+                    this.handleOut();
+                    return;
             }
             // Handle walks (four balls)
             if (this.state.balls >= 4) {
@@ -1340,6 +1418,8 @@
             }
             // Update the HUD
             this.updateDisplay();
+            // Enable or disable the steal button based on baserunners
+            this.dom.stealBtn.disabled = !this.state.bases.some(b => b);
             // Continue CPU batting if applicable
             if (this.state.battingTeam === this.state.cpuTeam && !this.state.gameOver) {
                 if (outcome.type === 'strike' || outcome.type === 'ball') {
@@ -1475,6 +1555,8 @@
                     container.appendChild(sprite);
                 }
             }
+            // Disable or enable the steal button based on whether a runner is on base
+            this.dom.stealBtn.disabled = !this.state.bases.some((b) => b);
         }
         /* Update scoreboard and count indicators */
         updateDisplay() {
