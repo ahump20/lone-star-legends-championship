@@ -5,425 +5,772 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>Lone Star Legends - Championship Baseball</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>Lone Star Legends: Championship Edition</title>
     <style>
+        /* === CORE RESET & VARIABLES === */
+        :root {
+            /* Austin-Inspired Psychological Color System */
+            --burnt-orange: #BF5700;
+            --charcoal: #333F48;
+            --limestone: #D6D2C4;
+            --sky-blue: #005F86;
+            --gold-accent: #FFB81C;
+            --emerald-success: #00A86B;
+            --fire-red: #CC5500;
+            --electric-blue: #00B4D8;
+            --field-green: #4B7F52;
+            --dirt-brown: #8B6F47;
+            --warning-track: #6B5245;
+            
+            /* UI Colors */
+            --ui-dark: #1A1A1A;
+            --ui-medium: #2D2D2D;
+            --ui-light: #F5F5F0;
+            --ui-glass: rgba(26, 26, 26, 0.85);
+            --ui-glow: rgba(191, 87, 0, 0.4);
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
             user-select: none;
         }
-
+        @font-face {
+            font-family: 'Athletic';
+            src: local('Impact'), local('Arial Black'), local('sans-serif');
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(180deg, #87CEEB 0%, #98D982 40%, #8B7355 100%);
+            font-family: 'Athletic', 'Arial Black', sans-serif;
+            background: linear-gradient(180deg, 
+                var(--sky-blue) 0%, 
+                #87CEEB 30%,
+                var(--field-green) 60%, 
+                var(--dirt-brown) 100%);
             height: 100vh;
             overflow: hidden;
             position: fixed;
             width: 100%;
         }
-
-        #root {
-            width: 100%;
-            height: 100%;
-        }
-
-        .game-container {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Field Styles */
-        .field {
-            position: absolute;
-            width: 800px;
-            height: 800px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .infield {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%) rotate(45deg);
-            background: radial-gradient(ellipse at center, #8B7355 0%, #7A6248 100%);
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.3);
-        }
-
-        .outfield {
-            position: absolute;
-            width: 800px;
-            height: 600px;
-            bottom: 200px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: radial-gradient(ellipse at bottom, #7CB342 0%, #689F38 100%);
-            border-radius: 50% 50% 0 0;
-            z-index: -1;
-        }
-
-        .warning-track {
-            position: absolute;
-            width: 900px;
-            height: 650px;
-            bottom: 200px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: transparent;
-            border: 20px solid #8B7355;
-            border-radius: 50% 50% 0 0;
-            border-bottom: none;
-            z-index: -2;
-        }
-
-        /* Base Styles */
-        .base {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #FFFFFF 0%, #F0F0F0 100%);
-            border: 2px solid #333;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            z-index: 10;
-            transition: all 0.3s;
-        }
-
-        .base.occupied {
-            background: linear-gradient(135deg, #4CAF50 0%, #45A049 100%);
-            animation: basePulse 1s infinite;
-        }
-
-        @keyframes basePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .base-first { bottom: 250px; right: 150px; }
-        .base-second { bottom: 400px; left: 50%; transform: translateX(-50%); }
-        .base-third { bottom: 250px; left: 150px; }
-        .base-home {
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%) rotate(45deg);
-            background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
-        }
-
-        .pitchers-mound {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            bottom: 280px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: radial-gradient(circle, #8B7355 0%, #6B5245 100%);
-            border-radius: 50%;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.4);
-            z-index: 11;
-        }
-
-        /* Player Styles */
-        .player {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 20;
-        }
-
-        .player-body {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
+        /* === LOADING SCREEN === */
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--charcoal);
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s;
+        }
+        .loading-logo {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            animation: rotateLogo 2s infinite linear;
+        }
+        @keyframes rotateLogo {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .loading-text {
+            color: var(--burnt-orange);
             font-size: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            color: white;
+            margin-top: 30px;
+            text-shadow: 0 0 20px rgba(191, 87, 0, 0.5);
+            animation: pulse 1.5s infinite;
         }
-
-        .player.running {
-            animation: playerRun 0.5s infinite;
-        }
-
-        @keyframes playerRun {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-5px) rotate(-5deg); }
-            75% { transform: translateY(-5px) rotate(5deg); }
-        }
-
-        /* Ball */
-        .ball {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            background: radial-gradient(circle at 30% 30%, #FFFFFF, #F0F0F0);
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            z-index: 30;
-            transition: all 0.4s cubic-bezier(0.55, 0.085, 0.68, 0.53);
-        }
-
-        .ball.flying {
-            animation: ballFly 1s ease-out;
-        }
-
-        @keyframes ballFly {
-            0% { transform: scale(1); }
-            50% { transform: scale(0.6); }
-            100% { transform: scale(1.2); }
-        }
-
-        /* HUD Styles */
-        .hud {
+        /* === TITLE SCREEN === */
+        #titleScreen {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            padding: 10px;
-            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 100%);
-            color: white;
-            z-index: 100;
-        }
-
-        .scoreboard {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .team-score {
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                var(--charcoal) 0%, 
+                var(--burnt-orange) 50%, 
+                var(--charcoal) 100%);
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 10px 20px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
+            z-index: 1000;
         }
-
-        .team-name {
-            font-size: 14px;
-            opacity: 0.8;
-            margin-bottom: 5px;
+        .game-logo {
+            position: relative;
+            margin-bottom: 30px;
         }
-
-        .score {
-            font-size: 32px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        .game-title {
+            font-size: clamp(36px, 8vw, 72px);
+            color: var(--ui-light);
+            text-shadow: 
+                3px 3px 0 var(--charcoal),
+                6px 6px 0 var(--burnt-orange),
+                9px 9px 20px rgba(0,0,0,0.8);
+            letter-spacing: 3px;
+            animation: titleFloat 3s ease-in-out infinite;
         }
-
-        .inning-display {
-            text-align: center;
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-
-        .inning-number {
-            font-size: 24px;
-            font-weight: bold;
+        .game-subtitle {
+            font-size: 20px;
+            color: var(--gold-accent);
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: shimmer 2s infinite;
         }
-
-        .inning-half {
-            font-size: 14px;
-            opacity: 0.8;
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; text-shadow: 0 0 20px var(--gold-accent); }
         }
-
-        /* Game Status */
-        .game-status {
+        /* === TEAM SELECTION === */
+        #teamSelect {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            z-index: 90;
-        }
-
-        .status-row {
-            display: flex;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, 
+                var(--charcoal) 0%, 
+                #1A1A1A 100%);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            margin: 5px 0;
+            z-index: 1000;
         }
-
-        .status-label {
-            width: 60px;
-            font-size: 12px;
-            opacity: 0.8;
+        .team-select-title {
+            font-size: 48px;
+            color: var(--burnt-orange);
+            margin-bottom: 50px;
+            text-shadow: 0 0 30px rgba(191, 87, 0, 0.5);
         }
-
-        .status-dots {
-            display: flex;
-            gap: 5px;
-        }
-
-        .status-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            transition: all 0.3s;
-        }
-
-        .status-dot.active.ball { background: #2196F3; box-shadow: 0 0 5px #2196F3; }
-        .status-dot.active.strike { background: #F44336; box-shadow: 0 0 5px #F44336; }
-        .status-dot.active.out { background: #FFD700; box-shadow: 0 0 5px #FFD700; }
-
-        /* Player Card */
-        .player-card {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.9);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            min-width: 200px;
-            backdrop-filter: blur(10px);
-            z-index: 90;
-            transform: translateY(150%);
-            transition: transform 0.4s ease-out;
-        }
-
-        .player-card.active {
-            transform: translateY(0);
-        }
-
-        .player-name {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #FFD700;
-        }
-
-        .player-stats {
+        .team-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 5px;
-            font-size: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            padding: 20px;
+            max-width: 800px;
         }
-
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .stat-label {
-            opacity: 0.7;
-        }
-
-        .stat-value {
-            font-weight: bold;
-        }
-
-        /* Controls */
-        .controls {
-            position: absolute;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 95;
-        }
-
-        .control-btn {
-            padding: 15px 30px;
-            background: linear-gradient(180deg, #4CAF50 0%, #45A049 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        .team-card {
+            background: linear-gradient(145deg, 
+                var(--ui-glass) 0%, 
+                rgba(51, 63, 72, 0.9) 100%);
+            border: 2px solid var(--burnt-orange);
+            border-radius: 20px;
+            padding: 30px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            color: white;
         }
-
-        .control-btn:active {
-            transform: scale(0.95);
-        }
-
-        .control-btn:disabled {
-            background: linear-gradient(180deg, #666 0%, #444 100%);
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .control-btn.swing {
-            background: linear-gradient(180deg, #FF5722 0%, #E64A19 100%);
-        }
-
-        .control-btn.pitch {
-            background: linear-gradient(180deg, #2196F3 0%, #1976D2 100%);
-        }
-
-        /* Power Meter */
-        .power-meter {
+        .team-card::before {
+            content: '';
             position: absolute;
-            bottom: 200px;
-            left: 20px;
-            width: 40px;
-            height: 200px;
-            background: rgba(0,0,0,0.8);
-            border: 2px solid #FFD700;
-            border-radius: 20px;
-            overflow: hidden;
-            z-index: 85;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, 
+                transparent 30%, 
+                var(--ui-glow) 70%);
             opacity: 0;
             transition: opacity 0.3s;
         }
-
-        .power-meter.active {
+        .team-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(191, 87, 0, 0.4);
+        }
+        .team-card:hover::before {
             opacity: 1;
+            animation: rotate 3s linear infinite;
         }
-
-        .power-fill {
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        /* === 3D FIELD === */
+        #gameField {
             position: absolute;
-            bottom: 0;
             width: 100%;
-            background: linear-gradient(0deg, #4CAF50 0%, #FFEB3B 50%, #F44336 100%);
-            transition: height 0.05s linear;
+            height: 100%;
+            perspective: 1000px;
+            display: none;
         }
-
-        /* Feedback */
-        .feedback-msg {
+        .field-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(20deg);
+        }
+        .field-surface {
             position: absolute;
-            top: 50%;
+            width: 800px;
+            height: 800px;
             left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: conic-gradient(
+                from 45deg at 50% 100%,
+                var(--field-green) 0deg,
+                var(--field-green) 90deg,
+                var(--dirt-brown) 90deg,
+                var(--dirt-brown) 180deg,
+                var(--field-green) 180deg,
+                var(--field-green) 270deg,
+                var(--dirt-brown) 270deg
+            );
+            border-radius: 50% 50% 0 0;
+            box-shadow: 
+                inset 0 0 100px rgba(0,0,0,0.4),
+                0 20px 40px rgba(0,0,0,0.3);
+        }
+        /* === PLAYER SPRITES === */
+        .player-sprite {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 20;
+            transform-style: preserve-3d;
+        }
+        .player-body {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.2s;
+        }
+        .player-sprite.pitching .player-body {
+            animation: pitchMotion 0.5s ease-in-out;
+        }
+        @keyframes pitchMotion {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(-15deg) scale(1.1); }
+            100% { transform: rotate(10deg) scale(1); }
+        }
+        .player-sprite.swinging .player-body {
+            animation: swingMotion 0.3s ease-out;
+        }
+        @keyframes swingMotion {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(45deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .player-head {
+            width: 25px;
+            height: 25px;
+            background: #FFD4B2;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2);
+        }
+        .player-cap {
+            width: 28px;
+            height: 15px;
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50% 50% 0 0;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.3);
+        }
+        .player-jersey {
+            width: 35px;
+            height: 35px;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .player-pants {
+            width: 30px;
+            height: 25px;
+            background: #CCCCCC;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 0 0 5px 5px;
+        }
+        .player-shadow {
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 15px;
+            background: radial-gradient(ellipse, 
+                rgba(0,0,0,0.4) 0%, 
+                transparent 70%);
+            border-radius: 50%;
+        }
+        .player-sprite.running {
+            animation: playerRun 0.5s infinite;
+        }
+        @keyframes playerRun {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-8px) rotate(-5deg); }
+            75% { transform: translateY(-8px) rotate(5deg); }
+        }
+        /* === ENHANCED BALL === */
+        .game-ball {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 30% 30%, 
+                #FFFFFF, 
+                #F0F0F0 50%, 
+                #E0E0E0);
+            border-radius: 50%;
+            box-shadow: 
+                0 2px 4px rgba(0,0,0,0.3),
+                inset -2px -2px 4px rgba(0,0,0,0.1);
+            z-index: 100;
+            display: none;
+            transform-style: preserve-3d;
+        }
+        .game-ball.flying {
+            animation: ballFly 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        @keyframes ballFly {
+            0% { 
+                transform: scale(1) translateZ(0);
+                filter: blur(0);
+            }
+            50% { 
+                transform: scale(0.6) translateZ(200px);
+                filter: blur(2px);
+            }
+            100% { 
+                transform: scale(1.2) translateZ(0);
+                filter: blur(0);
+            }
+        }
+        /* === HUD 2.0 === */
+        #gameHUD {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(180deg, 
+                var(--ui-glass) 0%, 
+                transparent 100%);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: none;
+        }
+        .hud-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+        .team-score-panel {
+            background: var(--ui-glass);
+            border: 2px solid var(--burnt-orange);
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .team-score-panel::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--gold-accent) 50%, 
+                transparent 100%);
+            animation: scanline 2s infinite;
+        }
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .team-name {
+            font-size: 14px;
+            color: var(--gold-accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        .team-score {
             font-size: 48px;
             font-weight: bold;
             color: white;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
-            z-index: 200;
-            pointer-events: none;
-            animation: feedbackAnim 1.5s ease-out forwards;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
-
+        .inning-display {
+            background: var(--charcoal);
+            border: 3px solid var(--burnt-orange);
+            border-radius: 20px;
+            padding: 20px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .inning-half {
+            font-size: 12px;
+            color: var(--gold-accent);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .inning-number {
+            font-size: 36px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(191, 87, 0, 0.5);
+        }
+        /* === COUNT & OUTS DISPLAY === */
+        #gameStatus {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--ui-glass);
+            border: 2px solid var(--burnt-orange);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(15px);
+            z-index: 90;
+            display: none;
+        }
+        .status-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .status-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .status-label {
+            width: 80px;
+            font-size: 14px;
+            color: var(--gold-accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .status-indicators {
+            display: flex;
+            gap: 8px;
+        }
+        .indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+            position: relative;
+        }
+        .indicator.active {
+            animation: indicatorPulse 1s infinite;
+        }
+        .indicator.ball.active {
+            background: var(--electric-blue);
+            box-shadow: 0 0 20px var(--electric-blue);
+        }
+        .indicator.strike.active {
+            background: var(--fire-red);
+            box-shadow: 0 0 20px var(--fire-red);
+        }
+        .indicator.out.active {
+            background: var(--gold-accent);
+            box-shadow: 0 0 20px var(--gold-accent);
+        }
+        @keyframes indicatorPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        /* === PLAYER CARD 2.0 === */
+        #playerCard {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: var(--ui-glass);
+            border: 2px solid var(--burnt-orange);
+            border-radius: 20px;
+            padding: 25px;
+            min-width: 280px;
+            backdrop-filter: blur(15px);
+            z-index: 90;
+            transform: translateY(150%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: none;
+        }
+        #playerCard.active {
+            transform: translateY(0);
+        }
+        .player-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .player-portrait {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--burnt-orange), var(--charcoal));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .player-info {
+            flex: 1;
+        }
+        .player-name {
+            font-size: 18px;
+            color: var(--gold-accent);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .player-position {
+            font-size: 14px;
+            color: white;
+            opacity: 0.8;
+        }
+        .player-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .stat-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .stat-label {
+            font-size: 10px;
+            color: var(--gold-accent);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        .stat-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        .stat-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.5s;
+        }
+        /* === ENHANCED CONTROLS === */
+        #gameControls {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            gap: 20px;
+            z-index: 95;
+        }
+        .control-btn {
+            padding: 20px 40px;
+            background: linear-gradient(135deg, 
+                var(--burnt-orange) 0%, 
+                var(--fire-red) 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, 
+                rgba(255,255,255,0.4) 0%, 
+                transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .control-btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(191, 87, 0, 0.4);
+        }
+        .control-btn:disabled {
+            background: linear-gradient(135deg, #666 0%, #444 100%);
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        /* === PITCH SELECTION === */
+        #pitchSelection {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--ui-glass);
+            border: 3px solid var(--burnt-orange);
+            border-radius: 20px;
+            padding: 30px;
+            display: none;
+            backdrop-filter: blur(15px);
+            z-index: 200;
+            color: white;
+        }
+        .pitch-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .pitch-option {
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .pitch-option:hover {
+            border-color: var(--gold-accent);
+            background: rgba(191, 87, 0, 0.2);
+        }
+        .pitch-name {
+            font-size: 14px;
+            color: white;
+            margin-bottom: 5px;
+        }
+        .pitch-stats {
+            font-size: 10px;
+            color: var(--gold-accent);
+        }
+        /* === POWER METER 2.0 === */
+        #powerMeter {
+            position: fixed;
+            bottom: 250px;
+            left: 50px;
+            width: 60px;
+            height: 250px;
+            background: var(--ui-glass);
+            border: 3px solid var(--burnt-orange);
+            border-radius: 30px;
+            overflow: hidden;
+            z-index: 85;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+        #powerMeter.active {
+            display: block;
+            animation: meterGlow 2s infinite;
+        }
+        @keyframes meterGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(191, 87, 0, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(191, 87, 0, 0.8); }
+        }
+        #powerFill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(0deg, 
+                var(--emerald-success) 0%, 
+                var(--gold-accent) 50%, 
+                var(--fire-red) 100%);
+            transition: height 0.05s linear;
+        }
+        .power-zones {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .power-zone {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+        }
+        .power-zone.sweet { bottom: 65%; }
+        .power-zone.good { bottom: 40%; }
+        /* === FEEDBACK MESSAGES === */
+        .feedback-msg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(36px, 6vw, 72px);
+            font-weight: bold;
+            color: white;
+            text-shadow: 
+                2px 2px 0 var(--charcoal),
+                4px 4px 0 var(--burnt-orange),
+                6px 6px 20px rgba(0,0,0,0.8);
+            z-index: 300;
+            pointer-events: none;
+            opacity: 0;
+        }
+        .feedback-msg.active {
+             animation: feedbackAnim 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
         @keyframes feedbackAnim {
             0% {
                 transform: translate(-50%, -50%) scale(0) rotate(-180deg);
                 opacity: 0;
             }
-            50% {
+            40% {
                 transform: translate(-50%, -50%) scale(1.2) rotate(10deg);
                 opacity: 1;
             }
@@ -432,656 +779,689 @@
                 opacity: 0;
             }
         }
-
         .feedback-msg.home-run {
-            background: linear-gradient(45deg, #FFD700, #FFA500);
+            background: linear-gradient(45deg, 
+                var(--gold-accent), 
+                var(--burnt-orange));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: homeRunAnim 3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
         }
-
-        /* Screens */
-        .screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+        @keyframes homeRunAnim {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(-360deg);
+                opacity: 0;
+            }
+            30% {
+                transform: translate(-50%, -50%) scale(1.5) rotate(20deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
+                opacity: 0;
+            }
+        }
+        /* === ACHIEVEMENT POPUP === */
+        .achievement-popup {
+            position: fixed;
+            top: 100px;
+            right: -400px;
+            background: var(--ui-glass);
+            border: 3px solid var(--gold-accent);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            backdrop-filter: blur(15px);
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 500;
+        }
+        .achievement-popup.show {
+            right: 30px;
+        }
+        .achievement-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gold-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .achievement-text {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 0.5s;
         }
-        .screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        .title-screen {
-            background: linear-gradient(135deg, #B83C21 0%, #1E3A5A 100%);
-        }
-
-        .game-title {
-            font-size: 48px;
-            color: white;
-            text-shadow: 4px 4px 8px rgba(0,0,0,0.5);
-            margin-bottom: 20px;
-            animation: titlePulse 2s infinite;
-        }
-
-        @keyframes titlePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .title-subtext {
-            font-size: 20px;
-            color: #FFD700;
-            margin-bottom: 40px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        /* Team Selection */
-        .team-select {
-            background: linear-gradient(180deg, #1E3A5A 0%, #B83C21 100%);
-        }
-
-        .team-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            padding: 20px;
-        }
-
-        .team-card {
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            min-width: 250px;
-        }
-
-        .team-card:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-        }
-
-        .team-logo {
-            font-size: 64px;
-            margin-bottom: 20px;
-        }
-
-        .team-card-name {
-            font-size: 24px;
+        .achievement-title {
+            font-size: 16px;
+            color: var(--gold-accent);
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
-
-        .team-motto {
-            font-size: 14px;
-            color: #666;
-            font-style: italic;
+        .achievement-desc {
+            font-size: 12px;
+            color: white;
+            opacity: 0.8;
         }
-
-        .state-rivals { color: #B83C21; }
-        .college-legends { color: #1E3A5A; }
-
-        /* Mobile Optimizations */
+        /* === STREAK COUNTER === */
+        #streakCounter {
+            position: fixed;
+            top: 100px;
+            left: 30px;
+            background: var(--ui-glass);
+            border: 2px solid var(--burnt-orange);
+            border-radius: 15px;
+            padding: 15px 20px;
+            backdrop-filter: blur(10px);
+            display: none;
+            z-index: 90;
+        }
+        .streak-label {
+            font-size: 12px;
+            color: var(--gold-accent);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .streak-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        .streak-fire {
+            display: inline-block;
+            margin-left: 10px;
+            animation: fire 0.5s infinite alternate;
+        }
+        @keyframes fire {
+            from { transform: scale(1) rotate(-5deg); }
+            to { transform: scale(1.2) rotate(5deg); }
+        }
+        /* === RESPONSIVE === */
         @media (max-width: 768px) {
-            .field {
-                width: 100vw;
-                height: 100vh;
+            .hud-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
             }
-
-            .infield {
-                width: 300px;
-                height: 300px;
+            .team-score-panel {
+                flex-direction: row;
+                justify-content: space-between;
             }
-
+            #gameStatus {
+                bottom: 20px;
+                right: 20px;
+                padding: 15px;
+            }
+            #playerCard {
+                bottom: 20px;
+                left: 20px;
+                min-width: 240px;
+            }
             .control-btn {
-                padding: 12px 20px;
+                padding: 15px 25px;
                 font-size: 14px;
             }
-
-            .game-title {
-                font-size: 32px;
-            }
-
-            .feedback-msg {
-                font-size: 32px;
-            }
-
-            .team-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
+            #powerMeter {
+                width: 50px;
+                height: 200px;
             }
         }
     </style>
 </head>
 <body>
-    <div id="root"></div>
-
-    <script type="text/babel">
-        const { useState, useEffect, useCallback, useRef } = React;
-
-        // --- CONSTANTS ---
-        const TEAMS = {
-            stateRivals: {
-                name: "State Rivals",
-                color: "#B83C21",
-                emoji: "🤠",
-                motto: "Built Different Since 1883",
-                players: [
-                    { id: 1, name: "Rocket Rodriguez", pos: "P", power: 75, contact: 65, speed: 60, arm: 98 },
-                    { id: 2, name: "Thunder Thompson", pos: "C", power: 80, contact: 70, speed: 45, arm: 85 },
-                    { id: 3, name: "Flash Fernandez", pos: "1B", power: 90, contact: 75, speed: 50, arm: 70 },
-                    { id: 4, name: "Wizard Williams", pos: "2B", power: 60, contact: 85, speed: 85, arm: 75 },
-                    { id: 5, name: "Hammer Hernandez", pos: "3B", power: 85, contact: 80, speed: 65, arm: 90 },
-                    { id: 6, name: "Lightning Lopez", pos: "SS", power: 70, contact: 85, speed: 90, arm: 85 },
-                    { id: 7, name: "Cannon Carter", pos: "LF", power: 85, contact: 75, speed: 75, arm: 95 },
-                    { id: 8, name: "Speed Smith", pos: "CF", power: 65, contact: 80, speed: 95, arm: 80 },
-                    { id: 9, name: "Power Parker", pos: "RF", power: 95, contact: 70, speed: 60, arm: 90 }
-                ]
-            },
-            collegeLegends: {
-                name: "College Legends",
-                color: "#1E3A5A",
-                emoji: "⭐",
-                motto: "Tradition Never Graduates",
-                players: [
-                    { id: 10, name: "Ace Anderson", pos: "P", power: 70, contact: 70, speed: 65, arm: 95 },
-                    { id: 11, name: "Tank Taylor", pos: "C", power: 85, contact: 65, speed: 40, arm: 80 },
-                    { id: 12, name: "Slam Sullivan", pos: "1B", power: 95, contact: 70, speed: 45, arm: 65 },
-                    { id: 13, name: "Slick Sanders", pos: "2B", power: 55, contact: 90, speed: 90, arm: 70 },
-                    { id: 14, name: "Gold Gonzalez", pos: "3B", power: 80, contact: 85, speed: 70, arm: 95 },
-                    { id: 15, name: "Quick Quinn", pos: "SS", power: 65, contact: 85, speed: 95, arm: 90 },
-                    { id: 16, name: "Blast Brown", pos: "LF", power: 90, contact: 70, speed: 70, arm: 85 },
-                    { id: 17, name: "Hawk Harrison", pos: "CF", power: 75, contact: 75, speed: 90, arm: 85 },
-                    { id: 18, name: "Rifle Roberts", pos: "RF", power: 85, contact: 80, speed: 65, arm: 98 }
-                ]
+    <!-- All HTML elements are here as designed -->
+    <div id="loadingScreen">
+        <div class="loading-logo">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#BF5700" stroke-width="2"/>
+                <path d="M50 5 L65 35 L95 35 L70 55 L80 85 L50 65 L20 85 L30 55 L5 35 L35 35 Z" 
+                      fill="#BF5700" opacity="0.8"/>
+            </svg>
+        </div>
+        <div class="loading-text">LOADING LEGENDS...</div>
+    </div>
+    <div id="titleScreen">
+        <div class="game-logo">
+            <h1 class="game-title">LONE STAR LEGENDS</h1>
+            <div class="game-subtitle">Championship Edition</div>
+        </div>
+        <button class="control-btn" onclick="game.showTeamSelect()">PLAY BALL</button>
+        <button class="control-btn" onclick="game.showStats()" style="margin-top: 20px;">HALL OF FAME</button>
+    </div>
+    <div id="teamSelect">
+        <h2 class="team-select-title">CHOOSE YOUR DYNASTY</h2>
+        <div class="team-grid">
+            <div class="team-card" onclick="game.selectTeam('astros')">
+                <div style="font-size: 72px; text-align: center; margin-bottom: 20px;">⭐</div>
+                <h3 style="color: var(--burnt-orange); font-size: 24px; margin-bottom: 10px;">Houston Legends</h3>
+                <p style="color: var(--gold-accent); font-style: italic; margin-bottom: 20px;">"Space City Excellence"</p>
+                <div>Featuring: Ryan, Bagwell, Biggio, Altuve</div>
+            </div>
+            <div class="team-card" onclick="game.selectTeam('rangers')">
+                <div style="font-size: 72px; text-align: center; margin-bottom: 20px;">🤠</div>
+                <h3 style="color: var(--electric-blue); font-size: 24px; margin-bottom: 10px;">Texas Rangers</h3>
+                <p style="color: var(--gold-accent); font-style: italic; margin-bottom: 20px;">"Never Ever Quit"</p>
+                <div>Featuring: Young, Rodriguez, Beltre, Seager</div>
+            </div>
+        </div>
+    </div>
+    <div id="gameField">
+        <div class="field-container">
+            <div class="field-surface"></div>
+            <div id="playersContainer"></div>
+            <div class="game-ball" id="gameBall"></div>
+        </div>
+    </div>
+    <div id="gameHUD">
+        <div class="hud-container">
+            <div class="team-score-panel">
+                <div class="team-name" id="awayTeamName">AWAY</div>
+                <div class="team-score" id="awayScore">0</div>
+            </div>
+            <div class="inning-display">
+                <div class="inning-half" id="inningHalf">TOP</div>
+                <div class="inning-number" id="inningNumber">1</div>
+            </div>
+            <div class="team-score-panel">
+                <div class="team-name" id="homeTeamName">HOME</div>
+                <div class="team-score" id="homeScore">0</div>
+            </div>
+        </div>
+    </div>
+    <div id="gameStatus">
+        <div class="status-grid">
+            <div class="status-row">
+                <span class="status-label">BALLS</span>
+                <div class="status-indicators" id="balls"></div>
+            </div>
+            <div class="status-row">
+                <span class="status-label">STRIKES</span>
+                <div class="status-indicators" id="strikes"></div>
+            </div>
+            <div class="status-row">
+                <span class="status-label">OUTS</span>
+                <div class="status-indicators" id="outs"></div>
+            </div>
+        </div>
+    </div>
+    <div id="playerCard">
+        <div class="player-card-header">
+            <div class="player-portrait" id="playerPortrait">⚾</div>
+            <div class="player-info">
+                <div class="player-name" id="playerName">Player Name</div>
+                <div class="player-position" id="playerPosition">Position</div>
+            </div>
+        </div>
+        <div class="player-stats-grid">
+            <div class="stat-item"><div class="stat-label">PWR</div><div class="stat-value" id="statPower">0</div><div class="stat-bar"><div class="stat-fill" id="powerBar" style="background: var(--fire-red);"></div></div></div>
+            <div class="stat-item"><div class="stat-label">CON</div><div class="stat-value" id="statContact">0</div><div class="stat-bar"><div class="stat-fill" id="contactBar" style="background: var(--electric-blue);"></div></div></div>
+            <div class="stat-item"><div class="stat-label">SPD</div><div class="stat-value" id="statSpeed">0</div><div class="stat-bar"><div class="stat-fill" id="speedBar" style="background: var(--emerald-success);"></div></div></div>
+            <div class="stat-item"><div class="stat-label">ARM</div><div class="stat-value" id="statArm">0</div><div class="stat-bar"><div class="stat-fill" id="armBar" style="background: var(--gold-accent);"></div></div></div>
+        </div>
+    </div>
+    <div id="powerMeter"><div id="powerFill" style="height: 0%;"></div><div class="power-zones"><div class="power-zone sweet"></div><div class="power-zone good"></div></div></div>
+    <div id="pitchSelection"><h3 style="color: var(--gold-accent); margin-bottom: 20px;">SELECT PITCH</h3><div class="pitch-grid"></div></div>
+    <div id="streakCounter"><div class="streak-label">WIN STREAK</div><div class="streak-value"><span id="streakValue">0</span><span class="streak-fire">🔥</span></div></div>
+    <div id="gameControls"><button class="control-btn" id="pitchBtn" onclick="game.showPitchSelection()">PITCH</button><button class="control-btn" id="swingBtn" onclick="game.swing()">SWING</button><button class="control-btn" id="stealBtn" onclick="game.attemptSteal()">STEAL</button></div>
+    
+    <script>
+        class LoneStarLegendsGame {
+            constructor() {
+                this.dom = {}; // To cache DOM elements
+                this.teams = {
+                    astros: {
+                        name: "Houston Legends", color: "#BF5700", altColor: "#002D62",
+                        players: [
+                            { name: "Nolan Ryan", pos: "P", num: 34, power: 75, contact: 65, speed: 70, arm: 99, clutch: 95, pitches: ['fastball', 'curve', 'changeup'] },
+                            { name: "Jose Altuve", pos: "2B", num: 27, power: 80, contact: 95, speed: 90, arm: 85, clutch: 94 },
+                            { name: "Jeff Bagwell", pos: "1B", num: 5, power: 95, contact: 85, speed: 60, arm: 75, clutch: 92 },
+                            { name: "Craig Biggio", pos: "C", num: 7, power: 70, contact: 88, speed: 85, arm: 80, clutch: 90 },
+                            { name: "Alex Bregman", pos: "3B", num: 2, power: 85, contact: 88, speed: 70, arm: 90, clutch: 93 },
+                            { name: "George Springer", pos: "CF", num: 4, power: 88, contact: 80, speed: 85, arm: 88, clutch: 90 },
+                            { name: "Lance Berkman", pos: "LF", num: 17, power: 90, contact: 85, speed: 65, arm: 85, clutch: 91 },
+                            { name: "Carlos Correa", pos: "SS", num: 1, power: 85, contact: 85, speed: 75, arm: 95, clutch: 88 },
+                            { name: "Yordan Alvarez", pos: "RF", num: 44, power: 98, contact: 82, speed: 55, arm: 70, clutch: 89 }
+                        ]
+                    },
+                    rangers: {
+                        name: "Texas Rangers", color: "#003278", altColor: "#C0111F",
+                        players: [
+                            { name: "Fergie Jenkins", pos: "P", num: 31, power: 70, contact: 70, speed: 65, arm: 95, clutch: 92, pitches: ['fastball', 'slider', 'sinker'] },
+                            { name: "Ivan Rodriguez", pos: "C", num: 7, power: 80, contact: 85, speed: 70, arm: 95, clutch: 94 },
+                            { name: "Rafael Palmeiro", pos: "1B", num: 25, power: 92, contact: 85, speed: 60, arm: 75, clutch: 88 },
+                            { name: "Ian Kinsler", pos: "2B", num: 5, power: 78, contact: 85, speed: 88, arm: 82, clutch: 86 },
+                            { name: "Adrian Beltre", pos: "3B", num: 29, power: 88, contact: 88, speed: 65, arm: 92, clutch: 95 },
+                            { name: "Michael Young", pos: "SS", num: 10, power: 75, contact: 90, speed: 75, arm: 85, clutch: 92 },
+                            { name: "Josh Hamilton", pos: "LF", num: 32, power: 94, contact: 82, speed: 80, arm: 88, clutch: 91 },
+                            { name: "Corey Seager", pos: "CF", num: 5, power: 86, contact: 88, speed: 72, arm: 88, clutch: 90 },
+                            { name: "Juan Gonzalez", pos: "RF", num: 19, power: 96, contact: 80, speed: 70, arm: 90, clutch: 90 }
+                        ]
+                    }
+                };
+                this.pitchTypes = {
+                    fastball: { name: 'FASTBALL', speed: 95, break: 10 },
+                    curve: { name: 'CURVEBALL', speed: 78, break: 80 },
+                    slider: { name: 'SLIDER', speed: 85, break: 60 },
+                    changeup: { name: 'CHANGEUP', speed: 82, break: 30 },
+                    knuckle: { name: 'KNUCKLEBALL', speed: 65, break: 95 },
+                    sinker: { name: 'SINKER', speed: 90, break: 40 }
+                };
+                this.fieldPositions = {
+                    P: { bottom: '45%', left: '50%', transform: 'translateX(-50%)' },
+                    C: { bottom: '18%', left: '50%', transform: 'translateX(-50%)' },
+                    '1B': { bottom: '38%', left: '68%', transform: 'translateX(-50%)' },
+                    '2B': { bottom: '50%', left: '60%', transform: 'translateX(-50%)' },
+                    '3B': { bottom: '38%', left: '32%', transform: 'translateX(-50%)' },
+                    SS: { bottom: '50%', left: '40%', transform: 'translateX(-50%)' },
+                    LF: { bottom: '68%', left: '25%', transform: 'translateX(-50%)' },
+                    CF: { bottom: '75%', left: '50%', transform: 'translateX(-50%)' },
+                    RF: { bottom: '68%', left: '75%', transform: 'translateX(-50%)' }
+                };
+                this.basePositions = {
+                    1: { bottom: '38%', left: '68%', transform: 'translateX(-50%)' },
+                    2: { bottom: '50%', left: '50%', transform: 'translateX(-50%)' },
+                    3: { bottom: '38%', left: '32%', transform: 'translateX(-50%)' },
+                    4: { bottom: '18%', left: '50%', transform: 'translateX(-50%)' } // Home
+                };
+                this.state = {};
+                this.resetState();
+                this.powerInterval = null;
+                this.init();
             }
-        };
-        const PITCH_SPEED = 400; // ms for ball to reach plate
-        const POST_PLAY_DELAY = 1500; // ms to pause after a play concludes
 
-        // --- GAME HOOK ---
-        function useGameLogic() {
-            const [gameState, setGameState] = useState({
-                screen: 'title', // title, teamSelect, playing, gameOver
-                playerTeamId: null,
-                cpuTeamId: null,
-                battingTeamId: null,
-                fieldingTeamId: null,
-                inning: 1,
-                halfInning: 'top',
-                outs: 0,
-                balls: 0,
-                strikes: 0,
-                bases: [null, null, null], // [1B, 2B, 3B]
-                homeScore: 0,
-                awayScore: 0,
-                currentBatterIndex: 0,
-                feedback: null, // { message, isHomeRun }
-                isActionInProgress: false,
-            });
+            resetState() {
+                this.state = {
+                    inning: 1, halfInning: 'top', outs: 0, balls: 0, strikes: 0,
+                    bases: [null, null, null], homeScore: 0, awayScore: 0,
+                    playerTeam: null, cpuTeam: null, battingTeam: null, fieldingTeam: null,
+                    currentBatterIndex: 0, currentPitcherIndex: 0,
+                    selectedPitch: null, powerMeterValue: 0, powerMeterDirection: 1,
+                    isActionInProgress: false, gameStarted: false, gameOver: false,
+                    lastFeedback: null
+                };
+            }
 
-            const timeoutRef = useRef(null);
-
-            const updateGameState = (newState) => {
-                setGameState(prev => ({ ...prev, ...newState }));
-            };
-
-            const showFeedback = (message, isHomeRun = false) => {
-                updateGameState({ feedback: { message, isHomeRun } });
-                setTimeout(() => updateGameState({ feedback: null }), POST_PLAY_DELAY);
-            };
-            
-            const advanceInning = useCallback(() => {
-                updateGameState({
-                    outs: 0,
-                    balls: 0,
-                    strikes: 0,
-                    bases: [null, null, null],
-                    battingTeamId: gameState.fieldingTeamId,
-                    fieldingTeamId: gameState.battingTeamId,
-                    currentBatterIndex: 0,
-                    halfInning: gameState.halfInning === 'top' ? 'bottom' : 'top',
-                    inning: gameState.halfInning === 'bottom' ? gameState.inning + 1 : gameState.inning,
-                });
-            }, [gameState.fieldingTeamId, gameState.battingTeamId, gameState.halfInning, gameState.inning]);
-            
-            // Effect to handle game state progression (outs, innings)
-            useEffect(() => {
-                if (gameState.isActionInProgress) return;
-                
-                if (gameState.outs >= 3) {
-                    showFeedback("CHANGE SIDES!");
-                    timeoutRef.current = setTimeout(advanceInning, POST_PLAY_DELAY);
-                    return;
-                }
-                if (gameState.balls >= 4) {
-                    showFeedback("WALK!");
-                    timeoutRef.current = setTimeout(() => handlePlayResult({ type: 'walk' }), POST_PLAY_DELAY);
-                    return;
-                }
-                if (gameState.strikes >= 3) {
-                    showFeedback("STRIKEOUT!");
-                    timeoutRef.current = setTimeout(() => handlePlayResult({ type: 'out' }), POST_PLAY_DELAY);
-                    return;
-                }
-                 // Check for game over
-                if (gameState.inning > 9 && gameState.halfInning === 'top' && gameState.homeScore !== gameState.awayScore) {
-                    updateGameState({ screen: 'gameOver' });
-                }
-
-            }, [gameState.outs, gameState.balls, gameState.strikes, gameState.isActionInProgress]);
-
-
-            const handlePlayResult = useCallback((result) => {
-                const advanceMap = { single: 1, double: 2, triple: 3, homerun: 4, walk: 1 };
-                let runsScored = 0;
-                let newBases = [...gameState.bases];
-                const batter = TEAMS[gameState.battingTeamId].players[gameState.currentBatterIndex];
-
-                if (result.type in advanceMap) {
-                    const numBases = advanceMap[result.type];
-                    const isWalk = result.type === 'walk';
-
-                    // Move runners on base
-                    for (let i = 2; i >= 0; i--) {
-                        if (newBases[i]) {
-                            // On a walk, only advance if forced
-                            if (isWalk && !newBases.slice(0, i).every(b => b)) continue;
-                            
-                            const newBaseIndex = i + numBases;
-                            if (newBaseIndex >= 3) {
-                                runsScored++;
-                                newBases[i] = null;
-                            } else {
-                                newBases[newBaseIndex] = newBases[i];
-                                newBases[i] = null;
-                            }
-                        }
-                    }
-
-                    // Place batter
-                    if (result.type === 'homerun') {
-                        runsScored++;
-                    } else {
-                        newBases[numBases - 1] = batter;
-                    }
-                }
-
-                // Update score
-                const newScores = { homeScore: gameState.homeScore, awayScore: gameState.awayScore };
-                if (runsScored > 0) {
-                    if (gameState.battingTeamId === gameState.playerTeamId) {
-                        newScores.homeScore += runsScored;
-                    } else {
-                        newScores.awayScore += runsScored;
-                    }
-                }
-                
-                updateGameState({
-                    bases: newBases,
-                    ...newScores,
-                    balls: 0,
-                    strikes: 0,
-                    outs: result.type === 'out' ? gameState.outs + 1 : gameState.outs,
-                    currentBatterIndex: (gameState.currentBatterIndex + 1) % 9,
-                    isActionInProgress: false,
-                });
-
-            }, [gameState.bases, gameState.battingTeamId, gameState.currentBatterIndex, gameState.outs, gameState.playerTeamId, gameState.homeScore, gameState.awayScore]);
-
-            const handlePitch = useCallback((isGoodPitch, swingPower) => {
-                const batter = TEAMS[gameState.battingTeamId].players[gameState.currentBatterIndex];
-                const didSwing = swingPower !== null;
-                
-                if (!didSwing) {
-                    showFeedback(isGoodPitch ? "STRIKE!" : "BALL!");
-                    updateGameState({ 
-                        strikes: gameState.strikes + (isGoodPitch ? 1 : 0),
-                        balls: gameState.balls + (isGoodPitch ? 0 : 1),
-                        isActionInProgress: false 
-                    });
-                    return;
-                }
-
-                // Calculate hit result
-                const contactChance = (batter.contact / 100) * (isGoodPitch ? 0.9 : 0.4);
-                if (Math.random() > contactChance) {
-                    showFeedback("SWING AND A MISS!");
-                    updateGameState({ strikes: gameState.strikes + 1, isActionInProgress: false });
-                    return;
-                }
-
-                const hitPower = (batter.power / 100) * (swingPower / 100);
-                const roll = Math.random() + (hitPower * 0.2);
-                
-                let result;
-                if (roll < 0.3) result = { type: 'out', message: 'GROUND OUT!' };
-                else if (roll < 0.7) result = { type: 'single', message: 'SINGLE!' };
-                else if (roll < 0.85) result = { type: 'double', message: 'DOUBLE!' };
-                else if (roll < 0.95) result = { type: 'triple', message: 'TRIPLE!' };
-                else result = { type: 'homerun', message: 'HOME RUN!!!' };
-
-                showFeedback(result.message, result.type === 'homerun');
-                timeoutRef.current = setTimeout(() => handlePlayResult(result), POST_PLAY_DELAY);
-
-            }, [gameState.battingTeamId, gameState.currentBatterIndex, gameState.strikes, gameState.balls, handlePlayResult]);
-
-            // Cleanup timeouts on unmount
-            useEffect(() => () => clearTimeout(timeoutRef.current), []);
-
-            return { gameState, updateGameState, handlePitch, showFeedback };
-        }
-
-        // --- COMPONENTS ---
-        const TitleScreen = ({ onStart }) => (
-            <div className="screen title-screen">
-                <h1 className="game-title">⚾ LONE STAR LEGENDS ⚾</h1>
-                <p className="title-subtext">Championship Baseball</p>
-                <button className="control-btn" onClick={onStart}>PLAY BALL</button>
-            </div>
-        );
-
-        const TeamSelectScreen = ({ onSelect }) => (
-            <div className="screen team-select">
-                <h2 style={{ color: 'white', fontSize: '32px', marginBottom: '30px', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-                    Choose Your Dynasty
-                </h2>
-                <div className="team-grid">
-                    {Object.entries(TEAMS).map(([key, team]) => (
-                        <div key={key} className="team-card" onClick={() => onSelect(key)}>
-                            <div className="team-logo">{team.emoji}</div>
-                            <div className={`team-card-name ${key}`}>{team.name}</div>
-                            <div className="team-motto">{team.motto}</div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-        
-        const Field = ({ gameState }) => {
-            const { fieldingTeamId, battingTeamId, bases } = gameState;
-            if (!fieldingTeamId || !battingTeamId) return null;
-
-            const fieldPositions = {
-                P: { bottom: '280px', left: '50%', transform: 'translateX(-50%)' },
-                C: { bottom: '80px', left: '50%', transform: 'translateX(-50%)' },
-                '1B': { bottom: '250px', right: '120px' },
-                '2B': { bottom: '350px', right: '280px' },
-                '3B': { bottom: '250px', left: '120px' },
-                'SS': { bottom: '350px', left: '280px' },
-                'LF': { bottom: '450px', left: '100px' },
-                'CF': { bottom: '500px', left: '50%', transform: 'translateX(-50%)' },
-                'RF': { bottom: '450px', right: '100px' }
-            };
-
-            return (
-                <div className="field">
-                    <div className="warning-track"></div>
-                    <div className="outfield"></div>
-                    <div className="infield"></div>
-                    <div className={`base base-first ${bases[0] ? 'occupied' : ''}`}></div>
-                    <div className={`base base-second ${bases[1] ? 'occupied' : ''}`}></div>
-                    <div className={`base base-third ${bases[2] ? 'occupied' : ''}`}></div>
-                    <div className="base base-home"></div>
-                    <div className="pitchers-mound"></div>
-                    
-                    {/* Fielders */}
-                    {TEAMS[fieldingTeamId].players.map(player => {
-                        if (!fieldPositions[player.pos]) return null;
-                        return (
-                             <div key={player.id} className="player" style={fieldPositions[player.pos]}>
-                                <div className="player-body" style={{ background: TEAMS[fieldingTeamId].color }}>⚾</div>
-                            </div>
-                        )
-                    })}
-                    
-                    {/* Batter */}
-                    <div className="player" style={{ bottom: '100px', left: '50%', transform: 'translateX(-50%)' }}>
-                        <div className="player-body" style={{ background: TEAMS[battingTeamId].color }}>🏏</div>
-                    </div>
-                </div>
-            )
-        };
-        
-        const Hud = ({ gameState }) => {
-            const { homeScore, awayScore, inning, halfInning, playerTeamId, cpuTeamId } = gameState;
-            if (!playerTeamId || !cpuTeamId) return null;
-            
-            const getInningSuffix = (num) => {
-                if (num % 10 === 1 && num % 100 !== 11) return 'st';
-                if (num % 10 === 2 && num % 100 !== 12) return 'nd';
-                if (num % 10 === 3 && num % 100 !== 13) return 'rd';
-                return 'th';
-            };
-
-            return (
-                <div className="hud">
-                    <div className="scoreboard">
-                        <div className="team-score">
-                            <div className="team-name">{TEAMS[playerTeamId].name.toUpperCase()}</div>
-                            <div className="score">{homeScore}</div>
-                        </div>
-                        <div className="inning-display">
-                            <div className="inning-half">{halfInning.toUpperCase()}</div>
-                            <div className="inning-number">{inning}{getInningSuffix(inning)}</div>
-                        </div>
-                        <div className="team-score">
-                            <div className="team-name">{TEAMS[cpuTeamId].name.toUpperCase()}</div>
-                            <div className="score">{awayScore}</div>
-                        </div>
-                    </div>
-                </div>
-            )
-        };
-        
-        const GameStatus = ({ balls, strikes, outs }) => (
-            <div className="game-status">
-                <div className="status-row">
-                    <span className="status-label">BALLS</span>
-                    <div className="status-dots">
-                        {[...Array(4)].map((_, i) => <div key={i} className={`status-dot ball ${i < balls ? 'active' : ''}`}></div>)}
-                    </div>
-                </div>
-                <div className="status-row">
-                    <span className="status-label">STRIKES</span>
-                    <div className="status-dots">
-                        {[...Array(3)].map((_, i) => <div key={i} className={`status-dot strike ${i < strikes ? 'active' : ''}`}></div>)}
-                    </div>
-                </div>
-                <div className="status-row">
-                    <span className="status-label">OUTS</span>
-                    <div className="status-dots">
-                        {[...Array(3)].map((_, i) => <div key={i} className={`status-dot out ${i < outs ? 'active' : ''}`}></div>)}
-                    </div>
-                </div>
-            </div>
-        );
-        
-        const PlayerCard = ({ batter }) => {
-            const [isActive, setIsActive] = useState(false);
-            useEffect(() => {
-                if (batter) {
-                    setIsActive(true);
-                    const timer = setTimeout(() => setIsActive(false), 2500);
-                    return () => clearTimeout(timer);
-                }
-            }, [batter]);
-
-            if (!batter) return null;
-            
-            return (
-                <div className={`player-card ${isActive ? 'active' : ''}`}>
-                    <div className="player-name">{batter.name}</div>
-                    <div className="player-stats">
-                        <div className="stat-item"><span className="stat-label">PWR:</span><span className="stat-value">{batter.power}</span></div>
-                        <div className="stat-item"><span className="stat-label">CON:</span><span className="stat-value">{batter.contact}</span></div>
-                        <div className="stat-item"><span className="stat-label">SPD:</span><span className="stat-value">{batter.speed}</span></div>
-                        <div className="stat-item"><span className="stat-label">ARM:</span><span className="stat-value">{batter.arm}</span></div>
-                    </div>
-                </div>
-            )
-        };
-
-        const Controls = ({ gameState, onPitch, onSwing, onBunt }) => {
-            const { playerTeamId, battingTeamId, isActionInProgress } = gameState;
-            const isPlayerBatting = playerTeamId === battingTeamId;
-
-            return (
-                 <div className="controls">
-                    {isPlayerBatting ? (
-                        <>
-                            <button className="control-btn swing" onClick={onSwing} disabled={isActionInProgress}>SWING</button>
-                            <button className="control-btn" onClick={onBunt} disabled={isActionInProgress}>BUNT</button>
-                        </>
-                    ) : (
-                        <button className="control-btn pitch" onClick={onPitch} disabled={isActionInProgress}>PITCH</button>
-                    )}
-                </div>
-            )
-        };
-        
-        const PowerMeter = ({ isActive }) => {
-            const [power, setPower] = useState(0);
-            const directionRef = useRef(1);
-
-            useEffect(() => {
-                if (isActive) {
-                    const interval = setInterval(() => {
-                        setPower(p => {
-                            const newPower = p + directionRef.current * 2;
-                            if (newPower >= 100) directionRef.current = -1;
-                            if (newPower <= 0) directionRef.current = 1;
-                            return Math.max(0, Math.min(100, newPower));
-                        });
-                    }, 20);
-                    return () => clearInterval(interval);
-                }
-            }, [isActive]);
-
-            return (
-                <div className={`power-meter ${isActive ? 'active' : ''}`}>
-                    <div className="power-fill" style={{ height: `${power}%` }}></div>
-                </div>
-            )
-        };
-
-        // --- MAIN APP COMPONENT ---
-        function LoneStarLegends() {
-            const { gameState, updateGameState, handlePitch, showFeedback } = useGameLogic();
-            const { screen, playerTeamId, cpuTeamId, battingTeamId, currentBatterIndex, isActionInProgress } = gameState;
-            
-            const [ballPosition, setBallPosition] = useState(null);
-            const swingPowerRef = useRef(0);
-
-            // --- CPU Logic ---
-            useEffect(() => {
-                if (screen === 'playing' && battingTeamId === cpuTeamId && !isActionInProgress) {
-                    const timer = setTimeout(() => {
-                         const isGoodPitch = Math.random() < 0.65;
-                         setBallPosition({ start: true });
-                         setTimeout(() => {
-                            setBallPosition({ start: false });
-                            handlePitch(isGoodPitch, null); // CPU takes the pitch
-                         }, PITCH_SPEED);
-                    }, POST_PLAY_DELAY);
-                    return () => clearTimeout(timer);
-                }
-            }, [screen, battingTeamId, cpuTeamId, isActionInProgress, handlePitch]);
-            
-            const handleSelectTeam = (teamId) => {
-                const cpuId = teamId === 'stateRivals' ? 'collegeLegends' : 'stateRivals';
-                const isPlayerBatting = Math.random() < 0.5;
-                updateGameState({
-                    screen: 'playing',
-                    playerTeamId: teamId,
-                    cpuTeamId: cpuId,
-                    battingTeamId: isPlayerBatting ? teamId : cpuId,
-                    fieldingTeamId: isPlayerBatting ? cpuId : teamId,
-                    homeScore: 0,
-                    awayScore: 0,
-                });
-            };
-            
-            const handlePlayerPitch = () => {
-                if (isActionInProgress) return;
-                updateGameState({ isActionInProgress: true });
-                
-                const isGoodPitch = Math.random() < 0.65;
-                const batter = TEAMS[cpuTeamId].players[currentBatterIndex];
-                const swingChance = (batter.contact / 150) + (isGoodPitch ? 0.3 : 0);
-
-                setBallPosition({ start: true });
+            init() {
+                this.cacheDomElements();
                 setTimeout(() => {
-                    setBallPosition({ start: false });
-                    if (Math.random() < swingChance) {
-                        handlePitch(isGoodPitch, 40 + Math.random() * 50); // CPU swings with random power
-                    } else {
-                        handlePitch(isGoodPitch, null); // CPU takes
-                    }
-                }, PITCH_SPEED);
-            };
-
-            const handlePlayerSwing = () => {
-                // This would be triggered by a button, which would capture the power meter value
-                // For now, we simulate it
-                console.log("Swing logic to be implemented");
-            };
-
-            if (screen === 'title') {
-                return <TitleScreen onStart={() => updateGameState({ screen: 'teamSelect' })} />;
+                    this.dom.loadingScreen.style.opacity = '0';
+                    setTimeout(() => { this.dom.loadingScreen.style.display = 'none'; }, 500);
+                }, 1500);
+                this.setupEventListeners();
+                this.updateDisplay(); // Initial UI setup
             }
-            if (screen === 'teamSelect') {
-                return <TeamSelectScreen onSelect={handleSelectTeam} />;
+
+            cacheDomElements() {
+                const ids = [
+                    'loadingScreen', 'titleScreen', 'teamSelect', 'gameField', 'gameHUD', 'gameStatus',
+                    'playerCard', 'powerMeter', 'pitchSelection', 'streakCounter', 'gameControls',
+                    'awayTeamName', 'awayScore', 'inningHalf', 'inningNumber', 'homeTeamName', 'homeScore',
+                    'balls', 'strikes', 'outs', 'playerPortrait', 'playerName', 'playerPosition',
+                    'statPower', 'powerBar', 'statContact', 'contactBar', 'statSpeed', 'speedBar',
+                    'statArm', 'armBar', 'powerFill', 'pitchBtn', 'swingBtn', 'stealBtn', 'playersContainer', 'gameBall'
+                ];
+                ids.forEach(id => { this.dom[id] = document.getElementById(id); });
+                this.dom.pitchGrid = this.dom.pitchSelection.querySelector('.pitch-grid');
             }
             
-            const currentBatter = battingTeamId ? TEAMS[battingTeamId].players[currentBatterIndex] : null;
+            setupEventListeners() {
+                document.addEventListener('keydown', (e) => {
+                    if (!this.state.gameStarted || this.state.isActionInProgress) return;
+                    if (e.key === ' ') this.swing();
+                });
+            }
 
-            return (
-                <div className="game-container">
-                    <Field gameState={gameState} />
-                    <Hud gameState={gameState} />
-                    <GameStatus {...gameState} />
-                    <PlayerCard batter={currentBatter} />
+            showTeamSelect() {
+                this.dom.titleScreen.style.display = 'none';
+                this.dom.teamSelect.style.display = 'flex';
+            }
+
+            selectTeam(teamId) {
+                this.resetState();
+                this.state.playerTeam = teamId;
+                this.state.cpuTeam = teamId === 'astros' ? 'rangers' : 'astros';
+                this.state.battingTeam = Math.random() < 0.5 ? this.state.playerTeam : this.state.cpuTeam;
+                this.state.fieldingTeam = this.state.battingTeam === this.state.playerTeam ? this.state.cpuTeam : this.state.playerTeam;
+                this.startGame();
+            }
+
+            startGame() {
+                this.state.gameStarted = true;
+                this.dom.teamSelect.style.display = 'none';
+                ['gameField', 'gameHUD', 'gameStatus', 'gameControls', 'playerCard'].forEach(id => this.dom[id].style.display = 'block');
+                this.dom.homeTeamName.textContent = this.teams[this.state.playerTeam].name.toUpperCase();
+                this.dom.awayTeamName.textContent = this.teams[this.state.cpuTeam].name.toUpperCase();
+                this.startAtBat();
+            }
+
+            setupField() {
+                const container = this.dom.playersContainer;
+                container.innerHTML = ''; // Clear previous players
+                
+                // Place fielders
+                const fieldingTeamData = this.teams[this.state.fieldingTeam];
+                fieldingTeamData.players.forEach(player => {
+                    if (this.fieldPositions[player.pos]) {
+                        const sprite = this.createPlayerSprite(player, fieldingTeamData.color);
+                        sprite.id = `player-${player.pos}`;
+                        Object.assign(sprite.style, this.fieldPositions[player.pos]);
+                        container.appendChild(sprite);
+                    }
+                });
+
+                // Place batter
+                const battingTeamData = this.teams[this.state.battingTeam];
+                const batter = battingTeamData.players[this.state.currentBatterIndex];
+                const batterSprite = this.createPlayerSprite(batter, battingTeamData.color);
+                batterSprite.id = 'batter';
+                batterSprite.style.bottom = '20%';
+                batterSprite.style.left = '50%';
+                batterSprite.style.transform = `translateX(${this.state.halfInning === 'top' ? '50%' : '-150%'})`;
+                container.appendChild(batterSprite);
+            }
+
+            createPlayerSprite(player, teamColor) {
+                const el = document.createElement('div');
+                el.className = 'player-sprite';
+                el.innerHTML = `<div class="player-body"><div class="player-head"></div><div class="player-cap" style="background:${teamColor}"></div><div class="player-jersey" style="background:${teamColor}">${player.num}</div><div class="player-pants"></div><div class="player-shadow"></div></div>`;
+                return el;
+            }
+            
+            startAtBat() {
+                this.state.isActionInProgress = false;
+                this.state.balls = 0;
+                this.state.strikes = 0;
+                this.setupField();
+                this.showPlayerCard(this.teams[this.state.battingTeam].players[this.state.currentBatterIndex]);
+                this.updateDisplay();
+
+                if (this.state.battingTeam === this.state.cpuTeam) {
+                    this.dom.pitchBtn.disabled = false;
+                    this.dom.swingBtn.disabled = true;
+                    this.dom.powerMeter.classList.remove('active');
+                } else {
+                    this.dom.pitchBtn.disabled = true;
+                    this.dom.swingBtn.disabled = true; // Wait for pitch
+                    this.dom.powerMeter.classList.add('active');
+                    this.startPowerMeter();
+                    setTimeout(() => this.cpuPitch(), 1000);
+                }
+            }
+            
+            showPlayerCard(player) {
+                this.dom.playerName.textContent = player.name.toUpperCase();
+                this.dom.playerPosition.textContent = player.pos;
+                this.dom.statPower.textContent = player.power;
+                this.dom.powerBar.style.width = `${player.power}%`;
+                this.dom.statContact.textContent = player.contact;
+                this.dom.contactBar.style.width = `${player.contact}%`;
+                this.dom.statSpeed.textContent = player.speed;
+                this.dom.speedBar.style.width = `${player.speed}%`;
+                this.dom.statArm.textContent = player.arm;
+                this.dom.armBar.style.width = `${player.arm}%`;
+                this.dom.playerCard.classList.add('active');
+            }
+
+            startPowerMeter() {
+                if (this.powerInterval) clearInterval(this.powerInterval);
+                this.powerInterval = setInterval(() => {
+                    this.state.powerMeterValue += this.state.powerMeterDirection * 2;
+                    if (this.state.powerMeterValue >= 100) this.state.powerMeterDirection = -1;
+                    if (this.state.powerMeterValue <= 0) this.state.powerMeterDirection = 1;
+                    this.dom.powerFill.style.height = `${this.state.powerMeterValue}%`;
+                }, 20);
+            }
+
+            stopPowerMeter() {
+                clearInterval(this.powerInterval);
+                this.powerInterval = null;
+            }
+
+            showPitchSelection() {
+                if(this.state.isActionInProgress) return;
+                const pitcher = this.teams[this.state.fieldingTeam].players[this.state.currentPitcherIndex];
+                this.dom.pitchGrid.innerHTML = '';
+                pitcher.pitches.forEach(pitchKey => {
+                    const pitch = this.pitchTypes[pitchKey];
+                    const el = document.createElement('div');
+                    el.className = 'pitch-option';
+                    el.innerHTML = `<div class="pitch-name">${pitch.name}</div><div class="pitch-stats">${pitch.speed} MPH</div>`;
+                    el.onclick = () => this.selectPitch(pitchKey);
+                    this.dom.pitchGrid.appendChild(el);
+                });
+                this.dom.pitchSelection.style.display = 'block';
+            }
+
+            selectPitch(pitchKey) {
+                this.state.selectedPitch = pitchKey;
+                this.dom.pitchSelection.style.display = 'none';
+                this.playerPitch();
+            }
+
+            playerPitch() {
+                this.state.isActionInProgress = true;
+                this.dom.pitchBtn.disabled = true;
+                this.animatePitch(this.state.selectedPitch, () => {
+                    this.cpuSwing(this.state.selectedPitch);
+                });
+            }
+
+            cpuPitch() {
+                this.state.isActionInProgress = true;
+                const pitcher = this.teams[this.state.fieldingTeam].players[this.state.currentPitcherIndex];
+                const pitchKey = pitcher.pitches[Math.floor(Math.random() * pitcher.pitches.length)];
+                this.state.selectedPitch = pitchKey;
+                this.animatePitch(pitchKey, () => {
+                    this.state.isActionInProgress = false;
+                    this.dom.swingBtn.disabled = false;
+                });
+            }
+            
+            swing() {
+                if (this.state.isActionInProgress || this.dom.swingBtn.disabled) return;
+                this.state.isActionInProgress = true;
+                this.dom.swingBtn.disabled = true;
+                this.stopPowerMeter();
+                
+                const batterSprite = document.getElementById('batter');
+                batterSprite.classList.add('swinging');
+                setTimeout(() => batterSprite.classList.remove('swinging'), 300);
+
+                setTimeout(() => {
+                    const swingPower = this.state.powerMeterValue;
+                    const result = this.calculateHit(this.state.selectedPitch, swingPower);
+                    this.showFeedback(result.message, result.type === 'homerun');
+                    this.processResult(result);
+                }, 150); // Delay to sync with animation
+            }
+            
+            cpuSwing(pitchKey) {
+                const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
+                const pitch = this.pitchTypes[pitchKey];
+                const swingChance = (batter.contact / 100) - (pitch.break / 200) + (batter.clutch / 500);
+                
+                setTimeout(() => {
+                    if (Math.random() < swingChance) {
+                        const power = 30 + Math.random() * 70; // CPU random power
+                        const result = this.calculateHit(pitchKey, power);
+                        this.showFeedback(result.message, result.type === 'homerun');
+                        this.processResult(result);
+                    } else {
+                        this.state.strikes++;
+                        this.showFeedback('STRIKE!');
+                        this.endPlay();
+                    }
+                }, 500); // CPU "reaction time"
+            }
+
+            calculateHit(pitchKey, power) {
+                const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
+                const pitch = this.pitchTypes[pitchKey];
+                
+                const contactValue = (batter.contact * 0.7) + (batter.clutch * 0.3);
+                if (Math.random() * 100 > contactValue - (pitch.break / 5)) {
+                    return { type: 'strike', message: 'SWING AND A MISS!' };
+                }
+                
+                const powerValue = (batter.power * 0.7) + (batter.clutch * 0.3);
+                const hitValue = (powerValue / 100) * (power / 100) * (1 - pitch.speed / 250);
+                
+                if (hitValue > 0.65) return { type: 'homerun', message: 'HOME RUN!' };
+                if (hitValue > 0.5) return { type: 'double', message: 'DOUBLE!' };
+                if (hitValue > 0.2) return { type: 'single', message: 'SINGLE!' };
+                return { type: 'out', message: 'OUT!' };
+            }
+
+            async processResult(result) {
+                if (result.type === 'strike') {
+                    this.state.strikes++;
+                } else if (result.type === 'out') {
+                    this.state.outs++;
+                } else {
+                    const advanceMap = { single: 1, double: 2, homerun: 4 };
+                    const numBases = advanceMap[result.type];
+                    await this.animateBaserunning(numBases);
+                }
+                this.endPlay();
+            }
+
+            async animateBaserunning(numBases) {
+                let runsScored = 0;
+                const runners = [];
+                
+                // Add existing runners
+                for(let i=2; i>=0; i--) {
+                    if (this.state.bases[i]) {
+                        runners.push({ from: i + 1, player: this.state.bases[i] });
+                        this.state.bases[i] = null;
+                    }
+                }
+                // Add batter
+                const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
+                runners.push({ from: 0, player: batter });
+
+                for (const runner of runners) {
+                    const newBaseIndex = runner.from + numBases;
+                    const runnerSprite = document.getElementById(runner.from === 0 ? 'batter' : `player-on-${runner.from}`);
+                    if (runnerSprite) runnerSprite.classList.add('running');
                     
-                    {ballPosition && <div className="ball" style={{
-                        bottom: ballPosition.start ? '280px' : '100px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        opacity: ballPosition.start ? 1 : 0,
-                    }}/>}    
-                    <Controls gameState={gameState} onPitch={handlePlayerPitch} onSwing={handlePlayerSwing} onBunt={() => {}} />
-                    
-                    {gameState.feedback && (
-                        <div className={`feedback-msg ${gameState.feedback.isHomeRun ? 'home-run' : ''}`}>
-                            {gameState.feedback.message}
-                        </div>
-                    )}
-                    
-                    {gameState.screen === 'gameOver' && (
-                         <div className="screen" style={{background: 'rgba(0,0,0,0.7)'}}>
-                            <h1 className="game-title">GAME OVER</h1>
-                             <p className="title-subtext">{gameState.homeScore > gameState.awayScore ? TEAMS[playerTeamId].name : TEAMS[cpuTeamId].name} WINS!</p>
-                            <button className="control-btn" onClick={() => window.location.reload()}>Play Again</button>
-                        </div>
-                    )}
-                </div>
-            );
+                    if (newBaseIndex > 3) {
+                        runsScored++;
+                        // Animate to home
+                        if(runnerSprite) Object.assign(runnerSprite.style, this.basePositions[4]);
+                    } else {
+                        // Animate to new base
+                        if(runnerSprite) Object.assign(runnerSprite.style, this.basePositions[newBaseIndex]);
+                        this.state.bases[newBaseIndex - 1] = runner.player;
+                    }
+                    await new Promise(res => setTimeout(res, 600)); // Stagger runners
+                    if (runnerSprite) runnerSprite.classList.remove('running');
+                }
+                
+                if (runsScored > 0) {
+                    if (this.state.battingTeam === this.state.playerTeam) this.state.homeScore += runsScored;
+                    else this.state.awayScore += runsScored;
+                    this.showFeedback(`${runsScored} RUN${runsScored > 1 ? 'S' : ''}!`);
+                }
+            }
+            
+            endPlay() {
+                setTimeout(() => {
+                    if (this.state.strikes >= 3) {
+                        this.state.outs++;
+                        this.showFeedback('STRIKEOUT!');
+                    }
+                    if (this.state.balls >= 4) {
+                        this.showFeedback('WALK!');
+                        // Simplified walk logic
+                        this.state.currentBatterIndex = (this.state.currentBatterIndex + 1) % 9;
+                    }
+
+                    if (this.state.outs >= 3) {
+                        this.changeInning();
+                    } else {
+                        this.state.currentBatterIndex = (this.state.currentBatterIndex + 1) % 9;
+                        this.startAtBat();
+                    }
+                    this.updateDisplay();
+                }, 1500);
+            }
+
+            changeInning() {
+                this.showFeedback('CHANGE SIDES');
+                this.state.outs = 0;
+                this.state.bases = [null, null, null];
+                if (this.state.halfInning === 'top') {
+                    this.state.halfInning = 'bottom';
+                } else {
+                    this.state.halfInning = 'top';
+                    this.state.inning++;
+                }
+                [this.state.battingTeam, this.state.fieldingTeam] = [this.state.fieldingTeam, this.state.battingTeam];
+                this.state.currentBatterIndex = 0;
+                setTimeout(() => this.startAtBat(), 2000);
+            }
+            
+            animatePitch(pitchKey, callback) {
+                const pitcherSprite = document.getElementById('player-P');
+                if(pitcherSprite) pitcherSprite.classList.add('pitching');
+                const ball = this.dom.gameBall;
+                ball.style.display = 'block';
+                ball.style.bottom = '45%';
+                ball.style.left = '50%';
+                ball.style.transform = 'translateX(-50%)';
+                
+                setTimeout(() => {
+                    if(pitcherSprite) pitcherSprite.classList.remove('pitching');
+                    ball.style.transition = 'all 0.4s ease-in';
+                    ball.style.bottom = '22%';
+                }, 200);
+
+                setTimeout(() => {
+                    ball.style.display = 'none';
+                    ball.style.transition = '';
+                    callback();
+                }, 600);
+            }
+            
+            showFeedback(message, isHomeRun = false) {
+                const el = document.createElement('div');
+                el.className = 'feedback-msg';
+                if (isHomeRun) el.classList.add('home-run');
+                el.textContent = message.toUpperCase();
+                document.body.appendChild(el);
+                el.classList.add('active');
+                setTimeout(() => el.remove(), 2500);
+            }
+
+            updateDisplay() {
+                this.dom.homeScore.textContent = this.state.homeScore;
+                this.dom.awayScore.textContent = this.state.awayScore;
+                this.dom.inningNumber.textContent = this.state.inning;
+                this.dom.inningHalf.textContent = this.state.halfInning.toUpperCase();
+                ['balls', 'strikes', 'outs'].forEach(type => {
+                    this.dom[type].innerHTML = '';
+                    for (let i = 0; i < (type === 'balls' ? 4 : 3); i++) {
+                        const indicator = document.createElement('div');
+                        indicator.className = `indicator ${type.slice(0, -1)}`;
+                        if (i < this.state[type]) indicator.classList.add('active');
+                        this.dom[type].appendChild(indicator);
+                    }
+                });
+            }
+            
+            attemptSteal() { this.showFeedback("STEAL ATTEMPT!"); }
+            showStats() { alert("Hall of Fame coming soon!"); }
         }
 
-        ReactDOM.render(<LoneStarLegends />, document.getElementById('root'));
-
-        document.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-        }, { passive: false });
+        const game = new LoneStarLegendsGame();
     </script>
 </body>
 </html>
