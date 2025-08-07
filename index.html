@@ -1178,6 +1178,8 @@
                 this.state.isActionInProgress = false;
                 this.state.balls = 0;
                 this.state.strikes = 0;
+                // Disable steal button if no runners on base
+                this.dom.stealBtn.disabled = !this.state.bases.some(b => b);
                 this.setupField();
                 this.showPlayerCard(this.teams[this.state.battingTeam].players[this.state.currentBatterIndex]);
                 this.updateDisplay();
@@ -1283,17 +1285,28 @@
             }
             
             cpuSwing(pitchKey) {
-                const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
-                const pitch = this.pitchTypes[pitchKey];
-                const swingChance = (batter.contact / 100) - (pitch.break / 200) + (batter.clutch / 500);
-                
-                setTimeout(() => {
-                    if (Math.random() < swingChance) {
-                        const power = 30 + Math.random() * 70; // CPU random power
-                        const result = this.calculateHit(pitchKey, power);
-                        this.showFeedback(result.message, result.type === 'homerun');
-                        this.processResult(result);
-                    } else {
+    const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
+    const pitch = this.pitchTypes[pitchKey];
+    // Adjust swing chance to produce more realistic plate appearances.  Reduce
+    // reliance on batter contact and incorporate break/velocity.  Floor at 0.3
+    const rawChance = ((batter.contact / 100) * 0.8) - (pitch.break / 300) + (batter.clutch / 600);
+    const swingChance = Math.max(0.3, rawChance);
+
+    setTimeout(() => {
+        if (Math.random() < swingChance) {
+            // CPU decides to swing.  Use a moderate power value with some randomness.
+            const power = 30 + Math.random() * 70;
+            const result = this.calculateHit(pitchKey, power);
+            this.showFeedback(result.message, result.type === 'homerun');
+            this.processResult(result);
+        } else {
+            // CPU takes the pitch: record a strike and end the play.
+            this.state.strikes++;
+            this.showFeedback('STRIKE!');
+            this.endPlay();
+        }
+    }, 500);
+} else {
                         this.state.strikes++;
                         this.showFeedback('STRIKE!');
                         this.endPlay();
@@ -1302,12 +1315,24 @@
             }
 
             calculateHit(pitchKey, power) {
-                const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
-                const pitch = this.pitchTypes[pitchKey];
-                
-                const contactValue = (batter.contact * 0.7) + (batter.clutch * 0.3);
-                if (Math.random() * 100 > contactValue - (pitch.break / 5)) {
-                    return { type: 'strike', message: 'SWING AND A MISS!' };
+    const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
+    const pitch = this.pitchTypes[pitchKey];
+
+    // Determine if the batter makes contact.  Lower contact value slightly to allow more whiffs.
+    const contactValue = (batter.contact * 0.6) + (batter.clutch * 0.4);
+    if (Math.random() * 100 > contactValue - (pitch.break / 5)) {
+        return { type: 'strike', message: 'SWING AND A MISS!' };
+    }
+
+    // Once contact is made, randomly choose hit outcome.  The thresholds below
+    // favour outs and singles over extra-base hits to keep scoring reasonable.
+    const roll = Math.random();
+    if (roll < 0.25) return { type: 'out', message: 'FLY OUT!' };
+    if (roll < 0.55) return { type: 'single', message: 'SINGLE!' };
+    if (roll < 0.75) return { type: 'double', message: 'DOUBLE!' };
+    if (roll < 0.9) return { type: 'triple', message: 'TRIPLE!' };
+    return { type: 'homerun', message: 'HOME RUN!' };
+};
                 }
                 
                 const powerValue = (batter.power * 0.7) + (batter.clutch * 0.3);
@@ -1373,11 +1398,26 @@
             }
             
             endPlay() {
-                setTimeout(() => {
-                    if (this.state.strikes >= 3) {
-                        this.state.outs++;
-                        this.showFeedback('STRIKEOUT!');
-                    }
+    setTimeout(() => {
+        if (this.state.strikes >= 3) {
+            this.state.outs++;
+            this.showFeedback('STRIKEOUT!');
+        }
+        if (this.state.balls >= 4) {
+            this.showFeedback('WALK!');
+            // Simplified walk logic
+            this.state.currentBatterIndex = (this.state.currentBatterIndex + 1) % 9;
+        }
+        // Show updated count/out before resetting for next at bat
+        this.updateDisplay();
+        if (this.state.outs >= 3) {
+            this.changeInning();
+        } else {
+            this.state.currentBatterIndex = (this.state.currentBatterIndex + 1) % 9;
+            this.startAtBat();
+        }
+    }, 1500);
+}
                     if (this.state.balls >= 4) {
                         this.showFeedback('WALK!');
                         // Simplified walk logic
