@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>Lone Star Legends: Championship Edition</title>
+    <title>Lone Star Legends: Championship Edition (Integrated)</title>
+    <!--
+      This file merges the visual design from the updated Lone Star Legends UI with
+      a simplified but complete game engine.  The game loop, scoring, base
+      running and CPU batting logic come from the previous working prototype,
+      while the styling and layout reflect the more polished version.  The
+      result is a playable baseball simulator with modern UI elements and a
+      balanced set of probabilities for pitches, hits and outs.
+    -->
     <style>
         /* === CORE RESET & VARIABLES === */
         :root {
@@ -21,7 +29,7 @@
             --field-green: #4B7F52;
             --dirt-brown: #8B6F47;
             --warning-track: #6B5245;
-            
+
             /* UI Colors */
             --ui-dark: #1A1A1A;
             --ui-medium: #2D2D2D;
@@ -367,7 +375,7 @@
                 filter: blur(0);
             }
         }
-        /* === HUD 2.0 === */
+        /* === HUD === */
         #gameHUD {
             position: fixed;
             top: 0;
@@ -452,7 +460,7 @@
             font-weight: bold;
             text-shadow: 0 0 10px rgba(191, 87, 0, 0.5);
         }
-        /* === COUNT & OUTS DISPLAY === */
+        /* === GAME STATUS === */
         #gameStatus {
             position: fixed;
             bottom: 30px;
@@ -513,7 +521,7 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.2); }
         }
-        /* === PLAYER CARD 2.0 === */
+        /* === PLAYER CARD === */
         #playerCard {
             position: fixed;
             bottom: 30px;
@@ -601,7 +609,7 @@
             border-radius: 2px;
             transition: width 0.5s;
         }
-        /* === ENHANCED CONTROLS === */
+        /* === CONTROL BUTTONS === */
         #gameControls {
             position: fixed;
             bottom: 120px;
@@ -629,33 +637,12 @@
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
-        .control-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, 
-                rgba(255,255,255,0.4) 0%, 
-                transparent 70%);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        .control-btn:active::before {
-            width: 300px;
-            height: 300px;
-        }
-        .control-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(191, 87, 0, 0.4);
-        }
         .control-btn:disabled {
             background: linear-gradient(135deg, #666 0%, #444 100%);
             opacity: 0.5;
             cursor: not-allowed;
         }
-        /* === PITCH SELECTION === */
+        /* === PITCH SELECTION (unused in integrated version) === */
         #pitchSelection {
             position: fixed;
             top: 50%;
@@ -698,7 +685,7 @@
             font-size: 10px;
             color: var(--gold-accent);
         }
-        /* === POWER METER 2.0 === */
+        /* === POWER METER (unused in integrated version) === */
         #powerMeter {
             position: fixed;
             bottom: 250px;
@@ -712,14 +699,6 @@
             z-index: 85;
             display: none;
             backdrop-filter: blur(10px);
-        }
-        #powerMeter.active {
-            display: block;
-            animation: meterGlow 2s infinite;
-        }
-        @keyframes meterGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(191, 87, 0, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(191, 87, 0, 0.8); }
         }
         #powerFill {
             position: absolute;
@@ -801,55 +780,6 @@
                 opacity: 0;
             }
         }
-        /* === ACHIEVEMENT POPUP === */
-        .achievement-popup {
-            position: fixed;
-            top: 100px;
-            right: -400px;
-            background: var(--ui-glass);
-            border: 3px solid var(--gold-accent);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            backdrop-filter: blur(15px);
-            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 500;
-        }
-        .achievement-popup.show {
-            right: 30px;
-        }
-        .achievement-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gold-accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            animation: bounce 1s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        .achievement-text {
-            display: flex;
-            flex-direction: column;
-        }
-        .achievement-title {
-            font-size: 16px;
-            color: var(--gold-accent);
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .achievement-desc {
-            font-size: 12px;
-            color: white;
-            opacity: 0.8;
-        }
         /* === STREAK COUNTER === */
         #streakCounter {
             position: fixed;
@@ -916,7 +846,7 @@
     </style>
 </head>
 <body>
-    <!-- All HTML elements are here as designed -->
+    <!-- Loading Screen -->
     <div id="loadingScreen">
         <div class="loading-logo">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -927,6 +857,7 @@
         </div>
         <div class="loading-text">LOADING LEGENDS...</div>
     </div>
+    <!-- Title Screen -->
     <div id="titleScreen">
         <div class="game-logo">
             <h1 class="game-title">LONE STAR LEGENDS</h1>
@@ -935,6 +866,7 @@
         <button class="control-btn" onclick="game.showTeamSelect()">PLAY BALL</button>
         <button class="control-btn" onclick="game.showStats()" style="margin-top: 20px;">HALL OF FAME</button>
     </div>
+    <!-- Team Selection -->
     <div id="teamSelect">
         <h2 class="team-select-title">CHOOSE YOUR DYNASTY</h2>
         <div class="team-grid">
@@ -942,16 +874,17 @@
                 <div style="font-size: 72px; text-align: center; margin-bottom: 20px;">⭐</div>
                 <h3 style="color: var(--burnt-orange); font-size: 24px; margin-bottom: 10px;">Houston Legends</h3>
                 <p style="color: var(--gold-accent); font-style: italic; margin-bottom: 20px;">"Space City Excellence"</p>
-                <div>Featuring: Ryan, Bagwell, Biggio, Altuve</div>
+                <div>Featuring: Ryan, Altuve, Bagwell, Biggio</div>
             </div>
             <div class="team-card" onclick="game.selectTeam('rangers')">
                 <div style="font-size: 72px; text-align: center; margin-bottom: 20px;">🤠</div>
                 <h3 style="color: var(--electric-blue); font-size: 24px; margin-bottom: 10px;">Texas Rangers</h3>
                 <p style="color: var(--gold-accent); font-style: italic; margin-bottom: 20px;">"Never Ever Quit"</p>
-                <div>Featuring: Young, Rodriguez, Beltre, Seager</div>
+                <div>Featuring: Jenkins, Rodriguez, Beltre, Seager</div>
             </div>
         </div>
     </div>
+    <!-- Game Field -->
     <div id="gameField">
         <div class="field-container">
             <div class="field-surface"></div>
@@ -959,6 +892,7 @@
             <div class="game-ball" id="gameBall"></div>
         </div>
     </div>
+    <!-- HUD -->
     <div id="gameHUD">
         <div class="hud-container">
             <div class="team-score-panel">
@@ -975,6 +909,7 @@
             </div>
         </div>
     </div>
+    <!-- Game Status -->
     <div id="gameStatus">
         <div class="status-grid">
             <div class="status-row">
@@ -991,6 +926,7 @@
             </div>
         </div>
     </div>
+    <!-- Player Card -->
     <div id="playerCard">
         <div class="player-card-header">
             <div class="player-portrait" id="playerPortrait">⚾</div>
@@ -1000,508 +936,630 @@
             </div>
         </div>
         <div class="player-stats-grid">
-            <div class="stat-item"><div class="stat-label">PWR</div><div class="stat-value" id="statPower">0</div><div class="stat-bar"><div class="stat-fill" id="powerBar" style="background: var(--fire-red);"></div></div></div>
-            <div class="stat-item"><div class="stat-label">CON</div><div class="stat-value" id="statContact">0</div><div class="stat-bar"><div class="stat-fill" id="contactBar" style="background: var(--electric-blue);"></div></div></div>
-            <div class="stat-item"><div class="stat-label">SPD</div><div class="stat-value" id="statSpeed">0</div><div class="stat-bar"><div class="stat-fill" id="speedBar" style="background: var(--emerald-success);"></div></div></div>
-            <div class="stat-item"><div class="stat-label">ARM</div><div class="stat-value" id="statArm">0</div><div class="stat-bar"><div class="stat-fill" id="armBar" style="background: var(--gold-accent);"></div></div></div>
+            <div class="stat-item">
+                <div class="stat-label">PWR</div>
+                <div class="stat-value" id="statPower">0</div>
+                <div class="stat-bar"><div class="stat-fill" id="powerBar" style="background: var(--fire-red);"></div></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">CON</div>
+                <div class="stat-value" id="statContact">0</div>
+                <div class="stat-bar"><div class="stat-fill" id="contactBar" style="background: var(--electric-blue);"></div></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">SPD</div>
+                <div class="stat-value" id="statSpeed">0</div>
+                <div class="stat-bar"><div class="stat-fill" id="speedBar" style="background: var(--emerald-success);"></div></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">ARM</div>
+                <div class="stat-value" id="statArm">0</div>
+                <div class="stat-bar"><div class="stat-fill" id="armBar" style="background: var(--gold-accent);"></div></div>
+            </div>
         </div>
     </div>
-    <div id="powerMeter"><div id="powerFill" style="height: 0%;"></div><div class="power-zones"><div class="power-zone sweet"></div><div class="power-zone good"></div></div></div>
-    <div id="pitchSelection"><h3 style="color: var(--gold-accent); margin-bottom: 20px;">SELECT PITCH</h3><div class="pitch-grid"></div></div>
-    <div id="streakCounter"><div class="streak-label">WIN STREAK</div><div class="streak-value"><span id="streakValue">0</span><span class="streak-fire">🔥</span></div></div>
-    <div id="gameControls"><button class="control-btn" id="pitchBtn" onclick="game.showPitchSelection()">PITCH</button><button class="control-btn" id="swingBtn" onclick="game.swing()">SWING</button><button class="control-btn" id="stealBtn" onclick="game.attemptSteal()">STEAL</button></div>
+    <!-- Power Meter (unused) -->
+    <div id="powerMeter">
+        <div id="powerFill" style="height: 0%;"></div>
+        <div class="power-zones">
+            <div class="power-zone sweet"></div>
+            <div class="power-zone good"></div>
+        </div>
+    </div>
+    <!-- Pitch Selection (unused) -->
+    <div id="pitchSelection">
+        <h3 style="color: var(--gold-accent); margin-bottom: 20px;">SELECT PITCH</h3>
+        <div class="pitch-grid"></div>
+    </div>
+    <!-- Streak Counter (unused) -->
+    <div id="streakCounter">
+        <div class="streak-label">WIN STREAK</div>
+        <div class="streak-value"><span id="streakValue">0</span><span class="streak-fire">🔥</span></div>
+    </div>
+    <!-- Controls -->
+    <div id="gameControls">
+        <!-- When pitching, show the pitch selection instead of immediately simulating a pitch -->
+        <button class="control-btn" id="pitchBtn" onclick="game.showPitchSelection()">PITCH</button>
+        <button class="control-btn" id="swingBtn" onclick="game.swing()">SWING</button>
+        <button class="control-btn" id="stealBtn" onclick="game.attemptSteal()">STEAL</button>
+    </div>
     
     <script>
-        class LoneStarLegendsGame {
-            constructor() {
-                this.dom = {}; // To cache DOM elements
-                this.teams = {
-                    astros: {
-                        name: "Houston Legends", color: "#BF5700", altColor: "#002D62",
-                        players: [
-                            { name: "Nolan Ryan", pos: "P", num: 34, power: 75, contact: 65, speed: 70, arm: 99, clutch: 95, pitches: ['fastball', 'curve', 'changeup'] },
-                            { name: "Jose Altuve", pos: "2B", num: 27, power: 80, contact: 95, speed: 90, arm: 85, clutch: 94 },
-                            { name: "Jeff Bagwell", pos: "1B", num: 5, power: 95, contact: 85, speed: 60, arm: 75, clutch: 92 },
-                            { name: "Craig Biggio", pos: "C", num: 7, power: 70, contact: 88, speed: 85, arm: 80, clutch: 90 },
-                            { name: "Alex Bregman", pos: "3B", num: 2, power: 85, contact: 88, speed: 70, arm: 90, clutch: 93 },
-                            { name: "George Springer", pos: "CF", num: 4, power: 88, contact: 80, speed: 85, arm: 88, clutch: 90 },
-                            { name: "Lance Berkman", pos: "LF", num: 17, power: 90, contact: 85, speed: 65, arm: 85, clutch: 91 },
-                            { name: "Carlos Correa", pos: "SS", num: 1, power: 85, contact: 85, speed: 75, arm: 95, clutch: 88 },
-                            { name: "Yordan Alvarez", pos: "RF", num: 44, power: 98, contact: 82, speed: 55, arm: 70, clutch: 89 }
-                        ]
-                    },
-                    rangers: {
-                        name: "Texas Rangers", color: "#003278", altColor: "#C0111F",
-                        players: [
-                            { name: "Fergie Jenkins", pos: "P", num: 31, power: 70, contact: 70, speed: 65, arm: 95, clutch: 92, pitches: ['fastball', 'slider', 'sinker'] },
-                            { name: "Ivan Rodriguez", pos: "C", num: 7, power: 80, contact: 85, speed: 70, arm: 95, clutch: 94 },
-                            { name: "Rafael Palmeiro", pos: "1B", num: 25, power: 92, contact: 85, speed: 60, arm: 75, clutch: 88 },
-                            { name: "Ian Kinsler", pos: "2B", num: 5, power: 78, contact: 85, speed: 88, arm: 82, clutch: 86 },
-                            { name: "Adrian Beltre", pos: "3B", num: 29, power: 88, contact: 88, speed: 65, arm: 92, clutch: 95 },
-                            { name: "Michael Young", pos: "SS", num: 10, power: 75, contact: 90, speed: 75, arm: 85, clutch: 92 },
-                            { name: "Josh Hamilton", pos: "LF", num: 32, power: 94, contact: 82, speed: 80, arm: 88, clutch: 91 },
-                            { name: "Corey Seager", pos: "CF", num: 5, power: 86, contact: 88, speed: 72, arm: 88, clutch: 90 },
-                            { name: "Juan Gonzalez", pos: "RF", num: 19, power: 96, contact: 80, speed: 70, arm: 90, clutch: 90 }
-                        ]
-                    }
-                };
-                this.pitchTypes = {
-                    fastball: { name: 'FASTBALL', speed: 95, break: 10 },
-                    curve: { name: 'CURVEBALL', speed: 78, break: 80 },
-                    slider: { name: 'SLIDER', speed: 85, break: 60 },
-                    changeup: { name: 'CHANGEUP', speed: 82, break: 30 },
-                    knuckle: { name: 'KNUCKLEBALL', speed: 65, break: 95 },
-                    sinker: { name: 'SINKER', speed: 90, break: 40 }
-                };
-                this.fieldPositions = {
-                    P: { bottom: '45%', left: '50%', transform: 'translateX(-50%)' },
-                    C: { bottom: '18%', left: '50%', transform: 'translateX(-50%)' },
-                    '1B': { bottom: '38%', left: '68%', transform: 'translateX(-50%)' },
-                    '2B': { bottom: '50%', left: '60%', transform: 'translateX(-50%)' },
-                    '3B': { bottom: '38%', left: '32%', transform: 'translateX(-50%)' },
-                    SS: { bottom: '50%', left: '40%', transform: 'translateX(-50%)' },
-                    LF: { bottom: '68%', left: '25%', transform: 'translateX(-50%)' },
-                    CF: { bottom: '75%', left: '50%', transform: 'translateX(-50%)' },
-                    RF: { bottom: '68%', left: '75%', transform: 'translateX(-50%)' }
-                };
-                this.basePositions = {
-                    1: { bottom: '38%', left: '68%', transform: 'translateX(-50%)' },
-                    2: { bottom: '50%', left: '50%', transform: 'translateX(-50%)' },
-                    3: { bottom: '38%', left: '32%', transform: 'translateX(-50%)' },
-                    4: { bottom: '18%', left: '50%', transform: 'translateX(-50%)' } // Home
-                };
-                this.state = {};
-                this.resetState();
-                this.powerInterval = null;
-                this.init();
-            }
+    // Integrated game logic.  This class merges the polished UI with a
+    // simplified but complete baseball simulation.  Players select one
+    // of two Texas dynasties and face off against a CPU.  Each at-bat
+    // produces balls, strikes, hits or outs based on player stats and
+    // tuned probabilities.  Runners advance appropriately and the
+    // scoreboard updates in real time.  A half inning ends after three
+    // outs and the game lasts three full innings.
+    class LoneStarLegendsGame {
+        constructor() {
+            // Define rosters for both teams.  Only basic batting stats are
+            // required (power, contact, speed, arm).  Pitchers include a
+            // 'pitches' property but it is unused in this simplified engine.
+            this.teams = {
+                astros: {
+                    name: 'Houston Legends', color: '#BF5700',
+                    players: [
+                        { name: 'Nolan Ryan', pos: 'P', num: 34, power: 75, contact: 65, speed: 70, arm: 99, clutch: 95 },
+                        { name: 'Jose Altuve', pos: '2B', num: 27, power: 80, contact: 95, speed: 90, arm: 85, clutch: 94 },
+                        { name: 'Jeff Bagwell', pos: '1B', num: 5, power: 95, contact: 85, speed: 60, arm: 75, clutch: 92 },
+                        { name: 'Craig Biggio', pos: 'C', num: 7, power: 70, contact: 88, speed: 85, arm: 80, clutch: 90 },
+                        { name: 'Alex Bregman', pos: '3B', num: 2, power: 85, contact: 88, speed: 70, arm: 90, clutch: 93 },
+                        { name: 'George Springer', pos: 'CF', num: 4, power: 88, contact: 80, speed: 85, arm: 88, clutch: 90 },
+                        { name: 'Lance Berkman', pos: 'LF', num: 17, power: 90, contact: 85, speed: 65, arm: 85, clutch: 91 },
+                        { name: 'Carlos Correa', pos: 'SS', num: 1, power: 85, contact: 85, speed: 75, arm: 95, clutch: 88 },
+                        { name: 'Yordan Alvarez', pos: 'RF', num: 44, power: 98, contact: 82, speed: 55, arm: 70, clutch: 89 }
+                    ]
+                },
+                rangers: {
+                    name: 'Texas Rangers', color: '#003278',
+                    players: [
+                        { name: 'Fergie Jenkins', pos: 'P', num: 31, power: 70, contact: 70, speed: 65, arm: 95, clutch: 92 },
+                        { name: 'Ivan Rodriguez', pos: 'C', num: 7, power: 80, contact: 85, speed: 70, arm: 95, clutch: 94 },
+                        { name: 'Rafael Palmeiro', pos: '1B', num: 25, power: 92, contact: 85, speed: 60, arm: 75, clutch: 88 },
+                        { name: 'Ian Kinsler', pos: '2B', num: 5, power: 78, contact: 85, speed: 88, arm: 82, clutch: 86 },
+                        { name: 'Adrian Beltre', pos: '3B', num: 29, power: 88, contact: 88, speed: 65, arm: 92, clutch: 95 },
+                        { name: 'Michael Young', pos: 'SS', num: 10, power: 75, contact: 90, speed: 75, arm: 85, clutch: 92 },
+                        { name: 'Josh Hamilton', pos: 'LF', num: 32, power: 94, contact: 82, speed: 80, arm: 88, clutch: 91 },
+                        { name: 'Corey Seager', pos: 'CF', num: 5, power: 86, contact: 88, speed: 72, arm: 88, clutch: 90 },
+                        { name: 'Juan Gonzalez', pos: 'RF', num: 19, power: 96, contact: 80, speed: 70, arm: 90, clutch: 90 }
+                    ]
+                }
+            };
+            // Field positions (for placing defensive players on the 3D diamond)
+            this.fieldPositions = {
+                'P': { bottom: '45%', left: '50%', transform: 'translateX(-50%)' },
+                'C': { bottom: '18%', left: '50%', transform: 'translateX(-50%)' },
+                '1B': { bottom: '38%', left: '68%', transform: 'translateX(-50%)' },
+                '2B': { bottom: '50%', left: '60%', transform: 'translateX(-50%)' },
+                '3B': { bottom: '38%', left: '32%', transform: 'translateX(-50%)' },
+                'SS': { bottom: '50%', left: '40%', transform: 'translateX(-50%)' },
+                'LF': { bottom: '68%', left: '25%', transform: 'translateX(-50%)' },
+                'CF': { bottom: '75%', left: '50%', transform: 'translateX(-50%)' },
+                'RF': { bottom: '68%', left: '75%', transform: 'translateX(-50%)' }
+            };
+            // Base positions for runners (1=first, 2=second, 3=third, 4=home)
+            this.basePositions = {
+                1: { bottom: '38%', left: '68%', transform: 'translateX(-50%)' },
+                2: { bottom: '50%', left: '50%', transform: 'translateX(-50%)' },
+                3: { bottom: '38%', left: '32%', transform: 'translateX(-50%)' },
+                4: { bottom: '18%', left: '50%', transform: 'translateX(-50%)' }
+            };
 
-            resetState() {
-                this.state = {
-                    inning: 1, halfInning: 'top', outs: 0, balls: 0, strikes: 0,
-                    bases: [null, null, null], homeScore: 0, awayScore: 0,
-                    playerTeam: null, cpuTeam: null, battingTeam: null, fieldingTeam: null,
-                    currentBatterIndex: 0, currentPitcherIndex: 0,
-                    selectedPitch: null, powerMeterValue: 0, powerMeterDirection: 1,
-                    isActionInProgress: false, gameStarted: false, gameOver: false,
-                    lastFeedback: null
-                };
+        // Define a simple set of pitch types for the pitch selection UI. Each
+        // pitch includes a display name and an indicative speed.  These
+        // values are purely cosmetic in this simplified engine, but they
+        // allow the player to pick a pitch when controlling the fielding
+        // team.  Selecting a pitch will immediately throw the pitch to
+        // the batter via cpuPitch().
+        this.pitchTypes = {
+            fastball: { name: 'FASTBALL', speed: 96 },
+            curve:    { name: 'CURVEBALL', speed: 78 },
+            slider:   { name: 'SLIDER', speed: 86 },
+            changeup: { name: 'CHANGEUP', speed: 82 },
+            knuckle:  { name: 'KNUCKLEBALL', speed: 68 },
+            sinker:   { name: 'SINKER', speed: 90 }
+        };
+            // Initialise game state
+            this.state = {
+                inning: 1,
+                halfInning: 'top',
+                outs: 0,
+                balls: 0,
+                strikes: 0,
+                bases: [null, null, null],
+                homeScore: 0,
+                awayScore: 0,
+                playerTeam: null,
+                cpuTeam: null,
+                battingTeam: null,
+                fieldingTeam: null,
+                currentBatterIndex: 0,
+                gameStarted: false,
+                gameOver: false
+            };
+            // Cache DOM elements
+            this.dom = {};
+            this.cacheDomElements();
+            // Start initialisation
+            this.init();
+        }
+        cacheDomElements() {
+            const ids = [
+                'loadingScreen','titleScreen','teamSelect','gameField','gameHUD','gameStatus','playerCard',
+                'powerMeter','pitchSelection','streakCounter','gameControls','awayTeamName','awayScore',
+                'inningHalf','inningNumber','homeTeamName','homeScore','balls','strikes','outs','playerPortrait',
+                'playerName','playerPosition','statPower','powerBar','statContact','contactBar','statSpeed',
+                'speedBar','statArm','armBar','playersContainer','gameBall','pitchBtn','swingBtn','stealBtn'
+            ];
+            ids.forEach(id => { this.dom[id] = document.getElementById(id); });
+            this.dom.pitchGrid = this.dom.pitchSelection.querySelector('.pitch-grid');
+        }
+        init() {
+            // Hide loading screen after a short delay
+            setTimeout(() => {
+                this.dom.loadingScreen.style.opacity = '0';
+                setTimeout(() => { this.dom.loadingScreen.style.display = 'none'; }, 500);
+            }, 1500);
+            // Set up key listeners
+            document.addEventListener('keydown', (e) => {
+                if (!this.state.gameStarted || this.state.gameOver) return;
+                if (e.key === ' ') {
+                    this.swing();
+                }
+            });
+            // Initial UI state
+            this.updateDisplay();
+        }
+        /* Show team selection menu */
+        showTeamSelect() {
+            this.dom.titleScreen.style.display = 'none';
+            this.dom.teamSelect.style.display = 'flex';
+        }
+        /* Player selects a team and game starts */
+        selectTeam(id) {
+            this.state.playerTeam = id;
+            this.state.cpuTeam = (id === 'astros' ? 'rangers' : 'astros');
+            // Randomly decide who bats first
+            if (Math.random() < 0.5) {
+                this.state.battingTeam = this.state.playerTeam;
+                this.state.fieldingTeam = this.state.cpuTeam;
+            } else {
+                this.state.battingTeam = this.state.cpuTeam;
+                this.state.fieldingTeam = this.state.playerTeam;
             }
-
-            init() {
-                this.cacheDomElements();
-                setTimeout(() => {
-                    this.dom.loadingScreen.style.opacity = '0';
-                    setTimeout(() => { this.dom.loadingScreen.style.display = 'none'; }, 500);
-                }, 1500);
-                this.setupEventListeners();
-                this.updateDisplay(); // Initial UI setup
+            // Set the inning half based on who bats first: away team hits in the top, home team in the bottom
+            this.state.halfInning = (this.state.battingTeam === this.state.cpuTeam) ? 'top' : 'bottom';
+            this.startGame();
+        }
+        /* Initialise the game UI and state for a new game */
+        startGame() {
+            this.state.gameStarted = true;
+            this.state.gameOver = false;
+            this.state.inning = 1;
+            this.state.halfInning = 'top';
+            this.state.outs = 0;
+            this.state.balls = 0;
+            this.state.strikes = 0;
+            this.state.bases = [null, null, null];
+            this.state.currentBatterIndex = 0;
+            // Hide selection menus and show game interfaces
+            this.dom.teamSelect.style.display = 'none';
+            this.dom.gameField.style.display = 'block';
+            this.dom.gameHUD.style.display = 'block';
+            this.dom.gameStatus.style.display = 'block';
+            this.dom.gameControls.style.display = 'flex';
+            this.dom.playerCard.style.display = 'block';
+            // Update team names on HUD
+            this.dom.homeTeamName.textContent = this.teams[this.state.playerTeam].name.toUpperCase();
+            this.dom.awayTeamName.textContent = this.teams[this.state.cpuTeam].name.toUpperCase();
+            // Begin the first at-bat
+            this.nextBatter();
+        }
+        /* Set up fielders and batter for current play */
+        setupField() {
+            const container = this.dom.playersContainer;
+            container.innerHTML = '';
+            // Place fielders for the fielding team
+            const fielding = this.teams[this.state.fieldingTeam];
+            fielding.players.forEach(player => {
+                const pos = this.fieldPositions[player.pos];
+                if (pos) {
+                    const sprite = this.createPlayerSprite(player, fielding.color);
+                    Object.assign(sprite.style, pos);
+                    container.appendChild(sprite);
+                }
+            });
+            // Place current batter
+            const batting = this.teams[this.state.battingTeam];
+            const batter = batting.players[this.state.currentBatterIndex % batting.players.length];
+            const batterSprite = this.createPlayerSprite(batter, batting.color);
+            batterSprite.id = 'batter';
+            batterSprite.style.bottom = '20%';
+            batterSprite.style.left = '50%';
+            batterSprite.style.transform = 'translateX(-50%)';
+            container.appendChild(batterSprite);
+            // Render base runners
+            this.updateBaseRunnersUI();
+        }
+        /* Create a DOM element for a player sprite */
+        createPlayerSprite(player, teamColor) {
+            const el = document.createElement('div');
+            el.className = 'player-sprite';
+            el.innerHTML = `
+                <div class="player-body">
+                    <div class="player-head"></div>
+                    <div class="player-cap" style="background:${teamColor}"></div>
+                    <div class="player-jersey" style="background:${teamColor}">${player.num}</div>
+                    <div class="player-pants"></div>
+                    <div class="player-shadow"></div>
+                </div>`;
+            return el;
+        }
+        /* Display the current batter's stats in the player card */
+        showPlayerCard(player) {
+            this.dom.playerName.textContent = player.name.toUpperCase();
+            this.dom.playerPosition.textContent = player.pos;
+            this.dom.statPower.textContent = player.power;
+            this.dom.powerBar.style.width = `${player.power}%`;
+            this.dom.statContact.textContent = player.contact;
+            this.dom.contactBar.style.width = `${player.contact}%`;
+            this.dom.statSpeed.textContent = player.speed;
+            this.dom.speedBar.style.width = `${player.speed}%`;
+            this.dom.statArm.textContent = player.arm;
+            this.dom.armBar.style.width = `${player.arm}%`;
+            this.dom.playerCard.classList.add('active');
+        }
+        /* Start the next at-bat.  Resets counts and determines if CPU or player is batting. */
+        nextBatter() {
+            // If three outs have occurred, handle inning change
+            if (this.state.outs >= 3) {
+                this.changeSides();
+                return;
             }
-
-            cacheDomElements() {
-                const ids = [
-                    'loadingScreen', 'titleScreen', 'teamSelect', 'gameField', 'gameHUD', 'gameStatus',
-                    'playerCard', 'powerMeter', 'pitchSelection', 'streakCounter', 'gameControls',
-                    'awayTeamName', 'awayScore', 'inningHalf', 'inningNumber', 'homeTeamName', 'homeScore',
-                    'balls', 'strikes', 'outs', 'playerPortrait', 'playerName', 'playerPosition',
-                    'statPower', 'powerBar', 'statContact', 'contactBar', 'statSpeed', 'speedBar',
-                    'statArm', 'armBar', 'powerFill', 'pitchBtn', 'swingBtn', 'stealBtn', 'playersContainer', 'gameBall'
-                ];
-                ids.forEach(id => { this.dom[id] = document.getElementById(id); });
-                this.dom.pitchGrid = this.dom.pitchSelection.querySelector('.pitch-grid');
+            // Reset count
+            this.state.balls = 0;
+            this.state.strikes = 0;
+            // Determine the current batter (wrap around after 9)
+            const battingLine = this.teams[this.state.battingTeam].players;
+            this.state.currentBatterIndex = this.state.currentBatterIndex % battingLine.length;
+            const batter = battingLine[this.state.currentBatterIndex];
+            // Show batter card
+            this.showPlayerCard(batter);
+            // Place players on field
+            this.setupField();
+            // Update HUD counts
+            this.updateDisplay();
+            // Determine if CPU or player is batting
+            if (this.state.battingTeam === this.state.cpuTeam) {
+                // CPU at bat: disable swing button, enable pitch (for player's awareness)
+                this.dom.swingBtn.disabled = true;
+                this.dom.pitchBtn.disabled = false;
+                // Simulate CPU pitch after a short delay
+                setTimeout(() => this.cpuPitch(), 800);
+            } else {
+                // Player at bat: enable swing button, disable pitch
+                this.dom.pitchBtn.disabled = true;
+                this.dom.swingBtn.disabled = false;
             }
-            
-            setupEventListeners() {
-                document.addEventListener('keydown', (e) => {
-                    if (!this.state.gameStarted || this.state.isActionInProgress) return;
-                    if (e.key === ' ') this.swing();
-                });
+        }
+        /* CPU pitching logic: simply generate an outcome for the current batter */
+        cpuPitch() {
+            if (this.state.gameOver || !this.state.gameStarted) return;
+            const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
+            const outcome = this.simulateOutcome(batter);
+            this.processPitchOutcome(outcome);
+        }
+        /* Player swings at the pitch */
+        swing() {
+            if (this.state.gameOver || !this.state.gameStarted) return;
+            if (this.state.battingTeam !== this.state.playerTeam) return;
+            const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
+            const outcome = this.simulateOutcome(batter);
+            this.processPitchOutcome(outcome);
+        }
+        /* Core outcome simulation.  Uses player contact/power to skew
+           probabilities of strikes, balls, hits and extra-base hits. */
+        simulateOutcome(player) {
+            // Clamp stats between 0 and 100
+            const contact = Math.min(Math.max(player.contact, 0), 100);
+            const power = Math.min(Math.max(player.power, 0), 100);
+            /*
+             * Base probabilities tuned to produce more realistic innings.  By
+             * default there are far more strikes and balls than hits.  High
+             * contact slightly increases the chance of a hit while reducing
+             * strikes.  Hits are further subdivided into singles, doubles,
+             * triples and home runs using the player's power.
+             */
+            // Base probabilities tuned to produce more realistic innings.
+            // Increase strike probability slightly and reduce hits to avoid long rallies.
+            let probStrike = 0.55;
+            let probBall   = 0.30;
+            let probHit    = 0.15;
+            // Adjust based on contact: raise hit chance slightly and lower strikes
+            probStrike -= (contact - 50) * 0.0005;
+            probHit    += (contact - 50) * 0.0010;
+            // Ensure probabilities remain within [0,1]
+            probStrike = Math.max(0.1, Math.min(probStrike, 0.9));
+            probHit    = Math.max(0.05, Math.min(probHit, 0.6));
+            probBall   = 1 - (probStrike + probHit);
+            // Randomly select outcome
+            const r = Math.random();
+            if (r < probStrike) return { type: 'strike' };
+            if (r < probStrike + probBall) return { type: 'ball' };
+            // Hit occurred: determine type based on power and a second roll
+            const hitRoll = Math.random();
+            // Home run: very high power and low probability
+            if (power > 90 && hitRoll < 0.02) return { type: 'homerun' };
+            // Triple: high power and slightly larger chance
+            if (power > 80 && hitRoll < 0.05) return { type: 'triple' };
+            // Double: moderate chance
+            if (hitRoll < 0.25) return { type: 'double' };
+            // Otherwise, single
+            return { type: 'single' };
+        }
+        /* Process the outcome of a pitch */
+        processPitchOutcome(outcome) {
+            if (this.state.gameOver) return;
+            // Display feedback and update state
+            const show = (msg, type) => {
+                this.showFeedback(msg, type);
+            };
+            switch (outcome.type) {
+                case 'strike':
+                    this.state.strikes++;
+                    show('Strike!', '');
+                    break;
+                case 'ball':
+                    this.state.balls++;
+                    show('Ball!', '');
+                    break;
+                case 'single':
+                    show('Single!', '');
+                    this.advanceRunners(1);
+                    break;
+                case 'double':
+                    show('Double!', '');
+                    this.advanceRunners(2);
+                    break;
+                case 'triple':
+                    show('Triple!', '');
+                    this.advanceRunners(3);
+                    break;
+                case 'homerun':
+                    show('Home Run!', 'home-run');
+                    this.advanceRunners(4);
+                    break;
             }
-
-            showTeamSelect() {
-                this.dom.titleScreen.style.display = 'none';
-                this.dom.teamSelect.style.display = 'flex';
+            // Handle walks (four balls)
+            if (this.state.balls >= 4) {
+                this.advanceRunners(1);
+                this.showFeedback('Walk!', '');
             }
-
-            selectTeam(teamId) {
-                this.resetState();
-                this.state.playerTeam = teamId;
-                this.state.cpuTeam = teamId === 'astros' ? 'rangers' : 'astros';
-                this.state.battingTeam = Math.random() < 0.5 ? this.state.playerTeam : this.state.cpuTeam;
-                this.state.fieldingTeam = this.state.battingTeam === this.state.playerTeam ? this.state.cpuTeam : this.state.playerTeam;
-                this.startGame();
+            // Handle strikeouts
+            if (this.state.strikes >= 3) {
+                this.handleOut();
+                return;
             }
-
-            startGame() {
-                this.state.gameStarted = true;
-                this.dom.teamSelect.style.display = 'none';
-                ['gameField', 'gameHUD', 'gameStatus', 'gameControls', 'playerCard'].forEach(id => this.dom[id].style.display = 'block');
-                this.dom.homeTeamName.textContent = this.teams[this.state.playerTeam].name.toUpperCase();
-                this.dom.awayTeamName.textContent = this.teams[this.state.cpuTeam].name.toUpperCase();
-                this.startAtBat();
-            }
-
-            setupField() {
-                const container = this.dom.playersContainer;
-                container.innerHTML = ''; // Clear previous players
-                
-                // Place fielders
-                const fieldingTeamData = this.teams[this.state.fieldingTeam];
-                fieldingTeamData.players.forEach(player => {
-                    if (this.fieldPositions[player.pos]) {
-                        const sprite = this.createPlayerSprite(player, fieldingTeamData.color);
-                        sprite.id = `player-${player.pos}`;
-                        Object.assign(sprite.style, this.fieldPositions[player.pos]);
-                        container.appendChild(sprite);
-                    }
-                });
-
-                // Place batter
-                const battingTeamData = this.teams[this.state.battingTeam];
-                const batter = battingTeamData.players[this.state.currentBatterIndex];
-                const batterSprite = this.createPlayerSprite(batter, battingTeamData.color);
-                batterSprite.id = 'batter';
-                batterSprite.style.bottom = '20%';
-                batterSprite.style.left = '50%';
-                batterSprite.style.transform = `translateX(${this.state.halfInning === 'top' ? '50%' : '-150%'})`;
-                container.appendChild(batterSprite);
-            }
-
-            createPlayerSprite(player, teamColor) {
-                const el = document.createElement('div');
-                el.className = 'player-sprite';
-                el.innerHTML = `<div class="player-body"><div class="player-head"></div><div class="player-cap" style="background:${teamColor}"></div><div class="player-jersey" style="background:${teamColor}">${player.num}</div><div class="player-pants"></div><div class="player-shadow"></div></div>`;
-                return el;
-            }
-            
-            startAtBat() {
-                this.state.isActionInProgress = false;
-                this.state.balls = 0;
-                this.state.strikes = 0;
-                // Disable steal button if no runners on base
-                this.dom.stealBtn.disabled = !this.state.bases.some(b => b);
-                this.setupField();
-                this.showPlayerCard(this.teams[this.state.battingTeam].players[this.state.currentBatterIndex]);
-                this.updateDisplay();
-
-                if (this.state.battingTeam === this.state.cpuTeam) {
-                    this.dom.pitchBtn.disabled = false;
-                    this.dom.swingBtn.disabled = true;
-                    this.dom.powerMeter.classList.remove('active');
+            // Update the HUD
+            this.updateDisplay();
+            // Continue CPU batting if applicable
+            if (this.state.battingTeam === this.state.cpuTeam && !this.state.gameOver) {
+                if (outcome.type === 'strike' || outcome.type === 'ball') {
+                    // Continue pitching after short delay
+                    setTimeout(() => this.cpuPitch(), 600);
                 } else {
-                    this.dom.pitchBtn.disabled = true;
-                    this.dom.swingBtn.disabled = true; // Wait for pitch
-                    this.dom.powerMeter.classList.add('active');
-                    this.startPowerMeter();
-                    setTimeout(() => this.cpuPitch(), 1000);
+                    // Hit: new batter
+                    this.state.currentBatterIndex++;
+                    this.nextBatter();
+                }
+            } else if (this.state.battingTeam === this.state.playerTeam) {
+                // For player: if hit occurred, move to next batter
+                if (['single','double','triple','homerun'].includes(outcome.type)) {
+                    this.state.currentBatterIndex++;
+                    this.nextBatter();
                 }
             }
-            
-            showPlayerCard(player) {
-                this.dom.playerName.textContent = player.name.toUpperCase();
-                this.dom.playerPosition.textContent = player.pos;
-                this.dom.statPower.textContent = player.power;
-                this.dom.powerBar.style.width = `${player.power}%`;
-                this.dom.statContact.textContent = player.contact;
-                this.dom.contactBar.style.width = `${player.contact}%`;
-                this.dom.statSpeed.textContent = player.speed;
-                this.dom.speedBar.style.width = `${player.speed}%`;
-                this.dom.statArm.textContent = player.arm;
-                this.dom.armBar.style.width = `${player.arm}%`;
-                this.dom.playerCard.classList.add('active');
-            }
-
-            startPowerMeter() {
-                if (this.powerInterval) clearInterval(this.powerInterval);
-                this.powerInterval = setInterval(() => {
-                    this.state.powerMeterValue += this.state.powerMeterDirection * 2;
-                    if (this.state.powerMeterValue >= 100) this.state.powerMeterDirection = -1;
-                    if (this.state.powerMeterValue <= 0) this.state.powerMeterDirection = 1;
-                    this.dom.powerFill.style.height = `${this.state.powerMeterValue}%`;
-                }, 20);
-            }
-
-            stopPowerMeter() {
-                clearInterval(this.powerInterval);
-                this.powerInterval = null;
-            }
-
-            showPitchSelection() {
-                if(this.state.isActionInProgress) return;
-                const pitcher = this.teams[this.state.fieldingTeam].players[this.state.currentPitcherIndex];
-                this.dom.pitchGrid.innerHTML = '';
-                pitcher.pitches.forEach(pitchKey => {
-                    const pitch = this.pitchTypes[pitchKey];
-                    const el = document.createElement('div');
-                    el.className = 'pitch-option';
-                    el.innerHTML = `<div class="pitch-name">${pitch.name}</div><div class="pitch-stats">${pitch.speed} MPH</div>`;
-                    el.onclick = () => this.selectPitch(pitchKey);
-                    this.dom.pitchGrid.appendChild(el);
-                });
-                this.dom.pitchSelection.style.display = 'block';
-            }
-
-            selectPitch(pitchKey) {
-                this.state.selectedPitch = pitchKey;
-                this.dom.pitchSelection.style.display = 'none';
-                this.playerPitch();
-            }
-
-            playerPitch() {
-                this.state.isActionInProgress = true;
-                this.dom.pitchBtn.disabled = true;
-                this.animatePitch(this.state.selectedPitch, () => {
-                    this.cpuSwing(this.state.selectedPitch);
-                });
-            }
-
-            cpuPitch() {
-                this.state.isActionInProgress = true;
-                const pitcher = this.teams[this.state.fieldingTeam].players[this.state.currentPitcherIndex];
-                const pitchKey = pitcher.pitches[Math.floor(Math.random() * pitcher.pitches.length)];
-                this.state.selectedPitch = pitchKey;
-                this.animatePitch(pitchKey, () => {
-                    this.state.isActionInProgress = false;
-                    this.dom.swingBtn.disabled = false;
-                });
-            }
-            
-            swing() {
-                if (this.state.isActionInProgress || this.dom.swingBtn.disabled) return;
-                this.state.isActionInProgress = true;
-                this.dom.swingBtn.disabled = true;
-                this.stopPowerMeter();
-                
-                const batterSprite = document.getElementById('batter');
-                batterSprite.classList.add('swinging');
-                setTimeout(() => batterSprite.classList.remove('swinging'), 300);
-
-                setTimeout(() => {
-                    const swingPower = this.state.powerMeterValue;
-                    const result = this.calculateHit(this.state.selectedPitch, swingPower);
-                    this.showFeedback(result.message, result.type === 'homerun');
-                    this.processResult(result);
-                }, 150); // Delay to sync with animation
-            }
-            
-            cpuSwing(pitchKey) {
-    const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
-    const pitch = this.pitchTypes[pitchKey];
-    // Adjust swing chance to produce more realistic plate appearances.  Reduce
-    // reliance on batter contact and incorporate break/velocity.  Floor at 0.3
-    const rawChance = ((batter.contact / 100) * 0.8) - (pitch.break / 300) + (batter.clutch / 600);
-    const swingChance = Math.max(0.3, rawChance);
-
-    setTimeout(() => {
-        if (Math.random() < swingChance) {
-            // CPU decides to swing.  Use a moderate power value with some randomness.
-            const power = 30 + Math.random() * 70;
-            const result = this.calculateHit(pitchKey, power);
-            this.showFeedback(result.message, result.type === 'homerun');
-            this.processResult(result);
-        } else {
-            // CPU takes the pitch: record a strike and end the play.
-            this.state.strikes++;
-            this.showFeedback('STRIKE!');
-            this.endPlay();
         }
-    }, 500);
-} else {
-                        this.state.strikes++;
-                        this.showFeedback('STRIKE!');
-                        this.endPlay();
+        /* Advance all base runners and batter by the specified number of bases */
+        advanceRunners(basesToAdvance) {
+            let runs = 0;
+            // Advance existing runners
+            for (let i = 2; i >= 0; i--) {
+                const runner = this.state.bases[i];
+                if (runner) {
+                    const newIndex = i + basesToAdvance;
+                    if (newIndex >= 3) {
+                        runs++;
+                    } else {
+                        this.state.bases[newIndex] = runner;
                     }
-                }, 500); // CPU "reaction time"
+                    this.state.bases[i] = null;
+                }
             }
+            // Batter
+            if (basesToAdvance >= 4) {
+                runs++;
+            } else {
+                this.state.bases[basesToAdvance - 1] = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
+            }
+            // Update score
+            if (runs > 0) {
+                if (this.state.battingTeam === this.state.playerTeam) {
+                    this.state.homeScore += runs;
+                } else {
+                    this.state.awayScore += runs;
+                }
+                const msg = runs > 1 ? `${runs} Runs!` : 'Run!';
+                this.showFeedback(msg, '');
+            }
+            // Refresh base runners UI
+            this.updateBaseRunnersUI();
+        }
+        /* Remove current batter on strikes and handle outs */
+        handleOut() {
+            this.state.outs++;
+            this.showFeedback('Out!', '');
+            // Reset balls/strikes
+            this.state.balls = 0;
+            this.state.strikes = 0;
+            // Move to next batter
+            this.state.currentBatterIndex++;
+            // Check for end of half-inning
+            if (this.state.outs >= 3) {
+                this.changeSides();
+            } else {
+                this.nextBatter();
+            }
+        }
+        /* Change sides after three outs; handles inning and game over conditions */
+        changeSides() {
+            // Reset outs and counts
+            this.state.outs = 0;
+            this.state.balls = 0;
+            this.state.strikes = 0;
+            // Clear bases
+            this.state.bases = [null, null, null];
+            // Swap batting and fielding teams
+            const oldBatting = this.state.battingTeam;
+            this.state.battingTeam = this.state.fieldingTeam;
+            this.state.fieldingTeam = oldBatting;
+            // Reset batter index
+            this.state.currentBatterIndex = 0;
+            // Switch top/bottom or advance inning
+            if (this.state.halfInning === 'top') {
+                this.state.halfInning = 'bottom';
+            } else {
+                this.state.halfInning = 'top';
+                this.state.inning++;
+            }
+            // Check for end of game (3 innings total)
+            if (this.state.inning > 3) {
+                this.endGame();
+                return;
+            }
+            // Update field and continue
+            this.updateBaseRunnersUI();
+            this.nextBatter();
+        }
+        /* End the game and show final result */
+        endGame() {
+            this.state.gameOver = true;
+            this.showFeedback('Game Over', '');
+            let result;
+            if (this.state.homeScore > this.state.awayScore) {
+                result = 'You Win!';
+            } else if (this.state.homeScore < this.state.awayScore) {
+                result = 'You Lose!';
+            } else {
+                result = 'Tie Game!';
+            }
+            setTimeout(() => {
+                this.showFeedback(result, '');
+            }, 2000);
+            // Disable controls
+            this.dom.swingBtn.disabled = true;
+            this.dom.pitchBtn.disabled = true;
+            this.dom.stealBtn.disabled = true;
+        }
+        /* Render base runners on the field */
+        updateBaseRunnersUI() {
+            // Remove existing runner elements
+            const container = this.dom.playersContainer;
+            const existing = container.querySelectorAll('.base-runner');
+            existing.forEach(el => el.remove());
+            // Add new runners
+            for (let i = 0; i < 3; i++) {
+                const runner = this.state.bases[i];
+                if (runner) {
+                    const sprite = this.createPlayerSprite(runner, this.teams[this.state.battingTeam].color);
+                    sprite.classList.add('base-runner');
+                    Object.assign(sprite.style, this.basePositions[i + 1]);
+                    container.appendChild(sprite);
+                }
+            }
+        }
+        /* Update scoreboard and count indicators */
+        updateDisplay() {
+            // Update scores and inning
+            this.dom.homeScore.textContent = this.state.homeScore;
+            this.dom.awayScore.textContent = this.state.awayScore;
+            this.dom.inningNumber.textContent = this.state.inning;
+            this.dom.inningHalf.textContent = this.state.halfInning.toUpperCase();
+            // Update ball/strike/out indicators
+            const updateIndicators = (container, count, max, cls) => {
+                container.innerHTML = '';
+                for (let i = 0; i < max; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = `indicator ${cls}`;
+                    if (i < count) dot.classList.add('active');
+                    container.appendChild(dot);
+                }
+            };
+            updateIndicators(this.dom.balls, this.state.balls, 4, 'ball');
+            updateIndicators(this.dom.strikes, this.state.strikes, 3, 'strike');
+            updateIndicators(this.dom.outs, this.state.outs, 3, 'out');
+        }
+        /* Display an animated feedback message on the screen */
+        showFeedback(message, type) {
+            const msgEl = document.createElement('div');
+            msgEl.className = 'feedback-msg';
+            if (type === 'home-run') msgEl.classList.add('home-run');
+            msgEl.textContent = message;
+            document.body.appendChild(msgEl);
+            // Trigger animation
+            setTimeout(() => { msgEl.classList.add('active'); }, 50);
+            // Remove after animation
+            setTimeout(() => { msgEl.remove(); }, 2500);
+        }
 
-            calculateHit(pitchKey, power) {
-    const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
-    const pitch = this.pitchTypes[pitchKey];
-
-    // Determine if the batter makes contact.  Lower contact value slightly to allow more whiffs.
-    const contactValue = (batter.contact * 0.6) + (batter.clutch * 0.4);
-    if (Math.random() * 100 > contactValue - (pitch.break / 5)) {
-        return { type: 'strike', message: 'SWING AND A MISS!' };
+    /*
+     * Display the pitch selection modal when the player is fielding and the
+     * CPU is at bat.  Each pitch option is generated from the pitchTypes
+     * list defined in the constructor.  Selecting a pitch hides the
+     * modal and triggers cpuPitch() immediately.  Pitch types are
+     * currently cosmetic and do not influence the outcome, but they
+     * provide a richer user interaction.
+     */
+    showPitchSelection() {
+        if (!this.state.gameStarted || this.state.gameOver) return;
+        // Only allow pitch selection when the CPU is batting
+        if (this.state.battingTeam !== this.state.cpuTeam) return;
+        // Clear existing options and build a new grid
+        this.dom.pitchGrid.innerHTML = '';
+        Object.keys(this.pitchTypes).forEach((key) => {
+            const pitch = this.pitchTypes[key];
+            const el = document.createElement('div');
+            el.className = 'pitch-option';
+            el.innerHTML = `<div class="pitch-name">${pitch.name}</div><div class="pitch-stats">${pitch.speed} MPH</div>`;
+            el.onclick = () => this.selectPitch(key);
+            this.dom.pitchGrid.appendChild(el);
+        });
+        this.dom.pitchSelection.style.display = 'block';
     }
 
-    // Once contact is made, randomly choose hit outcome.  The thresholds below
-    // favour outs and singles over extra-base hits to keep scoring reasonable.
-    const roll = Math.random();
-    if (roll < 0.25) return { type: 'out', message: 'FLY OUT!' };
-    if (roll < 0.55) return { type: 'single', message: 'SINGLE!' };
-    if (roll < 0.75) return { type: 'double', message: 'DOUBLE!' };
-    if (roll < 0.9) return { type: 'triple', message: 'TRIPLE!' };
-    return { type: 'homerun', message: 'HOME RUN!' };
-};
-                }
-                
-                const powerValue = (batter.power * 0.7) + (batter.clutch * 0.3);
-                const hitValue = (powerValue / 100) * (power / 100) * (1 - pitch.speed / 250);
-                
-                if (hitValue > 0.65) return { type: 'homerun', message: 'HOME RUN!' };
-                if (hitValue > 0.5) return { type: 'double', message: 'DOUBLE!' };
-                if (hitValue > 0.2) return { type: 'single', message: 'SINGLE!' };
-                return { type: 'out', message: 'OUT!' };
-            }
-
-            async processResult(result) {
-                if (result.type === 'strike') {
-                    this.state.strikes++;
-                } else if (result.type === 'out') {
-                    this.state.outs++;
-                } else {
-                    const advanceMap = { single: 1, double: 2, homerun: 4 };
-                    const numBases = advanceMap[result.type];
-                    await this.animateBaserunning(numBases);
-                }
-                this.endPlay();
-            }
-
-            async animateBaserunning(numBases) {
-                let runsScored = 0;
-                const runners = [];
-                
-                // Add existing runners
-                for(let i=2; i>=0; i--) {
-                    if (this.state.bases[i]) {
-                        runners.push({ from: i + 1, player: this.state.bases[i] });
-                        this.state.bases[i] = null;
-                    }
-                }
-                // Add batter
-                const batter = this.teams[this.state.battingTeam].players[this.state.currentBatterIndex];
-                runners.push({ from: 0, player: batter });
-
-                for (const runner of runners) {
-                    const newBaseIndex = runner.from + numBases;
-                    const runnerSprite = document.getElementById(runner.from === 0 ? 'batter' : `player-on-${runner.from}`);
-                    if (runnerSprite) runnerSprite.classList.add('running');
-                    
-                    if (newBaseIndex > 3) {
-                        runsScored++;
-                        // Animate to home
-                        if(runnerSprite) Object.assign(runnerSprite.style, this.basePositions[4]);
-                    } else {
-                        // Animate to new base
-                        if(runnerSprite) Object.assign(runnerSprite.style, this.basePositions[newBaseIndex]);
-                        this.state.bases[newBaseIndex - 1] = runner.player;
-                    }
-                    await new Promise(res => setTimeout(res, 600)); // Stagger runners
-                    if (runnerSprite) runnerSprite.classList.remove('running');
-                }
-                
-                if (runsScored > 0) {
-                    if (this.state.battingTeam === this.state.playerTeam) this.state.homeScore += runsScored;
-                    else this.state.awayScore += runsScored;
-                    this.showFeedback(`${runsScored} RUN${runsScored > 1 ? 'S' : ''}!`);
-                }
-            }
-            
-            endPlay() {
-    setTimeout(() => {
-        if (this.state.strikes >= 3) {
-            this.state.outs++;
-            this.showFeedback('STRIKEOUT!');
+    /*
+     * Record the selected pitch and immediately simulate the pitch.  The
+     * selected pitch key is stored on state.selectedPitch for future
+     * enhancements.  After selection, the pitch selection modal is
+     * hidden and the cpuPitch() method is called to continue play.
+     */
+    selectPitch(pitchKey) {
+        this.state.selectedPitch = pitchKey;
+        this.dom.pitchSelection.style.display = 'none';
+        this.cpuPitch();
+    }
+        /* Placeholder functions for unimplemented features */
+        attemptSteal() {
+            this.showFeedback('Steal feature coming soon!', '');
         }
-        if (this.state.balls >= 4) {
-            this.showFeedback('WALK!');
-            // Simplified walk logic
-            this.state.currentBatterIndex = (this.state.currentBatterIndex + 1) % 9;
+        showStats() {
+            alert('Hall of Fame coming soon!');
         }
-        // Show updated count/out before resetting for next at bat
-        this.updateDisplay();
-        if (this.state.outs >= 3) {
-            this.changeInning();
-        } else {
-            this.state.currentBatterIndex = (this.state.currentBatterIndex + 1) % 9;
-            this.startAtBat();
-        }
-    }, 1500);
-}
-                    if (this.state.balls >= 4) {
-                        this.showFeedback('WALK!');
-                        // Simplified walk logic
-                        this.state.currentBatterIndex = (this.state.currentBatterIndex + 1) % 9;
-                    }
-
-                    if (this.state.outs >= 3) {
-                        this.changeInning();
-                    } else {
-                        this.state.currentBatterIndex = (this.state.currentBatterIndex + 1) % 9;
-                        this.startAtBat();
-                    }
-                    this.updateDisplay();
-                }, 1500);
-            }
-
-            changeInning() {
-                this.showFeedback('CHANGE SIDES');
-                this.state.outs = 0;
-                this.state.bases = [null, null, null];
-                if (this.state.halfInning === 'top') {
-                    this.state.halfInning = 'bottom';
-                } else {
-                    this.state.halfInning = 'top';
-                    this.state.inning++;
-                }
-                [this.state.battingTeam, this.state.fieldingTeam] = [this.state.fieldingTeam, this.state.battingTeam];
-                this.state.currentBatterIndex = 0;
-                setTimeout(() => this.startAtBat(), 2000);
-            }
-            
-            animatePitch(pitchKey, callback) {
-                const pitcherSprite = document.getElementById('player-P');
-                if(pitcherSprite) pitcherSprite.classList.add('pitching');
-                const ball = this.dom.gameBall;
-                ball.style.display = 'block';
-                ball.style.bottom = '45%';
-                ball.style.left = '50%';
-                ball.style.transform = 'translateX(-50%)';
-                
-                setTimeout(() => {
-                    if(pitcherSprite) pitcherSprite.classList.remove('pitching');
-                    ball.style.transition = 'all 0.4s ease-in';
-                    ball.style.bottom = '22%';
-                }, 200);
-
-                setTimeout(() => {
-                    ball.style.display = 'none';
-                    ball.style.transition = '';
-                    callback();
-                }, 600);
-            }
-            
-            showFeedback(message, isHomeRun = false) {
-                const el = document.createElement('div');
-                el.className = 'feedback-msg';
-                if (isHomeRun) el.classList.add('home-run');
-                el.textContent = message.toUpperCase();
-                document.body.appendChild(el);
-                el.classList.add('active');
-                setTimeout(() => el.remove(), 2500);
-            }
-
-            updateDisplay() {
-                this.dom.homeScore.textContent = this.state.homeScore;
-                this.dom.awayScore.textContent = this.state.awayScore;
-                this.dom.inningNumber.textContent = this.state.inning;
-                this.dom.inningHalf.textContent = this.state.halfInning.toUpperCase();
-                ['balls', 'strikes', 'outs'].forEach(type => {
-                    this.dom[type].innerHTML = '';
-                    for (let i = 0; i < (type === 'balls' ? 4 : 3); i++) {
-                        const indicator = document.createElement('div');
-                        indicator.className = `indicator ${type.slice(0, -1)}`;
-                        if (i < this.state[type]) indicator.classList.add('active');
-                        this.dom[type].appendChild(indicator);
-                    }
-                });
-            }
-            
-            attemptSteal() { this.showFeedback("STEAL ATTEMPT!"); }
-            showStats() { alert("Hall of Fame coming soon!"); }
-        }
-
-        const game = new LoneStarLegendsGame();
+    }
+    // Create global game instance
+    const game = new LoneStarLegendsGame();
     </script>
 </body>
 </html>
