@@ -870,17 +870,17 @@
     <div id="teamSelect">
         <h2 class="team-select-title">CHOOSE YOUR DYNASTY</h2>
         <div class="team-grid">
-            <div class="team-card" onclick="game.selectTeam('astros')">
+            <div class="team-card" onclick="game.selectTeam('heroes')">
                 <div style="font-size: 72px; text-align: center; margin-bottom: 20px;">⭐</div>
-                <h3 style="color: var(--burnt-orange); font-size: 24px; margin-bottom: 10px;">Houston Legends</h3>
-                <p style="color: var(--gold-accent); font-style: italic; margin-bottom: 20px;">"Space City Excellence"</p>
-                <div>Featuring: Ryan, Altuve, Bagwell, Biggio</div>
+                <h3 style="color: var(--burnt-orange); font-size: 24px; margin-bottom: 10px;">Houston Heroes</h3>
+                <p style="color: var(--gold-accent); font-style: italic; margin-bottom: 20px;">"Space City Heroes"</p>
+                <div>Featuring: Ace Anderson, Mighty Mike, Big Brett, Catcher Carl</div>
             </div>
-            <div class="team-card" onclick="game.selectTeam('rangers')">
+            <div class="team-card" onclick="game.selectTeam('drifters')">
                 <div style="font-size: 72px; text-align: center; margin-bottom: 20px;">🤠</div>
-                <h3 style="color: var(--electric-blue); font-size: 24px; margin-bottom: 10px;">Texas Rangers</h3>
-                <p style="color: var(--gold-accent); font-style: italic; margin-bottom: 20px;">"Never Ever Quit"</p>
-                <div>Featuring: Jenkins, Rodriguez, Beltre, Seager</div>
+                <h3 style="color: var(--electric-blue); font-size: 24px; margin-bottom: 10px;">Dallas Drifters</h3>
+                <p style="color: var(--gold-accent); font-style: italic; margin-bottom: 20px;">"Always Forward"</p>
+                <div>Featuring: Pitcher Paul, Catcher Chris, Third Base Tony, Shortstop Shane</div>
             </div>
         </div>
     </div>
@@ -1033,32 +1033,34 @@ showPitchSelection()">PITCH</button>
             // required (power, contact, speed, arm).  Pitchers include a
             // 'pitches' property but it is unused in this simplified engine.
             this.teams = {
-                astros: {
-                    name: 'Houston Legends', color: '#BF5700',
+                heroes: {
+                    name: 'Houston Heroes',
+                    color: '#BF5700',
                     players: [
-                        { name: 'Nolan Ryan', pos: 'P', num: 34, power: 75, contact: 65, speed: 70, arm: 99, clutch: 95 },
-                        { name: 'Jose Altuve', pos: '2B', num: 27, power: 80, contact: 95, speed: 90, arm: 85, clutch: 94 },
-                        { name: 'Jeff Bagwell', pos: '1B', num: 5, power: 95, contact: 85, speed: 60, arm: 75, clutch: 92 },
-                        { name: 'Craig Biggio', pos: 'C', num: 7, power: 70, contact: 88, speed: 85, arm: 80, clutch: 90 },
-                        { name: 'Alex Bregman', pos: '3B', num: 2, power: 85, contact: 88, speed: 70, arm: 90, clutch: 93 },
-                        { name: 'George Springer', pos: 'CF', num: 4, power: 88, contact: 80, speed: 85, arm: 88, clutch: 90 },
-                        { name: 'Lance Berkman', pos: 'LF', num: 17, power: 90, contact: 85, speed: 65, arm: 85, clutch: 91 },
-                        { name: 'Carlos Correa', pos: 'SS', num: 1, power: 85, contact: 85, speed: 75, arm: 95, clutch: 88 },
-                        { name: 'Yordan Alvarez', pos: 'RF', num: 44, power: 98, contact: 82, speed: 55, arm: 70, clutch: 89 }
+                        { name: 'Ace Anderson', pos: 'P', num: 34, power: 75, contact: 65, speed: 70, arm: 99, clutch: 95 },
+                        { name: 'Mighty Mike', pos: '2B', num: 27, power: 80, contact: 95, speed: 90, arm: 85, clutch: 94 },
+                        { name: 'Big Brett', pos: '1B', num: 5, power: 95, contact: 85, speed: 60, arm: 75, clutch: 92 },
+                        { name: 'Catcher Carl', pos: 'C', num: 7, power: 70, contact: 88, speed: 85, arm: 80, clutch: 90 },
+                        { name: 'Third Base Theo', pos: '3B', num: 2, power: 85, contact: 88, speed: 70, arm: 90, clutch: 93 },
+                        { name: 'Speedy Sam', pos: 'CF', num: 4, power: 88, contact: 80, speed: 85, arm: 88, clutch: 90 },
+                        { name: 'Slugger Larry', pos: 'LF', num: 17, power: 90, contact: 85, speed: 65, arm: 85, clutch: 91 },
+                        { name: 'Shortstop Stu', pos: 'SS', num: 1, power: 85, contact: 85, speed: 75, arm: 95, clutch: 88 },
+                        { name: 'Power Pete', pos: 'RF', num: 44, power: 98, contact: 82, speed: 55, arm: 70, clutch: 89 }
                     ]
                 },
-                rangers: {
-                    name: 'Texas Rangers', color: '#003278',
+                drifters: {
+                    name: 'Dallas Drifters',
+                    color: '#003278',
                     players: [
-                        { name: 'Fergie Jenkins', pos: 'P', num: 31, power: 70, contact: 70, speed: 65, arm: 95, clutch: 92 },
-                        { name: 'Ivan Rodriguez', pos: 'C', num: 7, power: 80, contact: 85, speed: 70, arm: 95, clutch: 94 },
-                        { name: 'Rafael Palmeiro', pos: '1B', num: 25, power: 92, contact: 85, speed: 60, arm: 75, clutch: 88 },
-                        { name: 'Ian Kinsler', pos: '2B', num: 5, power: 78, contact: 85, speed: 88, arm: 82, clutch: 86 },
-                        { name: 'Adrian Beltre', pos: '3B', num: 29, power: 88, contact: 88, speed: 65, arm: 92, clutch: 95 },
-                        { name: 'Michael Young', pos: 'SS', num: 10, power: 75, contact: 90, speed: 75, arm: 85, clutch: 92 },
-                        { name: 'Josh Hamilton', pos: 'LF', num: 32, power: 94, contact: 82, speed: 80, arm: 88, clutch: 91 },
-                        { name: 'Corey Seager', pos: 'CF', num: 5, power: 86, contact: 88, speed: 72, arm: 88, clutch: 90 },
-                        { name: 'Juan Gonzalez', pos: 'RF', num: 19, power: 96, contact: 80, speed: 70, arm: 90, clutch: 90 }
+                        { name: 'Pitcher Paul', pos: 'P', num: 31, power: 70, contact: 70, speed: 65, arm: 95, clutch: 92 },
+                        { name: 'Catcher Chris', pos: 'C', num: 7, power: 80, contact: 85, speed: 70, arm: 95, clutch: 94 },
+                        { name: 'First Base Frank', pos: '1B', num: 25, power: 92, contact: 85, speed: 60, arm: 75, clutch: 88 },
+                        { name: 'Second Base Steve', pos: '2B', num: 5, power: 78, contact: 85, speed: 88, arm: 82, clutch: 86 },
+                        { name: 'Third Base Tony', pos: '3B', num: 29, power: 88, contact: 88, speed: 65, arm: 92, clutch: 95 },
+                        { name: 'Shortstop Shane', pos: 'SS', num: 10, power: 75, contact: 90, speed: 75, arm: 85, clutch: 92 },
+                        { name: 'Left Field Larry', pos: 'LF', num: 32, power: 94, contact: 82, speed: 80, arm: 88, clutch: 91 },
+                        { name: 'Center Field Cody', pos: 'CF', num: 5, power: 86, contact: 88, speed: 72, arm: 88, clutch: 90 },
+                        { name: 'Right Field Rick', pos: 'RF', num: 19, power: 96, contact: 80, speed: 70, arm: 90, clutch: 90 }
                     ]
                 }
             };
@@ -1157,7 +1159,7 @@ showPitchSelection()">PITCH</button>
         /* Player selects a team and game starts */
         selectTeam(id) {
             this.state.playerTeam = id;
-            this.state.cpuTeam = (id === 'astros' ? 'rangers' : 'astros');
+            this.state.cpuTeam = (id === 'heroes' ? 'drifters' : 'heroes');
             // Randomly decide who bats first
             if (Math.random() < 0.5) {
                 this.state.battingTeam = this.state.playerTeam;
