@@ -1,15 +1,102 @@
-<!doctype html>
+<!-- Auto-generated final integration for Lone Star Legends Championship -->
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Lone Star Legends — Elite Arcade</title>
-    <meta name="description" content="Texas-speed baseball arcade. Timing, pressure, clean contact." />
-    <link rel="icon" href="%BASE_URL%favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0b132b" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lone Star Legends Championship</title>
+  
+  <!-- Critical: Fix base path for GitHub Pages -->
+  <base href="/lone-star-legends-championship/">
+  
+  <style>
+    /* Immediate visual feedback during load */
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+      color: #f0f0f0;
+      font-family: 'Georgia', serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    #game-root {
+      width: 100%;
+      max-width: 1200px;
+      padding: 20px;
+    }
+    
+    .loading-state {
+      text-align: center;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+    
+    .achievement-notification {
+      position: fixed;
+      top: 20px;
+      right: -400px;
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      color: #1a1a2e;
+      padding: 15px 20px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+      transition: right 0.5s ease;
+      z-index: 1000;
+    }
+    
+    .achievement-notification.show {
+      right: 20px;
+    }
+    
+    .achievement-icon {
+      font-size: 2em;
+    }
+    
+    .achievement-title {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    
+    .achievement-key {
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-root">
+    <div class="loading-state">
+      <h1>Lone Star Legends Championship</h1>
+      <p>Loading frontier assets...</p>
+    </div>
+  </div>
+  
+  <!-- Configuration injected by build process -->
+  <script>
+    window.GAME_CONFIG = {
+      cloudflareWorkerUrl: 'https://lone-star-worker.YOUR-SUBDOMAIN.workers.dev',
+      netlifyPreviewUrl: null, // Set via environment variable in preview builds
+      environment: 'production',
+      version: '1.0.0',
+      debug: true
+    };
+  </script>
+  
+  <!-- Core game integration -->
+  <script type="module" src="./game-integration.js"></script>
+  
+  <!-- Main game bundle -->
+  <script type="module" src="./main.js"></script>
+</body>
 </html>
