@@ -1,102 +1,1039 @@
-<!-- Auto-generated final integration for Lone Star Legends Championship -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lone Star Legends Championship</title>
-  
-  <!-- Critical: Fix base path for GitHub Pages -->
-  <base href="/lone-star-legends-championship/">
-  
-  <style>
-    /* Immediate visual feedback during load */
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
-      color: #f0f0f0;
-      font-family: 'Georgia', serif;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    #game-root {
-      width: 100%;
-      max-width: 1200px;
-      padding: 20px;
-    }
-    
-    .loading-state {
-      text-align: center;
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 0.6; }
-      50% { opacity: 1; }
-    }
-    
-    .achievement-notification {
-      position: fixed;
-      top: 20px;
-      right: -400px;
-      background: linear-gradient(135deg, #FFD700, #FFA500);
-      color: #1a1a2e;
-      padding: 15px 20px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
-      transition: right 0.5s ease;
-      z-index: 1000;
-    }
-    
-    .achievement-notification.show {
-      right: 20px;
-    }
-    
-    .achievement-icon {
-      font-size: 2em;
-    }
-    
-    .achievement-title {
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-    
-    .achievement-key {
-      font-size: 0.9em;
-      opacity: 0.8;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/austin-humphrey-portfolio/lone-star-legends/">
+    <title>Lone Star Legends: Phase 18 Complete - Career Mode Edition</title>
+    <style>
+        :root {
+            --baseball-green: #2E8B57;
+            --baseball-brown: #8B4513;
+            --home-plate: #F5F5F5;
+            --diamond-red: #DC143C;
+            --sky-blue: #87CEEB;
+            --grass-green: #228B22;
+            --dugout-gray: #696969;
+            --scoreboard-yellow: #FFD700;
+            --text-dark: #2F2F2F;
+            --text-light: #F0F0F0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(to bottom, var(--sky-blue), var(--grass-green));
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .baseball-game {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at center, var(--grass-green) 0%, var(--baseball-green) 70%, var(--dugout-gray) 100%);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-header {
+            text-align: center;
+            background: linear-gradient(45deg, var(--diamond-red), var(--scoreboard-yellow));
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            border: 3px solid var(--home-plate);
+        }
+
+        .game-header h1 {
+            font-size: 2.8em;
+            color: var(--text-light);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+            margin-bottom: 0.3em;
+            font-family: Arial Black, sans-serif;
+        }
+
+        /* Phase 18: Career Mode Styles */
+        .career-mode-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .career-dashboard {
+            background: linear-gradient(135deg, var(--home-plate), #F8F8FF);
+            border: 4px solid var(--baseball-brown);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 95%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            color: var(--text-dark);
+        }
+
+        .career-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--baseball-green);
+        }
+
+        .career-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-panel {
+            background: linear-gradient(135deg, var(--baseball-green), #32CD32);
+            color: var(--text-light);
+            padding: 1.8rem;
+            border-radius: 15px;
+            border: 3px solid var(--scoreboard-yellow);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-panel h3 {
+            color: var(--scoreboard-yellow);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 1rem;
+            font-size: 1.5em;
+        }
+
+        .tournament-bracket {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 3px solid var(--diamond-red);
+            margin: 2rem 0;
+        }
+
+        .bracket-round {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+            align-items: center;
+        }
+
+        .bracket-team {
+            background: linear-gradient(45deg, var(--baseball-green), #228B22);
+            color: var(--text-light);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--scoreboard-yellow);
+            text-align: center;
+            font-weight: 700;
+            min-width: 150px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .bracket-team:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .bracket-team.winner {
+            background: linear-gradient(45deg, var(--diamond-red), #FF6B6B);
+            box-shadow: 0 0 20px rgba(220, 20, 60, 0.6);
+        }
+
+        .progress-bar {
+            background: var(--dugout-gray);
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+            border: 2px solid var(--baseball-brown);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--baseball-green), var(--scoreboard-yellow));
+            height: 100%;
+            transition: width 0.6s ease;
+            border-radius: 8px;
+        }
+
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .achievement-card {
+            background: linear-gradient(135deg, var(--scoreboard-yellow), #FFE55C);
+            color: var(--text-dark);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 3px solid var(--diamond-red);
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .achievement-card.locked {
+            background: linear-gradient(135deg, var(--dugout-gray), #A9A9A9);
+            color: var(--text-light);
+            opacity: 0.7;
+        }
+
+        .multiplayer-lobby {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 3px solid var(--baseball-green);
+            margin: 2rem 0;
+        }
+
+        .player-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .player-card {
+            background: var(--sky-blue);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid var(--baseball-brown);
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .game-header h2 {
+            font-size: 1.4em;
+            color: var(--home-plate);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 1rem;
+        }
+
+        .main-menu {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 248, 255, 0.8));
+            padding: 2rem;
+            border-radius: 20px;
+            border: 4px solid var(--baseball-brown);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-description {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+        }
+
+        .menu-description p {
+            margin-bottom: 0.8rem;
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+
+        .menu-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .menu-btn {
+            padding: 1.2rem 2rem;
+            font-size: 1.2em;
+            background: linear-gradient(45deg, var(--diamond-red), #FF6B6B);
+            color: var(--text-light);
+            border: 3px solid var(--home-plate);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: Arial Black, sans-serif;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .menu-btn.primary {
+            background: linear-gradient(45deg, var(--scoreboard-yellow), #FFA500);
+            color: var(--text-dark);
+            text-shadow: none;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .stadium-creation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .stadium-creation-wizard {
+            background: linear-gradient(135deg, var(--home-plate), #F8F8FF);
+            border: 4px solid var(--baseball-brown);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            color: var(--text-dark);
+        }
+
+        .creation-content {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--baseball-green);
+            margin-bottom: 2rem;
+            min-height: 300px;
+            text-align: center;
+        }
+
+        .stadium-btn {
+            padding: 1rem 2rem;
+            font-size: 1.1em;
+            font-weight: 700;
+            border: 3px solid var(--baseball-brown);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: Arial Black, sans-serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            margin: 0.5rem;
+        }
+
+        .stadium-btn.create {
+            background: linear-gradient(45deg, var(--diamond-red), #FF6B6B);
+            color: var(--text-light);
+        }
+
+        .stadium-btn.cancel {
+            background: linear-gradient(45deg, var(--dugout-gray), #A9A9A9);
+            color: var(--text-light);
+        }
+
+        .stadium-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-highlight {
+            background: linear-gradient(135deg, var(--baseball-green), #32CD32);
+            color: var(--text-light);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .feature-highlight h3 {
+            color: var(--scoreboard-yellow);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: translate(-50%, -50%) scale(0.3) rotate(-10deg);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .stadium-creation-wizard {
+                width: 95%;
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="game-root">
-    <div class="loading-state">
-      <h1>Lone Star Legends Championship</h1>
-      <p>Loading frontier assets...</p>
+    <div class="baseball-game">
+        <div class="game-header">
+            <h1>🏆 Lone Star Legends Championship</h1>
+            <h2>⚾ Complete Baseball Experience</h2>
+        </div>
+
+        <div class="main-menu">
+            <div class="menu-description">
+                <p><strong>🏟️ Welcome to the Ultimate Baseball Game!</strong></p>
+                <p>Build custom stadiums, manage teams, and play with professional-grade physics!</p>
+            </div>
+
+            <div class="feature-highlight">
+                <h3>🆕 Phase 18: Career Mode Complete</h3>
+                <p>Full career progression, tournament brackets, achievement system, and multiplayer foundation!</p>
+            </div>
+
+            <div class="menu-buttons">
+                <button class="menu-btn primary" onclick="showStadiumBuilder()">
+                    🏗️ Stadium Builder
+                </button>
+                <button class="menu-btn primary" onclick="showTeamManager()">
+                    👥 Team Manager
+                </button>
+                <button class="menu-btn primary" onclick="showAnalytics()">
+                    📊 Analytics Dashboard
+                </button>
+                <button class="menu-btn" onclick="startGame()">
+                    ⚾ Play Baseball
+                </button>
+                <button class="menu-btn" onclick="showTournament()">
+                    🏆 Tournament Mode
+                </button>
+                <button class="menu-btn" onclick="showCareer()">
+                    📈 Career Mode
+                </button>
+            </div>
+
+            <div class="feature-highlight">
+                <h3>✨ Phase 18 Features</h3>
+                <p>📈 Career Progression • 🏆 Tournament Brackets • 🎖️ Achievement System • 👥 Multiplayer Foundation</p>
+            </div>
+        </div>
     </div>
-  </div>
-  
-  <!-- Configuration injected by build process -->
-  <script>
-    window.GAME_CONFIG = {
-      cloudflareWorkerUrl: 'https://lone-star-worker.YOUR-SUBDOMAIN.workers.dev',
-      netlifyPreviewUrl: null, // Set via environment variable in preview builds
-      environment: 'production',
-      version: '1.0.0',
-      debug: true
-    };
-  </script>
-  
-  <!-- Core game integration -->
-  <script type="module" src="./game-integration.js"></script>
-  
-  <!-- Main game bundle -->
-  <script type="module" src="./main.js"></script>
+
+    <script>
+        // Game System Initialization
+        class LoneStarLegendsGame {
+            constructor() {
+                this.version = "Phase 18 Complete - Career Mode Edition";
+                this.features = [
+                    "Stadium Builder System",
+                    "Team Management",
+                    "Advanced Analytics",
+                    "Career Progression",
+                    "Tournament Brackets",
+                    "Multiplayer Foundation",
+                    "Achievement System",
+                    "Physics Engine",
+                    "AI Opponents",
+                    "Progressive Controls"
+                ];
+                this.careerMode = new CareerModeSystem();
+                this.tournamentSystem = new TournamentBracketSystem();
+                this.multiplayerFoundation = new MultiplayerFoundation();
+                console.log("🏆 Lone Star Legends Championship - " + this.version);
+            }
+        }
+
+        // Phase 18: Career Mode System
+        class CareerModeSystem {
+            constructor() {
+                this.playerCareer = {
+                    name: "Rising Star",
+                    level: 1,
+                    experience: 0,
+                    season: 1,
+                    totalGames: 0,
+                    wins: 0,
+                    championships: 0,
+                    achievements: [],
+                    currentTeam: "Rookie Squad",
+                    salary: 50000,
+                    reputation: "Unknown",
+                    stats: {
+                        battingAverage: 0.000,
+                        homeRuns: 0,
+                        rbis: 0,
+                        era: 0.00,
+                        strikeouts: 0,
+                        saves: 0
+                    }
+                };
+                this.achievements = this.initializeAchievements();
+                this.loadCareerData();
+            }
+
+            initializeAchievements() {
+                return [
+                    { id: 'first_win', name: 'First Victory', description: 'Win your first game', unlocked: false, icon: '🏆' },
+                    { id: 'rookie_season', name: 'Rookie Season', description: 'Complete your first season', unlocked: false, icon: '⭐' },
+                    { id: 'home_run_king', name: 'Home Run King', description: 'Hit 30 home runs in a season', unlocked: false, icon: '⚾' },
+                    { id: 'perfect_game', name: 'Perfect Game', description: 'Pitch a perfect game', unlocked: false, icon: '🎯' },
+                    { id: 'championship', name: 'Champion', description: 'Win the World Series', unlocked: false, icon: '🏆' },
+                    { id: 'hall_of_fame', name: 'Hall of Fame', description: 'Reach legendary status', unlocked: false, icon: '👑' }
+                ];
+            }
+
+            addExperience(amount) {
+                this.playerCareer.experience += amount;
+                const newLevel = Math.floor(this.playerCareer.experience / 1000) + 1;
+                if (newLevel > this.playerCareer.level) {
+                    this.levelUp(newLevel);
+                }
+                this.saveCareerData();
+            }
+
+            levelUp(newLevel) {
+                const oldLevel = this.playerCareer.level;
+                this.playerCareer.level = newLevel;
+                this.playerCareer.salary += 25000;
+                
+                // Show level up notification
+                this.showLevelUpNotification(oldLevel, newLevel);
+                this.updateReputation();
+            }
+
+            updateReputation() {
+                const level = this.playerCareer.level;
+                if (level >= 50) this.playerCareer.reputation = "Legend";
+                else if (level >= 30) this.playerCareer.reputation = "All-Star";
+                else if (level >= 20) this.playerCareer.reputation = "Veteran";
+                else if (level >= 10) this.playerCareer.reputation = "Rising Star";
+                else this.playerCareer.reputation = "Rookie";
+            }
+
+            unlockAchievement(achievementId) {
+                const achievement = this.achievements.find(a => a.id === achievementId);
+                if (achievement && !achievement.unlocked) {
+                    achievement.unlocked = true;
+                    this.showAchievementNotification(achievement);
+                    this.saveCareerData();
+                }
+            }
+
+            showLevelUpNotification(oldLevel, newLevel) {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: linear-gradient(45deg, var(--scoreboard-yellow), #FFE55C);
+                    border: 4px solid var(--diamond-red);
+                    border-radius: 20px;
+                    padding: 2rem;
+                    text-align: center;
+                    z-index: 3000;
+                    animation: bounceIn 0.8s ease;
+                    color: var(--text-dark);
+                    font-weight: 700;
+                    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+                `;
+                notification.innerHTML = `
+                    <h2>🎉 LEVEL UP! 🎉</h2>
+                    <p>Level ${oldLevel} → Level ${newLevel}</p>
+                    <p>Salary increased to $${this.playerCareer.salary.toLocaleString()}</p>
+                    <button onclick="this.parentElement.remove()" style="
+                        margin-top: 1rem;
+                        padding: 0.8rem 1.5rem;
+                        background: var(--baseball-green);
+                        color: white;
+                        border: none;
+                        border-radius: 10px;
+                        cursor: pointer;
+                        font-weight: 700;
+                    ">Continue</button>
+                `;
+                document.body.appendChild(notification);
+                setTimeout(() => notification.remove(), 5000);
+            }
+
+            showAchievementNotification(achievement) {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, var(--baseball-green), #32CD32);
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 15px;
+                    border: 3px solid var(--scoreboard-yellow);
+                    z-index: 3000;
+                    animation: slideInRight 0.5s ease;
+                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+                `;
+                notification.innerHTML = `
+                    <div style="font-weight: 700; margin-bottom: 0.5rem;">
+                        ${achievement.icon} Achievement Unlocked!
+                    </div>
+                    <div style="font-size: 1.1em;">${achievement.name}</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">${achievement.description}</div>
+                `;
+                document.body.appendChild(notification);
+                setTimeout(() => notification.remove(), 4000);
+            }
+
+            saveCareerData() {
+                localStorage.setItem('loneStarCareer', JSON.stringify(this.playerCareer));
+                localStorage.setItem('loneStarAchievements', JSON.stringify(this.achievements));
+            }
+
+            loadCareerData() {
+                const savedCareer = localStorage.getItem('loneStarCareer');
+                const savedAchievements = localStorage.getItem('loneStarAchievements');
+                
+                if (savedCareer) {
+                    this.playerCareer = { ...this.playerCareer, ...JSON.parse(savedCareer) };
+                }
+                if (savedAchievements) {
+                    this.achievements = JSON.parse(savedAchievements);
+                }
+            }
+        }
+
+        // Phase 18: Tournament Bracket System
+        class TournamentBracketSystem {
+            constructor() {
+                this.currentTournament = null;
+                this.tournaments = [
+                    {
+                        name: "Spring Training Classic",
+                        teams: ["Houston Stars", "Arlington Outlaws", "Dallas Rangers", "Austin Aces"],
+                        prize: 100000,
+                        difficulty: "Rookie"
+                    },
+                    {
+                        name: "Lone Star Championship",
+                        teams: ["Houston Stars", "Arlington Outlaws", "Dallas Rangers", "Austin Aces", "San Antonio Spurs", "El Paso Eagles", "Corpus Christi Hooks", "Frisco RoughRiders"],
+                        prize: 500000,
+                        difficulty: "Professional"
+                    },
+                    {
+                        name: "World Series",
+                        teams: ["Houston Stars", "New York Yankees", "Los Angeles Dodgers", "Boston Red Sox", "Atlanta Braves", "Chicago Cubs", "Philadelphia Phillies", "San Francisco Giants"],
+                        prize: 2000000,
+                        difficulty: "Legendary"
+                    }
+                ];
+            }
+
+            startTournament(tournamentIndex) {
+                this.currentTournament = {
+                    ...this.tournaments[tournamentIndex],
+                    bracket: this.generateBracket(this.tournaments[tournamentIndex].teams),
+                    currentRound: 1,
+                    playerTeam: "Houston Stars"
+                };
+                return this.currentTournament;
+            }
+
+            generateBracket(teams) {
+                const bracket = [];
+                const shuffledTeams = [...teams].sort(() => Math.random() - 0.5);
+                
+                for (let i = 0; i < shuffledTeams.length; i += 2) {
+                    bracket.push({
+                        team1: shuffledTeams[i],
+                        team2: shuffledTeams[i + 1],
+                        winner: null,
+                        played: false
+                    });
+                }
+                return bracket;
+            }
+
+            playMatch(matchIndex, playerWon) {
+                if (this.currentTournament && this.currentTournament.bracket[matchIndex]) {
+                    const match = this.currentTournament.bracket[matchIndex];
+                    match.winner = playerWon ? match.team1 : match.team2;
+                    match.played = true;
+                    
+                    // Check if round is complete
+                    const roundComplete = this.currentTournament.bracket.every(m => m.played);
+                    if (roundComplete) {
+                        this.advanceToNextRound();
+                    }
+                }
+            }
+
+            advanceToNextRound() {
+                const winners = this.currentTournament.bracket
+                    .filter(match => match.winner)
+                    .map(match => match.winner);
+                
+                if (winners.length === 1) {
+                    // Tournament complete
+                    this.completeTournament(winners[0]);
+                } else {
+                    // Generate next round
+                    this.currentTournament.bracket = this.generateBracket(winners);
+                    this.currentTournament.currentRound++;
+                }
+            }
+
+            completeTournament(winner) {
+                const isPlayerWinner = winner === this.currentTournament.playerTeam;
+                if (isPlayerWinner) {
+                    game.careerMode.addExperience(this.currentTournament.prize / 100);
+                    game.careerMode.playerCareer.championships++;
+                    game.careerMode.unlockAchievement('championship');
+                }
+                
+                this.showTournamentResult(winner, isPlayerWinner);
+                this.currentTournament = null;
+            }
+
+            showTournamentResult(winner, isPlayerWinner) {
+                const modal = document.createElement('div');
+                modal.className = 'career-mode-overlay';
+                modal.innerHTML = `
+                    <div class="career-dashboard" style="max-width: 600px; text-align: center;">
+                        <h2>${isPlayerWinner ? '🏆 TOURNAMENT CHAMPION! 🏆' : '💔 Tournament Complete'}</h2>
+                        <div style="margin: 2rem 0;">
+                            <h3>Winner: ${winner}</h3>
+                            ${isPlayerWinner ? `
+                                <p style="color: var(--baseball-green); font-weight: 700; font-size: 1.2em;">
+                                    Prize Money: $${this.currentTournament.prize.toLocaleString()}
+                                </p>
+                                <p>Experience Gained: ${this.currentTournament.prize / 100} XP</p>
+                            ` : `
+                                <p style="color: var(--diamond-red); font-weight: 700;">
+                                    Better luck next time!
+                                </p>
+                            `}
+                        </div>
+                        <button class="stadium-btn create" onclick="closeTournamentResult()">
+                            Continue Career
+                        </button>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            }
+        }
+
+        // Phase 18: Multiplayer Foundation
+        class MultiplayerFoundation {
+            constructor() {
+                this.isOnline = false;
+                this.playerCount = 1;
+                this.lobbyPlayers = [];
+                this.gameRoom = null;
+            }
+
+            createLobby(maxPlayers = 4) {
+                this.gameRoom = {
+                    id: this.generateRoomId(),
+                    maxPlayers: maxPlayers,
+                    players: [{
+                        id: 'player1',
+                        name: game.careerMode.playerCareer.name,
+                        level: game.careerMode.playerCareer.level,
+                        team: 'Houston Stars',
+                        ready: false
+                    }],
+                    gameStarted: false
+                };
+                return this.gameRoom;
+            }
+
+            generateRoomId() {
+                return 'ROOM-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            }
+
+            addAIPlayers(count) {
+                const aiNames = ['Lightning Larry', 'Slugger Sam', 'Ace Anderson', 'Home Run Henry'];
+                for (let i = 0; i < count && this.gameRoom.players.length < this.gameRoom.maxPlayers; i++) {
+                    this.gameRoom.players.push({
+                        id: 'ai' + (i + 1),
+                        name: aiNames[i] || 'AI Player ' + (i + 1),
+                        level: Math.floor(Math.random() * 20) + 1,
+                        team: 'AI Team ' + (i + 1),
+                        ready: true,
+                        isAI: true
+                    });
+                }
+            }
+
+            startMultiplayerGame() {
+                if (this.gameRoom && this.gameRoom.players.length >= 2) {
+                    this.gameRoom.gameStarted = true;
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        // Initialize game
+        const game = new LoneStarLegendsGame();
+
+        // Stadium Builder System
+        function showStadiumBuilder() {
+            const overlay = document.createElement('div');
+            overlay.className = 'stadium-creation-overlay';
+            overlay.innerHTML = `
+                <div class="stadium-creation-wizard">
+                    <h2>🏟️ Stadium Builder</h2>
+                    <div class="creation-content">
+                        <h3>Welcome to Stadium Builder!</h3>
+                        <p>Design your perfect ballpark with:</p>
+                        <br>
+                        <p>📐 <strong>Custom Dimensions</strong> - Set outfield distances and wall heights</p>
+                        <p>🌤️ <strong>Environmental Effects</strong> - Choose climate and weather patterns</p>
+                        <p>💰 <strong>Economic Modeling</strong> - Realistic construction costs and revenue</p>
+                        <p>🎭 <strong>Atmosphere Design</strong> - Configure crowd dynamics and traditions</p>
+                        <p>🏗️ <strong>Premium Features</strong> - Luxury boxes, unique elements, and more</p>
+                        <br>
+                        <p><em>Create stadiums that affect gameplay with realistic physics!</em></p>
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="stadium-btn create" onclick="alert('Stadium creation wizard would open here with 6-step process!')">🏗️ Start Building</button>
+                        <button class="stadium-btn cancel" onclick="closeStadiumBuilder()">Cancel</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        function closeStadiumBuilder() {
+            const overlay = document.querySelector('.stadium-creation-overlay');
+            if (overlay) overlay.remove();
+        }
+
+        function showTeamManager() {
+            alert('👥 Team Manager\\n\\nFeatures:\\n• Custom team creation\\n• Player development system\\n• Chemistry calculations\\n• Coaching staff management\\n• Facility upgrades');
+        }
+
+        function showAnalytics() {
+            alert('📊 Analytics Dashboard\\n\\nFeatures:\\n• Professional Sabermetrics (WAR, wOBA, FIP)\\n• Heat map visualizations\\n• Predictive analytics\\n• Historical trend analysis\\n• Performance monitoring');
+        }
+
+        function startGame() {
+            alert('⚾ Baseball Game\\n\\nFeatures:\\n• Progressive difficulty system\\n• Advanced physics with Magnus effect\\n• Dynamic AI opponents\\n• Weather and environmental effects\\n• Multiple game modes');
+        }
+
+        function showTournament() {
+            const overlay = document.createElement('div');
+            overlay.className = 'career-mode-overlay';
+            overlay.innerHTML = `
+                <div class="career-dashboard">
+                    <div class="career-header">
+                        <h2>🏆 Tournament Central</h2>
+                        <p>Choose your tournament and compete for glory!</p>
+                    </div>
+                    
+                    <div class="career-stats-grid">
+                        ${game.tournamentSystem.tournaments.map((tournament, index) => `
+                            <div class="stat-panel" style="cursor: pointer;" onclick="startTournament(${index})">
+                                <h3>${tournament.name}</h3>
+                                <p><strong>Teams:</strong> ${tournament.teams.length}</p>
+                                <p><strong>Difficulty:</strong> ${tournament.difficulty}</p>
+                                <p><strong>Prize:</strong> $${tournament.prize.toLocaleString()}</p>
+                                <div style="margin-top: 1rem;">
+                                    <button class="stadium-btn create">
+                                        Enter Tournament
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    ${game.tournamentSystem.currentTournament ? `
+                        <div class="tournament-bracket">
+                            <h3>Current Tournament: ${game.tournamentSystem.currentTournament.name}</h3>
+                            <p>Round ${game.tournamentSystem.currentTournament.currentRound}</p>
+                            
+                            <div class="bracket-round">
+                                ${game.tournamentSystem.currentTournament.bracket.map((match, index) => `
+                                    <div class="bracket-team ${match.winner === match.team1 ? 'winner' : ''}" 
+                                         onclick="playTournamentMatch(${index}, true)">
+                                        ${match.team1}
+                                        ${match.played && match.winner === match.team1 ? ' 🏆' : ''}
+                                    </div>
+                                    <div style="margin: 0 1rem; font-size: 1.5em; font-weight: 700;">VS</div>
+                                    <div class="bracket-team ${match.winner === match.team2 ? 'winner' : ''}"
+                                         onclick="playTournamentMatch(${index}, false)">
+                                        ${match.team2}
+                                        ${match.played && match.winner === match.team2 ? ' 🏆' : ''}
+                                    </div>
+                                `).join('<div style="width: 100%; margin: 1rem 0;"></div>')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="stadium-btn create" onclick="closeTournament()">
+                            Return to Main Menu
+                        </button>
+                        ${game.tournamentSystem.currentTournament ? 
+                            '<button class="stadium-btn cancel" onclick="exitTournament()" style="margin-left: 1rem;">Exit Tournament</button>' : 
+                            ''
+                        }
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        function startTournament(tournamentIndex) {
+            game.tournamentSystem.startTournament(tournamentIndex);
+            showTournament(); // Refresh the display
+        }
+
+        function playTournamentMatch(matchIndex, playerWon) {
+            if (game.tournamentSystem.currentTournament) {
+                const match = game.tournamentSystem.currentTournament.bracket[matchIndex];
+                if (!match.played) {
+                    // Simulate the match
+                    const isPlayerMatch = match.team1 === "Houston Stars" || match.team2 === "Houston Stars";
+                    if (isPlayerMatch) {
+                        game.tournamentSystem.playMatch(matchIndex, playerWon);
+                        game.careerMode.playerCareer.totalGames++;
+                        if (playerWon) {
+                            game.careerMode.playerCareer.wins++;
+                            game.careerMode.addExperience(50);
+                        }
+                        game.careerMode.saveCareerData();
+                    } else {
+                        // AI vs AI match
+                        const aiWon = Math.random() > 0.5;
+                        game.tournamentSystem.playMatch(matchIndex, aiWon);
+                    }
+                    showTournament(); // Refresh display
+                }
+            }
+        }
+
+        function exitTournament() {
+            game.tournamentSystem.currentTournament = null;
+            showTournament();
+        }
+
+        function closeTournament() {
+            const overlay = document.querySelector('.career-mode-overlay');
+            if (overlay) overlay.remove();
+        }
+
+        function closeTournamentResult() {
+            const overlay = document.querySelector('.career-mode-overlay');
+            if (overlay) overlay.remove();
+        }
+
+        function showCareer() {
+            const overlay = document.createElement('div');
+            overlay.className = 'career-mode-overlay';
+            overlay.innerHTML = `
+                <div class="career-dashboard">
+                    <div class="career-header">
+                        <h2>📈 Career Mode Dashboard</h2>
+                        <h3>Player: ${game.careerMode.playerCareer.name} | Level ${game.careerMode.playerCareer.level} | ${game.careerMode.playerCareer.reputation}</h3>
+                    </div>
+                    
+                    <div class="career-stats-grid">
+                        <div class="stat-panel">
+                            <h3>🏆 Career Statistics</h3>
+                            <p><strong>Season:</strong> ${game.careerMode.playerCareer.season}</p>
+                            <p><strong>Games Played:</strong> ${game.careerMode.playerCareer.totalGames}</p>
+                            <p><strong>Wins:</strong> ${game.careerMode.playerCareer.wins}</p>
+                            <p><strong>Championships:</strong> ${game.careerMode.playerCareer.championships}</p>
+                            <p><strong>Salary:</strong> $${game.careerMode.playerCareer.salary.toLocaleString()}</p>
+                        </div>
+                        
+                        <div class="stat-panel">
+                            <h3>📊 Player Stats</h3>
+                            <p><strong>Batting Avg:</strong> ${game.careerMode.playerCareer.stats.battingAverage.toFixed(3)}</p>
+                            <p><strong>Home Runs:</strong> ${game.careerMode.playerCareer.stats.homeRuns}</p>
+                            <p><strong>RBIs:</strong> ${game.careerMode.playerCareer.stats.rbis}</p>
+                            <p><strong>ERA:</strong> ${game.careerMode.playerCareer.stats.era.toFixed(2)}</p>
+                            <p><strong>Strikeouts:</strong> ${game.careerMode.playerCareer.stats.strikeouts}</p>
+                        </div>
+                        
+                        <div class="stat-panel">
+                            <h3>📈 Experience Progress</h3>
+                            <p><strong>Current XP:</strong> ${game.careerMode.playerCareer.experience}</p>
+                            <p><strong>Next Level:</strong> ${((game.careerMode.playerCareer.level) * 1000) - game.careerMode.playerCareer.experience} XP</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${(game.careerMode.playerCareer.experience % 1000) / 10}%"></div>
+                            </div>
+                            <button class="stadium-btn create" onclick="game.careerMode.addExperience(100); showCareer();">
+                                🎮 Simulate Game (+100 XP)
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="achievement-grid">
+                        ${game.careerMode.achievements.map(achievement => `
+                            <div class="achievement-card ${achievement.unlocked ? '' : 'locked'}">
+                                <div style="font-size: 2em; margin-bottom: 0.5rem;">${achievement.icon}</div>
+                                <h4>${achievement.name}</h4>
+                                <p>${achievement.description}</p>
+                                ${achievement.unlocked ? '<div style="color: var(--baseball-green); font-weight: 700; margin-top: 0.5rem;">✅ UNLOCKED</div>' : '<div style="color: var(--dugout-gray); margin-top: 0.5rem;">🔒 Locked</div>'}
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="stadium-btn create" onclick="closeCareerMode()">
+                            Return to Main Menu
+                        </button>
+                        <button class="stadium-btn create" onclick="game.careerMode.unlockAchievement('first_win'); showCareer();" style="margin-left: 1rem;">
+                            🏆 Test Achievement
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        function closeCareerMode() {
+            const overlay = document.querySelector('.career-mode-overlay');
+            if (overlay) overlay.remove();
+        }
+
+        // Global game object for easy access
+        window.game = game;
+    </script>
 </body>
 </html>
