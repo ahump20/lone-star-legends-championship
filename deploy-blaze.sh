@@ -1,0 +1,227 @@
+#!/bin/bash
+
+# Deploy Lone Star Legends Championship with Blaze Intelligence to GitHub Pages
+
+echo "🔥 Deploying Lone Star Legends Championship with Blaze Intelligence Analytics..."
+
+# Make sure we're in the right directory
+cd "$(dirname "$0")"
+
+# Check if this is a git repository
+if [ ! -d ".git" ]; then
+    echo "❌ Error: Not a git repository. Please run from the project root."
+    exit 1
+fi
+
+# Make sure we have the latest changes
+echo "📥 Pulling latest changes..."
+git pull origin main
+
+# Create a deployment branch
+echo "🌿 Creating deployment branch..."
+git checkout -b gh-pages-deploy 2>/dev/null || git checkout gh-pages-deploy
+
+# Copy all necessary files for GitHub Pages
+echo "📋 Preparing files for deployment..."
+
+# Create an index.html that includes all the new Blaze Intelligence components
+cat > index.html << 'EOL'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lone Star Legends Championship ⚾ - With Blaze Intelligence Analytics</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2E8B57, #8B4513);
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #FFD700;
+        }
+        
+        .analytics-info {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid #FFD700;
+        }
+        
+        .keyboard-shortcuts {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        
+        .shortcut {
+            display: inline-block;
+            background: #FFD700;
+            color: #1a1a2e;
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            margin: 0.2rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚾ Lone Star Legends Championship ⚾</h1>
+        <h2>🔥 Powered by Blaze Intelligence Analytics</h2>
+        <p>Professional Baseball Simulation with Advanced Real-Time Analytics</p>
+    </div>
+    
+    <div class="game-container">
+        <div class="analytics-info">
+            <h3>🔥 Blaze Intelligence Features</h3>
+            <div class="features">
+                <div class="feature-card">
+                    <h4>📈 Momentum Tracking</h4>
+                    <p>Real-time momentum analysis tracks the ebb and flow of the game, identifying when teams are gaining or losing control.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚡ Critical Play Detection</h4>
+                    <p>Advanced algorithms identify game-changing moments and their impact on the overall outcome.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎯 Predictive Analytics</h4>
+                    <p>Win probability calculations and trend analysis provide insights into likely game outcomes.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Advanced Dashboard</h4>
+                    <p>Comprehensive analytics dashboard with multiple tabs for momentum, critical plays, predictions, and statistics.</p>
+                </div>
+            </div>
+            
+            <div class="keyboard-shortcuts">
+                <h4>⌨️ Keyboard Shortcuts:</h4>
+                <span class="shortcut">B</span> Open Blaze Dashboard
+                <span class="shortcut">M</span> View Momentum Analysis
+                <span class="shortcut">C</span> View Critical Plays
+                <span class="shortcut">ESC</span> Close Dashboard
+            </div>
+        </div>
+        
+        <div class="analytics-info">
+            <h3>🏟️ Enhanced Baseball Features</h3>
+            <div class="features">
+                <div class="feature-card">
+                    <h4>⚾ Realistic Physics</h4>
+                    <p>Advanced ball trajectory calculations with wind, drag, and Magnus effect simulation.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🏟️ Accurate Field Geometry</h4>
+                    <p>MLB-standard field dimensions and geometry calculations from the sportyR framework.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎮 3D Visualization</h4>
+                    <p>Three.js 3D field rendering with multiple camera angles and realistic graphics.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📈 Advanced Statistics</h4>
+                    <p>Comprehensive player and team statistics tracking with modern baseball analytics.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 2rem 0;">
+            <h3>🚀 Technical Implementation</h3>
+            <p>This game integrates multiple advanced frameworks:</p>
+            <ul style="list-style: none; padding: 0;">
+                <li>🔥 <strong>Blaze Intelligence</strong> - Real-time sports analytics framework</li>
+                <li>⚾ <strong>sportyR</strong> - Professional baseball field geometry</li>
+                <li>🎮 <strong>Three.js</strong> - 3D graphics and visualization</li>
+                <li>📊 <strong>D3.js</strong> - Advanced data visualization</li>
+                <li>⚡ <strong>MLB Stats API</strong> - Real player data integration</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Load the game modules -->
+    <script type="module">
+        // Import Blaze Intelligence components
+        import BlazeIntegration from './blaze-integration.js';
+        import BlazeDashboard from './blaze-dashboard.js';
+        
+        console.log('🔥 Blaze Intelligence Analytics System Loading...');
+        
+        // Initialize the dashboard
+        const dashboard = new BlazeDashboard(document.body);
+        
+        // Show welcome message
+        setTimeout(() => {
+            alert('🔥 Welcome to Lone Star Legends Championship with Blaze Intelligence!\n\nPress B to open the analytics dashboard\nPress M for momentum analysis\nPress C for critical plays\n\nEnjoy the enhanced baseball experience!');
+        }, 1000);
+    </script>
+</body>
+</html>
+EOL
+
+# Commit the deployment files
+echo "💾 Committing deployment files..."
+git add .
+git commit -m "Deploy: Add Blaze Intelligence Analytics Dashboard
+
+🔥 Enhanced Lone Star Legends Championship with:
+- Real-time momentum tracking
+- Critical play detection
+- Advanced analytics dashboard
+- Predictive win probability
+- Professional baseball simulation
+
+🤖 Generated with Claude Code" 2>/dev/null || echo "No changes to commit"
+
+# Push to GitHub Pages
+echo "🚀 Deploying to GitHub Pages..."
+git push origin gh-pages-deploy --force
+
+# Switch back to main branch
+git checkout main
+
+echo ""
+echo "✅ Deployment complete!"
+echo "🌐 Your enhanced game with Blaze Intelligence should be available at:"
+echo "   https://ahump20.github.io/lone-star-legends-championship/"
+echo ""
+echo "🔥 Blaze Intelligence Features:"
+echo "   - Real-time momentum tracking"
+echo "   - Critical play detection"
+echo "   - Predictive analytics dashboard"
+echo "   - Advanced game statistics"
+echo ""
+echo "⌨️ Keyboard shortcuts:"
+echo "   B - Open Blaze Dashboard"
+echo "   M - View Momentum Analysis"  
+echo "   C - View Critical Plays"
+echo "   ESC - Close Dashboard"
+echo ""
+echo "🎮 Enjoy your enhanced baseball experience!"
