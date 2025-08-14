@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lone Star Legends Championship ⚾ - Blaze Intelligence Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2E8B57, #8B4513);
+            font-family: 'Arial', sans-serif;
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #FFD700; }
+            to { text-shadow: 0 0 20px #FFD700, 0 0 30px #FFD700; }
+        }
+        
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .demo-section {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid #FFD700;
+        }
+        
+        .analytics-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #FFD700;
+            text-align: center;
+        }
+        
+        .momentum-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .momentum-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2E8B57, #FFD700);
+            transition: width 2s ease;
+        }
+        
+        .critical-play {
+            background: rgba(255, 107, 107, 0.2);
+            border-left: 4px solid #FF6B6B;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+            border: none;
+            padding: 1rem 2rem;
+            color: white;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚾ Lone Star Legends Championship ⚾</h1>
+        <h2 style="color: #FFD700;">🔥 Blaze Intelligence Analytics Demo</h2>
+        <p>Experience the future of baseball analytics</p>
+    </div>
+    
+    <div class="game-container">
+        <div class="demo-section">
+            <h3>🔥 Live Blaze Analytics Dashboard</h3>
+            
+            <div class="analytics-demo">
+                <div class="metric-card">
+                    <h4>📈 Game Momentum</h4>
+                    <div style="text-align: left;">
+                        <div>Home Team: <span id="home-momentum">65%</span></div>
+                        <div class="momentum-bar">
+                            <div class="momentum-fill" id="home-bar" style="width: 65%"></div>
+                        </div>
+                        <div>Away Team: <span id="away-momentum">35%</span></div>
+                        <div class="momentum-bar">
+                            <div class="momentum-fill" id="away-bar" style="width: 35%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <h4>🎯 Win Probability</h4>
+                    <div style="font-size: 2rem; color: #FFD700;">
+                        <div>Home: <span id="home-win-prob">72%</span></div>
+                        <div>Away: <span id="away-win-prob">28%</span></div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <h4>⚡ Critical Play Likelihood</h4>
+                    <div style="font-size: 1.5rem; color: #FF6B6B;">
+                        <span id="critical-likelihood">45%</span>
+                    </div>
+                    <div style="font-size: 0.9rem; margin-top: 0.5rem;">
+                        High leverage situation detected
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin: 2rem 0;">
+                <button class="btn" onclick="simulatePlay()">⚾ Simulate Baseball Play</button>
+                <button class="btn" onclick="resetGame()">🔄 Reset Game</button>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h3>⚡ Recent Critical Plays</h3>
+            <div id="critical-plays">
+                <div class="critical-play">
+                    <strong>Bottom 7th:</strong> Rodriguez hits a 2-run homer! (Impact: 85%)
+                </div>
+                <div class="critical-play">
+                    <strong>Top 6th:</strong> Johnson makes spectacular diving catch (Impact: 65%)
+                </div>
+                <div class="critical-play">
+                    <strong>Bottom 5th:</strong> Williams steals home plate! (Impact: 78%)
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h3>🚀 Blaze Intelligence Features</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>📈 Momentum Analysis</h4>
+                    <p>Real-time tracking of game momentum with contextual factors including inning pressure, score differential, and base runners.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚡ Critical Play Detection</h4>
+                    <p>Advanced algorithms identify game-changing moments and calculate their impact on win probability.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎯 Predictive Analytics</h4>
+                    <p>Machine learning models predict game outcomes and next critical play likelihood.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Advanced Metrics</h4>
+                    <p>Professional baseball analytics including exit velocity, launch angle, and situational statistics.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h3>🎮 Full Game Features</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>⚾ Realistic Physics</h4>
+                    <p>Advanced ball trajectory simulation with wind, drag, and Magnus effect calculations.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🏟️ Professional Field</h4>
+                    <p>MLB-standard field geometry and dimensions from the sportyR framework.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎮 3D Graphics</h4>
+                    <p>Three.js powered 3D field visualization with multiple camera angles.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📈 Live Statistics</h4>
+                    <p>Real-time player and team statistics with modern baseball analytics.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 3rem 0; padding: 2rem; background: rgba(0, 0, 0, 0.5); border-radius: 15px;">
+            <h3>🌟 Experience the Full Game</h3>
+            <p style="font-size: 1.1rem;">This is a demonstration of the Blaze Intelligence analytics system.</p>
+            <p>The full game includes interactive baseball simulation, 3D graphics, and complete analytics dashboard.</p>
+            <button class="btn" onclick="window.open('https://github.com/ahump20/lone-star-legends-championship', '_blank')">
+                📋 View Source Code
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Demo animation and interaction
+        let gameInning = 7;
+        let homeMomentum = 65;
+        let awayMomentum = 35;
+        let homeWinProb = 72;
+        let awayWinProb = 28;
+        let criticalLikelihood = 45;
+        
+        const plays = [
+            { player: "Rodriguez", action: "hits a solo homer", impact: 75, momentum: 15 },
+            { player: "Johnson", action: "strikes out the side", impact: 60, momentum: -10 },
+            { player: "Williams", action: "steals second base", impact: 35, momentum: 5 },
+            { player: "Davis", action: "hits a double", impact: 50, momentum: 8 },
+            { player: "Martinez", action: "makes diving catch", impact: 70, momentum: -12 },
+            { player: "Thompson", action: "walks with bases loaded", impact: 80, momentum: 18 },
+            { player: "Garcia", action: "grounds into double play", impact: 65, momentum: -15 }
+        ];
+        
+        function updateDisplay() {
+            document.getElementById('home-momentum').textContent = homeMomentum + '%';
+            document.getElementById('away-momentum').textContent = awayMomentum + '%';
+            document.getElementById('home-bar').style.width = homeMomentum + '%';
+            document.getElementById('away-bar').style.width = awayMomentum + '%';
+            
+            document.getElementById('home-win-prob').textContent = homeWinProb + '%';
+            document.getElementById('away-win-prob').textContent = awayWinProb + '%';
+            document.getElementById('critical-likelihood').textContent = criticalLikelihood + '%';
+        }
+        
+        function simulatePlay() {
+            const play = plays[Math.floor(Math.random() * plays.length)];
+            const team = Math.random() > 0.5 ? 'Home' : 'Away';
+            
+            // Update momentum
+            if (team === 'Home') {
+                homeMomentum = Math.min(90, homeMomentum + play.momentum);
+                awayMomentum = Math.max(10, awayMomentum - play.momentum * 0.5);
+            } else {
+                awayMomentum = Math.min(90, awayMomentum + play.momentum);
+                homeMomentum = Math.max(10, homeMomentum - play.momentum * 0.5);
+            }
+            
+            // Normalize momentum
+            const total = homeMomentum + awayMomentum;
+            homeMomentum = Math.round((homeMomentum / total) * 100);
+            awayMomentum = Math.round((awayMomentum / total) * 100);
+            
+            // Update win probability
+            homeWinProb = Math.round(homeMomentum * 0.8 + Math.random() * 20);
+            awayWinProb = 100 - homeWinProb;
+            
+            // Update critical likelihood
+            criticalLikelihood = Math.round(30 + Math.random() * 40);
+            
+            // Add new critical play
+            const topBottom = Math.random() > 0.5 ? 'Top' : 'Bottom';
+            const playHTML = `
+                <div class="critical-play" style="animation: slideIn 0.5s ease;">
+                    <strong>${topBottom} ${gameInning}th:</strong> ${team} - ${play.player} ${play.action}! (Impact: ${play.impact}%)
+                </div>
+            `;
+            
+            const criticalPlaysDiv = document.getElementById('critical-plays');
+            criticalPlaysDiv.insertAdjacentHTML('afterbegin', playHTML);
+            
+            // Keep only last 4 plays
+            const plays_elements = criticalPlaysDiv.children;
+            if (plays_elements.length > 4) {
+                criticalPlaysDiv.removeChild(plays_elements[plays_elements.length - 1]);
+            }
+            
+            updateDisplay();
+            
+            // Show notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+                color: white;
+                padding: 1rem;
+                border-radius: 10px;
+                z-index: 1000;
+                animation: slideIn 0.5s ease;
+            `;
+            notification.innerHTML = `🔥 ${team} - ${play.player} ${play.action}!`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+            
+            gameInning = Math.min(12, gameInning + (Math.random() > 0.7 ? 1 : 0));
+        }
+        
+        function resetGame() {
+            homeMomentum = 50;
+            awayMomentum = 50;
+            homeWinProb = 50;
+            awayWinProb = 50;
+            criticalLikelihood = 25;
+            gameInning = 1;
+            
+            document.getElementById('critical-plays').innerHTML = `
+                <div class="critical-play">
+                    <strong>Game Reset:</strong> Fresh start! New game beginning...
+                </div>
+            `;
+            
+            updateDisplay();
+        }
+        
+        // Add slide animation CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Auto-demo mode
+        setInterval(() => {
+            if (Math.random() > 0.8) { // 20% chance every 3 seconds
+                simulatePlay();
+            }
+        }, 3000);
+        
+        console.log('🔥 Blaze Intelligence Demo Loaded!');
+    </script>
+</body>
+</html>

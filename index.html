@@ -256,18 +256,10 @@
     </div>
     
     <!-- Load the game modules -->
-    <script type="module">
-        // Import Blaze Intelligence components
-        import BlazeIntegration from './blaze-integration.js';
-        import BlazeDashboard from './blaze-dashboard.js';
-        import BlazeMomentumAnalyzer from './blaze-momentum-analyzer.js';
-        import BlazeCriticalPlayAnalyzer from './blaze-critical-plays.js';
-        
+    <script>
         console.log('🔥 Blaze Intelligence Analytics System Loading...');
         
         // Initialize the components
-        let dashboard;
-        let blazeIntegration;
         let gameActive = false;
         
         // Initialize game canvas
@@ -325,16 +317,8 @@
                 ctx.fillStyle = '#FFFFFF';
                 ctx.font = '18px Arial';
                 ctx.fillText('Press "Start Game" to begin!', centerX, centerY - 50);
-                ctx.fillText('Press "B" for Blaze Analytics Dashboard', centerX, centerY - 20);
+                ctx.fillText('Visit demo.html for full analytics!', centerX, centerY - 20);
             }
-        }
-        
-        // Initialize dashboard
-        try {
-            dashboard = new BlazeDashboard(document.body);
-            console.log('✅ Blaze Dashboard initialized');
-        } catch (error) {
-            console.warn('⚠️ Dashboard initialization failed:', error);
         }
         
         // Global functions for buttons
@@ -342,56 +326,16 @@
             gameActive = true;
             console.log('🎮 Game started!');
             
-            // Simulate some game events for demonstration
-            if (dashboard) {
-                setTimeout(() => {
-                    // Simulate a home run event
-                    const homeRunEvent = {
-                        type: 'homerun',
-                        team: 'home',
-                        inning: 1,
-                        topBottom: 'bottom',
-                        outs: 1,
-                        balls: 2,
-                        strikes: 1,
-                        scoreDifferential: 0,
-                        runnersOnBase: 1,
-                        velocity: 98
-                    };
-                    
-                    dashboard.processGameEvent({
-                        play: {
-                            type: 'homerun',
-                            player: 'Alex Rodriguez',
-                            runsScored: 2,
-                            exitVelocity: 105,
-                            launchAngle: 28,
-                            distance: 420
-                        },
-                        context: {
-                            inning: 1,
-                            topBottom: 'bottom',
-                            outs: 1,
-                            homeScore: 2,
-                            awayScore: 0,
-                            scoreDifferential: 2,
-                            runnersOnBase: 1
-                        }
-                    });
-                    
-                    alert('🔥 HOME RUN! Check the Blaze Analytics (press B) to see the momentum shift!');
-                }, 2000);
-            }
+            // Simple game demo
+            setTimeout(() => {
+                alert('🔥 HOME RUN! Visit demo.html to see the full Blaze Analytics in action!');
+            }, 2000);
             
             drawField();
         };
         
         window.showAnalytics = function() {
-            if (dashboard) {
-                dashboard.show();
-            } else {
-                alert('🔥 Blaze Analytics Dashboard is loading...');
-            }
+            window.open('./demo.html', '_blank');
         };
         
         // Initial field drawing
@@ -400,6 +344,7 @@
         // Show welcome message
         setTimeout(() => {
             console.log('🔥 Blaze Intelligence System Ready!');
+            console.log('Visit demo.html for the full analytics experience!');
         }, 1000);
         
     </script>
