@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lone Star Legends Championship ⚾ - With Blaze Intelligence Analytics</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2E8B57, #8B4513);
+            font-family: 'Arial', sans-serif;
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px #FFD700; }
+            to { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px #FFD700, 0 0 30px #FFD700; }
+        }
+        
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid #FFD700;
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .analytics-info {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            border: 3px solid #FFD700;
+            backdrop-filter: blur(10px);
+        }
+        
+        .keyboard-shortcuts {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1.5rem 0;
+            border: 1px solid #FFD700;
+        }
+        
+        .shortcut {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #1a1a2e;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin: 0.3rem;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .shortcut:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+        }
+        
+        .game-canvas {
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            background: #2E8B57;
+            border: 3px solid #FFD700;
+            border-radius: 15px;
+            margin: 2rem auto;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .field-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        .play-button {
+            background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+            border: none;
+            padding: 1rem 2rem;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 1rem;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .play-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+        }
+        
+        .status-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #FFD700;
+            z-index: 1000;
+        }
+        
+        .blaze-indicator {
+            color: #FFD700;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <div class="status-indicator">
+        <div class="blaze-indicator">🔥 Blaze Intelligence: Active</div>
+        <div style="font-size: 0.9rem; color: #ccc;">Press B for Analytics Dashboard</div>
+    </div>
+    
+    <div class="header">
+        <h1>⚾ Lone Star Legends Championship ⚾</h1>
+        <h2 style="color: #FFD700; margin: 0.5rem 0;">🔥 Powered by Blaze Intelligence Analytics</h2>
+        <p style="font-size: 1.2rem; margin: 1rem 0;">Professional Baseball Simulation with Advanced Real-Time Analytics</p>
+    </div>
+    
+    <div class="game-container">
+        <!-- Game Field Canvas -->
+        <canvas class="game-canvas" id="gameCanvas" width="800" height="600">
+            <div class="field-overlay">
+                <div>⚾ Baseball Field ⚾</div>
+                <div style="font-size: 1rem; margin-top: 1rem;">
+                    Click "Start Game" to begin playing!
+                </div>
+            </div>
+        </canvas>
+        
+        <div style="text-align: center;">
+            <button class="play-button" onclick="startGame()">🎮 Start Game</button>
+            <button class="play-button" onclick="showAnalytics()">🔥 Open Blaze Analytics</button>
+        </div>
+        
+        <div class="analytics-info">
+            <h3>🔥 Blaze Intelligence Features</h3>
+            <div class="features">
+                <div class="feature-card">
+                    <h4>📈 Real-Time Momentum Tracking</h4>
+                    <p>Advanced momentum analysis tracks the ebb and flow of the game, identifying when teams are gaining or losing control with contextual factors like inning, score differential, and base runners.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚡ Critical Play Detection</h4>
+                    <p>Intelligent algorithms identify game-changing moments and calculate their impact on the overall outcome, from clutch hits to defensive gems.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎯 Predictive Analytics</h4>
+                    <p>Win probability calculations and trend analysis provide real-time insights into likely game outcomes based on current momentum and game state.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Advanced Dashboard</h4>
+                    <p>Comprehensive analytics dashboard with multiple tabs for momentum visualization, critical plays timeline, predictions, and detailed statistics.</p>
+                </div>
+            </div>
+            
+            <div class="keyboard-shortcuts">
+                <h4>⌨️ Keyboard Shortcuts:</h4>
+                <span class="shortcut">B</span> Open Blaze Dashboard
+                <span class="shortcut">M</span> View Momentum Analysis
+                <span class="shortcut">C</span> View Critical Plays
+                <span class="shortcut">ESC</span> Close Dashboard
+            </div>
+        </div>
+        
+        <div class="analytics-info">
+            <h3>🏟️ Enhanced Baseball Simulation</h3>
+            <div class="features">
+                <div class="feature-card">
+                    <h4>⚾ Realistic Physics Engine</h4>
+                    <p>Advanced ball trajectory calculations incorporating wind resistance, drag coefficients, Magnus effect, and environmental factors for authentic gameplay.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🏟️ Professional Field Geometry</h4>
+                    <p>MLB-standard field dimensions and geometry calculations adapted from the sportyR framework, ensuring accurate baseball simulation.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎮 3D Visualization</h4>
+                    <p>Three.js 3D field rendering with multiple camera angles, realistic lighting, and immersive graphics for enhanced visual experience.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📈 Advanced Statistics</h4>
+                    <p>Comprehensive player and team statistics tracking with modern baseball analytics including exit velocity, launch angle, and advanced metrics.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 3rem 0; padding: 2rem; background: rgba(0, 0, 0, 0.3); border-radius: 15px;">
+            <h3>🚀 Technical Implementation</h3>
+            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">This game integrates multiple cutting-edge frameworks:</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                <div>🔥 <strong>Blaze Intelligence</strong><br>Real-time sports analytics</div>
+                <div>⚾ <strong>sportyR Framework</strong><br>Professional field geometry</div>
+                <div>🎮 <strong>Three.js</strong><br>3D graphics rendering</div>
+                <div>📊 <strong>D3.js</strong><br>Data visualization</div>
+                <div>⚡ <strong>MLB Stats API</strong><br>Real player data</div>
+                <div>🧮 <strong>Physics Engine</strong><br>Realistic ball dynamics</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Load the game modules -->
+    <script type="module">
+        // Import Blaze Intelligence components
+        import BlazeIntegration from './blaze-integration.js';
+        import BlazeDashboard from './blaze-dashboard.js';
+        import BlazeMomentumAnalyzer from './blaze-momentum-analyzer.js';
+        import BlazeCriticalPlayAnalyzer from './blaze-critical-plays.js';
+        
+        console.log('🔥 Blaze Intelligence Analytics System Loading...');
+        
+        // Initialize the components
+        let dashboard;
+        let blazeIntegration;
+        let gameActive = false;
+        
+        // Initialize game canvas
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Draw basic baseball field
+        function drawField() {
+            ctx.fillStyle = '#2E8B57';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw infield diamond
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            // Home plate area
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height - 50;
+            
+            // Diamond
+            ctx.moveTo(centerX, centerY); // Home
+            ctx.lineTo(centerX + 150, centerY - 150); // First base
+            ctx.lineTo(centerX, centerY - 300); // Second base
+            ctx.lineTo(centerX - 150, centerY - 150); // Third base
+            ctx.closePath();
+            ctx.stroke();
+            
+            // Pitcher's mound
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 120, 15, 0, 2 * Math.PI);
+            ctx.fillStyle = '#8B4513';
+            ctx.fill();
+            ctx.stroke();
+            
+            // Bases
+            const baseSize = 8;
+            ctx.fillStyle = '#FFFFFF';
+            // First base
+            ctx.fillRect(centerX + 150 - baseSize/2, centerY - 150 - baseSize/2, baseSize, baseSize);
+            // Second base
+            ctx.fillRect(centerX - baseSize/2, centerY - 300 - baseSize/2, baseSize, baseSize);
+            // Third base
+            ctx.fillRect(centerX - 150 - baseSize/2, centerY - 150 - baseSize/2, baseSize, baseSize);
+            // Home plate
+            ctx.fillRect(centerX - baseSize/2, centerY - baseSize/2, baseSize, baseSize);
+            
+            // Game status text
+            ctx.fillStyle = '#FFD700';
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🔥 Lone Star Legends Championship ⚾', centerX, 40);
+            
+            if (!gameActive) {
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = '18px Arial';
+                ctx.fillText('Press "Start Game" to begin!', centerX, centerY - 50);
+                ctx.fillText('Press "B" for Blaze Analytics Dashboard', centerX, centerY - 20);
+            }
+        }
+        
+        // Initialize dashboard
+        try {
+            dashboard = new BlazeDashboard(document.body);
+            console.log('✅ Blaze Dashboard initialized');
+        } catch (error) {
+            console.warn('⚠️ Dashboard initialization failed:', error);
+        }
+        
+        // Global functions for buttons
+        window.startGame = function() {
+            gameActive = true;
+            console.log('🎮 Game started!');
+            
+            // Simulate some game events for demonstration
+            if (dashboard) {
+                setTimeout(() => {
+                    // Simulate a home run event
+                    const homeRunEvent = {
+                        type: 'homerun',
+                        team: 'home',
+                        inning: 1,
+                        topBottom: 'bottom',
+                        outs: 1,
+                        balls: 2,
+                        strikes: 1,
+                        scoreDifferential: 0,
+                        runnersOnBase: 1,
+                        velocity: 98
+                    };
+                    
+                    dashboard.processGameEvent({
+                        play: {
+                            type: 'homerun',
+                            player: 'Alex Rodriguez',
+                            runsScored: 2,
+                            exitVelocity: 105,
+                            launchAngle: 28,
+                            distance: 420
+                        },
+                        context: {
+                            inning: 1,
+                            topBottom: 'bottom',
+                            outs: 1,
+                            homeScore: 2,
+                            awayScore: 0,
+                            scoreDifferential: 2,
+                            runnersOnBase: 1
+                        }
+                    });
+                    
+                    alert('🔥 HOME RUN! Check the Blaze Analytics (press B) to see the momentum shift!');
+                }, 2000);
+            }
+            
+            drawField();
+        };
+        
+        window.showAnalytics = function() {
+            if (dashboard) {
+                dashboard.show();
+            } else {
+                alert('🔥 Blaze Analytics Dashboard is loading...');
+            }
+        };
+        
+        // Initial field drawing
+        drawField();
+        
+        // Show welcome message
+        setTimeout(() => {
+            console.log('🔥 Blaze Intelligence System Ready!');
+        }, 1000);
+        
+    </script>
+</body>
+</html>
