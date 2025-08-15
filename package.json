@@ -1,0 +1,44 @@
+{
+  "name": "lone-star-legends-championship",
+  "version": "2.0.0",
+  "description": "Advanced Baseball Simulator with AI Players, Real-Time Analytics, and Multiplayer",
+  "main": "index.html",
+  "scripts": {
+    "start": "node multiplayer-server.js",
+    "dev": "concurrently \"python3 simple-api-server.py\" \"node multiplayer-server.js\"",
+    "api": "python3 simple-api-server.py",
+    "multiplayer": "node multiplayer-server.js",
+    "dashboard": "python3 -m http.server 8082",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "dependencies": {
+    "ws": "^8.14.0",
+    "concurrently": "^8.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "keywords": [
+    "baseball",
+    "simulator",
+    "ai",
+    "multiplayer",
+    "websocket",
+    "three.js",
+    "claude-api",
+    "champion-enigma-engine",
+    "sports-analytics",
+    "real-time"
+  ],
+  "author": "Austin Humphrey",
+  "license": "MIT",
+  "homepage": "https://ahump20.github.io/lone-star-legends-championship/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahump20/lone-star-legends-championship.git"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "python": ">=3.8.0"
+  }
+}

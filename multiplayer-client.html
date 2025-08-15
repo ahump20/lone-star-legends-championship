@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lone Star Legends - Multiplayer Baseball</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: radial-gradient(ellipse at center, #1a4c2b 0%, #0d2818 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #2d5a3d, #1a4c2b);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #4a7c59;
+            margin-bottom: 20px;
+        }
+
+        .connection-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .status-connected {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            color: #22c55e;
+        }
+
+        .status-disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .panel {
+            background: rgba(45, 90, 61, 0.8);
+            border: 2px solid #4a7c59;
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .panel-title {
+            color: #90EE90;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 2px solid #4a7c59;
+            padding-bottom: 10px;
+        }
+
+        .player-setup {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #90EE90;
+            font-weight: bold;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #4a7c59;
+            border-radius: 8px;
+            background: rgba(26, 76, 43, 0.7);
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #90EE90;
+            box-shadow: 0 0 0 3px rgba(144, 238, 144, 0.2);
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, #4a7c59, #2d5a3d);
+            border: 2px solid #90EE90;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .action-button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #90EE90, #4a7c59);
+            color: #1a4c2b;
+            transform: translateY(-2px);
+        }
+
+        .action-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .queue-status {
+            text-align: center;
+            padding: 20px;
+            background: rgba(26, 76, 43, 0.5);
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .queue-position {
+            font-size: 2em;
+            color: #90EE90;
+            margin: 10px 0;
+        }
+
+        .game-area {
+            grid-column: 1 / -1;
+            display: none;
+        }
+
+        .game-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-card {
+            background: rgba(26, 76, 43, 0.6);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #4a7c59;
+        }
+
+        .info-value {
+            font-size: 1.5em;
+            color: #90EE90;
+            font-weight: bold;
+        }
+
+        .info-label {
+            color: #cccccc;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .chat-area {
+            height: 200px;
+            background: rgba(26, 76, 43, 0.3);
+            border: 1px solid #4a7c59;
+            border-radius: 8px;
+            padding: 10px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .chat-message {
+            margin-bottom: 8px;
+            padding: 5px 8px;
+            background: rgba(45, 90, 61, 0.5);
+            border-radius: 4px;
+        }
+
+        .chat-sender {
+            color: #90EE90;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #4a7c59;
+            border-radius: 6px;
+            background: rgba(26, 76, 43, 0.7);
+            color: white;
+        }
+
+        .team-roster {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .roster-player {
+            background: rgba(26, 76, 43, 0.6);
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 3px solid #90EE90;
+        }
+
+        .player-name {
+            font-weight: bold;
+            color: #90EE90;
+        }
+
+        .player-stats {
+            font-size: 0.9em;
+            color: #cccccc;
+            margin-top: 5px;
+        }
+
+        .game-log {
+            height: 150px;
+            background: rgba(26, 76, 43, 0.3);
+            border: 1px solid #4a7c59;
+            border-radius: 8px;
+            padding: 10px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .log-hit { background: rgba(34, 197, 94, 0.2); }
+        .log-out { background: rgba(239, 68, 68, 0.2); }
+        .log-info { background: rgba(59, 130, 246, 0.2); }
+
+        .spectator-list {
+            background: rgba(26, 76, 43, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            color: #22c55e;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .ping-display {
+            font-size: 12px;
+            color: #90EE90;
+            opacity: 0.7;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #4a7c59;
+            border-top: 3px solid #90EE90;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>⚾ Lone Star Legends Multiplayer</h1>
+            <p>Real-Time Baseball Championship • AI-Enhanced Competition</p>
+            
+            <div class="connection-status" id="connectionStatus">
+                <div class="status-indicator"></div>
+                <span>Connecting...</span>
+            </div>
+            
+            <div class="ping-display" id="pingDisplay">Ping: --ms</div>
+        </div>
+
+        <div class="main-content">
+            <!-- Player Setup Panel -->
+            <div class="panel player-setup" id="setupPanel">
+                <div class="panel-title">👤 Player Setup</div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="playerName">Player Name:</label>
+                    <input type="text" id="playerName" class="form-input" 
+                           placeholder="Enter your name" maxlength="20">
+                </div>
+                
+                <div class="form-group">
+                    <button class="action-button" onclick="setPlayerName()" id="nameBtn">
+                        Set Name
+                    </button>
+                    <button class="action-button" onclick="joinQueue()" id="queueBtn" disabled>
+                        Join Matchmaking
+                    </button>
+                </div>
+
+                <div id="queueStatus" class="queue-status" style="display: none;">
+                    <div>🎯 Searching for opponent...</div>
+                    <div class="queue-position" id="queuePosition">--</div>
+                    <div>Position in queue</div>
+                    <div class="loading"></div>
+                    <button class="action-button" onclick="leaveQueue()">
+                        Leave Queue
+                    </button>
+                </div>
+
+                <div id="messages"></div>
+            </div>
+
+            <!-- Game Area (Hidden initially) -->
+            <div class="panel game-area" id="gameArea">
+                <div class="panel-title">🎮 Live Game</div>
+                
+                <div class="game-info">
+                    <div class="info-card">
+                        <div class="info-value" id="currentInning">1</div>
+                        <div class="info-label">Inning</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-value" id="awayScore">0</div>
+                        <div class="info-label">Away Score</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-value" id="homeScore">0</div>
+                        <div class="info-label">Home Score</div>
+                    </div>
+                </div>
+
+                <div class="game-log" id="gameLog"></div>
+                
+                <div style="margin-top: 15px;">
+                    <button class="action-button" onclick="gameAction('swing')">
+                        🥎 Swing
+                    </button>
+                    <button class="action-button" onclick="gameAction('pitch')">
+                        ⚾ Pitch
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Panel -->
+            <div class="panel">
+                <div class="panel-title">💬 Game Chat</div>
+                
+                <div class="chat-area" id="chatArea"></div>
+                
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" class="chat-input" 
+                           placeholder="Type a message..." maxlength="200">
+                    <button class="action-button" onclick="sendChat()">Send</button>
+                </div>
+            </div>
+
+            <!-- Team Info Panel -->
+            <div class="panel">
+                <div class="panel-title">⚾ Team Rosters</div>
+                
+                <div id="teamRosters">
+                    <p>No active game</p>
+                </div>
+
+                <div class="spectator-list" id="spectatorList" style="display: none;">
+                    <strong>👁️ Spectators:</strong>
+                    <div id="spectators"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class MultiplayerClient {
+            constructor() {
+                this.ws = null;
+                this.connected = false;
+                this.playerName = null;
+                this.gameId = null;
+                this.clientId = null;
+                this.pingInterval = null;
+                this.lastPingTime = 0;
+                
+                this.connect();
+                this.setupEventListeners();
+            }
+
+            connect() {
+                const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                const host = window.location.hostname;
+                const port = '8081';
+                const wsUrl = `${protocol}//${host}:${port}/baseball-multiplayer`;
+                
+                console.log('🔗 Connecting to:', wsUrl);
+                
+                try {
+                    this.ws = new WebSocket(wsUrl);
+                    this.setupWebSocketHandlers();
+                } catch (error) {
+                    console.error('❌ WebSocket connection failed:', error);
+                    this.showError('Failed to connect to game server');
+                }
+            }
+
+            setupWebSocketHandlers() {
+                this.ws.onopen = () => {
+                    console.log('✅ Connected to multiplayer server');
+                    this.connected = true;
+                    this.updateConnectionStatus('Connected', true);
+                    this.startPing();
+                };
+
+                this.ws.onclose = (event) => {
+                    console.log('🔌 Disconnected from server:', event.code);
+                    this.connected = false;
+                    this.updateConnectionStatus('Disconnected', false);
+                    this.stopPing();
+                    
+                    // Attempt reconnection
+                    setTimeout(() => {
+                        if (!this.connected) {
+                            console.log('🔄 Attempting to reconnect...');
+                            this.connect();
+                        }
+                    }, 3000);
+                };
+
+                this.ws.onerror = (error) => {
+                    console.error('❌ WebSocket error:', error);
+                    this.showError('Connection error occurred');
+                };
+
+                this.ws.onmessage = (event) => {
+                    try {
+                        const message = JSON.parse(event.data);
+                        this.handleMessage(message);
+                    } catch (error) {
+                        console.error('❌ Error parsing message:', error);
+                    }
+                };
+            }
+
+            handleMessage(message) {
+                console.log('📨 Received:', message.type);
+                
+                switch (message.type) {
+                    case 'connected':
+                        this.handleConnected(message);
+                        break;
+                    case 'playerNameSet':
+                        this.handlePlayerNameSet(message);
+                        break;
+                    case 'queueJoined':
+                        this.handleQueueJoined(message);
+                        break;
+                    case 'queueLeft':
+                        this.handleQueueLeft();
+                        break;
+                    case 'gameCreated':
+                        this.handleGameCreated(message);
+                        break;
+                    case 'aiTeamsInitialized':
+                        this.handleAITeamsInitialized(message);
+                        break;
+                    case 'gameStarted':
+                        this.handleGameStarted(message);
+                        break;
+                    case 'atBatResult':
+                        this.handleAtBatResult(message);
+                        break;
+                    case 'newInning':
+                        this.handleNewInning(message);
+                        break;
+                    case 'gameEnded':
+                        this.handleGameEnded(message);
+                        break;
+                    case 'chatMessage':
+                        this.handleChatMessage(message);
+                        break;
+                    case 'playerDisconnected':
+                        this.handlePlayerDisconnected(message);
+                        break;
+                    case 'error':
+                        this.showError(message.message);
+                        break;
+                    case 'pong':
+                        this.handlePong(message);
+                        break;
+                    default:
+                        console.log('Unknown message type:', message.type);
+                }
+            }
+
+            handleConnected(message) {
+                this.clientId = message.clientId;
+                console.log('👤 Client ID assigned:', this.clientId);
+            }
+
+            handlePlayerNameSet(message) {
+                this.playerName = message.playerName;
+                document.getElementById('queueBtn').disabled = false;
+                this.showSuccess(`Welcome, ${this.playerName}!`);
+            }
+
+            handleQueueJoined(message) {
+                document.getElementById('queueStatus').style.display = 'block';
+                document.getElementById('queuePosition').textContent = message.position;
+                this.showSuccess('Joined matchmaking queue');
+            }
+
+            handleQueueLeft() {
+                document.getElementById('queueStatus').style.display = 'none';
+                this.showSuccess('Left matchmaking queue');
+            }
+
+            handleGameCreated(message) {
+                this.gameId = message.gameId;
+                document.getElementById('queueStatus').style.display = 'none';
+                this.showSuccess(`Game created! Players: ${message.players.map(p => p.playerName).join(' vs ')}`);
+                
+                // Auto-ready for now
+                setTimeout(() => {
+                    this.send({ type: 'gameAction', action: 'ready' });
+                }, 1000);
+            }
+
+            handleAITeamsInitialized(message) {
+                this.displayTeamRosters(message.teams);
+            }
+
+            handleGameStarted(message) {
+                document.getElementById('setupPanel').style.display = 'none';
+                document.getElementById('gameArea').style.display = 'block';
+                
+                this.updateGameState(message.initialState);
+                this.addGameLogEntry('🚀 Game Started!', 'info');
+                
+                this.showSuccess('Game has begun!');
+            }
+
+            handleAtBatResult(message) {
+                const result = message.result;
+                const logClass = result.outcome === 'homerun' || result.outcome === 'single' || 
+                                result.outcome === 'double' ? 'hit' : 'out';
+                
+                let logText = `${result.batter}: ${result.outcome}`;
+                if (result.exitVelocity) {
+                    logText += ` (${result.exitVelocity} mph, ${result.launchAngle}°)`;
+                }
+                
+                this.addGameLogEntry(logText, logClass);
+                this.updateGameState(message.gameState);
+            }
+
+            handleNewInning(message) {
+                this.addGameLogEntry(`🔄 Now batting: Inning ${message.inning}`, 'info');
+                document.getElementById('currentInning').textContent = message.inning;
+            }
+
+            handleGameEnded(message) {
+                const winner = message.winner === 'tie' ? 'Tie Game!' : 
+                              `${message.winner.charAt(0).toUpperCase() + message.winner.slice(1)} Team Wins!`;
+                
+                this.addGameLogEntry(`🏁 GAME OVER: ${winner}`, 'info');
+                this.addGameLogEntry(`Final Score: Away ${message.finalScore.away} - Home ${message.finalScore.home}`, 'info');
+                
+                // Show highlights
+                message.gameStats.highlights.forEach(highlight => {
+                    this.addGameLogEntry(highlight, 'hit');
+                });
+                
+                this.showSuccess(`Game finished! ${winner}`);
+            }
+
+            handleChatMessage(message) {
+                this.addChatMessage(message.from, message.message);
+            }
+
+            handlePlayerDisconnected(message) {
+                this.addGameLogEntry(`🔌 ${message.playerName} disconnected`, 'info');
+                this.showError(`${message.playerName} left the game`);
+            }
+
+            handlePong(message) {
+                const ping = Date.now() - message.timestamp;
+                document.getElementById('pingDisplay').textContent = `Ping: ${ping}ms`;
+            }
+
+            setupEventListeners() {
+                // Enter key handlers
+                document.getElementById('playerName').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') setPlayerName();
+                });
+                
+                document.getElementById('chatInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') sendChat();
+                });
+            }
+
+            updateConnectionStatus(status, connected) {
+                const statusEl = document.getElementById('connectionStatus');
+                statusEl.className = `connection-status ${connected ? 'status-connected' : 'status-disconnected'}`;
+                statusEl.innerHTML = `
+                    <div class="status-indicator"></div>
+                    <span>${status}</span>
+                `;
+            }
+
+            updateGameState(state) {
+                if (state.inning) {
+                    document.getElementById('currentInning').textContent = state.inning;
+                }
+                if (state.score) {
+                    document.getElementById('awayScore').textContent = state.score.away;
+                    document.getElementById('homeScore').textContent = state.score.home;
+                }
+            }
+
+            displayTeamRosters(teams) {
+                const rosterEl = document.getElementById('teamRosters');
+                rosterEl.innerHTML = '';
+                
+                teams.forEach(team => {
+                    const teamDiv = document.createElement('div');
+                    teamDiv.innerHTML = `
+                        <h4>${team.playerName} (${team.team.charAt(0).toUpperCase() + team.team.slice(1)})</h4>
+                        <div class="team-roster">
+                            ${team.roster.map(player => `
+                                <div class="roster-player">
+                                    <div class="player-name">${player.name} (${player.position})</div>
+                                    <div class="player-stats">
+                                        CQ: ${player.championQuotient} | ${player.personality}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    rosterEl.appendChild(teamDiv);
+                });
+            }
+
+            addGameLogEntry(text, className = '') {
+                const logEl = document.getElementById('gameLog');
+                const entry = document.createElement('div');
+                entry.className = `log-entry ${className ? 'log-' + className : ''}`;
+                entry.textContent = text;
+                logEl.appendChild(entry);
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+
+            addChatMessage(sender, message) {
+                const chatEl = document.getElementById('chatArea');
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'chat-message';
+                msgDiv.innerHTML = `
+                    <span class="chat-sender">${sender}:</span>
+                    ${message}
+                `;
+                chatEl.appendChild(msgDiv);
+                chatEl.scrollTop = chatEl.scrollHeight;
+            }
+
+            showError(message) {
+                this.showMessage(message, 'error');
+            }
+
+            showSuccess(message) {
+                this.showMessage(message, 'success');
+            }
+
+            showMessage(message, type) {
+                const messagesEl = document.getElementById('messages');
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `${type}-message`;
+                msgDiv.textContent = message;
+                messagesEl.appendChild(msgDiv);
+                
+                // Remove after 5 seconds
+                setTimeout(() => {
+                    if (msgDiv.parentNode) {
+                        msgDiv.parentNode.removeChild(msgDiv);
+                    }
+                }, 5000);
+            }
+
+            startPing() {
+                this.pingInterval = setInterval(() => {
+                    if (this.connected) {
+                        this.lastPingTime = Date.now();
+                        this.send({ type: 'ping', timestamp: this.lastPingTime });
+                    }
+                }, 30000); // Ping every 30 seconds
+            }
+
+            stopPing() {
+                if (this.pingInterval) {
+                    clearInterval(this.pingInterval);
+                    this.pingInterval = null;
+                }
+            }
+
+            send(message) {
+                if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                    this.ws.send(JSON.stringify(message));
+                } else {
+                    console.warn('⚠️ Cannot send message: WebSocket not connected');
+                }
+            }
+        }
+
+        // Initialize client
+        let client;
+
+        window.addEventListener('load', () => {
+            client = new MultiplayerClient();
+        });
+
+        // Global functions for UI interactions
+        function setPlayerName() {
+            const nameInput = document.getElementById('playerName');
+            const name = nameInput.value.trim();
+            
+            if (!name) {
+                alert('Please enter a player name');
+                return;
+            }
+            
+            client.send({
+                type: 'setPlayerName',
+                playerName: name
+            });
+            
+            document.getElementById('nameBtn').disabled = true;
+        }
+
+        function joinQueue() {
+            client.send({ type: 'joinQueue' });
+            document.getElementById('queueBtn').disabled = true;
+        }
+
+        function leaveQueue() {
+            client.send({ type: 'leaveQueue' });
+            document.getElementById('queueBtn').disabled = false;
+        }
+
+        function gameAction(action) {
+            client.send({
+                type: 'gameAction',
+                action: action
+            });
+        }
+
+        function sendChat() {
+            const chatInput = document.getElementById('chatInput');
+            const message = chatInput.value.trim();
+            
+            if (!message) return;
+            
+            client.send({
+                type: 'chatMessage',
+                text: message
+            });
+            
+            chatInput.value = '';
+        }
+
+        console.log('⚾ Lone Star Legends Multiplayer Client Loaded');
+    </script>
+</body>
+</html>
