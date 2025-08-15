@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lone Star Legends - Claude-Powered Three.js Baseball Simulator</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        #canvas-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .scoreboard {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid gold;
+            border-radius: 10px;
+            padding: 15px 30px;
+            color: white;
+            pointer-events: auto;
+        }
+        
+        .score-display {
+            display: flex;
+            justify-content: space-around;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .team-score {
+            text-align: center;
+            margin: 0 20px;
+        }
+        
+        .team-name {
+            font-size: 14px;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+        
+        .inning-display {
+            text-align: center;
+            font-size: 14px;
+            color: #aaa;
+        }
+        
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            pointer-events: auto;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn.loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            margin: auto;
+            border: 2px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: button-loading-spinner 1s ease infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        @keyframes button-loading-spinner {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .enigma-panel {
+            position: absolute;
+            right: 20px;
+            top: 100px;
+            width: 280px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #9b59b6;
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            pointer-events: auto;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .enigma-title {
+            font-size: 16px;
+            color: #9b59b6;
+            margin-bottom: 15px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .enigma-score {
+            font-size: 28px;
+            color: #e74c3c;
+            text-align: center;
+            margin: 15px 0;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+        }
+        
+        .enigma-metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+        
+        .enigma-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+        
+        .enigma-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e74c3c, #f39c12, #2ecc71);
+            transition: width 0.5s ease;
+        }
+        
+        .ai-narrative {
+            position: absolute;
+            left: 20px;
+            bottom: 150px;
+            width: 350px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            pointer-events: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .narrative-title {
+            color: #3498db;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .narrative-content {
+            font-size: 12px;
+            line-height: 1.4;
+            font-style: italic;
+        }
+        
+        .ai-commentary {
+            position: absolute;
+            bottom: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 15px 20px;
+            color: #ffd700;
+            text-align: center;
+            font-style: italic;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+            font-size: 16px;
+        }
+        
+        .ai-commentary.active {
+            opacity: 1;
+        }
+        
+        .claude-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            pointer-events: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .momentum-bar {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid white;
+            border-radius: 15px;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .momentum-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4a90e2 0%, #ff6b6b 100%);
+            width: 50%;
+            transition: width 0.5s ease;
+        }
+        
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            z-index: 1000;
+        }
+        
+        .camera-controls {
+            position: absolute;
+            left: 20px;
+            top: 100px;
+            pointer-events: auto;
+        }
+        
+        .camera-btn {
+            display: block;
+            margin: 5px 0;
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #4a90e2;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 12px;
+        }
+        
+        .camera-btn:hover {
+            background: rgba(74, 144, 226, 0.3);
+        }
+        
+        .camera-btn.active {
+            background: #4a90e2;
+        }
+        
+        .stats-mini {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 14px;
+            pointer-events: none;
+        }
+        
+        .performance-panel {
+            position: absolute;
+            left: 20px;
+            top: 300px;
+            width: 200px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #f39c12;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            font-size: 12px;
+            pointer-events: none;
+        }
+        
+        .performance-title {
+            color: #f39c12;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        .feature-highlight {
+            position: absolute;
+            top: 200px;
+            right: 320px;
+            width: 250px;
+            background: rgba(46, 204, 113, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .feature-highlight.show {
+            opacity: 1;
+        }
+        
+        .feature-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">Loading Stadium...</div>
+    
+    <div id="canvas-container"></div>
+    
+    <div id="ui-overlay">
+        <div class="claude-badge">
+            🤖 Powered by Claude AI
+        </div>
+        
+        <div class="scoreboard">
+            <div class="score-display">
+                <div class="team-score">
+                    <div class="team-name">LONE STAR LEGENDS</div>
+                    <div id="home-score">0</div>
+                </div>
+                <div class="team-score">
+                    <div class="team-name">CHALLENGERS</div>
+                    <div id="away-score">0</div>
+                </div>
+            </div>
+            <div class="inning-display">
+                Inning: <span id="inning">1</span> - <span id="half">TOP</span>
+            </div>
+        </div>
+        
+        <div class="stats-mini">
+            <span id="current-batter">Rodriguez</span> at bat | 
+            Exit Velocity: <span id="exit-velocity">0 mph</span> | 
+            Distance: <span id="distance">0 ft</span>
+        </div>
+        
+        <div class="camera-controls">
+            <button class="camera-btn active" onclick="setCamera('broadcast')">Broadcast</button>
+            <button class="camera-btn" onclick="setCamera('pitcher')">Pitcher View</button>
+            <button class="camera-btn" onclick="setCamera('batter')">Batter View</button>
+            <button class="camera-btn" onclick="setCamera('aerial')">Aerial View</button>
+        </div>
+        
+        <div class="performance-panel">
+            <div class="performance-title">⚡ Performance Metrics</div>
+            <div>Reaction Time: <span id="reaction-time">--</span>ms</div>
+            <div>Decision Velocity: <span id="decision-velocity">--</span></div>
+            <div>Cognitive Load: <span id="cognitive-load">--</span>%</div>
+            <div>Pattern Recognition: <span id="pattern-rec">--</span></div>
+        </div>
+        
+        <div class="enigma-panel">
+            <div class="enigma-title">
+                🧠 Champion Enigma Engine
+            </div>
+            <div class="enigma-score" id="champion-quotient">87.3</div>
+            
+            <div style="font-size: 11px; margin-bottom: 10px;">
+                <div class="enigma-metric">
+                    <span>Mental Toughness:</span>
+                    <span id="mental-toughness">92%</span>
+                </div>
+                <div class="enigma-bar">
+                    <div class="enigma-fill" id="mental-bar" style="width: 92%"></div>
+                </div>
+                
+                <div class="enigma-metric">
+                    <span>Killer Instinct:</span>
+                    <span id="killer-instinct">85%</span>
+                </div>
+                <div class="enigma-bar">
+                    <div class="enigma-fill" id="killer-bar" style="width: 85%"></div>
+                </div>
+                
+                <div class="enigma-metric">
+                    <span>Neural Efficiency:</span>
+                    <span id="neural-efficiency">89%</span>
+                </div>
+                <div class="enigma-bar">
+                    <div class="enigma-fill" id="neural-bar" style="width: 89%"></div>
+                </div>
+                
+                <div class="enigma-metric">
+                    <span>Flow State:</span>
+                    <span id="flow-state">78%</span>
+                </div>
+                <div class="enigma-bar">
+                    <div class="enigma-fill" id="flow-bar" style="width: 78%"></div>
+                </div>
+            </div>
+            
+            <div style="font-size: 10px; color: #bbb; text-align: center; margin-top: 10px;">
+                Elite champion potential detected
+            </div>
+        </div>
+        
+        <div class="ai-narrative">
+            <div class="narrative-title">
+                📖 Player Narrative
+            </div>
+            <div class="narrative-content" id="narrative-content">
+                <strong>Background:</strong> Rodriguez has ice in his veins. Teammates call him 'Mr. Clutch' for his composure in pressure moments.<br><br>
+                <strong>Mental State:</strong> Heart rate remains steady, showing elite mental conditioning<br><br>
+                <strong>Prediction:</strong> Expect solid contact - thrives when the spotlight is brightest
+            </div>
+        </div>
+        
+        <div class="feature-highlight" id="feature-highlight">
+            <div class="feature-title">🎯 AMSI Performance Analytics</div>
+            Advanced pattern recognition and cognitive load distribution visualization in real-time
+        </div>
+        
+        <div class="momentum-bar">
+            <div class="momentum-fill" id="momentum"></div>
+        </div>
+        
+        <div class="ai-commentary" id="commentary"></div>
+        
+        <div class="controls">
+            <button class="btn" onclick="simulatePitch()">Pitch (P)</button>
+            <button class="btn" onclick="simulateHit()">Swing (SPACE)</button>
+            <button class="btn" onclick="generateClaudePlay()">AI Scenario</button>
+            <button class="btn" onclick="analyzePlayer()">Analysis</button>
+            <button class="btn" onclick="resetGame()">Reset</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Three.js Baseball Simulator with Claude API Integration
+        
+        let scene, camera, renderer;
+        let stadium, field, baseball;
+        let cameras = {};
+        let currentCamera = 'broadcast';
+        let gameState = {
+            homeScore: 0,
+            awayScore: 0,
+            inning: 1,
+            topBottom: 'top',
+            outs: 0,
+            momentum: 50,
+            lastPlay: null,
+            currentBatter: 'Rodriguez'
+        };
+        
+        // Player roster for narratives
+        const players = {
+            home: ['Rodriguez', 'Martinez', 'Johnson', 'Williams', 'Davis'],
+            away: ['Smith', 'Brown', 'Jones', 'Miller', 'Moore']
+        };
+        
+        // Initialize Three.js Scene
+        function initScene() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.Fog(0x000030, 100, 1500);
+            
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.setClearColor(0x000030);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+            
+            setupCameras();
+            setupLighting();
+            createStadium();
+            createField();
+            createBaseball();
+            
+            document.getElementById('loading').style.display = 'none';
+            
+            // Show initial AI commentary
+            setTimeout(() => {
+                showCommentary("🤖 Claude AI has analyzed the field conditions. Game ready!");
+            }, 1000);
+            
+            // Show feature highlight
+            setTimeout(() => {
+                document.getElementById('feature-highlight').classList.add('show');
+            }, 2000);
+            
+            animate();
+        }
+        
+        function setupCameras() {
+            // Broadcast camera
+            cameras.broadcast = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+            cameras.broadcast.position.set(150, 80, 150);
+            cameras.broadcast.lookAt(0, 0, 0);
+            
+            // Pitcher view
+            cameras.pitcher = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+            cameras.pitcher.position.set(0, 2, 20);
+            cameras.pitcher.lookAt(0, 1, 0);
+            
+            // Batter view
+            cameras.batter = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+            cameras.batter.position.set(0, 2, -2);
+            cameras.batter.lookAt(0, 1, 20);
+            
+            // Aerial view
+            cameras.aerial = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+            cameras.aerial.position.set(0, 250, 0);
+            cameras.aerial.lookAt(0, 0, 0);
+            
+            camera = cameras[currentCamera];
+        }
+        
+        function setupLighting() {
+            // Ambient light
+            const ambientLight = new THREE.AmbientLight(0x404080, 0.3);
+            scene.add(ambientLight);
+            
+            // Stadium lights with dramatic effect
+            const stadiumLights = [
+                { x: 100, y: 120, z: 100 },
+                { x: -100, y: 120, z: 100 },
+                { x: 100, y: 120, z: -100 },
+                { x: -100, y: 120, z: -100 }
+            ];
+            
+            stadiumLights.forEach((pos, index) => {
+                const light = new THREE.SpotLight(0xffffff, 0.8, 400, Math.PI / 3, 0.3);
+                light.position.set(pos.x, pos.y, pos.z);
+                light.target.position.set(0, 0, 0);
+                light.castShadow = true;
+                light.shadow.mapSize.width = 1024;
+                light.shadow.mapSize.height = 1024;
+                scene.add(light);
+                scene.add(light.target);
+                
+                // Add light fixtures
+                const fixtureGeometry = new THREE.CylinderGeometry(3, 5, 8, 8);
+                const fixtureMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
+                const fixture = new THREE.Mesh(fixtureGeometry, fixtureMaterial);
+                fixture.position.set(pos.x, pos.y + 5, pos.z);
+                scene.add(fixture);
+            });
+        }
+        
+        function createStadium() {
+            // Stadium walls with enhanced detail
+            const wallGeometry = new THREE.BoxGeometry(400, 80, 15);
+            const wallMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x2c3e50,
+                shininess: 30
+            });
+            
+            // Back wall
+            const backWall = new THREE.Mesh(wallGeometry, wallMaterial);
+            backWall.position.set(0, 40, -200);
+            backWall.receiveShadow = true;
+            scene.add(backWall);
+            
+            // Side walls
+            const sideWallGeometry = new THREE.BoxGeometry(15, 80, 400);
+            
+            const leftWall = new THREE.Mesh(sideWallGeometry, wallMaterial);
+            leftWall.position.set(-200, 40, 0);
+            leftWall.receiveShadow = true;
+            scene.add(leftWall);
+            
+            const rightWall = new THREE.Mesh(sideWallGeometry, wallMaterial);
+            rightWall.position.set(200, 40, 0);
+            rightWall.receiveShadow = true;
+            scene.add(rightWall);
+            
+            // Stands with detail
+            const standGeometry = new THREE.BoxGeometry(370, 40, 80);
+            const standMaterial = new THREE.MeshPhongMaterial({ color: 0x8b4513 });
+            
+            const stands = new THREE.Mesh(standGeometry, standMaterial);
+            stands.position.set(0, 20, -160);
+            stands.receiveShadow = true;
+            scene.add(stands);
+            
+            // Scoreboard
+            const scoreboardGeometry = new THREE.BoxGeometry(60, 30, 5);
+            const scoreboardMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+            const scoreboard = new THREE.Mesh(scoreboardGeometry, scoreboardMaterial);
+            scoreboard.position.set(0, 60, -195);
+            scene.add(scoreboard);
+        }
+        
+        function createField() {
+            // Main field with realistic grass texture
+            const fieldGeometry = new THREE.PlaneGeometry(400, 400);
+            const fieldTexture = createGrassTexture();
+            const fieldMaterial = new THREE.MeshLambertMaterial({ 
+                map: fieldTexture,
+                side: THREE.DoubleSide
+            });
+            
+            field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+            field.rotation.x = -Math.PI / 2;
+            field.receiveShadow = true;
+            scene.add(field);
+            
+            // Infield dirt with realistic color
+            const infieldGeometry = new THREE.CircleGeometry(65, 64, 0, Math.PI / 2);
+            const infieldMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x8b6914,
+                side: THREE.DoubleSide
+            });
+            
+            const infield = new THREE.Mesh(infieldGeometry, infieldMaterial);
+            infield.rotation.x = -Math.PI / 2;
+            infield.position.y = 0.1;
+            scene.add(infield);
+            
+            // Enhanced bases
+            const baseGeometry = new THREE.BoxGeometry(2.5, 0.3, 2.5);
+            const baseMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xffffff,
+                shininess: 100
+            });
+            
+            const bases = [
+                { x: 32, z: 0, name: "First" },
+                { x: 0, z: 32, name: "Second" },
+                { x: -32, z: 0, name: "Third" },
+                { x: 0, z: 0, name: "Home" }
+            ];
+            
+            bases.forEach(pos => {
+                const base = new THREE.Mesh(baseGeometry, baseMaterial);
+                base.position.set(pos.x, 0.15, pos.z);
+                base.castShadow = true;
+                scene.add(base);
+            });
+            
+            // Pitcher's mound with detail
+            const moundGeometry = new THREE.CylinderGeometry(4, 6, 1.5, 32);
+            const moundMaterial = new THREE.MeshLambertMaterial({ color: 0x8b6914 });
+            
+            const mound = new THREE.Mesh(moundGeometry, moundMaterial);
+            mound.position.set(0, 0.75, 18.44);
+            mound.receiveShadow = true;
+            scene.add(mound);
+            
+            // Foul lines
+            const lineGeometry = new THREE.BoxGeometry(0.2, 0.1, 300);
+            const lineMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            
+            const firstBaseLine = new THREE.Mesh(lineGeometry, lineMaterial);
+            firstBaseLine.position.set(105, 0.1, 0);
+            firstBaseLine.rotation.y = Math.PI / 4;
+            scene.add(firstBaseLine);
+            
+            const thirdBaseLine = new THREE.Mesh(lineGeometry, lineMaterial);
+            thirdBaseLine.position.set(-105, 0.1, 0);
+            thirdBaseLine.rotation.y = -Math.PI / 4;
+            scene.add(thirdBaseLine);
+        }
+        
+        function createGrassTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+            
+            // Create realistic grass pattern
+            const gradient = ctx.createRadialGradient(256, 256, 0, 256, 256, 256);
+            gradient.addColorStop(0, '#2d5016');
+            gradient.addColorStop(0.3, '#3a6218');
+            gradient.addColorStop(0.7, '#2d5016');
+            gradient.addColorStop(1, '#1a3009');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 512, 512);
+            
+            // Add grass patterns
+            ctx.strokeStyle = 'rgba(74, 124, 30, 0.6)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 512; i += 15) {
+                ctx.beginPath();
+                ctx.moveTo(0, i + Math.sin(i * 0.1) * 3);
+                ctx.lineTo(512, i + Math.cos(i * 0.1) * 3);
+                ctx.stroke();
+            }
+            
+            return new THREE.CanvasTexture(canvas);
+        }
+        
+        function createBaseball() {
+            const ballGeometry = new THREE.SphereGeometry(0.6, 32, 32);
+            const ballMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xffffff,
+                shininess: 50
+            });
+            
+            baseball = new THREE.Mesh(ballGeometry, ballMaterial);
+            baseball.position.set(0, 1, 18.44);
+            baseball.castShadow = true;
+            scene.add(baseball);
+            
+            // Add stitching
+            const stitchGeometry = new THREE.TorusGeometry(0.6, 0.02, 4, 100);
+            const stitchMaterial = new THREE.MeshBasicMaterial({ color: 0xcc0000 });
+            
+            const stitch1 = new THREE.Mesh(stitchGeometry, stitchMaterial);
+            stitch1.rotation.y = Math.PI / 4;
+            baseball.add(stitch1);
+            
+            const stitch2 = new THREE.Mesh(stitchGeometry, stitchMaterial);
+            stitch2.rotation.y = -Math.PI / 4;
+            baseball.add(stitch2);
+        }
+        
+        // Game Functions
+        
+        async function generateClaudePlay() {
+            const btn = event.target;
+            btn.classList.add('loading');
+            btn.textContent = '';
+            
+            showCommentary("🤖 Claude AI generating unique scenario based on game context...");
+            
+            setTimeout(() => {
+                const scenarios = [
+                    {
+                        setup: "Bottom of the 9th, two outs, bases loaded. The crowd is on its feet. This is what championship dreams are made of.",
+                        commentary: "WALK-OFF GRAND SLAM! THE CROWD ERUPTS! LONE STAR LEGENDS WIN THE CHAMPIONSHIP!",
+                        outcome: "homerun",
+                        drama: 10
+                    },
+                    {
+                        setup: "The veteran pitcher faces the rookie sensation. Generations collide in this epic at-bat.",
+                        commentary: "The kid shows no fear! What a statement double into the gap!",
+                        outcome: "double",
+                        drama: 7
+                    },
+                    {
+                        setup: "Perfect game through 8 innings. History hangs in the balance with every pitch.",
+                        commentary: "Strike three! The perfect game is ALIVE! The stadium shakes with excitement!",
+                        outcome: "strikeout",
+                        drama: 9
+                    }
+                ];
+                
+                const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+                
+                showCommentary(scenario.setup);
+                
+                setTimeout(() => {
+                    processAIPlay(scenario);
+                    showCommentary(scenario.commentary);
+                    
+                    if (scenario.drama >= 8) {
+                        createFireworks();
+                    }
+                    
+                    updatePerformanceMetrics(scenario.drama);
+                }, 3000);
+                
+                btn.classList.remove('loading');
+                btn.textContent = 'AI Scenario';
+            }, 2000);
+        }
+        
+        function analyzePlayer() {
+            // Generate new analysis with Claude-style insights
+            const analysis = {
+                champion_quotient: Math.random() * 20 + 75,
+                mental_toughness: Math.random() * 0.3 + 0.7,
+                killer_instinct: Math.random() * 0.4 + 0.6,
+                neural_efficiency: Math.random() * 0.3 + 0.7,
+                flow_state: Math.random() * 0.4 + 0.6
+            };
+            
+            updateEnigmaPanel(analysis);
+            
+            // Show analysis highlight
+            const highlight = document.getElementById('feature-highlight');
+            highlight.innerHTML = `
+                <div class="feature-title">🧠 Analysis Complete</div>
+                Champion Quotient: ${analysis.champion_quotient.toFixed(1)}/100<br>
+                Player shows elite mental conditioning with strong clutch gene activation.
+            `;
+            highlight.classList.add('show');
+            
+            setTimeout(() => {
+                highlight.classList.remove('show');
+            }, 4000);
+        }
+        
+        function updateEnigmaPanel(analysis) {
+            document.getElementById('champion-quotient').textContent = `${analysis.champion_quotient.toFixed(1)}`;
+            
+            const mental = analysis.mental_toughness * 100;
+            const killer = analysis.killer_instinct * 100;
+            const neural = analysis.neural_efficiency * 100;
+            const flow = analysis.flow_state * 100;
+            
+            document.getElementById('mental-toughness').textContent = `${mental.toFixed(0)}%`;
+            document.getElementById('killer-instinct').textContent = `${killer.toFixed(0)}%`;
+            document.getElementById('neural-efficiency').textContent = `${neural.toFixed(0)}%`;
+            document.getElementById('flow-state').textContent = `${flow.toFixed(0)}%`;
+            
+            document.getElementById('mental-bar').style.width = `${mental}%`;
+            document.getElementById('killer-bar').style.width = `${killer}%`;
+            document.getElementById('neural-bar').style.width = `${neural}%`;
+            document.getElementById('flow-bar').style.width = `${flow}%`;
+            
+            // Update border color based on overall score
+            const panel = document.querySelector('.enigma-panel');
+            if (analysis.champion_quotient > 85) {
+                panel.style.borderColor = '#2ecc71';
+            } else if (analysis.champion_quotient > 70) {
+                panel.style.borderColor = '#f39c12';
+            } else {
+                panel.style.borderColor = '#e74c3c';
+            }
+        }
+        
+        function updatePerformanceMetrics(drama) {
+            const reactionTime = Math.floor(Math.random() * 50 + 150);
+            const decisionVel = (1000 / reactionTime).toFixed(1);
+            const cogLoad = Math.floor((drama / 10) * 100);
+            const patternRec = Math.floor(Math.random() * 30 + 70);
+            
+            document.getElementById('reaction-time').textContent = reactionTime;
+            document.getElementById('decision-velocity').textContent = decisionVel;
+            document.getElementById('cognitive-load').textContent = cogLoad;
+            document.getElementById('pattern-rec').textContent = `${patternRec}%`;
+        }
+        
+        function simulateHit() {
+            const exitVelocity = Math.random() * 35 + 85;
+            const launchAngle = Math.random() * 40 + 5;
+            const direction = Math.random() * 90 - 45;
+            
+            document.getElementById('exit-velocity').textContent = `${exitVelocity.toFixed(1)} mph`;
+            
+            const distance = calculateDistance(exitVelocity, launchAngle);
+            document.getElementById('distance').textContent = `${distance.toFixed(0)} ft`;
+            
+            animateHitBall(exitVelocity, launchAngle, direction);
+            
+            const outcome = determineOutcome(distance, direction);
+            processPlay(outcome);
+            
+            generateHitCommentary(outcome, distance, exitVelocity);
+            switchBatter();
+            updatePerformanceMetrics(Math.random() * 10);
+        }
+        
+        function calculateDistance(velocity, angle) {
+            const v0 = velocity * 0.44704;
+            const angleRad = angle * Math.PI / 180;
+            const g = 9.81;
+            const distance = (v0 * v0 * Math.sin(2 * angleRad)) / g;
+            return distance * 3.28084;
+        }
+        
+        function animateHitBall(velocity, angle, direction) {
+            const startTime = Date.now();
+            const duration = 3000;
+            
+            function update() {
+                const elapsed = Date.now() - startTime;
+                const t = elapsed / 1000;
+                
+                if (t < duration / 1000) {
+                    const v0 = velocity * 0.44704;
+                    const angleRad = angle * Math.PI / 180;
+                    const dirRad = direction * Math.PI / 180;
+                    
+                    const x = v0 * Math.cos(angleRad) * Math.sin(dirRad) * t;
+                    const z = v0 * Math.cos(angleRad) * Math.cos(dirRad) * t;
+                    const y = v0 * Math.sin(angleRad) * t - 0.5 * 9.81 * t * t + 1;
+                    
+                    baseball.position.set(x, Math.max(0, y), z);
+                    baseball.rotation.x += 0.3;
+                    baseball.rotation.y += 0.2;
+                    
+                    requestAnimationFrame(update);
+                } else {
+                    baseball.position.y = 0;
+                }
+            }
+            update();
+        }
+        
+        function determineOutcome(distance, direction) {
+            if (distance < 90) return 'out';
+            if (distance < 200) return 'single';
+            if (distance < 300) return 'double';
+            if (distance < 380) return 'triple';
+            return 'homerun';
+        }
+        
+        function processPlay(outcome) {
+            const currentTeam = gameState.topBottom === 'top' ? 'away' : 'home';
+            
+            switch(outcome) {
+                case 'homerun':
+                    if (currentTeam === 'home') {
+                        gameState.homeScore += 1;
+                        gameState.momentum = Math.min(90, gameState.momentum + 25);
+                    } else {
+                        gameState.awayScore += 1;
+                        gameState.momentum = Math.max(10, gameState.momentum - 25);
+                    }
+                    createFireworks();
+                    break;
+                case 'triple':
+                case 'double':
+                case 'single':
+                    if (Math.random() < 0.4) {
+                        if (currentTeam === 'home') {
+                            gameState.homeScore += 1;
+                            gameState.momentum = Math.min(80, gameState.momentum + 15);
+                        } else {
+                            gameState.awayScore += 1;
+                            gameState.momentum = Math.max(20, gameState.momentum - 15);
+                        }
+                    }
+                    break;
+                case 'out':
+                    gameState.outs += 1;
+                    if (gameState.outs >= 3) {
+                        switchInning();
+                    }
+                    break;
+            }
+            updateUI();
+        }
+        
+        function processAIPlay(scenario) {
+            const outcome = scenario.outcome;
+            const drama = scenario.drama;
+            
+            switch(outcome) {
+                case 'homerun':
+                    const currentTeam = gameState.topBottom === 'top' ? 'away' : 'home';
+                    const runs = Math.floor(drama / 3) + 1;
+                    if (currentTeam === 'home') {
+                        gameState.homeScore += runs;
+                        gameState.momentum = Math.min(95, gameState.momentum + drama * 3);
+                    } else {
+                        gameState.awayScore += runs;
+                        gameState.momentum = Math.max(5, gameState.momentum - drama * 3);
+                    }
+                    animateHitBall(115, 32, 0);
+                    break;
+                    
+                case 'double':
+                    animateHitBall(102, 18, 25);
+                    if (Math.random() < 0.6) {
+                        const currentTeam = gameState.topBottom === 'top' ? 'away' : 'home';
+                        if (currentTeam === 'home') {
+                            gameState.homeScore += 1;
+                        } else {
+                            gameState.awayScore += 1;
+                        }
+                    }
+                    break;
+                    
+                case 'strikeout':
+                    gameState.outs += 1;
+                    if (gameState.outs >= 3) {
+                        switchInning();
+                    }
+                    break;
+            }
+            
+            updateUI();
+            switchBatter();
+        }
+        
+        function generateHitCommentary(outcome, distance, velocity) {
+            const commentaries = {
+                'homerun': [
+                    `CRUSHED! ${distance.toFixed(0)} feet of pure power! Exit velocity: ${velocity.toFixed(0)} mph!`,
+                    `IT'S OUTTA HERE! That ball is GONE! ${distance.toFixed(0)} feet!`,
+                    `MOONSHOT! ${velocity.toFixed(0)} mph off the bat and it's still rising!`
+                ],
+                'triple': [
+                    `All the way to the wall! The runner is flying around the bases!`,
+                    `Deep into the gap! That's a stand-up triple!`
+                ],
+                'double': [
+                    `Split the gap! That's a rope for a double!`,
+                    `Off the wall! Perfect placement for extra bases!`
+                ],
+                'single': [
+                    `Clean contact! Base hit through the infield!`,
+                    `Finds the hole! That's how you start a rally!`
+                ],
+                'out': [
+                    `Routine play for the defense.`,
+                    `The fielder makes it look easy.`
+                ]
+            };
+            
+            const options = commentaries[outcome];
+            const selected = options[Math.floor(Math.random() * options.length)];
+            showCommentary(selected);
+        }
+        
+        function switchBatter() {
+            const currentTeam = gameState.topBottom === 'top' ? 'away' : 'home';
+            const roster = players[currentTeam];
+            gameState.currentBatter = roster[Math.floor(Math.random() * roster.length)];
+            document.getElementById('current-batter').textContent = gameState.currentBatter;
+        }
+        
+        function switchInning() {
+            gameState.outs = 0;
+            if (gameState.topBottom === 'top') {
+                gameState.topBottom = 'bottom';
+            } else {
+                gameState.topBottom = 'top';
+                gameState.inning += 1;
+            }
+        }
+        
+        function updateUI() {
+            document.getElementById('home-score').textContent = gameState.homeScore;
+            document.getElementById('away-score').textContent = gameState.awayScore;
+            document.getElementById('inning').textContent = gameState.inning;
+            document.getElementById('half').textContent = gameState.topBottom.toUpperCase();
+            document.getElementById('momentum').style.width = `${gameState.momentum}%`;
+        }
+        
+        function showCommentary(text) {
+            const commentary = document.getElementById('commentary');
+            commentary.textContent = text;
+            commentary.classList.add('active');
+            setTimeout(() => commentary.classList.remove('active'), 6000);
+        }
+        
+        function createFireworks() {
+            const particles = new THREE.Group();
+            for (let i = 0; i < 100; i++) {
+                const geometry = new THREE.SphereGeometry(0.8, 8, 8);
+                const material = new THREE.MeshBasicMaterial({
+                    color: new THREE.Color(Math.random(), Math.random(), Math.random())
+                });
+                const particle = new THREE.Mesh(geometry, material);
+                particle.position.set(
+                    Math.random() * 200 - 100,
+                    Math.random() * 100 + 50,
+                    Math.random() * 200 - 100
+                );
+                particle.velocity = new THREE.Vector3(
+                    Math.random() * 20 - 10,
+                    Math.random() * 20 + 10,
+                    Math.random() * 20 - 10
+                );
+                particles.add(particle);
+            }
+            scene.add(particles);
+            
+            let frame = 0;
+            function animateFireworks() {
+                frame++;
+                particles.children.forEach(p => {
+                    p.position.add(p.velocity.clone().multiplyScalar(0.5));
+                    p.velocity.y -= 0.5; // gravity
+                    p.material.opacity = Math.max(0, 1 - frame / 120);
+                });
+                
+                if (frame < 120) {
+                    requestAnimationFrame(animateFireworks);
+                } else {
+                    scene.remove(particles);
+                }
+            }
+            animateFireworks();
+        }
+        
+        function setCamera(cameraName) {
+            currentCamera = cameraName;
+            camera = cameras[cameraName];
+            document.querySelectorAll('.camera-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        function simulatePitch() {
+            baseball.position.set(0, 1, 18.44);
+            const endPos = { 
+                x: Math.random() * 3 - 1.5, 
+                y: Math.random() * 2 + 0.5, 
+                z: 0 
+            };
+            animateBall({ x: 0, y: 1, z: 18.44 }, endPos, 600);
+            
+            const velocity = Math.floor(Math.random() * 15 + 85);
+            showCommentary(`Fastball at ${velocity} mph! The pitcher brings the heat!`);
+        }
+        
+        function animateBall(start, end, duration) {
+            const startTime = Date.now();
+            function update() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                baseball.position.x = start.x + (end.x - start.x) * progress;
+                baseball.position.y = start.y + (end.y - start.y) * progress;
+                baseball.position.z = start.z + (end.z - start.z) * progress;
+                
+                baseball.rotation.x += 0.2;
+                baseball.rotation.y += 0.15;
+                
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            update();
+        }
+        
+        function resetGame() {
+            gameState = {
+                homeScore: 0, awayScore: 0, inning: 1, topBottom: 'top',
+                outs: 0, momentum: 50, currentBatter: 'Rodriguez'
+            };
+            baseball.position.set(0, 1, 18.44);
+            updateUI();
+            document.getElementById('current-batter').textContent = gameState.currentBatter;
+            document.getElementById('exit-velocity').textContent = '0 mph';
+            document.getElementById('distance').textContent = '0 ft';
+            showCommentary("🎮 Game reset! Ready for championship action!");
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Smooth baseball rotation
+            if (baseball && baseball.position.y <= 1) {
+                baseball.rotation.y += 0.02;
+            }
+            
+            // Camera movement for broadcast view
+            if (currentCamera === 'broadcast') {
+                const time = Date.now() * 0.0005;
+                camera.position.x = 150 + Math.sin(time) * 10;
+                camera.position.z = 150 + Math.cos(time) * 10;
+                camera.lookAt(0, 0, 0);
+            }
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Keyboard controls
+        document.addEventListener('keydown', (event) => {
+            switch(event.code) {
+                case 'KeyP':
+                    simulatePitch();
+                    break;
+                case 'Space':
+                    event.preventDefault();
+                    simulateHit();
+                    break;
+                case 'KeyA':
+                    analyzePlayer();
+                    break;
+                case 'KeyR':
+                    resetGame();
+                    break;
+            }
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            Object.values(cameras).forEach(cam => {
+                cam.aspect = window.innerWidth / window.innerHeight;
+                cam.updateProjectionMatrix();
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Initialize when page loads
+        window.addEventListener('load', initScene);
+    </script>
+</body>
+</html>
