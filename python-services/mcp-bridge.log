@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/private/tmp/lone-star-legends-championship/python-services/baseball-mcp-bridge.py", line 17, in <module>
+    from mcp.server.fastmcp import FastMCP, Context
+ModuleNotFoundError: No module named 'mcp'

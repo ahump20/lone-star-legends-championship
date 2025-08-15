@@ -1,0 +1,9 @@
+asyncio
+json
+logging
+socket
+dataclasses
+mcp.server.fastmcp
+numpy
+websockets
+aiohttp

@@ -1,0 +1,43 @@
+{
+  "mcpServers": {
+    "baseballUnrealBridge": {
+      "command": "python3",
+      "args": [
+        "/tmp/lone-star-legends-championship/baseball-mcp-bridge.py"
+      ],
+      "description": "Baseball game MCP bridge connecting Blaze Analytics with Unreal Engine"
+    },
+    "unrealMCP": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/tmp/unreal-mcp/Python",
+        "run",
+        "unreal_mcp_server.py"
+      ],
+      "description": "Unreal Engine MCP server for natural language control"
+    }
+  },
+  "configuration": {
+    "baseball": {
+      "blazeAnalytics": {
+        "enabled": true,
+        "streamingInterval": 1000,
+        "momentumTracking": true,
+        "criticalPlayDetection": true,
+        "winProbability": true
+      },
+      "unrealEngine": {
+        "projectPath": "/tmp/lone-star-legends-championship/UnrealProject",
+        "engineVersion": "5.5",
+        "renderingQuality": "high",
+        "targetFPS": 60
+      },
+      "networking": {
+        "mcpPort": 55558,
+        "analyticsPort": 8888,
+        "webSocketPort": 3001
+      }
+    }
+  }
+}
