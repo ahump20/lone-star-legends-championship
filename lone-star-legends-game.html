@@ -501,9 +501,11 @@
                     isThrown: false
                 };
 
-                // Audio context (for potential future sounds)
+                // Audio system for immersive sound effects
                 this.audioContext = null;
                 this.sounds = {};
+                this.soundEnabled = true;
+                this.masterVolume = 0.3; // 30% volume to avoid being too loud
 
                 this.init();
             }
@@ -517,6 +519,7 @@
                     this.createBall();
                     this.setupCamera();
                     this.setupInput();
+                    this.initAudio();
                     
                     // Hide loading screen
                     document.getElementById('loadingScreen').style.display = 'none';
@@ -541,6 +544,191 @@
                         </button>
                     </div>
                 `;
+            }
+
+            // === AUDIO SYSTEM ===
+
+            initAudio() {
+                try {
+                    // Initialize Web Audio API (user gesture required)
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.generateSounds();
+                } catch (error) {
+                    console.warn('Audio initialization failed:', error);
+                    this.soundEnabled = false;
+                }
+            }
+
+            async ensureAudioContext() {
+                if (!this.audioContext || this.audioContext.state === 'suspended') {
+                    try {
+                        await this.audioContext.resume();
+                    } catch (error) {
+                        console.warn('Could not resume audio context:', error);
+                        this.soundEnabled = false;
+                    }
+                }
+            }
+
+            generateSounds() {
+                if (!this.audioContext) return;
+
+                // Generate different sound types
+                this.sounds = {
+                    swing: this.createSwingSound(),
+                    hit: this.createHitSound(),
+                    catch: this.createCatchSound(),
+                    homerun: this.createHomeRunSound(),
+                    strike: this.createStrikeSound(),
+                    crowd: this.createCrowdSound(),
+                    throw: this.createThrowSound(),
+                    bounce: this.createBounceSound()
+                };
+            }
+
+            createSwingSound() {
+                // Whoosh sound for bat swing
+                return {
+                    frequency: 150,
+                    duration: 0.15,
+                    type: 'noise',
+                    envelope: { attack: 0.01, decay: 0.14 }
+                };
+            }
+
+            createHitSound() {
+                // Sharp crack sound for ball contact
+                return {
+                    frequency: 800,
+                    duration: 0.1,
+                    type: 'noise',
+                    envelope: { attack: 0.001, decay: 0.099 }
+                };
+            }
+
+            createCatchSound() {
+                // Pop sound for ball in glove
+                return {
+                    frequency: 200,
+                    duration: 0.08,
+                    type: 'sine',
+                    envelope: { attack: 0.01, decay: 0.07 }
+                };
+            }
+
+            createHomeRunSound() {
+                // Triumphant ascending tone
+                return {
+                    frequency: 440,
+                    duration: 0.8,
+                    type: 'sawtooth',
+                    envelope: { attack: 0.1, decay: 0.7 },
+                    pitch: { start: 440, end: 880 }
+                };
+            }
+
+            createStrikeSound() {
+                // Quick descending tone
+                return {
+                    frequency: 300,
+                    duration: 0.3,
+                    type: 'square',
+                    envelope: { attack: 0.05, decay: 0.25 },
+                    pitch: { start: 300, end: 150 }
+                };
+            }
+
+            createCrowdSound() {
+                // Crowd cheer (white noise burst)
+                return {
+                    frequency: 0, // White noise
+                    duration: 1.5,
+                    type: 'noise',
+                    envelope: { attack: 0.2, decay: 1.3 }
+                };
+            }
+
+            createThrowSound() {
+                // Quick whoosh for ball throw
+                return {
+                    frequency: 300,
+                    duration: 0.2,
+                    type: 'noise',
+                    envelope: { attack: 0.02, decay: 0.18 }
+                };
+            }
+
+            createBounceSound() {
+                // Ball bounce on ground
+                return {
+                    frequency: 150,
+                    duration: 0.1,
+                    type: 'sine',
+                    envelope: { attack: 0.01, decay: 0.09 }
+                };
+            }
+
+            async playSound(soundName, volume = 1) {
+                if (!this.soundEnabled || !this.audioContext || !this.sounds[soundName]) return;
+
+                try {
+                    await this.ensureAudioContext();
+                    
+                    const sound = this.sounds[soundName];
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    const noiseBuffer = this.audioContext.createBuffer(1, this.audioContext.sampleRate * sound.duration, this.audioContext.sampleRate);
+
+                    // Connect audio nodes
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+
+                    // Configure sound based on type
+                    if (sound.type === 'noise') {
+                        // Create white noise
+                        const output = noiseBuffer.getChannelData(0);
+                        for (let i = 0; i < noiseBuffer.length; i++) {
+                            output[i] = Math.random() * 2 - 1;
+                        }
+                        
+                        const noiseSource = this.audioContext.createBufferSource();
+                        const noiseGain = this.audioContext.createGain();
+                        
+                        noiseSource.buffer = noiseBuffer;
+                        noiseSource.connect(noiseGain);
+                        noiseGain.connect(this.audioContext.destination);
+                        
+                        // Apply envelope
+                        const now = this.audioContext.currentTime;
+                        noiseGain.gain.setValueAtTime(0, now);
+                        noiseGain.gain.linearRampToValueAtTime(volume * this.masterVolume, now + sound.envelope.attack);
+                        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + sound.envelope.attack + sound.envelope.decay);
+                        
+                        noiseSource.start(now);
+                        noiseSource.stop(now + sound.duration);
+                    } else {
+                        // Use oscillator for tonal sounds
+                        oscillator.type = sound.type;
+                        oscillator.frequency.setValueAtTime(sound.frequency, this.audioContext.currentTime);
+                        
+                        // Apply pitch bend if specified
+                        if (sound.pitch) {
+                            oscillator.frequency.setValueAtTime(sound.pitch.start, this.audioContext.currentTime);
+                            oscillator.frequency.linearRampToValueAtTime(sound.pitch.end, this.audioContext.currentTime + sound.duration);
+                        }
+                        
+                        // Apply envelope
+                        const now = this.audioContext.currentTime;
+                        gainNode.gain.setValueAtTime(0, now);
+                        gainNode.gain.linearRampToValueAtTime(volume * this.masterVolume, now + sound.envelope.attack);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, now + sound.envelope.attack + sound.envelope.decay);
+                        
+                        oscillator.start(now);
+                        oscillator.stop(now + sound.duration);
+                    }
+                } catch (error) {
+                    console.warn('Error playing sound:', soundName, error);
+                }
             }
 
             setupRenderer() {
@@ -1068,7 +1256,8 @@
                 this.isChargingPower = false;
                 document.getElementById('powerMeter').style.display = 'none';
                 
-                // Animate bat swing
+                // Play swing sound and animate
+                this.playSound('swing', 0.7);
                 this.animateBatSwing();
                 
                 // Check for contact
@@ -1090,6 +1279,9 @@
 
             hitBall() {
                 this.ballPhysics.hasBeenHit = true;
+                
+                // Play hit sound
+                this.playSound('hit', 0.8);
                 
                 // Calculate hit quality based on power and timing
                 const power = this.powerMeter / 100;
@@ -1135,6 +1327,9 @@
 
             strike() {
                 this.gameState.strikes++;
+                
+                // Play strike sound
+                this.playSound('strike', 0.6);
                 
                 if (this.gameState.strikes >= 3) {
                     this.strikeout();
@@ -1207,6 +1402,11 @@
                 
                 // Ground collision
                 if (this.ballPhysics.position.y <= 0.15) {
+                    // Play bounce sound if significant bounce
+                    if (Math.abs(this.ballPhysics.velocity.y) > 2) {
+                        this.playSound('bounce', 0.4);
+                    }
+                    
                     this.ballPhysics.position.y = 0.15;
                     this.ballPhysics.velocity.y = Math.abs(this.ballPhysics.velocity.y) * 0.4;
                     this.ballPhysics.velocity.x *= 0.7;
@@ -1249,6 +1449,11 @@
 
             homeRun() {
                 this.gameState.homeScore++;
+                
+                // Play celebratory home run sound and crowd cheer
+                this.playSound('homerun', 1.0);
+                setTimeout(() => this.playSound('crowd', 0.6), 200);
+                
                 this.showCommentary("🎉 HOME RUN! IT'S OUTTA HERE! 🎉");
                 this.updateDynamicTip("HOME RUN! Amazing!");
                 
@@ -1536,6 +1741,9 @@
                 this.ballPhysics.hasBeenHit = false;
                 this.ballPhysics.isThrown = true;
                 
+                // Play throw sound
+                this.playSound('throw', 0.7);
+                
                 this.showCommentary(`Throwing to ${baseName}!`);
                 this.updateDynamicTip('Ball thrown - watch the play!');
                 
@@ -1593,6 +1801,9 @@
                     this.ballPhysics.inPlay = false;
                     this.ballPhysics.velocity.set(0, 0, 0);
                     
+                    // Play catch sound
+                    this.playSound('catch', 0.8);
+                    
                     // Position ball in fielder's glove
                     this.ballPhysics.position.copy(fielderPos);
                     
@@ -1643,6 +1854,9 @@
                             this.ballPhysics.velocity.set(0, 0, 0);
                             this.ballPhysics.position.copy(fielder.position);
                             this.ballPhysics.position.y = 1.5;
+                            
+                            // Play catch sound for AI fielder
+                            this.playSound('catch', 0.8);
                             
                             this.showCommentary('Fielder makes the catch!');
                             this.selectFielder(fielder);
