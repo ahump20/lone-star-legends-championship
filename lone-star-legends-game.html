@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lone Star Legends Championship</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial Black', Arial, sans-serif;
+            background: #000;
+            overflow: hidden;
+            color: white;
+        }
+
+        #gameCanvas {
+            display: block;
+            cursor: none;
+        }
+
+        .game-hud {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1000;
+            font-weight: bold;
+        }
+
+        .scoreboard {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid #FFD700;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 200px;
+        }
+
+        .score-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .team-name {
+            color: #FFD700;
+        }
+
+        .score-number {
+            color: #90EE90;
+            font-size: 22px;
+        }
+
+        .game-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid #FFD700;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .inning {
+            color: #FFD700;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .count {
+            color: #90EE90;
+            font-size: 16px;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid #FFD700;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .control-section {
+            margin-bottom: 10px;
+        }
+
+        .control-title {
+            color: #FFD700;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .power-meter {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            width: 20px;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid #FFD700;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .power-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(to top, #00FF00, #FFFF00, #FF0000);
+            border-radius: 0 0 7px 7px;
+            transition: height 0.1s;
+        }
+
+        .commentary {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #FFD700;
+            border-radius: 20px;
+            padding: 15px 30px;
+            font-size: 18px;
+            color: #FFD700;
+            opacity: 0;
+            transition: opacity 0.5s;
+            max-width: 80%;
+            text-align: center;
+        }
+
+        .commentary.show {
+            opacity: 1;
+        }
+
+        .crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid #FFD700;
+            border-radius: 50%;
+            display: none;
+            pointer-events: none;
+        }
+
+        .pause-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .menu-content {
+            background: #1a472a;
+            border: 4px solid #FFD700;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .menu-title {
+            color: #FFD700;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        .menu-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: linear-gradient(45deg, #228B22, #32CD32);
+            border: 3px solid #90EE90;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-button:hover {
+            background: linear-gradient(45deg, #32CD32, #228B22);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    
+    <div class="game-hud">
+        <div class="scoreboard">
+            <div class="score-line">
+                <span class="team-name">VISITORS</span>
+                <span class="score-number" id="awayScore">0</span>
+            </div>
+            <div class="score-line">
+                <span class="team-name">LEGENDS</span>
+                <span class="score-number" id="homeScore">0</span>
+            </div>
+        </div>
+
+        <div class="game-info">
+            <div class="inning">
+                <span id="inningHalf">TOP</span> <span id="inning">1</span>
+            </div>
+            <div class="count">
+                <div>Balls: <span id="balls">0</span> Strikes: <span id="strikes">0</span></div>
+                <div>Outs: <span id="outs">0</span></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="control-section">
+                <div class="control-title">BATTING:</div>
+                <div>SPACE - Swing</div>
+                <div>WASD - Move in box</div>
+                <div>Hold SPACE - Power swing</div>
+            </div>
+            <div class="control-section">
+                <div class="control-title">RUNNING:</div>
+                <div>Arrow Keys - Run bases</div>
+                <div>SHIFT - Sprint</div>
+            </div>
+            <div class="control-section">
+                <div class="control-title">FIELDING:</div>
+                <div>WASD - Move player</div>
+                <div>SPACE - Throw/Catch</div>
+                <div>Numbers - Select base</div>
+            </div>
+            <div class="control-section">
+                <div class="control-title">GAME:</div>
+                <div>ESC - Pause menu</div>
+                <div>P - Pause/Resume</div>
+            </div>
+        </div>
+
+        <div class="power-meter" id="powerMeter">
+            <div class="power-fill" id="powerFill"></div>
+        </div>
+
+        <div class="commentary" id="commentary"></div>
+        <div class="crosshair" id="crosshair"></div>
+    </div>
+
+    <div class="pause-menu" id="pauseMenu">
+        <div class="menu-content">
+            <div class="menu-title">LONE STAR LEGENDS</div>
+            <button class="menu-button" onclick="resumeGame()">Resume Game</button>
+            <button class="menu-button" onclick="newGame()">New Game</button>
+            <button class="menu-button" onclick="showOptions()">Options</button>
+            <button class="menu-button" onclick="quitGame()">Quit to Menu</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        class LoneStarLegendsGame {
+            constructor() {
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                this.renderer = new THREE.WebGLRenderer({
+                    canvas: document.getElementById('gameCanvas'),
+                    antialias: true
+                });
+
+                // Game state
+                this.gameState = {
+                    homeScore: 0,
+                    awayScore: 0,
+                    inning: 1,
+                    isTopInning: true,
+                    outs: 0,
+                    balls: 0,
+                    strikes: 0,
+                    runners: [null, null, null, null], // home, 1st, 2nd, 3rd
+                    currentPhase: 'batting', // batting, running, fielding, pitching
+                    gameMode: 'playing', // menu, playing, paused
+                    isPaused: false
+                };
+
+                // Player control
+                this.player = {
+                    position: new THREE.Vector3(0, 0, 0),
+                    isControllingRunner: false,
+                    currentRunner: 0,
+                    battingPosition: new THREE.Vector3(-1, 0, 18)
+                };
+
+                // Input handling
+                this.keys = {};
+                this.powerMeter = 0;
+                this.isChargingPower = false;
+
+                // Game objects
+                this.ball = null;
+                this.bat = null;
+                this.players = {
+                    batter: null,
+                    pitcher: null,
+                    fielders: [],
+                    runners: []
+                };
+
+                // Physics
+                this.ballPhysics = {
+                    position: new THREE.Vector3(0, 1, -18),
+                    velocity: new THREE.Vector3(0, 0, 0),
+                    inPlay: false,
+                    hasBeenHit: false
+                };
+
+                this.init();
+            }
+
+            async init() {
+                this.setupRenderer();
+                this.setupLighting();
+                this.createStadium();
+                this.createPlayers();
+                this.createBall();
+                this.setupCamera();
+                this.setupInput();
+                
+                this.animate();
+                this.startGame();
+            }
+
+            setupRenderer() {
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setClearColor(0x87CEEB); // Sky blue
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            }
+
+            setupLighting() {
+                // Ambient lighting
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+                this.scene.add(ambientLight);
+
+                // Stadium flood lights
+                const lights = [
+                    { pos: [100, 80, 50], intensity: 1.2 },
+                    { pos: [-100, 80, 50], intensity: 1.2 },
+                    { pos: [50, 80, -100], intensity: 1.0 },
+                    { pos: [-50, 80, -100], intensity: 1.0 }
+                ];
+
+                lights.forEach(light => {
+                    const spotLight = new THREE.SpotLight(0xffffff, light.intensity);
+                    spotLight.position.set(...light.pos);
+                    spotLight.angle = Math.PI / 4;
+                    spotLight.penumbra = 0.3;
+                    spotLight.decay = 2;
+                    spotLight.distance = 300;
+                    spotLight.castShadow = true;
+                    spotLight.shadow.mapSize.width = 1024;
+                    spotLight.shadow.mapSize.height = 1024;
+                    this.scene.add(spotLight);
+                });
+
+                // Sun light
+                const sunLight = new THREE.DirectionalLight(0xfffacd, 0.8);
+                sunLight.position.set(200, 300, 100);
+                sunLight.castShadow = true;
+                sunLight.shadow.camera.near = 1;
+                sunLight.shadow.camera.far = 500;
+                sunLight.shadow.camera.left = -200;
+                sunLight.shadow.camera.right = 200;
+                sunLight.shadow.camera.top = 200;
+                sunLight.shadow.camera.bottom = -200;
+                this.scene.add(sunLight);
+            }
+
+            createStadium() {
+                // Field grass
+                const fieldGeometry = new THREE.PlaneGeometry(500, 500);
+                const fieldMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x228B22,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+                field.rotation.x = -Math.PI / 2;
+                field.receiveShadow = true;
+                this.scene.add(field);
+
+                // Infield dirt
+                const infieldGeometry = new THREE.RingGeometry(0, 35, 4, 1);
+                const infieldMaterial = new THREE.MeshLambertMaterial({ color: 0xD2691E });
+                const infield = new THREE.Mesh(infieldGeometry, infieldMaterial);
+                infield.rotation.x = -Math.PI / 2;
+                infield.rotation.z = Math.PI / 4;
+                infield.position.y = 0.01;
+                infield.receiveShadow = true;
+                this.scene.add(infield);
+
+                // Pitcher's mound
+                const moundGeometry = new THREE.CylinderGeometry(4, 5, 0.8, 16);
+                const moundMaterial = new THREE.MeshLambertMaterial({ color: 0xD2691E });
+                const mound = new THREE.Mesh(moundGeometry, moundMaterial);
+                mound.position.set(0, 0.4, -18.44);
+                mound.castShadow = true;
+                mound.receiveShadow = true;
+                this.scene.add(mound);
+
+                // Bases
+                this.createBases();
+
+                // Stadium walls
+                this.createStadiumWalls();
+
+                // Home plate
+                const plateGeometry = new THREE.CylinderGeometry(0.8, 0.8, 0.1, 5);
+                const plateMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+                const plate = new THREE.Mesh(plateGeometry, plateMaterial);
+                plate.position.set(0, 0.05, 18.44);
+                plate.rotation.y = Math.PI / 10;
+                this.scene.add(plate);
+
+                // Batter's boxes
+                const boxGeometry = new THREE.PlaneGeometry(2, 4);
+                const boxMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0xD2691E,
+                    transparent: true,
+                    opacity: 0.7
+                });
+                
+                const leftBox = new THREE.Mesh(boxGeometry, boxMaterial);
+                leftBox.rotation.x = -Math.PI / 2;
+                leftBox.position.set(-2, 0.02, 18.44);
+                this.scene.add(leftBox);
+                
+                const rightBox = new THREE.Mesh(boxGeometry, boxMaterial);
+                rightBox.rotation.x = -Math.PI / 2;
+                rightBox.position.set(2, 0.02, 18.44);
+                this.scene.add(rightBox);
+            }
+
+            createBases() {
+                const baseGeometry = new THREE.BoxGeometry(2, 0.3, 2);
+                const baseMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+
+                // First base (90 feet = ~27.4 meters in game scale)
+                const firstBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                firstBase.position.set(18.44, 0.15, 0);
+                firstBase.castShadow = true;
+                this.scene.add(firstBase);
+
+                // Second base
+                const secondBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                secondBase.position.set(0, 0.15, -18.44);
+                secondBase.castShadow = true;
+                this.scene.add(secondBase);
+
+                // Third base
+                const thirdBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                thirdBase.position.set(-18.44, 0.15, 0);
+                thirdBase.castShadow = true;
+                this.scene.add(thirdBase);
+            }
+
+            createStadiumWalls() {
+                const wallHeight = 15;
+                const wallMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+
+                // Outfield wall sections
+                const wallSections = [
+                    { pos: [-120, wallHeight/2, -80], size: [5, wallHeight, 160] }, // Left field
+                    { pos: [0, wallHeight/2, -160], size: [240, wallHeight, 5] },   // Center field
+                    { pos: [120, wallHeight/2, -80], size: [5, wallHeight, 160] }   // Right field
+                ];
+
+                wallSections.forEach(section => {
+                    const wallGeometry = new THREE.BoxGeometry(...section.size);
+                    const wall = new THREE.Mesh(wallGeometry, wallMaterial);
+                    wall.position.set(...section.pos);
+                    wall.castShadow = true;
+                    wall.receiveShadow = true;
+                    this.scene.add(wall);
+                });
+
+                // Foul poles
+                const poleGeometry = new THREE.CylinderGeometry(0.3, 0.3, 25);
+                const poleMaterial = new THREE.MeshLambertMaterial({ color: 0xFFD700 });
+                
+                const leftPole = new THREE.Mesh(poleGeometry, poleMaterial);
+                leftPole.position.set(-95, 12.5, -95);
+                this.scene.add(leftPole);
+                
+                const rightPole = new THREE.Mesh(poleGeometry, poleMaterial);
+                rightPole.position.set(95, 12.5, -95);
+                this.scene.add(rightPole);
+            }
+
+            createPlayers() {
+                // Create batter
+                const batterGeometry = new THREE.CapsuleGeometry(1, 4);
+                const batterMaterial = new THREE.MeshLambertMaterial({ color: 0xFF4444 });
+                this.players.batter = new THREE.Mesh(batterGeometry, batterMaterial);
+                this.players.batter.position.copy(this.player.battingPosition);
+                this.players.batter.position.y = 2.5;
+                this.players.batter.castShadow = true;
+                this.scene.add(this.players.batter);
+
+                // Create bat
+                const batGeometry = new THREE.CylinderGeometry(0.15, 0.2, 3);
+                const batMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+                this.bat = new THREE.Mesh(batGeometry, batMaterial);
+                this.bat.position.set(-2.5, 2.5, 18.44);
+                this.bat.rotation.z = Math.PI / 4;
+                this.bat.castShadow = true;
+                this.scene.add(this.bat);
+
+                // Create pitcher
+                const pitcherGeometry = new THREE.CapsuleGeometry(1, 4);
+                const pitcherMaterial = new THREE.MeshLambertMaterial({ color: 0x4444FF });
+                this.players.pitcher = new THREE.Mesh(pitcherGeometry, pitcherMaterial);
+                this.players.pitcher.position.set(0, 2.5, -18.44);
+                this.players.pitcher.castShadow = true;
+                this.scene.add(this.players.pitcher);
+
+                // Create fielders
+                const fielderPositions = [
+                    { pos: [18.44, 2.5, 5], name: "1B" },     // First base
+                    { pos: [13, 2.5, -10], name: "2B" },     // Second base
+                    { pos: [-18.44, 2.5, 5], name: "3B" },   // Third base
+                    { pos: [-13, 2.5, -10], name: "SS" },    // Shortstop
+                    { pos: [-70, 2.5, -70], name: "LF" },    // Left field
+                    { pos: [0, 2.5, -120], name: "CF" },     // Center field
+                    { pos: [70, 2.5, -70], name: "RF" },     // Right field
+                    { pos: [0, 2.5, 22], name: "C" }         // Catcher
+                ];
+
+                const fielderGeometry = new THREE.CapsuleGeometry(0.9, 3.8);
+                const fielderMaterial = new THREE.MeshLambertMaterial({ color: 0x4444FF });
+
+                fielderPositions.forEach((pos, index) => {
+                    const fielder = new THREE.Mesh(fielderGeometry, fielderMaterial);
+                    fielder.position.set(...pos.pos);
+                    fielder.castShadow = true;
+                    fielder.userData = { position: pos.name, homePosition: pos.pos.slice() };
+                    this.players.fielders.push(fielder);
+                    this.scene.add(fielder);
+                });
+            }
+
+            createBall() {
+                const ballGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+                const ballMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+                this.ball = new THREE.Mesh(ballGeometry, ballMaterial);
+                this.ball.position.copy(this.ballPhysics.position);
+                this.ball.castShadow = true;
+                this.scene.add(this.ball);
+            }
+
+            setupCamera() {
+                // Dynamic camera based on game state
+                this.updateCameraPosition();
+            }
+
+            updateCameraPosition() {
+                switch(this.gameState.currentPhase) {
+                    case 'batting':
+                        // Behind home plate view
+                        this.camera.position.set(0, 8, 35);
+                        this.camera.lookAt(0, 2, -18);
+                        break;
+                    case 'fielding':
+                        // Follow the ball
+                        if (this.ballPhysics.inPlay) {
+                            const ballPos = this.ballPhysics.position;
+                            this.camera.position.set(ballPos.x + 15, 15, ballPos.z + 15);
+                            this.camera.lookAt(ballPos);
+                        }
+                        break;
+                    case 'running':
+                        // Follow the runner
+                        if (this.player.isControllingRunner && this.players.runners[this.player.currentRunner]) {
+                            const runnerPos = this.players.runners[this.player.currentRunner].position;
+                            this.camera.position.set(runnerPos.x, 8, runnerPos.z + 10);
+                            this.camera.lookAt(runnerPos);
+                        }
+                        break;
+                }
+            }
+
+            setupInput() {
+                document.addEventListener('keydown', (event) => {
+                    this.keys[event.code] = true;
+                    this.handleKeyDown(event);
+                });
+
+                document.addEventListener('keyup', (event) => {
+                    this.keys[event.code] = false;
+                    this.handleKeyUp(event);
+                });
+
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            handleKeyDown(event) {
+                if (this.gameState.isPaused) return;
+
+                switch(event.code) {
+                    case 'Space':
+                        event.preventDefault();
+                        if (this.gameState.currentPhase === 'batting') {
+                            if (!this.isChargingPower) {
+                                this.startPowerCharge();
+                            }
+                        } else if (this.gameState.currentPhase === 'fielding') {
+                            this.throwBall();
+                        }
+                        break;
+                    case 'Escape':
+                        event.preventDefault();
+                        this.togglePauseMenu();
+                        break;
+                    case 'KeyP':
+                        event.preventDefault();
+                        this.togglePause();
+                        break;
+                    case 'ArrowUp':
+                        if (this.gameState.currentPhase === 'running') {
+                            this.advanceRunner();
+                        }
+                        break;
+                    case 'ArrowDown':
+                        if (this.gameState.currentPhase === 'running') {
+                            this.retreatRunner();
+                        }
+                        break;
+                    case 'Digit1':
+                    case 'Digit2':
+                    case 'Digit3':
+                    case 'Digit4':
+                        if (this.gameState.currentPhase === 'fielding') {
+                            const base = parseInt(event.code.slice(-1));
+                            this.throwToBase(base);
+                        }
+                        break;
+                }
+            }
+
+            handleKeyUp(event) {
+                if (this.gameState.isPaused) return;
+
+                switch(event.code) {
+                    case 'Space':
+                        if (this.gameState.currentPhase === 'batting' && this.isChargingPower) {
+                            this.swing();
+                        }
+                        break;
+                }
+            }
+
+            updatePlayerMovement() {
+                if (this.gameState.isPaused) return;
+
+                const moveSpeed = 0.3;
+                const sprintMultiplier = this.keys['ShiftLeft'] ? 2 : 1;
+                const speed = moveSpeed * sprintMultiplier;
+
+                switch(this.gameState.currentPhase) {
+                    case 'batting':
+                        // Move in batter's box
+                        if (this.keys['KeyW']) {
+                            this.players.batter.position.z = Math.max(16, this.players.batter.position.z - speed);
+                        }
+                        if (this.keys['KeyS']) {
+                            this.players.batter.position.z = Math.min(20, this.players.batter.position.z + speed);
+                        }
+                        if (this.keys['KeyA']) {
+                            this.players.batter.position.x = Math.max(-3, this.players.batter.position.x - speed);
+                        }
+                        if (this.keys['KeyD']) {
+                            this.players.batter.position.x = Math.min(1, this.players.batter.position.x + speed);
+                        }
+                        break;
+
+                    case 'fielding':
+                        // Control nearest fielder to ball
+                        const controlledFielder = this.getControlledFielder();
+                        if (controlledFielder) {
+                            if (this.keys['KeyW']) controlledFielder.position.z -= speed;
+                            if (this.keys['KeyS']) controlledFielder.position.z += speed;
+                            if (this.keys['KeyA']) controlledFielder.position.x -= speed;
+                            if (this.keys['KeyD']) controlledFielder.position.x += speed;
+                        }
+                        break;
+
+                    case 'running':
+                        // Control base running
+                        if (this.keys['ArrowLeft']) this.switchRunner(-1);
+                        if (this.keys['ArrowRight']) this.switchRunner(1);
+                        break;
+                }
+            }
+
+            getControlledFielder() {
+                if (!this.ballPhysics.inPlay) return null;
+                
+                let nearestFielder = null;
+                let nearestDistance = Infinity;
+
+                this.players.fielders.forEach(fielder => {
+                    const distance = fielder.position.distanceTo(this.ballPhysics.position);
+                    if (distance < nearestDistance) {
+                        nearestDistance = distance;
+                        nearestFielder = fielder;
+                    }
+                });
+
+                return nearestFielder;
+            }
+
+            startPowerCharge() {
+                this.isChargingPower = true;
+                this.powerMeter = 0;
+                document.getElementById('powerMeter').style.display = 'block';
+                
+                // Start pitcher wind-up
+                this.pitchBall();
+            }
+
+            updatePowerMeter() {
+                if (this.isChargingPower) {
+                    this.powerMeter += 2;
+                    if (this.powerMeter > 100) this.powerMeter = 100;
+                    
+                    document.getElementById('powerFill').style.height = this.powerMeter + '%';
+                }
+            }
+
+            pitchBall() {
+                // Reset ball
+                this.ballPhysics.position.set(0, 1.5, -18.44);
+                this.ballPhysics.velocity.set(0, 0, 0);
+                this.ballPhysics.inPlay = true;
+                this.ballPhysics.hasBeenHit = false;
+                
+                // Pitch towards home plate with some variation
+                const speed = 25 + Math.random() * 10; // 35-45 m/s
+                const horizontalVariation = (Math.random() - 0.5) * 3;
+                const verticalVariation = (Math.random() - 0.5) * 2;
+                
+                this.ballPhysics.velocity.set(
+                    horizontalVariation,
+                    verticalVariation,
+                    speed
+                );
+
+                this.showCommentary("Here comes the pitch!");
+            }
+
+            swing() {
+                this.isChargingPower = false;
+                document.getElementById('powerMeter').style.display = 'none';
+                
+                // Animate bat swing
+                this.animateBatSwing();
+                
+                // Check for contact
+                const ballPos = this.ballPhysics.position;
+                const batterPos = this.players.batter.position;
+                
+                // Hit zone check
+                const hitDistance = ballPos.distanceTo(batterPos);
+                const isInStrikeZone = ballPos.z > 16 && ballPos.z < 21 && 
+                                     ballPos.y > 0.5 && ballPos.y < 3.5 &&
+                                     Math.abs(ballPos.x - batterPos.x) < 2;
+                
+                if (hitDistance < 3 && isInStrikeZone && this.ballPhysics.inPlay) {
+                    this.hitBall();
+                } else {
+                    this.strike();
+                }
+                
+                this.powerMeter = 0;
+            }
+
+            hitBall() {
+                this.ballPhysics.hasBeenHit = true;
+                
+                // Calculate hit based on power and contact
+                const power = this.powerMeter / 100;
+                const contactQuality = 0.7 + Math.random() * 0.3;
+                const totalPower = power * contactQuality;
+                
+                // Hit direction based on timing and batter position
+                const angle = (Math.random() - 0.5) * Math.PI * 0.8; // -72° to +72°
+                const elevation = Math.min(Math.PI / 3, totalPower * Math.PI / 2); // Max 60° elevation
+                
+                const hitSpeed = 20 + totalPower * 40; // 20-60 m/s
+                
+                this.ballPhysics.velocity.set(
+                    Math.sin(angle) * Math.cos(elevation) * hitSpeed,
+                    Math.sin(elevation) * hitSpeed,
+                    -Math.cos(angle) * Math.cos(elevation) * hitSpeed
+                );
+                
+                // Switch to fielding mode
+                this.gameState.currentPhase = 'fielding';
+                this.updateCameraPosition();
+                
+                // Create runner
+                this.createRunner();
+                
+                // Determine hit quality
+                const exitVelocity = hitSpeed * 2.237; // Convert to mph
+                let hitType = this.determineHitType(exitVelocity, elevation);
+                
+                this.showCommentary(`Contact! ${hitType} - ${exitVelocity.toFixed(0)} mph!`);
+            }
+
+            determineHitType(velocity, elevation) {
+                if (velocity > 100 && elevation > 0.4) return "CRUSHED! Home run!";
+                if (velocity > 95) return "Deep drive!";
+                if (velocity > 85) return "Line drive!";
+                if (elevation < 0.2) return "Ground ball!";
+                return "Fly ball!";
+            }
+
+            createRunner() {
+                // Convert batter to runner
+                const runnerGeometry = new THREE.CapsuleGeometry(0.9, 3.8);
+                const runnerMaterial = new THREE.MeshLambertMaterial({ color: 0xFF4444 });
+                const runner = new THREE.Mesh(runnerGeometry, runnerMaterial);
+                runner.position.copy(this.players.batter.position);
+                runner.castShadow = true;
+                runner.userData = { 
+                    targetBase: 1,
+                    isRunning: true,
+                    speed: 8 // m/s
+                };
+                
+                this.players.runners[0] = runner;
+                this.scene.add(runner);
+                
+                this.player.isControllingRunner = true;
+                this.player.currentRunner = 0;
+                this.gameState.currentPhase = 'running';
+            }
+
+            strike() {
+                this.gameState.strikes++;
+                
+                if (this.gameState.strikes >= 3) {
+                    this.strikeout();
+                } else {
+                    this.showCommentary(`Strike ${this.gameState.strikes}!`);
+                    this.updateHUD();
+                }
+            }
+
+            strikeout() {
+                this.gameState.outs++;
+                this.showCommentary("Strike three! You're out!");
+                
+                if (this.gameState.outs >= 3) {
+                    this.endInning();
+                } else {
+                    this.nextBatter();
+                }
+                
+                this.updateHUD();
+            }
+
+            nextBatter() {
+                // Reset for next batter
+                this.gameState.balls = 0;
+                this.gameState.strikes = 0;
+                this.gameState.currentPhase = 'batting';
+                
+                // Reset positions
+                this.players.batter.position.copy(this.player.battingPosition);
+                this.players.batter.position.y = 2.5;
+                
+                this.updateCameraPosition();
+                this.updateHUD();
+            }
+
+            endInning() {
+                this.gameState.outs = 0;
+                this.gameState.isTopInning = !this.gameState.isTopInning;
+                
+                if (!this.gameState.isTopInning) {
+                    this.gameState.inning++;
+                }
+                
+                this.showCommentary(`End of the ${this.gameState.isTopInning ? 'bottom' : 'top'} of the ${this.gameState.inning}!`);
+                
+                // Clear runners
+                this.clearRunners();
+                
+                this.nextBatter();
+            }
+
+            clearRunners() {
+                this.players.runners.forEach(runner => {
+                    if (runner) {
+                        this.scene.remove(runner);
+                    }
+                });
+                this.players.runners = [null, null, null, null];
+                this.player.isControllingRunner = false;
+            }
+
+            updateRunners() {
+                this.players.runners.forEach((runner, index) => {
+                    if (runner && runner.userData.isRunning) {
+                        this.moveRunnerToBase(runner, runner.userData.targetBase);
+                    }
+                });
+            }
+
+            moveRunnerToBase(runner, baseNumber) {
+                const bases = [
+                    new THREE.Vector3(0, 2.5, 18.44),      // Home
+                    new THREE.Vector3(18.44, 2.5, 0),      // First
+                    new THREE.Vector3(0, 2.5, -18.44),     // Second
+                    new THREE.Vector3(-18.44, 2.5, 0)      // Third
+                ];
+                
+                const targetPos = bases[baseNumber];
+                const direction = targetPos.clone().sub(runner.position).normalize();
+                const distance = runner.position.distanceTo(targetPos);
+                
+                if (distance > 1) {
+                    runner.position.add(direction.multiplyScalar(runner.userData.speed * 0.016)); // 60fps
+                } else {
+                    runner.position.copy(targetPos);
+                    runner.userData.isRunning = false;
+                    
+                    if (baseNumber === 0) {
+                        // Scored!
+                        this.gameState.homeScore++;
+                        this.showCommentary("SAFE AT HOME! RUN SCORES!");
+                        this.scene.remove(runner);
+                        this.players.runners[this.players.runners.indexOf(runner)] = null;
+                    }
+                }
+            }
+
+            updateBallPhysics() {
+                if (!this.ballPhysics.inPlay) return;
+                
+                const deltaTime = 0.016; // 60fps
+                
+                // Update position
+                this.ballPhysics.position.add(
+                    this.ballPhysics.velocity.clone().multiplyScalar(deltaTime)
+                );
+                
+                // Apply gravity
+                this.ballPhysics.velocity.y -= 9.8 * deltaTime;
+                
+                // Ground collision
+                if (this.ballPhysics.position.y <= 0.2) {
+                    this.ballPhysics.position.y = 0.2;
+                    this.ballPhysics.velocity.y = Math.abs(this.ballPhysics.velocity.y) * 0.4;
+                    this.ballPhysics.velocity.x *= 0.8;
+                    this.ballPhysics.velocity.z *= 0.8;
+                }
+                
+                // Update visual ball
+                this.ball.position.copy(this.ballPhysics.position);
+                
+                // Check for home run
+                this.checkHomeRun();
+            }
+
+            checkHomeRun() {
+                const ballPos = this.ballPhysics.position;
+                
+                // Check if ball cleared the wall
+                if (ballPos.z < -150 && ballPos.y > 12) {
+                    this.homeRun();
+                }
+            }
+
+            homeRun() {
+                this.gameState.homeScore++;
+                this.showCommentary("HOME RUN! IT'S OUTTA HERE!");
+                
+                this.ballPhysics.inPlay = false;
+                this.clearRunners();
+                this.nextBatter();
+                this.updateHUD();
+            }
+
+            animateBatSwing() {
+                const originalRotation = this.bat.rotation.z;
+                
+                // Quick swing animation
+                this.bat.rotation.z = -Math.PI / 6;
+                this.bat.position.x -= 1;
+                
+                setTimeout(() => {
+                    this.bat.rotation.z = originalRotation;
+                    this.bat.position.x += 1;
+                }, 200);
+            }
+
+            showCommentary(text) {
+                const commentary = document.getElementById('commentary');
+                commentary.textContent = text;
+                commentary.classList.add('show');
+                
+                setTimeout(() => {
+                    commentary.classList.remove('show');
+                }, 3000);
+            }
+
+            updateHUD() {
+                document.getElementById('homeScore').textContent = this.gameState.homeScore;
+                document.getElementById('awayScore').textContent = this.gameState.awayScore;
+                document.getElementById('inning').textContent = this.gameState.inning;
+                document.getElementById('inningHalf').textContent = this.gameState.isTopInning ? 'TOP' : 'BOT';
+                document.getElementById('balls').textContent = this.gameState.balls;
+                document.getElementById('strikes').textContent = this.gameState.strikes;
+                document.getElementById('outs').textContent = this.gameState.outs;
+            }
+
+            togglePauseMenu() {
+                const menu = document.getElementById('pauseMenu');
+                if (menu.style.display === 'flex') {
+                    menu.style.display = 'none';
+                    this.gameState.isPaused = false;
+                } else {
+                    menu.style.display = 'flex';
+                    this.gameState.isPaused = true;
+                }
+            }
+
+            togglePause() {
+                this.gameState.isPaused = !this.gameState.isPaused;
+                this.showCommentary(this.gameState.isPaused ? "Game Paused" : "Game Resumed");
+            }
+
+            startGame() {
+                this.showCommentary("⚾ PLAY BALL! Welcome to Lone Star Legends!");
+                this.updateHUD();
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                if (!this.gameState.isPaused) {
+                    this.updatePlayerMovement();
+                    this.updatePowerMeter();
+                    this.updateBallPhysics();
+                    this.updateRunners();
+                    this.updateCameraPosition();
+                }
+                
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+
+        // Global game instance
+        let game;
+
+        // Global control functions
+        function resumeGame() {
+            document.getElementById('pauseMenu').style.display = 'none';
+            if (game) game.gameState.isPaused = false;
+        }
+
+        function newGame() {
+            if (game) {
+                game.gameState = {
+                    homeScore: 0,
+                    awayScore: 0,
+                    inning: 1,
+                    isTopInning: true,
+                    outs: 0,
+                    balls: 0,
+                    strikes: 0,
+                    runners: [null, null, null, null],
+                    currentPhase: 'batting',
+                    gameMode: 'playing',
+                    isPaused: false
+                };
+                game.clearRunners();
+                game.nextBatter();
+                game.showCommentary("⚾ NEW GAME! Play ball!");
+                resumeGame();
+            }
+        }
+
+        function showOptions() {
+            alert("Options menu coming soon!");
+        }
+
+        function quitGame() {
+            if (confirm("Are you sure you want to quit?")) {
+                window.close();
+            }
+        }
+
+        // Initialize game when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            game = new LoneStarLegendsGame();
+        });
+    </script>
+</body>
+</html>
