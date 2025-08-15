@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lone Star Legends - Live Baseball Simulation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a472a;
+            overflow: hidden;
+            color: white;
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .hud {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .scoreboard {
+            background: rgba(0, 20, 0, 0.95);
+            border: 3px solid #228B22;
+            border-radius: 15px;
+            padding: 20px;
+            min-width: 300px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            pointer-events: auto;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .team-name {
+            color: #90EE90;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .score {
+            color: #FFD700;
+            font-size: 28px;
+        }
+
+        .inning-info {
+            text-align: center;
+            font-size: 16px;
+            color: #DDD;
+            border-top: 1px solid #228B22;
+            padding-top: 10px;
+        }
+
+        .game-stats {
+            background: rgba(0, 20, 0, 0.95);
+            border: 3px solid #228B22;
+            border-radius: 15px;
+            padding: 15px;
+            min-width: 250px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .stat-label {
+            color: #CCC;
+        }
+
+        .stat-value {
+            color: #90EE90;
+            font-weight: bold;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            pointer-events: auto;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, #228B22, #32CD32);
+            border: 3px solid #90EE90;
+            border-radius: 50px;
+            color: white;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(34, 139, 34, 0.4);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(34, 139, 34, 0.6);
+            background: linear-gradient(45deg, #32CD32, #228B22);
+        }
+
+        .control-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .control-btn.swing {
+            background: linear-gradient(45deg, #DC143C, #FF6347);
+            border-color: #FFB6C1;
+            box-shadow: 0 6px 20px rgba(220, 20, 60, 0.4);
+        }
+
+        .control-btn.swing:hover {
+            background: linear-gradient(45deg, #FF6347, #DC143C);
+            box-shadow: 0 10px 30px rgba(220, 20, 60, 0.6);
+        }
+
+        .commentary {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #FFD700;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFD700;
+            max-width: 80vw;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .commentary.show {
+            opacity: 1;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .control-btn.active {
+            animation: pulse 0.3s ease;
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 2000;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #228B22;
+            border-top: 4px solid #90EE90;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    
+    <div class="loading" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div>Loading Lone Star Legends...</div>
+    </div>
+
+    <div class="hud">
+        <div class="scoreboard">
+            <div class="score-row">
+                <span class="team-name">AWAY</span>
+                <span class="score" id="awayScore">0</span>
+            </div>
+            <div class="score-row">
+                <span class="team-name">HOME</span>
+                <span class="score" id="homeScore">0</span>
+            </div>
+            <div class="inning-info">
+                <div>Inning <span id="currentInning">1</span></div>
+                <div id="inningHalf">Top</div>
+            </div>
+        </div>
+
+        <div class="game-stats">
+            <div class="stat-row">
+                <span class="stat-label">Pitch Speed:</span>
+                <span class="stat-value" id="pitchSpeed">--</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Exit Velocity:</span>
+                <span class="stat-value" id="exitVelocity">--</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">At Bat:</span>
+                <span class="stat-value" id="currentBatter">--</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Count:</span>
+                <span class="stat-value" id="pitchCount">0-0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="commentary" id="commentary"></div>
+
+    <div class="controls">
+        <button class="control-btn" onclick="pitchBall()">PITCH</button>
+        <button class="control-btn swing" onclick="swingBat()">SWING</button>
+        <button class="control-btn" onclick="newGame()">NEW GAME</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        class BaseballGame {
+            constructor() {
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+                this.renderer = new THREE.WebGLRenderer({
+                    canvas: document.getElementById('gameCanvas'),
+                    antialias: true
+                });
+
+                this.gameState = {
+                    homeScore: 0,
+                    awayScore: 0,
+                    inning: 1,
+                    isTopInning: true,
+                    outs: 0,
+                    balls: 0,
+                    strikes: 0,
+                    bases: [false, false, false], // 1st, 2nd, 3rd
+                    currentBatter: 'Rodriguez',
+                    pitchInProgress: false,
+                    gameStarted: true
+                };
+
+                this.models = {
+                    ball: null,
+                    bat: null,
+                    pitcher: null,
+                    batter: null,
+                    fielders: []
+                };
+
+                this.physics = {
+                    ball: {
+                        position: new THREE.Vector3(0, 1.5, 0),
+                        velocity: new THREE.Vector3(0, 0, 0),
+                        gravity: -9.8,
+                        inPlay: false
+                    }
+                };
+
+                this.init();
+            }
+
+            async init() {
+                this.setupRenderer();
+                this.setupLighting();
+                this.createField();
+                this.createPlayers();
+                this.createBall();
+                this.setupCamera();
+                this.setupEventListeners();
+                
+                document.getElementById('loadingScreen').style.display = 'none';
+                
+                this.animate();
+                this.showCommentary("⚾ Welcome to Lone Star Legends! The game is about to begin!");
+            }
+
+            setupRenderer() {
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setClearColor(0x87CEEB); // Sky blue
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            }
+
+            setupLighting() {
+                // Ambient light
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+                this.scene.add(ambientLight);
+
+                // Stadium lights
+                const stadiumLight1 = new THREE.DirectionalLight(0xffffff, 1.0);
+                stadiumLight1.position.set(50, 100, 50);
+                stadiumLight1.castShadow = true;
+                stadiumLight1.shadow.mapSize.width = 2048;
+                stadiumLight1.shadow.mapSize.height = 2048;
+                stadiumLight1.shadow.camera.near = 0.1;
+                stadiumLight1.shadow.camera.far = 200;
+                stadiumLight1.shadow.camera.left = -100;
+                stadiumLight1.shadow.camera.right = 100;
+                stadiumLight1.shadow.camera.top = 100;
+                stadiumLight1.shadow.camera.bottom = -100;
+                this.scene.add(stadiumLight1);
+
+                const stadiumLight2 = new THREE.DirectionalLight(0xffffff, 0.8);
+                stadiumLight2.position.set(-50, 80, -50);
+                this.scene.add(stadiumLight2);
+
+                // Sun light
+                const sunLight = new THREE.DirectionalLight(0xfffacd, 0.6);
+                sunLight.position.set(100, 200, -100);
+                this.scene.add(sunLight);
+            }
+
+            createField() {
+                // Field grass
+                const fieldGeometry = new THREE.PlaneGeometry(400, 400);
+                const fieldMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+                const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+                field.rotation.x = -Math.PI / 2;
+                field.receiveShadow = true;
+                this.scene.add(field);
+
+                // Infield dirt (diamond shape)
+                const infieldGeometry = new THREE.RingGeometry(0, 30, 4, 1);
+                const infieldMaterial = new THREE.MeshLambertMaterial({ color: 0xD2B48C });
+                const infield = new THREE.Mesh(infieldGeometry, infieldMaterial);
+                infield.rotation.x = -Math.PI / 2;
+                infield.rotation.z = Math.PI / 4;
+                infield.position.y = 0.01;
+                this.scene.add(infield);
+
+                // Pitcher's mound
+                const moundGeometry = new THREE.CylinderGeometry(3, 4, 0.5, 16);
+                const moundMaterial = new THREE.MeshLambertMaterial({ color: 0xD2B48C });
+                const mound = new THREE.Mesh(moundGeometry, moundMaterial);
+                mound.position.set(0, 0.25, -18);
+                mound.castShadow = true;
+                this.scene.add(mound);
+
+                // Home plate
+                const plateGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.1, 5);
+                const plateMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+                const plate = new THREE.Mesh(plateGeometry, plateMaterial);
+                plate.position.set(0, 0.05, 18);
+                plate.rotation.y = Math.PI / 10;
+                this.scene.add(plate);
+
+                // Bases
+                this.createBases();
+
+                // Stadium walls/fence
+                const fenceGeometry = new THREE.BoxGeometry(2, 12, 400);
+                const fenceMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+                
+                // Left field wall
+                const leftWall = new THREE.Mesh(fenceGeometry, fenceMaterial);
+                leftWall.position.set(-150, 6, 0);
+                leftWall.castShadow = true;
+                this.scene.add(leftWall);
+
+                // Right field wall
+                const rightWall = new THREE.Mesh(fenceGeometry, fenceMaterial);
+                rightWall.position.set(150, 6, 0);
+                rightWall.castShadow = true;
+                this.scene.add(rightWall);
+
+                // Center field wall
+                const centerWallGeometry = new THREE.BoxGeometry(300, 12, 2);
+                const centerWall = new THREE.Mesh(centerWallGeometry, fenceMaterial);
+                centerWall.position.set(0, 6, -180);
+                centerWall.castShadow = true;
+                this.scene.add(centerWall);
+            }
+
+            createBases() {
+                const baseGeometry = new THREE.BoxGeometry(1.5, 0.2, 1.5);
+                const baseMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+
+                // First base
+                const firstBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                firstBase.position.set(18, 0.1, 0);
+                this.scene.add(firstBase);
+
+                // Second base
+                const secondBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                secondBase.position.set(0, 0.1, -18);
+                this.scene.add(secondBase);
+
+                // Third base
+                const thirdBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                thirdBase.position.set(-18, 0.1, 0);
+                this.scene.add(thirdBase);
+            }
+
+            createPlayers() {
+                // Create pitcher
+                const pitcherGeometry = new THREE.CapsuleGeometry(0.8, 3.5);
+                const pitcherMaterial = new THREE.MeshLambertMaterial({ color: 0x0000FF });
+                this.models.pitcher = new THREE.Mesh(pitcherGeometry, pitcherMaterial);
+                this.models.pitcher.position.set(0, 2, -18);
+                this.models.pitcher.castShadow = true;
+                this.scene.add(this.models.pitcher);
+
+                // Create batter
+                const batterGeometry = new THREE.CapsuleGeometry(0.8, 3.5);
+                const batterMaterial = new THREE.MeshLambertMaterial({ color: 0xFF0000 });
+                this.models.batter = new THREE.Mesh(batterGeometry, batterMaterial);
+                this.models.batter.position.set(-1.5, 2, 15);
+                this.models.batter.castShadow = true;
+                this.scene.add(this.models.batter);
+
+                // Create bat
+                const batGeometry = new THREE.CylinderGeometry(0.1, 0.15, 2.5);
+                const batMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+                this.models.bat = new THREE.Mesh(batGeometry, batMaterial);
+                this.models.bat.position.set(-2.5, 2.5, 15);
+                this.models.bat.rotation.z = Math.PI / 3;
+                this.models.bat.castShadow = true;
+                this.scene.add(this.models.bat);
+
+                // Create fielders
+                this.createFielders();
+            }
+
+            createFielders() {
+                const fielderGeometry = new THREE.CapsuleGeometry(0.7, 3.2);
+                const fielderMaterial = new THREE.MeshLambertMaterial({ color: 0x0000FF });
+
+                const positions = [
+                    { x: 18, z: 5 },    // 1B
+                    { x: 12, z: -8 },   // 2B
+                    { x: -18, z: 5 },   // 3B
+                    { x: -12, z: -8 },  // SS
+                    { x: -45, z: -45 }, // LF
+                    { x: 0, z: -60 },   // CF
+                    { x: 45, z: -45 },  // RF
+                    { x: 0, z: 22 }     // C
+                ];
+
+                positions.forEach((pos, index) => {
+                    const fielder = new THREE.Mesh(fielderGeometry, fielderMaterial);
+                    fielder.position.set(pos.x, 1.8, pos.z);
+                    fielder.castShadow = true;
+                    this.models.fielders.push(fielder);
+                    this.scene.add(fielder);
+                });
+            }
+
+            createBall() {
+                const ballGeometry = new THREE.SphereGeometry(0.15, 16, 16);
+                const ballMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+                this.models.ball = new THREE.Mesh(ballGeometry, ballMaterial);
+                this.models.ball.position.copy(this.physics.ball.position);
+                this.models.ball.castShadow = true;
+                this.scene.add(this.models.ball);
+            }
+
+            setupCamera() {
+                // Behind home plate camera angle
+                this.camera.position.set(0, 12, 35);
+                this.camera.lookAt(0, 2, -18);
+            }
+
+            setupEventListeners() {
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+
+                // Keyboard controls
+                document.addEventListener('keydown', (event) => {
+                    switch(event.code) {
+                        case 'Space':
+                            event.preventDefault();
+                            this.swingBat();
+                            break;
+                        case 'KeyP':
+                            event.preventDefault();
+                            this.pitchBall();
+                            break;
+                    }
+                });
+            }
+
+            pitchBall() {
+                if (this.gameState.pitchInProgress) return;
+
+                this.gameState.pitchInProgress = true;
+                
+                // Random pitch speed between 85-100 mph
+                const speed = 85 + Math.random() * 15;
+                document.getElementById('pitchSpeed').textContent = speed.toFixed(1) + ' mph';
+
+                // Reset ball position
+                this.physics.ball.position.set(0, 1.5, -18);
+                this.models.ball.position.copy(this.physics.ball.position);
+
+                // Calculate pitch velocity (convert mph to m/s and scale for game)
+                const pitchSpeed = (speed / 2.237) * 0.8; // Scaled for gameplay
+                
+                // Add some randomness to pitch location
+                const horizontalVariation = (Math.random() - 0.5) * 2;
+                const verticalVariation = (Math.random() - 0.5) * 1.5;
+
+                this.physics.ball.velocity.set(
+                    horizontalVariation,
+                    verticalVariation,
+                    pitchSpeed
+                );
+
+                this.physics.ball.inPlay = true;
+
+                // Animate pitcher
+                this.animatePitcher();
+
+                this.showCommentary(`Here's the pitch! ${speed.toFixed(1)} mph fastball!`);
+            }
+
+            swingBat() {
+                if (!this.physics.ball.inPlay) return;
+
+                // Check if ball is in hitting zone
+                const ballPos = this.physics.ball.position;
+                const hitZone = {
+                    x: [-2, 2],
+                    y: [0.5, 3],
+                    z: [12, 20]
+                };
+
+                const inZone = ballPos.x >= hitZone.x[0] && ballPos.x <= hitZone.x[1] &&
+                              ballPos.y >= hitZone.y[0] && ballPos.y <= hitZone.y[1] &&
+                              ballPos.z >= hitZone.z[0] && ballPos.z <= hitZone.z[1];
+
+                this.animateBatSwing();
+
+                if (inZone) {
+                    this.hitBall();
+                } else {
+                    this.missedSwing();
+                }
+            }
+
+            hitBall() {
+                // Calculate exit velocity based on contact quality
+                const contactQuality = 0.7 + Math.random() * 0.3;
+                const exitVel = 70 + contactQuality * 50;
+                
+                document.getElementById('exitVelocity').textContent = exitVel.toFixed(1) + ' mph';
+
+                // Calculate hit direction
+                const angle = (Math.random() - 0.5) * Math.PI * 0.6; // -54° to +54°
+                const elevation = Math.random() * Math.PI * 0.3; // 0° to 54° up
+
+                const hitSpeed = (exitVel / 2.237) * 0.6; // Convert and scale
+                
+                this.physics.ball.velocity.set(
+                    Math.sin(angle) * Math.cos(elevation) * hitSpeed,
+                    Math.sin(elevation) * hitSpeed,
+                    -Math.cos(angle) * Math.cos(elevation) * hitSpeed
+                );
+
+                // Determine hit type based on exit velocity and angle
+                let hitType = 'single';
+                if (exitVel > 105 && elevation > 0.3) {
+                    hitType = 'homerun';
+                    this.gameState.homeScore += 1;
+                } else if (exitVel > 95) {
+                    hitType = Math.random() > 0.5 ? 'double' : 'triple';
+                } else if (exitVel < 80 && elevation < 0.2) {
+                    hitType = 'groundout';
+                }
+
+                this.showCommentary(this.getHitCommentary(hitType, exitVel));
+                this.updateScore();
+                
+                setTimeout(() => {
+                    this.nextAtBat();
+                }, 3000);
+            }
+
+            missedSwing() {
+                this.gameState.strikes++;
+                
+                if (this.gameState.strikes >= 3) {
+                    this.showCommentary("Strike three! You're out!");
+                    this.strikeout();
+                } else {
+                    this.showCommentary(`Strike ${this.gameState.strikes}!`);
+                }
+                
+                this.updateCount();
+                
+                setTimeout(() => {
+                    if (this.gameState.strikes < 3) {
+                        this.resetForNextPitch();
+                    }
+                }, 1500);
+            }
+
+            getHitCommentary(hitType, velocity) {
+                const comments = {
+                    'homerun': [
+                        `CRUSHED! ${velocity.toFixed(1)} mph missile is GONE!`,
+                        `MOONSHOT! That ball is outta here!`,
+                        `HOME RUN! What a blast!`
+                    ],
+                    'triple': [
+                        `Off the wall! Going for three!`,
+                        `Into the gap! Triple!`
+                    ],
+                    'double': [
+                        `Rips it down the line! Double!`,
+                        `Into the corner! Stand-up double!`
+                    ],
+                    'single': [
+                        `Base hit! Clean through the infield!`,
+                        `Finds a hole! Single to center!`
+                    ],
+                    'groundout': [
+                        `Chopped to short! Throws to first!`,
+                        `Routine grounder for the out!`
+                    ]
+                };
+                
+                const options = comments[hitType] || comments['single'];
+                return options[Math.floor(Math.random() * options.length)];
+            }
+
+            animatePitcher() {
+                // Simple pitcher animation
+                const originalY = this.models.pitcher.position.y;
+                
+                // Wind up
+                this.models.pitcher.rotation.x = -0.3;
+                
+                setTimeout(() => {
+                    // Delivery
+                    this.models.pitcher.rotation.x = 0.3;
+                    this.models.pitcher.position.y = originalY - 0.5;
+                }, 200);
+                
+                setTimeout(() => {
+                    // Follow through
+                    this.models.pitcher.rotation.x = 0;
+                    this.models.pitcher.position.y = originalY;
+                }, 600);
+            }
+
+            animateBatSwing() {
+                const originalRotation = this.models.bat.rotation.z;
+                
+                // Swing animation
+                this.models.bat.rotation.z = -Math.PI / 4;
+                
+                setTimeout(() => {
+                    this.models.bat.rotation.z = originalRotation;
+                }, 300);
+            }
+
+            updatePhysics() {
+                if (this.physics.ball.inPlay) {
+                    const deltaTime = 1/60; // 60 FPS
+                    
+                    // Update ball position
+                    this.physics.ball.position.x += this.physics.ball.velocity.x * deltaTime;
+                    this.physics.ball.position.y += this.physics.ball.velocity.y * deltaTime;
+                    this.physics.ball.position.z += this.physics.ball.velocity.z * deltaTime;
+                    
+                    // Apply gravity
+                    this.physics.ball.velocity.y += this.physics.ball.gravity * deltaTime;
+                    
+                    // Check if ball hits ground
+                    if (this.physics.ball.position.y <= 0.15) {
+                        this.physics.ball.position.y = 0.15;
+                        this.physics.ball.velocity.y *= -0.4; // Bounce with energy loss
+                        this.physics.ball.velocity.x *= 0.8; // Friction
+                        this.physics.ball.velocity.z *= 0.8;
+                        
+                        if (Math.abs(this.physics.ball.velocity.y) < 0.1) {
+                            this.physics.ball.velocity.y = 0;
+                        }
+                    }
+                    
+                    // Update visual ball position
+                    this.models.ball.position.copy(this.physics.ball.position);
+                    
+                    // Check for out of bounds
+                    if (Math.abs(this.physics.ball.position.x) > 200 || 
+                        Math.abs(this.physics.ball.position.z) > 200) {
+                        this.resetForNextPitch();
+                    }
+                }
+            }
+
+            strikeout() {
+                this.gameState.outs++;
+                this.resetCount();
+                
+                if (this.gameState.outs >= 3) {
+                    this.endInning();
+                } else {
+                    setTimeout(() => {
+                        this.nextBatter();
+                    }, 2000);
+                }
+            }
+
+            nextAtBat() {
+                this.resetCount();
+                this.nextBatter();
+            }
+
+            nextBatter() {
+                const batters = ['Rodriguez', 'Martinez', 'Johnson', 'Williams', 'Davis'];
+                const currentIndex = batters.indexOf(this.gameState.currentBatter);
+                this.gameState.currentBatter = batters[(currentIndex + 1) % batters.length];
+                
+                document.getElementById('currentBatter').textContent = this.gameState.currentBatter;
+                this.resetForNextPitch();
+            }
+
+            endInning() {
+                this.gameState.outs = 0;
+                this.gameState.isTopInning = !this.gameState.isTopInning;
+                
+                if (!this.gameState.isTopInning) {
+                    this.gameState.inning++;
+                }
+                
+                this.updateInningDisplay();
+                this.showCommentary(`End of the ${this.gameState.isTopInning ? 'bottom' : 'top'} of the ${this.gameState.inning}th!`);
+                
+                setTimeout(() => {
+                    this.resetForNextPitch();
+                }, 3000);
+            }
+
+            resetCount() {
+                this.gameState.balls = 0;
+                this.gameState.strikes = 0;
+                this.updateCount();
+            }
+
+            resetForNextPitch() {
+                this.physics.ball.inPlay = false;
+                this.physics.ball.position.set(0, 1.5, -18);
+                this.physics.ball.velocity.set(0, 0, 0);
+                this.models.ball.position.copy(this.physics.ball.position);
+                this.gameState.pitchInProgress = false;
+                
+                document.getElementById('pitchSpeed').textContent = '--';
+                document.getElementById('exitVelocity').textContent = '--';
+            }
+
+            updateScore() {
+                document.getElementById('homeScore').textContent = this.gameState.homeScore;
+                document.getElementById('awayScore').textContent = this.gameState.awayScore;
+            }
+
+            updateCount() {
+                document.getElementById('pitchCount').textContent = 
+                    `${this.gameState.balls}-${this.gameState.strikes}`;
+            }
+
+            updateInningDisplay() {
+                document.getElementById('currentInning').textContent = this.gameState.inning;
+                document.getElementById('inningHalf').textContent = 
+                    this.gameState.isTopInning ? 'Top' : 'Bottom';
+            }
+
+            showCommentary(text) {
+                const commentary = document.getElementById('commentary');
+                commentary.textContent = text;
+                commentary.classList.add('show');
+                
+                setTimeout(() => {
+                    commentary.classList.remove('show');
+                }, 3000);
+            }
+
+            newGame() {
+                this.gameState = {
+                    homeScore: 0,
+                    awayScore: 0,
+                    inning: 1,
+                    isTopInning: true,
+                    outs: 0,
+                    balls: 0,
+                    strikes: 0,
+                    bases: [false, false, false],
+                    currentBatter: 'Rodriguez',
+                    pitchInProgress: false,
+                    gameStarted: true
+                };
+                
+                this.resetForNextPitch();
+                this.updateScore();
+                this.updateCount();
+                this.updateInningDisplay();
+                
+                document.getElementById('currentBatter').textContent = this.gameState.currentBatter;
+                
+                this.showCommentary("⚾ New game started! Play ball!");
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                this.updatePhysics();
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+
+        // Global functions for controls
+        let game;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            game = new BaseballGame();
+        });
+
+        function pitchBall() {
+            if (game) game.pitchBall();
+        }
+
+        function swingBat() {
+            if (game) game.swingBat();
+        }
+
+        function newGame() {
+            if (game) game.newGame();
+        }
+    </script>
+</body>
+</html>
