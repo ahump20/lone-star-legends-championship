@@ -1,0 +1,2 @@
+::ffff:127.0.0.1 - - [15/Aug/2025 08:06:26] code 400, message Bad request version ('null}')
+::ffff:127.0.0.1 - - [15/Aug/2025 08:06:26] "Z\x01\x00\x00{"action": "create_enhanced_stadium", "params": {"quality": "ultra", "lighting": "ray_traced", "textures": "8k", "geometry_detail": "high", "crowd_size": 45000, "weather": "clear_night", "features": ["jumbotron", "luxury_boxes", "concession_stands", "parking_lot", "team_dugouts", "bullpen"]}, "timestamp": 1755263181.745791, "callback_id": null}" 400 -
