@@ -938,19 +938,130 @@
                 this.ballPhysics.hasBeenHit = false;
                 this.ballPhysics.isThrown = false;
                 
-                // Pitch towards home plate
-                const speed = 20 + Math.random() * 8; // Varied speed
-                const horizontalVariation = (Math.random() - 0.5) * 2;
-                const verticalVariation = (Math.random() - 0.5) * 1.5;
+                // AI Pitcher Decision Making
+                const pitchDecision = this.choosePitchType();
+                
+                this.showCommentary(`${pitchDecision.name} - ${pitchDecision.speed} mph!`);
+                this.updateDynamicTip(`${pitchDecision.description}`);
+                this.animatePitcher();
+            }
+
+            choosePitchType() {
+                // AI considers game situation
+                const count = { balls: this.gameState.balls, strikes: this.gameState.strikes };
+                const outs = this.gameState.outs;
+                const runnersOnBase = this.players.runners.length > 0;
+                
+                // Pitch type probabilities based on count
+                let pitchTypes = [];
+                
+                if (count.balls > count.strikes) {
+                    // Behind in count - more likely to throw strikes
+                    pitchTypes = [
+                        { name: "Fastball", weight: 60, speed: [92, 98], accuracy: 0.8 },
+                        { name: "Sinker", weight: 25, speed: [88, 94], accuracy: 0.75 },
+                        { name: "Cutter", weight: 15, speed: [89, 95], accuracy: 0.7 }
+                    ];
+                } else if (count.strikes >= 2) {
+                    // Ahead in count - can be more deceptive
+                    pitchTypes = [
+                        { name: "Slider", weight: 30, speed: [82, 88], accuracy: 0.6 },
+                        { name: "Curveball", weight: 25, speed: [75, 82], accuracy: 0.55 },
+                        { name: "Fastball", weight: 25, speed: [95, 100], accuracy: 0.7 },
+                        { name: "Changeup", weight: 20, speed: [78, 85], accuracy: 0.65 }
+                    ];
+                } else {
+                    // Even count - balanced approach
+                    pitchTypes = [
+                        { name: "Fastball", weight: 40, speed: [93, 99], accuracy: 0.75 },
+                        { name: "Slider", weight: 20, speed: [83, 89], accuracy: 0.65 },
+                        { name: "Changeup", weight: 20, speed: [79, 86], accuracy: 0.7 },
+                        { name: "Curveball", weight: 20, speed: [76, 83], accuracy: 0.6 }
+                    ];
+                }
+                
+                // Select pitch based on weighted probability
+                const totalWeight = pitchTypes.reduce((sum, pitch) => sum + pitch.weight, 0);
+                let random = Math.random() * totalWeight;
+                
+                let selectedPitch = pitchTypes[0];
+                for (const pitch of pitchTypes) {
+                    random -= pitch.weight;
+                    if (random <= 0) {
+                        selectedPitch = pitch;
+                        break;
+                    }
+                }
+                
+                // Determine actual pitch parameters
+                const speed = selectedPitch.speed[0] + Math.random() * (selectedPitch.speed[1] - selectedPitch.speed[0]);
+                const gameSpeed = (speed / 2.237) * 0.8; // Convert mph to game units
+                
+                // Accuracy affects location variation
+                const accuracy = selectedPitch.accuracy;
+                const baseVariation = 2.5;
+                const horizontalVariation = (Math.random() - 0.5) * baseVariation * (1 - accuracy);
+                const verticalVariation = (Math.random() - 0.5) * baseVariation * (1 - accuracy);
+                
+                // Apply pitch-specific movement
+                let movement = this.getPitchMovement(selectedPitch.name);
                 
                 this.ballPhysics.velocity.set(
-                    horizontalVariation,
-                    verticalVariation,
-                    speed
+                    horizontalVariation + movement.horizontal,
+                    verticalVariation + movement.vertical,
+                    gameSpeed
                 );
+                
+                return {
+                    name: selectedPitch.name,
+                    speed: speed.toFixed(0),
+                    description: this.getPitchDescription(selectedPitch.name, count)
+                };
+            }
 
-                this.showCommentary("Here comes the pitch!");
-                this.animatePitcher();
+            getPitchMovement(pitchType) {
+                switch(pitchType) {
+                    case "Fastball":
+                        return { horizontal: 0, vertical: 0.2 }; // Slight rise
+                    case "Sinker":
+                        return { horizontal: 0, vertical: -0.3 }; // Sinks down
+                    case "Cutter":
+                        return { horizontal: 0.3, vertical: 0 }; // Cuts away
+                    case "Slider":
+                        return { horizontal: 0.4, vertical: -0.2 }; // Breaks down and away
+                    case "Curveball":
+                        return { horizontal: 0.2, vertical: -0.5 }; // Big break down
+                    case "Changeup":
+                        return { horizontal: -0.1, vertical: -0.1 }; // Slight fade
+                    default:
+                        return { horizontal: 0, vertical: 0 };
+                }
+            }
+
+            getPitchDescription(pitchType, count) {
+                const situations = {
+                    "Fastball": [
+                        "Bringing the heat!", "Challenge pitch!", "High octane!", "Blow it by him!"
+                    ],
+                    "Slider": [
+                        "Nasty break!", "Wipeout slider!", "Buckle your knees!", "Late movement!"
+                    ],
+                    "Curveball": [
+                        "12-to-6 hammer!", "Uncle Charlie!", "Big hook!", "Drops off the table!"
+                    ],
+                    "Changeup": [
+                        "Change of pace!", "Off-speed deception!", "Keeps him guessing!", "Slow and low!"
+                    ],
+                    "Sinker": [
+                        "Heavy sinker!", "Ground ball pitch!", "Two-seam action!", "Induces weak contact!"
+                    ],
+                    "Cutter": [
+                        "Sharp cutter!", "Late movement!", "Cuts the corners!", "Precision pitch!"
+                    ]
+                };
+                
+                const options = situations[pitchType] || ["Here's the pitch!"];
+                return options[Math.floor(Math.random() * options.length)];
             }
 
             swing() {
