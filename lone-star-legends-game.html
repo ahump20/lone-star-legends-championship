@@ -497,7 +497,8 @@
                     position: new THREE.Vector3(0, 1, -18),
                     velocity: new THREE.Vector3(0, 0, 0),
                     inPlay: false,
-                    hasBeenHit: false
+                    hasBeenHit: false,
+                    isThrown: false
                 };
 
                 // Audio context (for potential future sounds)
@@ -735,6 +736,13 @@
                     const fielder = new THREE.Mesh(fielderGeometry, fielderMaterial);
                     fielder.position.set(...pos);
                     fielder.castShadow = true;
+                    
+                    // Initialize fielder userData
+                    fielder.userData = {
+                        selected: false,
+                        originalPosition: new THREE.Vector3(...pos)
+                    };
+                    
                     this.players.fielders.push(fielder);
                     this.scene.add(fielder);
                 });
@@ -928,6 +936,7 @@
                 this.ballPhysics.velocity.set(0, 0, 0);
                 this.ballPhysics.inPlay = true;
                 this.ballPhysics.hasBeenHit = false;
+                this.ballPhysics.isThrown = false;
                 
                 // Pitch towards home plate
                 const speed = 20 + Math.random() * 8; // Varied speed
@@ -1099,6 +1108,14 @@
                 
                 // Update visual ball
                 this.ball.position.copy(this.ballPhysics.position);
+                
+                // Check for player catch attempt
+                if (this.gameState.currentPhase === 'fielding' && this.selectedFielder) {
+                    this.attemptCatch();
+                }
+                
+                // Update fielder AI
+                this.updateFielderAI();
                 
                 // Check for home run
                 this.checkHomeRun();
@@ -1388,10 +1405,31 @@
             throwToBase(baseName) {
                 if (!this.selectedFielder) {
                     this.selectClosestFielder();
+                    return;
                 }
+                
+                // Calculate throw trajectory and speed
+                const throwSpeed = 25; // m/s
+                const targetPosition = this.basePositions[baseName].clone();
+                targetPosition.y = 1.5; // Chest height
+                
+                const direction = targetPosition.clone().sub(this.selectedFielder.position).normalize();
+                
+                // Reset ball position to fielder
+                this.ballPhysics.position.copy(this.selectedFielder.position);
+                this.ballPhysics.position.y += 1.5; // Throwing height
+                
+                // Set ball velocity towards base
+                this.ballPhysics.velocity.copy(direction.multiplyScalar(throwSpeed));
+                this.ballPhysics.inPlay = true;
+                this.ballPhysics.hasBeenHit = false;
+                this.ballPhysics.isThrown = true;
                 
                 this.showCommentary(`Throwing to ${baseName}!`);
                 this.updateDynamicTip('Ball thrown - watch the play!');
+                
+                // Animate fielder throw
+                this.animateFielderThrow(this.selectedFielder);
             }
 
             selectClosestFielder() {
@@ -1410,13 +1448,133 @@
                 });
                 
                 if (closestFielder) {
-                    // Deselect all fielders
-                    this.players.fielders.forEach(f => f.material.color.setHex(0x0000FF));
-                    
-                    // Select closest fielder
-                    this.selectedFielder = closestFielder;
-                    this.selectedFielder.material.color.setHex(0xFFD700); // Gold
+                    this.selectFielder(closestFielder);
                 }
+            }
+
+            selectFielder(fielder) {
+                // Deselect all fielders
+                this.players.fielders.forEach(f => {
+                    f.material.color.setHex(0x0000FF); // Blue
+                    f.userData.selected = false;
+                });
+                
+                // Select new fielder
+                this.selectedFielder = fielder;
+                fielder.material.color.setHex(0xFFD700); // Gold
+                fielder.userData.selected = true;
+                
+                this.updateDynamicTip('Control fielder with WASD, SPACE to throw');
+            }
+
+            attemptCatch() {
+                if (!this.selectedFielder || !this.ballPhysics.inPlay) return false;
+                
+                const ballPos = new THREE.Vector3().copy(this.ballPhysics.position);
+                const fielderPos = this.selectedFielder.position.clone();
+                fielderPos.y += 1; // Fielder reach height
+                
+                const catchRadius = 2.5; // Catching range
+                const distance = ballPos.distanceTo(fielderPos);
+                
+                if (distance <= catchRadius && ballPos.y <= 3 && ballPos.y >= 0.2) {
+                    // Successful catch!
+                    this.ballPhysics.inPlay = false;
+                    this.ballPhysics.velocity.set(0, 0, 0);
+                    
+                    // Position ball in fielder's glove
+                    this.ballPhysics.position.copy(fielderPos);
+                    
+                    this.showCommentary('CAUGHT! Great defensive play!');
+                    this.updateDynamicTip('Ball caught! Press 1-4 to throw to bases');
+                    
+                    // Animate catch
+                    this.animateFielderCatch(this.selectedFielder);
+                    
+                    // Update game state
+                    this.gameState.outs++;
+                    this.updateHUD();
+                    
+                    if (this.gameState.outs >= 3) {
+                        this.endInning();
+                    }
+                    
+                    return true;
+                }
+                
+                return false;
+            }
+
+            updateFielderAI() {
+                if (!this.ballPhysics.inPlay || this.ballPhysics.isThrown) return;
+                
+                this.players.fielders.forEach(fielder => {
+                    if (fielder === this.selectedFielder) return; // Don't AI-control selected fielder
+                    
+                    const ballPos = new THREE.Vector3().copy(this.ballPhysics.position);
+                    const fielderPos = fielder.position;
+                    const distance = fielderPos.distanceTo(ballPos);
+                    
+                    // Only move if ball is relatively close and in the air or bouncing
+                    if (distance < 30 && ballPos.y > 0.5) {
+                        const direction = ballPos.clone().sub(fielderPos).normalize();
+                        const moveSpeed = 0.15;
+                        
+                        // Move towards ball but don't overshoot
+                        if (distance > 2) {
+                            fielder.position.add(direction.multiplyScalar(moveSpeed));
+                        }
+                        
+                        // Attempt automatic catch for AI fielders
+                        const catchRadius = 2.0;
+                        if (distance <= catchRadius && ballPos.y <= 3 && ballPos.y >= 0.2) {
+                            this.ballPhysics.inPlay = false;
+                            this.ballPhysics.velocity.set(0, 0, 0);
+                            this.ballPhysics.position.copy(fielder.position);
+                            this.ballPhysics.position.y = 1.5;
+                            
+                            this.showCommentary('Fielder makes the catch!');
+                            this.selectFielder(fielder);
+                            this.updateDynamicTip('Ball caught by AI fielder! Take control with WASD');
+                            
+                            this.gameState.outs++;
+                            this.updateHUD();
+                            
+                            if (this.gameState.outs >= 3) {
+                                this.endInning();
+                            }
+                        }
+                    }
+                });
+            }
+
+            animateFielderCatch(fielder) {
+                const originalY = fielder.position.y;
+                const originalScale = fielder.scale.y;
+                
+                // Jump slightly for catch
+                fielder.position.y = originalY + 0.3;
+                fielder.scale.y = originalScale * 1.1;
+                
+                setTimeout(() => {
+                    fielder.position.y = originalY;
+                    fielder.scale.y = originalScale;
+                }, 300);
+            }
+
+            animateFielderThrow(fielder) {
+                const originalRotation = fielder.rotation.z;
+                
+                // Throwing motion
+                fielder.rotation.z = Math.PI / 6;
+                
+                setTimeout(() => {
+                    fielder.rotation.z = -Math.PI / 6;
+                }, 150);
+                
+                setTimeout(() => {
+                    fielder.rotation.z = originalRotation;
+                }, 400);
             }
 
             showCommentary(text) {
