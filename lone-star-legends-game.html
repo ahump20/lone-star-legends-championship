@@ -365,6 +365,24 @@
                 </div>
             </div>
 
+            <div class="tutorial-section">
+                <div class="tutorial-heading">🏟️ GAME LENGTH:</div>
+                <div class="tutorial-controls" style="display: flex; justify-content: space-around; padding: 10px;">
+                    <button class="tutorial-button" onclick="setGameLength(3)" style="padding: 10px 20px; margin: 0 5px;">
+                        3 Innings
+                    </button>
+                    <button class="tutorial-button" onclick="setGameLength(6)" style="padding: 10px 20px; margin: 0 5px;">
+                        6 Innings
+                    </button>
+                    <button class="tutorial-button" onclick="setGameLength(9)" style="padding: 10px 20px; margin: 0 5px; background: linear-gradient(45deg, #FFD700, #FFA500);">
+                        9 Innings
+                    </button>
+                </div>
+                <div style="text-align: center; color: #90EE90; margin-top: 10px;">
+                    Selected: <span id="selectedInnings" style="color: #FFD700;">9</span> innings
+                </div>
+            </div>
+
             <button class="tutorial-button" onclick="startGame()">⚾ PLAY BALL!</button>
             <button class="tutorial-button" onclick="skipTutorial()">Skip Tutorial</button>
         </div>
@@ -454,7 +472,8 @@
                     currentPhase: 'batting', // batting, running, fielding, pitching
                     isPaused: false,
                     gameStarted: false,
-                    basesLoaded: [false, false, false] // 1st, 2nd, 3rd base
+                    basesLoaded: [false, false, false], // 1st, 2nd, 3rd base
+                    maxInnings: 9 // Default to 9 innings, can be set to 3 or 6
                 };
 
                 // Player control
@@ -1370,14 +1389,155 @@
 
             endInning() {
                 this.gameState.outs = 0;
-                this.gameState.isTopInning = !this.gameState.isTopInning;
                 
-                if (!this.gameState.isTopInning) {
+                // Clear all runners from bases
+                this.clearAllRunners();
+                
+                // Switch between top and bottom of inning
+                if (this.gameState.isTopInning) {
+                    // End of top half - switch to bottom
+                    this.gameState.isTopInning = false;
+                    this.showCommentary(`Middle of the ${this.ordinalNumber(this.gameState.inning)} - Home team batting!`);
+                    this.updateDynamicTip('Time for the home team to bat!');
+                } else {
+                    // End of bottom half - advance to next inning
+                    this.gameState.isTopInning = true;
                     this.gameState.inning++;
+                    
+                    // Check for game end
+                    if (this.gameState.inning > this.gameState.maxInnings) {
+                        this.checkGameEnd();
+                        return;
+                    }
+                    
+                    this.showCommentary(`Starting the ${this.ordinalNumber(this.gameState.inning)} inning!`);
+                    this.updateDynamicTip('Away team up to bat!');
                 }
                 
-                this.showCommentary(`End of the ${this.gameState.isTopInning ? 'bottom' : 'top'} of the ${this.gameState.inning}!`);
-                this.nextBatter();
+                // Update display and continue
+                this.updateHUD();
+                this.updatePhaseIndicator();
+                
+                // Switch teams
+                this.switchTeams();
+                
+                // Reset for next half-inning
+                setTimeout(() => {
+                    this.nextBatter();
+                }, 2000);
+            }
+
+            ordinalNumber(num) {
+                const ordinals = ['', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th'];
+                return ordinals[num] || `${num}th`;
+            }
+
+            clearAllRunners() {
+                // Remove all runners from the field
+                this.players.runners.forEach(runner => {
+                    this.scene.remove(runner);
+                });
+                this.players.runners = [];
+                this.activeRunner = null;
+                this.gameState.basesLoaded = [false, false, false];
+            }
+
+            switchTeams() {
+                // Swap team colors for visual indication
+                if (this.gameState.isTopInning) {
+                    // Away team batting (red), home team fielding (blue)
+                    this.players.batter.material.color.setHex(0xFF0000);
+                    this.players.fielders.forEach(f => f.material.color.setHex(0x0000FF));
+                } else {
+                    // Home team batting (blue), away team fielding (red)
+                    this.players.batter.material.color.setHex(0x0000FF);
+                    this.players.fielders.forEach(f => f.material.color.setHex(0xFF0000));
+                }
+            }
+
+            checkGameEnd() {
+                const homeWins = this.gameState.homeScore > this.gameState.awayScore;
+                const awayWins = this.gameState.awayScore > this.gameState.homeScore;
+                
+                if (homeWins || awayWins) {
+                    this.endGame(homeWins);
+                } else {
+                    // Extra innings if tied
+                    this.showCommentary("TIED GAME! Going to extra innings!");
+                    this.updateDynamicTip("Extra innings! Next run wins!");
+                    this.gameState.isTopInning = true;
+                    this.updateHUD();
+                    setTimeout(() => {
+                        this.nextBatter();
+                    }, 3000);
+                }
+            }
+
+            endGame(homeWins) {
+                // Game over!
+                this.gameState.gameStarted = false;
+                this.gameState.currentPhase = 'gameover';
+                
+                // Play celebration sounds
+                this.playSound('homerun', 1.0);
+                setTimeout(() => this.playSound('crowd', 0.8), 500);
+                
+                const winner = homeWins ? 'HOME TEAM' : 'AWAY TEAM';
+                const finalScore = `${this.gameState.awayScore} - ${this.gameState.homeScore}`;
+                
+                // Show game over screen
+                const gameOverScreen = document.createElement('div');
+                gameOverScreen.id = 'gameOverScreen';
+                gameOverScreen.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.9);
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 9999;
+                    color: white;
+                    font-family: 'Arial Black', Arial, sans-serif;
+                `;
+                
+                gameOverScreen.innerHTML = `
+                    <div style="text-align: center;">
+                        <h1 style="font-size: 72px; color: #FFD700; margin-bottom: 20px;">
+                            GAME OVER!
+                        </h1>
+                        <h2 style="font-size: 48px; color: #90EE90; margin-bottom: 30px;">
+                            ${winner} WINS!
+                        </h2>
+                        <div style="font-size: 36px; color: #FFF; margin-bottom: 40px;">
+                            Final Score: ${finalScore}
+                        </div>
+                        <div style="font-size: 24px; color: #CCC; margin-bottom: 50px;">
+                            ${this.gameState.inning - 1} innings played
+                        </div>
+                        <button onclick="location.reload()" style="
+                            padding: 20px 40px;
+                            font-size: 24px;
+                            background: linear-gradient(45deg, #228B22, #32CD32);
+                            color: white;
+                            border: 3px solid #90EE90;
+                            border-radius: 15px;
+                            cursor: pointer;
+                            font-weight: bold;
+                            transition: all 0.3s;
+                        " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                            PLAY AGAIN
+                        </button>
+                    </div>
+                `;
+                
+                document.body.appendChild(gameOverScreen);
+                
+                // Update final commentary
+                this.showCommentary(`🎉 ${winner} WINS! Final: ${finalScore} 🎉`);
             }
 
             resetForNextPitch() {
@@ -1448,7 +1608,12 @@
             }
 
             homeRun() {
-                this.gameState.homeScore++;
+                // Score for the team that's currently batting
+                if (this.gameState.isTopInning) {
+                    this.gameState.awayScore++;
+                } else {
+                    this.gameState.homeScore++;
+                }
                 
                 // Play celebratory home run sound and crowd cheer
                 this.playSound('homerun', 1.0);
@@ -1656,7 +1821,17 @@
                 // Check for scoring
                 if (targetBase === 0) {
                     this.showCommentary('RUNNER SCORES!');
-                    this.gameState.homeScore++;
+                    
+                    // Score for the team that's currently batting
+                    if (this.gameState.isTopInning) {
+                        this.gameState.awayScore++;
+                    } else {
+                        this.gameState.homeScore++;
+                    }
+                    
+                    // Play scoring sound
+                    this.playSound('crowd', 0.5);
+                    
                     this.updateHUD();
                 }
             }
@@ -1963,7 +2138,9 @@
                     strikes: 0,
                     currentPhase: 'batting',
                     isPaused: false,
-                    gameStarted: true
+                    gameStarted: true,
+                    basesLoaded: [false, false, false],
+                    maxInnings: selectedGameLength // Use the selected game length
                 };
                 
                 this.players.batter.position.copy(this.player.battingPosition);
@@ -1974,7 +2151,13 @@
                 this.updatePhaseIndicator();
                 this.updateDynamicTip("Play ball! Hold SPACE to charge your swing!");
                 
-                this.showCommentary("⚾ PLAY BALL! Welcome to Lone Star Legends! ⚾");
+                // Clear any runners from previous game
+                this.clearAllRunners();
+                
+                // Set initial team colors
+                this.switchTeams();
+                
+                this.showCommentary(`⚾ PLAY BALL! ${this.gameState.maxInnings}-inning game starting! ⚾`);
             }
 
             animate() {
@@ -1992,8 +2175,24 @@
 
         // Global game instance
         let game;
+        let selectedGameLength = 9; // Default to 9 innings
 
         // Global control functions
+        function setGameLength(innings) {
+            selectedGameLength = innings;
+            document.getElementById('selectedInnings').textContent = innings;
+            
+            // Update button styling
+            const buttons = document.querySelectorAll('.tutorial-section button');
+            buttons.forEach(btn => {
+                if (btn.textContent.includes(innings)) {
+                    btn.style.background = 'linear-gradient(45deg, #FFD700, #FFA500)';
+                } else if (btn.textContent.includes('Innings')) {
+                    btn.style.background = 'linear-gradient(45deg, #228B22, #32CD32)';
+                }
+            });
+        }
+
         function startGame() {
             document.getElementById('tutorialOverlay').style.display = 'none';
             if (game) {
