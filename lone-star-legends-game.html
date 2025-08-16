@@ -526,6 +526,13 @@
                 this.soundEnabled = true;
                 this.masterVolume = 0.3; // 30% volume to avoid being too loud
 
+                // Performance monitoring
+                this.performanceMode = 'auto'; // auto, high, low
+                this.frameCount = 0;
+                this.fps = 60;
+                this.lastFrameTime = Date.now();
+                this.targetFPS = 60;
+
                 this.init();
             }
 
@@ -753,8 +760,20 @@
             setupRenderer() {
                 this.renderer.setSize(window.innerWidth, window.innerHeight);
                 this.renderer.setClearColor(0x87CEEB); // Sky blue
-                this.renderer.shadowMap.enabled = true;
-                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                
+                // Performance optimization - reduce shadow quality for low-end devices
+                const isLowEnd = navigator.hardwareConcurrency <= 4 || /mobile/i.test(navigator.userAgent);
+                
+                if (isLowEnd) {
+                    this.renderer.shadowMap.enabled = false; // Disable shadows on low-end
+                } else {
+                    this.renderer.shadowMap.enabled = true;
+                    this.renderer.shadowMap.type = THREE.PCFShadowMap; // Simpler shadow type
+                }
+                
+                // Enable performance optimizations
+                this.renderer.powerPreference = "high-performance";
+                this.renderer.antialias = !isLowEnd; // Disable AA on low-end
             }
 
             setupLighting() {
@@ -798,7 +817,7 @@
 
             createStadium() {
                 // Field grass (smaller for better performance)
-                const fieldGeometry = new THREE.PlaneGeometry(300, 300);
+                const fieldGeometry = new THREE.PlaneGeometry(300, 300, 1, 1); // Simple plane, no subdivisions
                 const fieldMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
                 const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
                 field.rotation.x = -Math.PI / 2;
@@ -956,7 +975,7 @@
             }
 
             createBall() {
-                const ballGeometry = new THREE.SphereGeometry(0.15, 16, 16);
+                const ballGeometry = new THREE.SphereGeometry(0.15, 8, 8); // Reduced segments for performance
                 const ballMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
                 this.ball = new THREE.Mesh(ballGeometry, ballMaterial);
                 this.ball.position.copy(this.ballPhysics.position);
@@ -2163,6 +2182,9 @@
             animate() {
                 requestAnimationFrame(() => this.animate());
                 
+                // Performance monitoring
+                this.updatePerformance();
+                
                 if (this.gameState.gameStarted && !this.gameState.isPaused) {
                     this.updatePlayerMovement();
                     this.updatePowerMeter();
@@ -2170,6 +2192,31 @@
                 }
                 
                 this.renderer.render(this.scene, this.camera);
+            }
+
+            updatePerformance() {
+                this.frameCount++;
+                const currentTime = Date.now();
+                const deltaTime = currentTime - this.lastFrameTime;
+                
+                // Calculate FPS every second
+                if (this.frameCount % 60 === 0) {
+                    this.fps = Math.round(1000 / deltaTime);
+                    
+                    // Auto-adjust performance if FPS drops
+                    if (this.performanceMode === 'auto') {
+                        if (this.fps < 30 && this.renderer.shadowMap.enabled) {
+                            // Disable shadows if FPS is too low
+                            this.renderer.shadowMap.enabled = false;
+                            console.log('Performance: Disabled shadows due to low FPS');
+                        } else if (this.fps < 45 && this.soundEnabled) {
+                            // Reduce sound quality if still low
+                            this.masterVolume = 0.2;
+                        }
+                    }
+                }
+                
+                this.lastFrameTime = currentTime;
             }
         }
 
