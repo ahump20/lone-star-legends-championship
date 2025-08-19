@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lone Star Legends - Enhanced Stadium Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial Black', Arial, sans-serif;
+            background: linear-gradient(135deg, #000011, #001122, #000011);
+            color: white;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            display: block;
+            cursor: crosshair;
+        }
+
+        .hud {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1000;
+            font-weight: bold;
+        }
+
+        .enhanced-scoreboard {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 20, 0, 0.95);
+            border: 4px solid #FFD700;
+            border-radius: 15px;
+            padding: 25px;
+            min-width: 350px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .scoreboard-header {
+            text-align: center;
+            color: #FFD700;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+
+        .score-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 22px;
+            align-items: center;
+        }
+
+        .team-name {
+            color: #90EE90;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            min-width: 120px;
+        }
+
+        .score-number {
+            color: #FFD700;
+            font-size: 32px;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .inning-display {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #FFD700;
+        }
+
+        .inning-number {
+            color: #FFD700;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .inning-half {
+            color: #90EE90;
+            font-size: 16px;
+        }
+
+        .game-stats {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 20, 0, 0.95);
+            border: 4px solid #FFD700;
+            border-radius: 15px;
+            padding: 25px;
+            min-width: 300px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-header {
+            text-align: center;
+            color: #FFD700;
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .stat-label {
+            color: #CCC;
+            min-width: 150px;
+        }
+
+        .stat-value {
+            color: #90EE90;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(144, 238, 144, 0.5);
+        }
+
+        .weather-display {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 20, 0, 0.95);
+            border: 3px solid #4169E1;
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 250px;
+            box-shadow: 0 0 25px rgba(65, 105, 225, 0.4);
+        }
+
+        .weather-header {
+            color: #4169E1;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .weather-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .weather-label {
+            color: #CCC;
+        }
+
+        .weather-value {
+            color: #87CEEB;
+            font-weight: bold;
+        }
+
+        .controls-panel {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            flex-direction: column;
+        }
+
+        .control-button {
+            background: linear-gradient(45deg, #228B22, #32CD32);
+            border: 3px solid #90EE90;
+            border-radius: 50px;
+            color: white;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(34, 139, 34, 0.5);
+            pointer-events: auto;
+        }
+
+        .control-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(34, 139, 34, 0.7);
+            background: linear-gradient(45deg, #32CD32, #228B22);
+        }
+
+        .control-button.special {
+            background: linear-gradient(45deg, #DC143C, #FF6347);
+            border-color: #FFB6C1;
+            box-shadow: 0 8px 25px rgba(220, 20, 60, 0.5);
+        }
+
+        .control-button.special:hover {
+            background: linear-gradient(45deg, #FF6347, #DC143C);
+            box-shadow: 0 12px 35px rgba(220, 20, 60, 0.7);
+        }
+
+        .enhancement-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #FFD700;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            text-align: center;
+            z-index: 2000;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
+            display: none;
+        }
+
+        .enhancement-title {
+            color: #FFD700;
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+
+        .enhancement-list {
+            text-align: left;
+            color: #90EE90;
+            line-height: 2;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+
+        .enhancement-item {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .enhancement-item::before {
+            content: "⚡";
+            position: absolute;
+            left: 0;
+            color: #FFD700;
+            font-size: 20px;
+        }
+
+        .start-button {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border: 3px solid #FFFF00;
+            border-radius: 15px;
+            color: #000;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 20px 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .start-button:hover {
+            background: linear-gradient(45deg, #FFA500, #FFD700);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+        }
+
+        .fps-counter {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid #4169E1;
+            color: #87CEEB;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
+            100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+        }
+
+        .glowing {
+            animation: glow 2s infinite;
+        }
+
+        .particle-trail {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #FFD700, transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    
+    <div class="enhancement-overlay" id="enhancementOverlay">
+        <div class="enhancement-title">🏆 ENHANCED STADIUM LOADED! 🏆</div>
+        <div class="enhancement-list">
+            <div class="enhancement-item">Particle Effects System - Sparks, dust, fireworks</div>
+            <div class="enhancement-item">Dynamic Weather - Wind effects on ball trajectory</div>
+            <div class="enhancement-item">Enhanced Lighting - Stadium lights with realistic flickering</div>
+            <div class="enhancement-item">Advanced Camera - Shake effects and dynamic following</div>
+            <div class="enhancement-item">Crowd Animations - Reactive crowd with excitement levels</div>
+            <div class="enhancement-item">Improved Physics - Wind resistance and ball spin</div>
+            <div class="enhancement-item">Enhanced Audio - 3D positioned sound effects</div>
+            <div class="enhancement-item">Performance Optimization - Auto-adjusting quality</div>
+        </div>
+        <button class="start-button" onclick="startEnhancedGame()">EXPERIENCE THE UPGRADE!</button>
+    </div>
+
+    <div class="hud">
+        <div class="fps-counter" id="fpsCounter">FPS: 60 | Particles: 0</div>
+        
+        <div class="enhanced-scoreboard">
+            <div class="scoreboard-header">🏟️ LONE STAR LEGENDS 🏟️</div>
+            <div class="score-line">
+                <span class="team-name">VISITORS</span>
+                <span class="score-number" id="awayScore">0</span>
+            </div>
+            <div class="score-line">
+                <span class="team-name">LEGENDS</span>
+                <span class="score-number" id="homeScore">0</span>
+            </div>
+            <div class="inning-display">
+                <div class="inning-number">
+                    <span id="inningHalf">TOP</span> <span id="inning">1</span>
+                </div>
+                <div class="inning-half">
+                    Balls: <span id="balls">0</span> | Strikes: <span id="strikes">0</span> | Outs: <span id="outs">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-stats">
+            <div class="stats-header">📊 GAME STATISTICS</div>
+            <div class="stat-row">
+                <span class="stat-label">Pitch Speed:</span>
+                <span class="stat-value" id="pitchSpeed">--</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Exit Velocity:</span>
+                <span class="stat-value" id="exitVelocity">--</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Launch Angle:</span>
+                <span class="stat-value" id="launchAngle">--</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Distance:</span>
+                <span class="stat-value" id="hitDistance">--</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Game Phase:</span>
+                <span class="stat-value" id="gamePhase">BATTING</span>
+            </div>
+        </div>
+
+        <div class="weather-display">
+            <div class="weather-header">🌤️ WEATHER CONDITIONS</div>
+            <div class="weather-info">
+                <span class="weather-label">Conditions:</span>
+                <span class="weather-value" id="weatherType">Clear</span>
+            </div>
+            <div class="weather-info">
+                <span class="weather-label">Wind Speed:</span>
+                <span class="weather-value" id="windSpeed">0 mph</span>
+            </div>
+            <div class="weather-info">
+                <span class="weather-label">Direction:</span>
+                <span class="weather-value" id="windDirection">Calm</span>
+            </div>
+            <div class="weather-info">
+                <span class="weather-label">Temperature:</span>
+                <span class="weather-value" id="temperature">75°F</span>
+            </div>
+        </div>
+
+        <div class="controls-panel">
+            <button class="control-button special" onclick="game?.triggerHomeRunDemo()">🎆 HOME RUN DEMO</button>
+            <button class="control-button" onclick="game?.changeWeather()">🌦️ CHANGE WEATHER</button>
+            <button class="control-button" onclick="game?.toggleNightMode()">🌙 NIGHT MODE</button>
+            <button class="control-button" onclick="game?.resetToOriginal()">🔄 RESET GAME</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Show enhancement overlay on load
+        document.getElementById('enhancementOverlay').style.display = 'block';
+        
+        let game;
+        let fpsCounter = 0;
+        let lastFPSTime = Date.now();
+
+        function startEnhancedGame() {
+            document.getElementById('enhancementOverlay').style.display = 'none';
+            
+            // Import and start the enhanced game
+            window.location.href = 'lone-star-legends-game.html';
+        }
+
+        // Demo functions for the enhanced features
+        function updateFPSCounter() {
+            fpsCounter++;
+            const currentTime = Date.now();
+            
+            if (currentTime - lastFPSTime > 1000) {
+                const fps = Math.round(fpsCounter * 1000 / (currentTime - lastFPSTime));
+                const particleCount = game ? (game.particleSystems ? Object.keys(game.particleSystems).length * 50 : 0) : 0;
+                
+                document.getElementById('fpsCounter').textContent = `FPS: ${fps} | Particles: ${particleCount}`;
+                
+                fpsCounter = 0;
+                lastFPSTime = currentTime;
+            }
+        }
+
+        // Update weather display
+        function updateWeatherDisplay() {
+            if (!game?.weatherSystem) return;
+            
+            const conditions = ['Clear', 'Partly Cloudy', 'Windy', 'Night Game'];
+            const windSpeeds = ['0-5 mph', '5-10 mph', '10-15 mph', '15+ mph'];
+            const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'Variable'];
+            const temps = ['68°F', '72°F', '75°F', '78°F', '82°F'];
+            
+            document.getElementById('weatherType').textContent = conditions[Math.floor(Math.random() * conditions.length)];
+            document.getElementById('windSpeed').textContent = windSpeeds[Math.floor(Math.random() * windSpeeds.length)];
+            document.getElementById('windDirection').textContent = directions[Math.floor(Math.random() * directions.length)];
+            document.getElementById('temperature').textContent = temps[Math.floor(Math.random() * temps.length)];
+        }
+
+        // Create particle trail effect for mouse movement
+        let particleTrails = [];
+        
+        document.addEventListener('mousemove', (e) => {
+            if (particleTrails.length < 20) {
+                const trail = document.createElement('div');
+                trail.className = 'particle-trail';
+                trail.style.left = e.clientX + 'px';
+                trail.style.top = e.clientY + 'px';
+                document.body.appendChild(trail);
+                
+                particleTrails.push(trail);
+                
+                // Animate particle
+                trail.style.opacity = '1';
+                setTimeout(() => {
+                    trail.style.opacity = '0';
+                    trail.style.transform = 'translate(' + (Math.random() - 0.5) * 50 + 'px, ' + (Math.random() - 0.5) * 50 + 'px) scale(0)';
+                }, 100);
+                
+                setTimeout(() => {
+                    document.body.removeChild(trail);
+                    particleTrails.splice(particleTrails.indexOf(trail), 1);
+                }, 1000);
+            }
+        });
+
+        // Add glowing effect to scoreboard when score changes
+        function addGlowEffect(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.add('glowing');
+            setTimeout(() => {
+                element.classList.remove('glowing');
+            }, 2000);
+        }
+
+        // Initialize weather display
+        updateWeatherDisplay();
+        
+        // Update weather every 30 seconds
+        setInterval(updateWeatherDisplay, 30000);
+        
+        // Start FPS counter
+        setInterval(updateFPSCounter, 100);
+
+        // Add keyboard shortcuts for demo
+        document.addEventListener('keydown', (e) => {
+            switch(e.code) {
+                case 'KeyH':
+                    e.preventDefault();
+                    if (game?.triggerHomeRunDemo) game.triggerHomeRunDemo();
+                    break;
+                case 'KeyW':
+                    e.preventDefault();
+                    if (game?.changeWeather) game.changeWeather();
+                    break;
+                case 'KeyN':
+                    e.preventDefault();
+                    if (game?.toggleNightMode) game.toggleNightMode();
+                    break;
+                case 'KeyR':
+                    e.preventDefault();
+                    location.reload();
+                    break;
+            }
+        });
+
+        // Enhanced loading animation
+        function createLoadingAnimation() {
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            let time = 0;
+            
+            function animate() {
+                ctx.fillStyle = 'rgba(0, 17, 34, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw animated loading elements
+                for (let i = 0; i < 20; i++) {
+                    const x = canvas.width / 2 + Math.sin(time + i * 0.5) * 100;
+                    const y = canvas.height / 2 + Math.cos(time + i * 0.3) * 50;
+                    const size = 3 + Math.sin(time * 2 + i) * 2;
+                    
+                    ctx.fillStyle = `hsla(${(time * 50 + i * 20) % 360}, 70%, 60%, 0.8)`;
+                    ctx.beginPath();
+                    ctx.arc(x, y, size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                time += 0.02;
+                
+                if (document.getElementById('enhancementOverlay').style.display !== 'none') {
+                    requestAnimationFrame(animate);
+                }
+            }
+            
+            animate();
+        }
+        
+        createLoadingAnimation();
+    </script>
+</body>
+</html>

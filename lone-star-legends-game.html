@@ -520,11 +520,35 @@
                     isThrown: false
                 };
 
-                // Audio system for immersive sound effects
+                // Enhanced Audio system for immersive sound effects
                 this.audioContext = null;
                 this.sounds = {};
                 this.soundEnabled = true;
                 this.masterVolume = 0.3; // 30% volume to avoid being too loud
+                
+                // Particle Systems for Enhanced Visual Effects
+                this.particleSystems = {
+                    dust: null,
+                    sparks: null,
+                    homeRunFireworks: null,
+                    ballTrail: null
+                };
+                
+                // Weather and Atmosphere
+                this.weatherSystem = {
+                    enabled: true,
+                    type: 'clear', // clear, cloudy, windy, night
+                    windSpeed: 0,
+                    windDirection: new THREE.Vector3(1, 0, 0)
+                };
+                
+                // Enhanced Visual Effects
+                this.visualEffects = {
+                    stadiumLights: [],
+                    crowdAnimations: [],
+                    hitEffects: [],
+                    scoreboardEffects: []
+                };
 
                 // Performance monitoring
                 this.performanceMode = 'auto'; // auto, high, low
@@ -534,6 +558,9 @@
                 this.targetFPS = 60;
 
                 this.init();
+                this.initParticleSystems();
+                this.setupWeatherSystem();
+                this.createCrowdAnimations();
             }
 
             async init() {
@@ -546,6 +573,7 @@
                     this.setupCamera();
                     this.setupInput();
                     this.initAudio();
+                    this.initCameraEffects();
                     
                     // Hide loading screen
                     document.getElementById('loadingScreen').style.display = 'none';
@@ -572,6 +600,482 @@
                 `;
             }
 
+            // === ENHANCED PARTICLE SYSTEMS ===
+            
+            initParticleSystems() {
+                // Ball trail particle system
+                this.createBallTrailSystem();
+                
+                // Dust particle system for sliding and impacts
+                this.createDustSystem();
+                
+                // Spark system for bat-ball contact
+                this.createSparkSystem();
+                
+                // Fireworks for home runs
+                this.createFireworksSystem();
+            }
+            
+            createBallTrailSystem() {
+                const particleCount = 20;
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const velocities = new Float32Array(particleCount * 3);
+                const lifetimes = new Float32Array(particleCount);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    positions[i * 3] = 0;
+                    positions[i * 3 + 1] = 0;
+                    positions[i * 3 + 2] = 0;
+                    velocities[i * 3] = (Math.random() - 0.5) * 0.1;
+                    velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.1;
+                    velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.1;
+                    lifetimes[i] = 0;
+                }
+                
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+                geometry.setAttribute('lifetime', new THREE.BufferAttribute(lifetimes, 1));
+                
+                const material = new THREE.PointsMaterial({
+                    color: 0xffffff,
+                    size: 0.1,
+                    transparent: true,
+                    opacity: 0.8,
+                    blending: THREE.AdditiveBlending
+                });
+                
+                this.particleSystems.ballTrail = new THREE.Points(geometry, material);
+                this.scene.add(this.particleSystems.ballTrail);
+            }
+            
+            createDustSystem() {
+                const particleCount = 50;
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const velocities = new Float32Array(particleCount * 3);
+                const lifetimes = new Float32Array(particleCount);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    positions[i * 3] = 0;
+                    positions[i * 3 + 1] = 0;
+                    positions[i * 3 + 2] = 0;
+                    velocities[i * 3] = (Math.random() - 0.5) * 5;
+                    velocities[i * 3 + 1] = Math.random() * 3;
+                    velocities[i * 3 + 2] = (Math.random() - 0.5) * 5;
+                    lifetimes[i] = 0;
+                }
+                
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+                geometry.setAttribute('lifetime', new THREE.BufferAttribute(lifetimes, 1));
+                
+                const material = new THREE.PointsMaterial({
+                    color: 0xD2691E,
+                    size: 0.3,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                
+                this.particleSystems.dust = new THREE.Points(geometry, material);
+                this.scene.add(this.particleSystems.dust);
+            }
+            
+            createSparkSystem() {
+                const particleCount = 30;
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const velocities = new Float32Array(particleCount * 3);
+                const lifetimes = new Float32Array(particleCount);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    positions[i * 3] = 0;
+                    positions[i * 3 + 1] = 0;
+                    positions[i * 3 + 2] = 0;
+                    velocities[i * 3] = (Math.random() - 0.5) * 8;
+                    velocities[i * 3 + 1] = Math.random() * 6;
+                    velocities[i * 3 + 2] = (Math.random() - 0.5) * 8;
+                    lifetimes[i] = 0;
+                }
+                
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+                geometry.setAttribute('lifetime', new THREE.BufferAttribute(lifetimes, 1));
+                
+                const material = new THREE.PointsMaterial({
+                    color: 0xFFD700,
+                    size: 0.2,
+                    transparent: true,
+                    opacity: 1.0,
+                    blending: THREE.AdditiveBlending
+                });
+                
+                this.particleSystems.sparks = new THREE.Points(geometry, material);
+                this.scene.add(this.particleSystems.sparks);
+            }
+            
+            createFireworksSystem() {
+                const particleCount = 100;
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const velocities = new Float32Array(particleCount * 3);
+                const colors = new Float32Array(particleCount * 3);
+                const lifetimes = new Float32Array(particleCount);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    positions[i * 3] = 0;
+                    positions[i * 3 + 1] = 0;
+                    positions[i * 3 + 2] = 0;
+                    
+                    const speed = 5 + Math.random() * 10;
+                    const angle = Math.random() * Math.PI * 2;
+                    const elevation = Math.random() * Math.PI / 2;
+                    
+                    velocities[i * 3] = Math.sin(angle) * Math.cos(elevation) * speed;
+                    velocities[i * 3 + 1] = Math.sin(elevation) * speed;
+                    velocities[i * 3 + 2] = Math.cos(angle) * Math.cos(elevation) * speed;
+                    
+                    // Random bright colors for fireworks
+                    colors[i * 3] = Math.random();
+                    colors[i * 3 + 1] = Math.random();
+                    colors[i * 3 + 2] = Math.random();
+                    
+                    lifetimes[i] = 0;
+                }
+                
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                geometry.setAttribute('lifetime', new THREE.BufferAttribute(lifetimes, 1));
+                
+                const material = new THREE.PointsMaterial({
+                    size: 0.4,
+                    transparent: true,
+                    opacity: 1.0,
+                    blending: THREE.AdditiveBlending,
+                    vertexColors: true
+                });
+                
+                this.particleSystems.homeRunFireworks = new THREE.Points(geometry, material);
+                this.scene.add(this.particleSystems.homeRunFireworks);
+            }
+            
+            updateParticles() {
+                const deltaTime = 0.016;
+                
+                // Update ball trail
+                if (this.ballPhysics.inPlay && this.ballPhysics.hasBeenHit) {
+                    this.updateBallTrail(deltaTime);
+                }
+                
+                // Update other particle systems
+                this.updateDustParticles(deltaTime);
+                this.updateSparkParticles(deltaTime);
+                this.updateFireworksParticles(deltaTime);
+            }
+            
+            updateBallTrail(deltaTime) {
+                const trail = this.particleSystems.ballTrail;
+                const positions = trail.geometry.attributes.position.array;
+                const lifetimes = trail.geometry.attributes.lifetime.array;
+                
+                // Spawn new particles at ball position
+                for (let i = 0; i < positions.length / 3; i++) {
+                    if (lifetimes[i] <= 0) {
+                        positions[i * 3] = this.ballPhysics.position.x;
+                        positions[i * 3 + 1] = this.ballPhysics.position.y;
+                        positions[i * 3 + 2] = this.ballPhysics.position.z;
+                        lifetimes[i] = 0.5; // 0.5 second lifetime
+                        break;
+                    }
+                }
+                
+                // Update existing particles
+                for (let i = 0; i < positions.length / 3; i++) {
+                    if (lifetimes[i] > 0) {
+                        lifetimes[i] -= deltaTime;
+                        const alpha = lifetimes[i] / 0.5;
+                        trail.material.opacity = alpha * 0.8;
+                    }
+                }
+                
+                trail.geometry.attributes.position.needsUpdate = true;
+                trail.geometry.attributes.lifetime.needsUpdate = true;
+            }
+            
+            updateDustParticles(deltaTime) {
+                const dust = this.particleSystems.dust;
+                const positions = dust.geometry.attributes.position.array;
+                const velocities = dust.geometry.attributes.velocity.array;
+                const lifetimes = dust.geometry.attributes.lifetime.array;
+                
+                for (let i = 0; i < positions.length / 3; i++) {
+                    if (lifetimes[i] > 0) {
+                        lifetimes[i] -= deltaTime;
+                        
+                        positions[i * 3] += velocities[i * 3] * deltaTime;
+                        positions[i * 3 + 1] += velocities[i * 3 + 1] * deltaTime;
+                        positions[i * 3 + 2] += velocities[i * 3 + 2] * deltaTime;
+                        
+                        // Apply gravity and friction
+                        velocities[i * 3 + 1] -= 9.8 * deltaTime;
+                        velocities[i * 3] *= 0.98;
+                        velocities[i * 3 + 2] *= 0.98;
+                        
+                        const alpha = lifetimes[i] / 2.0;
+                        dust.material.opacity = alpha * 0.6;
+                    }
+                }
+                
+                dust.geometry.attributes.position.needsUpdate = true;
+            }
+            
+            updateSparkParticles(deltaTime) {
+                const sparks = this.particleSystems.sparks;
+                const positions = sparks.geometry.attributes.position.array;
+                const velocities = sparks.geometry.attributes.velocity.array;
+                const lifetimes = sparks.geometry.attributes.lifetime.array;
+                
+                for (let i = 0; i < positions.length / 3; i++) {
+                    if (lifetimes[i] > 0) {
+                        lifetimes[i] -= deltaTime;
+                        
+                        positions[i * 3] += velocities[i * 3] * deltaTime;
+                        positions[i * 3 + 1] += velocities[i * 3 + 1] * deltaTime;
+                        positions[i * 3 + 2] += velocities[i * 3 + 2] * deltaTime;
+                        
+                        // Apply gravity
+                        velocities[i * 3 + 1] -= 9.8 * deltaTime;
+                        
+                        const alpha = lifetimes[i] / 0.3;
+                        sparks.material.opacity = alpha;
+                    }
+                }
+                
+                sparks.geometry.attributes.position.needsUpdate = true;
+            }
+            
+            updateFireworksParticles(deltaTime) {
+                const fireworks = this.particleSystems.homeRunFireworks;
+                const positions = fireworks.geometry.attributes.position.array;
+                const velocities = fireworks.geometry.attributes.velocity.array;
+                const lifetimes = fireworks.geometry.attributes.lifetime.array;
+                
+                for (let i = 0; i < positions.length / 3; i++) {
+                    if (lifetimes[i] > 0) {
+                        lifetimes[i] -= deltaTime;
+                        
+                        positions[i * 3] += velocities[i * 3] * deltaTime;
+                        positions[i * 3 + 1] += velocities[i * 3 + 1] * deltaTime;
+                        positions[i * 3 + 2] += velocities[i * 3 + 2] * deltaTime;
+                        
+                        // Apply gravity
+                        velocities[i * 3 + 1] -= 9.8 * deltaTime;
+                        
+                        const alpha = lifetimes[i] / 3.0;
+                        fireworks.material.opacity = alpha;
+                    }
+                }
+                
+                fireworks.geometry.attributes.position.needsUpdate = true;
+            }
+            
+            triggerDustEffect(position) {
+                const dust = this.particleSystems.dust;
+                const positions = dust.geometry.attributes.position.array;
+                const velocities = dust.geometry.attributes.velocity.array;
+                const lifetimes = dust.geometry.attributes.lifetime.array;
+                
+                for (let i = 0; i < 20; i++) {
+                    let particleIndex = -1;
+                    for (let j = 0; j < lifetimes.length; j++) {
+                        if (lifetimes[j] <= 0) {
+                            particleIndex = j;
+                            break;
+                        }
+                    }
+                    
+                    if (particleIndex !== -1) {
+                        positions[particleIndex * 3] = position.x + (Math.random() - 0.5) * 2;
+                        positions[particleIndex * 3 + 1] = position.y + Math.random() * 0.5;
+                        positions[particleIndex * 3 + 2] = position.z + (Math.random() - 0.5) * 2;
+                        
+                        velocities[particleIndex * 3] = (Math.random() - 0.5) * 5;
+                        velocities[particleIndex * 3 + 1] = Math.random() * 3;
+                        velocities[particleIndex * 3 + 2] = (Math.random() - 0.5) * 5;
+                        
+                        lifetimes[particleIndex] = 2.0;
+                    }
+                }
+                
+                dust.geometry.attributes.position.needsUpdate = true;
+                dust.geometry.attributes.velocity.needsUpdate = true;
+                dust.geometry.attributes.lifetime.needsUpdate = true;
+            }
+            
+            triggerSparkEffect(position) {
+                const sparks = this.particleSystems.sparks;
+                const positions = sparks.geometry.attributes.position.array;
+                const velocities = sparks.geometry.attributes.velocity.array;
+                const lifetimes = sparks.geometry.attributes.lifetime.array;
+                
+                for (let i = 0; i < 15; i++) {
+                    let particleIndex = -1;
+                    for (let j = 0; j < lifetimes.length; j++) {
+                        if (lifetimes[j] <= 0) {
+                            particleIndex = j;
+                            break;
+                        }
+                    }
+                    
+                    if (particleIndex !== -1) {
+                        positions[particleIndex * 3] = position.x;
+                        positions[particleIndex * 3 + 1] = position.y;
+                        positions[particleIndex * 3 + 2] = position.z;
+                        
+                        velocities[particleIndex * 3] = (Math.random() - 0.5) * 8;
+                        velocities[particleIndex * 3 + 1] = Math.random() * 6;
+                        velocities[particleIndex * 3 + 2] = (Math.random() - 0.5) * 8;
+                        
+                        lifetimes[particleIndex] = 0.3;
+                    }
+                }
+                
+                sparks.geometry.attributes.position.needsUpdate = true;
+                sparks.geometry.attributes.velocity.needsUpdate = true;
+                sparks.geometry.attributes.lifetime.needsUpdate = true;
+            }
+            
+            triggerFireworksEffect(position) {
+                const fireworks = this.particleSystems.homeRunFireworks;
+                const positions = fireworks.geometry.attributes.position.array;
+                const velocities = fireworks.geometry.attributes.velocity.array;
+                const lifetimes = fireworks.geometry.attributes.lifetime.array;
+                
+                for (let i = 0; i < 50; i++) {
+                    let particleIndex = -1;
+                    for (let j = 0; j < lifetimes.length; j++) {
+                        if (lifetimes[j] <= 0) {
+                            particleIndex = j;
+                            break;
+                        }
+                    }
+                    
+                    if (particleIndex !== -1) {
+                        positions[particleIndex * 3] = position.x;
+                        positions[particleIndex * 3 + 1] = position.y + 20;
+                        positions[particleIndex * 3 + 2] = position.z;
+                        
+                        const speed = 5 + Math.random() * 10;
+                        const angle = Math.random() * Math.PI * 2;
+                        const elevation = Math.random() * Math.PI / 2;
+                        
+                        velocities[particleIndex * 3] = Math.sin(angle) * Math.cos(elevation) * speed;
+                        velocities[particleIndex * 3 + 1] = Math.sin(elevation) * speed;
+                        velocities[particleIndex * 3 + 2] = Math.cos(angle) * Math.cos(elevation) * speed;
+                        
+                        lifetimes[particleIndex] = 3.0;
+                    }
+                }
+                
+                fireworks.geometry.attributes.position.needsUpdate = true;
+                fireworks.geometry.attributes.velocity.needsUpdate = true;
+                fireworks.geometry.attributes.lifetime.needsUpdate = true;
+            }
+            
+            // === WEATHER SYSTEM ===
+            
+            setupWeatherSystem() {
+                this.weatherSystem.type = Math.random() > 0.7 ? 'night' : 'clear';
+                
+                if (this.weatherSystem.type === 'night') {
+                    this.setupNightLighting();
+                }
+                
+                this.weatherSystem.windSpeed = Math.random() * 0.3;
+                this.weatherSystem.windDirection.set(
+                    (Math.random() - 0.5) * 2,
+                    0,
+                    (Math.random() - 0.5) * 2
+                ).normalize();
+            }
+            
+            setupNightLighting() {
+                // Darken sky for night games
+                this.renderer.setClearColor(0x001122);
+                
+                // Enhance stadium lights for night effect
+                this.visualEffects.stadiumLights.forEach(light => {
+                    light.intensity *= 1.5;
+                    light.distance *= 1.2;
+                });
+            }
+            
+            // === CROWD ANIMATIONS ===
+            
+            createCrowdAnimations() {
+                // Create animated crowd silhouettes in the stands
+                this.createCrowdGeometry();
+                this.setupCrowdReactions();
+            }
+            
+            createCrowdGeometry() {
+                const crowdGeometry = new THREE.PlaneGeometry(200, 20);
+                const crowdMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x333333,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                
+                // Create crowd sections around the stadium
+                const crowdSections = [
+                    { pos: [-120, 15, -40], rot: [0, Math.PI / 4, 0] },
+                    { pos: [120, 15, -40], rot: [0, -Math.PI / 4, 0] },
+                    { pos: [0, 15, -140], rot: [0, 0, 0] },
+                    { pos: [-80, 15, 60], rot: [0, -Math.PI / 4, 0] },
+                    { pos: [80, 15, 60], rot: [0, Math.PI / 4, 0] }
+                ];
+                
+                crowdSections.forEach(section => {
+                    const crowd = new THREE.Mesh(crowdGeometry, crowdMaterial);
+                    crowd.position.set(...section.pos);
+                    crowd.rotation.set(...section.rot);
+                    this.visualEffects.crowdAnimations.push(crowd);
+                    this.scene.add(crowd);
+                });
+            }
+            
+            setupCrowdReactions() {
+                this.crowdReactionLevel = 0; // 0 = quiet, 1 = excited
+                this.crowdAnimationTime = 0;
+            }
+            
+            updateCrowdAnimations() {
+                this.crowdAnimationTime += 0.016;
+                
+                this.visualEffects.crowdAnimations.forEach((crowd, index) => {
+                    // Subtle crowd movement
+                    const wave = Math.sin(this.crowdAnimationTime * 2 + index) * 0.02 * this.crowdReactionLevel;
+                    crowd.scale.y = 1 + wave;
+                    
+                    // Change opacity based on excitement
+                    crowd.material.opacity = 0.6 + this.crowdReactionLevel * 0.3;
+                });
+            }
+            
+            triggerCrowdReaction(intensity = 1.0) {
+                this.crowdReactionLevel = Math.min(1.0, intensity);
+                
+                // Gradually decrease excitement
+                setTimeout(() => {
+                    this.crowdReactionLevel *= 0.5;
+                }, 2000);
+                
+                setTimeout(() => {
+                    this.crowdReactionLevel = 0;
+                }, 5000);
+            }
+            
             // === AUDIO SYSTEM ===
 
             initAudio() {
@@ -777,42 +1281,56 @@
             }
 
             setupLighting() {
-                // Ambient lighting
+                // Enhanced ambient lighting with dynamic intensity
                 const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
                 this.scene.add(ambientLight);
 
-                // Stadium flood lights
+                // Enhanced Stadium flood lights with dramatic effects
                 const lights = [
-                    { pos: [80, 100, 40], intensity: 1.5 },
-                    { pos: [-80, 100, 40], intensity: 1.5 },
-                    { pos: [40, 100, -80], intensity: 1.2 },
-                    { pos: [-40, 100, -80], intensity: 1.2 }
+                    { pos: [80, 120, 40], intensity: 1.8, color: 0xffffff },
+                    { pos: [-80, 120, 40], intensity: 1.8, color: 0xffffff },
+                    { pos: [40, 120, -80], intensity: 1.5, color: 0xfff8dc },
+                    { pos: [-40, 120, -80], intensity: 1.5, color: 0xfff8dc }
                 ];
 
-                lights.forEach(light => {
-                    const spotLight = new THREE.SpotLight(0xffffff, light.intensity);
+                lights.forEach((light, index) => {
+                    const spotLight = new THREE.SpotLight(light.color, light.intensity);
                     spotLight.position.set(...light.pos);
-                    spotLight.angle = Math.PI / 3;
-                    spotLight.penumbra = 0.2;
+                    spotLight.angle = Math.PI / 2.8;
+                    spotLight.penumbra = 0.3;
                     spotLight.decay = 2;
-                    spotLight.distance = 400;
+                    spotLight.distance = 500;
                     spotLight.castShadow = true;
-                    spotLight.shadow.mapSize.width = 1024;
-                    spotLight.shadow.mapSize.height = 1024;
+                    spotLight.shadow.mapSize.width = 2048;
+                    spotLight.shadow.mapSize.height = 2048;
+                    
+                    // Add subtle flickering for realism
+                    spotLight.userData = {
+                        originalIntensity: light.intensity,
+                        flickerTime: Math.random() * 1000
+                    };
+                    
+                    this.visualEffects.stadiumLights.push(spotLight);
                     this.scene.add(spotLight);
                 });
 
-                // Sun light
-                const sunLight = new THREE.DirectionalLight(0xfffacd, 0.8);
-                sunLight.position.set(200, 300, 100);
+                // Enhanced sun light with time-of-day effects
+                const sunLight = new THREE.DirectionalLight(0xfffacd, 0.9);
+                sunLight.position.set(200, 350, 100);
                 sunLight.castShadow = true;
                 sunLight.shadow.camera.near = 1;
-                sunLight.shadow.camera.far = 500;
-                sunLight.shadow.camera.left = -150;
-                sunLight.shadow.camera.right = 150;
-                sunLight.shadow.camera.top = 150;
-                sunLight.shadow.camera.bottom = -150;
+                sunLight.shadow.camera.far = 600;
+                sunLight.shadow.camera.left = -200;
+                sunLight.shadow.camera.right = 200;
+                sunLight.shadow.camera.top = 200;
+                sunLight.shadow.camera.bottom = -200;
+                sunLight.shadow.bias = -0.0001;
                 this.scene.add(sunLight);
+                
+                // Add rim lighting for dramatic player silhouettes
+                const rimLight = new THREE.DirectionalLight(0x4169e1, 0.3);
+                rimLight.position.set(-100, 50, -200);
+                this.scene.add(rimLight);
             }
 
             createStadium() {
@@ -1318,25 +1836,42 @@
             hitBall() {
                 this.ballPhysics.hasBeenHit = true;
                 
-                // Play hit sound
-                this.playSound('hit', 0.8);
-                
                 // Calculate hit quality based on power and timing
                 const power = this.powerMeter / 100;
                 const contactQuality = 0.6 + Math.random() * 0.4;
                 const totalPower = (power * 0.7 + contactQuality * 0.3);
                 
-                // Hit direction and elevation
+                // Enhanced hit effects with particle systems
+                const contactPoint = this.ballPhysics.position.clone();
+                this.triggerSparkEffect(contactPoint);
+                
+                // Play enhanced hit sound based on contact quality
+                if (totalPower > 0.8) {
+                    this.playSound('hit', 1.0);
+                } else {
+                    this.playSound('hit', 0.6 + totalPower * 0.4);
+                }
+                
+                // Hit direction and elevation with wind effects
                 const angle = (Math.random() - 0.5) * Math.PI * 0.7; // Spread
                 const elevation = Math.min(Math.PI / 3, totalPower * Math.PI / 2.5);
                 
                 const hitSpeed = 15 + totalPower * 35; // 15-50 m/s
                 
+                // Apply wind effects to ball trajectory
+                let windEffect = this.weatherSystem.windSpeed * this.weatherSystem.windDirection.clone();
+                windEffect.multiplyScalar(0.5); // Scale wind effect
+                
                 this.ballPhysics.velocity.set(
-                    Math.sin(angle) * Math.cos(elevation) * hitSpeed,
+                    Math.sin(angle) * Math.cos(elevation) * hitSpeed + windEffect.x,
                     Math.sin(elevation) * hitSpeed,
-                    -Math.cos(angle) * Math.cos(elevation) * hitSpeed
+                    -Math.cos(angle) * Math.cos(elevation) * hitSpeed + windEffect.z
                 );
+                
+                // Enhanced camera shake for powerful hits
+                if (totalPower > 0.7) {
+                    this.cameraShake(totalPower * 0.5, 500);
+                }
                 
                 // Update game phase
                 this.gameState.currentPhase = 'fielding';
@@ -1344,6 +1879,9 @@
                 
                 const exitVelocity = hitSpeed * 2.237; // Convert to mph
                 let hitType = this.determineHitType(exitVelocity, elevation);
+                
+                // Enhanced crowd reaction based on hit quality
+                this.triggerCrowdReaction(totalPower);
                 
                 // Create a runner on first base (batter becomes runner)
                 this.addRunnerOnBase(1);
@@ -1634,9 +2172,26 @@
                     this.gameState.homeScore++;
                 }
                 
+                // Enhanced home run celebration with fireworks!
+                const fireworksPosition = new THREE.Vector3(0, 50, -100);
+                this.triggerFireworksEffect(fireworksPosition);
+                
+                // Multiple fireworks bursts
+                setTimeout(() => this.triggerFireworksEffect(new THREE.Vector3(-30, 45, -120)), 500);
+                setTimeout(() => this.triggerFireworksEffect(new THREE.Vector3(30, 55, -110)), 1000);
+                
+                // Dramatic camera shake
+                this.cameraShake(1.0, 1500);
+                
+                // Enhanced lighting flash
+                this.homeRunLightingEffect();
+                
                 // Play celebratory home run sound and crowd cheer
                 this.playSound('homerun', 1.0);
-                setTimeout(() => this.playSound('crowd', 0.6), 200);
+                setTimeout(() => this.playSound('crowd', 0.8), 200);
+                
+                // Maximum crowd excitement
+                this.triggerCrowdReaction(1.0);
                 
                 this.showCommentary("🎉 HOME RUN! IT'S OUTTA HERE! 🎉");
                 this.updateDynamicTip("HOME RUN! Amazing!");
@@ -1658,33 +2213,62 @@
                 const originalRotation = this.bat.rotation.z;
                 const originalPosition = this.bat.position.x;
                 
-                // Quick swing animation
-                this.bat.rotation.z = -Math.PI / 6;
-                this.bat.position.x -= 0.8;
+                // Enhanced swing animation with multiple phases
+                // Phase 1: Load up
+                this.bat.rotation.z = Math.PI / 3;
+                this.bat.position.x += 0.3;
                 
                 setTimeout(() => {
+                    // Phase 2: Quick swing through zone
+                    this.bat.rotation.z = -Math.PI / 4;
+                    this.bat.position.x -= 1.2;
+                    
+                    // Add subtle camera shake during swing
+                    this.cameraShake(0.1, 100);
+                }, 100);
+                
+                setTimeout(() => {
+                    // Phase 3: Follow through
+                    this.bat.rotation.z = -Math.PI / 6;
+                    this.bat.position.x -= 0.3;
+                }, 200);
+                
+                setTimeout(() => {
+                    // Return to ready position
                     this.bat.rotation.z = originalRotation;
                     this.bat.position.x = originalPosition;
-                }, 250);
+                }, 400);
             }
 
             animatePitcher() {
                 const originalY = this.players.pitcher.position.y;
                 const originalRotation = this.players.pitcher.rotation.x;
                 
-                // Wind up
-                this.players.pitcher.rotation.x = -0.2;
-                this.players.pitcher.position.y = originalY - 0.3;
+                // Enhanced pitching animation with multiple phases
+                // Phase 1: Wind up
+                this.players.pitcher.rotation.x = -0.3;
+                this.players.pitcher.position.y = originalY + 0.2;
+                this.players.pitcher.rotation.z = 0.1;
                 
                 setTimeout(() => {
-                    // Follow through
-                    this.players.pitcher.rotation.x = 0.2;
-                }, 300);
+                    // Phase 2: Stride and delivery
+                    this.players.pitcher.rotation.x = 0;
+                    this.players.pitcher.position.y = originalY - 0.4;
+                    this.players.pitcher.rotation.z = -0.1;
+                }, 200);
                 
                 setTimeout(() => {
-                    // Return to normal
+                    // Phase 3: Follow through
+                    this.players.pitcher.rotation.x = 0.3;
+                    this.players.pitcher.position.y = originalY - 0.2;
+                    this.players.pitcher.rotation.z = -0.2;
+                }, 400);
+                
+                setTimeout(() => {
+                    // Return to normal stance
                     this.players.pitcher.rotation.x = originalRotation;
                     this.players.pitcher.position.y = originalY;
+                    this.players.pitcher.rotation.z = 0;
                 }, 800);
             }
 
@@ -2189,11 +2773,106 @@
                     this.updatePlayerMovement();
                     this.updatePowerMeter();
                     this.updateBallPhysics();
+                    this.updateParticles();
+                    this.updateCrowdAnimations();
+                    this.updateStadiumLighting();
+                    this.updateCameraEffects();
                 }
                 
                 this.renderer.render(this.scene, this.camera);
             }
 
+            // === ENHANCED CAMERA SYSTEM ===
+            
+            initCameraEffects() {
+                this.cameraEffects = {
+                    shake: {
+                        intensity: 0,
+                        duration: 0,
+                        elapsed: 0
+                    },
+                    originalPosition: this.camera.position.clone(),
+                    followBall: false,
+                    dynamicFOV: false
+                };
+            }
+            
+            cameraShake(intensity, duration) {
+                this.cameraEffects.shake.intensity = intensity;
+                this.cameraEffects.shake.duration = duration;
+                this.cameraEffects.shake.elapsed = 0;
+            }
+            
+            updateCameraEffects() {
+                const deltaTime = 16; // ~60fps
+                
+                // Update camera shake
+                if (this.cameraEffects.shake.elapsed < this.cameraEffects.shake.duration) {
+                    this.cameraEffects.shake.elapsed += deltaTime;
+                    
+                    const progress = this.cameraEffects.shake.elapsed / this.cameraEffects.shake.duration;
+                    const intensity = this.cameraEffects.shake.intensity * (1 - progress);
+                    
+                    const shakeX = (Math.random() - 0.5) * intensity * 2;
+                    const shakeY = (Math.random() - 0.5) * intensity * 2;
+                    const shakeZ = (Math.random() - 0.5) * intensity * 2;
+                    
+                    this.camera.position.set(
+                        this.cameraEffects.originalPosition.x + shakeX,
+                        this.cameraEffects.originalPosition.y + shakeY,
+                        this.cameraEffects.originalPosition.z + shakeZ
+                    );
+                } else if (this.cameraEffects.shake.intensity > 0) {
+                    // Reset camera position when shake ends
+                    this.camera.position.copy(this.cameraEffects.originalPosition);
+                    this.cameraEffects.shake.intensity = 0;
+                }
+                
+                // Dynamic camera following for dramatic hits
+                if (this.ballPhysics.hasBeenHit && this.ballPhysics.inPlay) {
+                    const ballPos = this.ballPhysics.position;
+                    if (ballPos.y > 5) { // Ball is high in the air
+                        const targetLookAt = ballPos.clone();
+                        this.camera.lookAt(targetLookAt);
+                    }
+                }
+            }
+            
+            homeRunLightingEffect() {
+                // Create dramatic lighting flash for home runs
+                const flash = new THREE.PointLight(0xFFD700, 3, 200);
+                flash.position.set(0, 100, 0);
+                this.scene.add(flash);
+                
+                // Fade out the flash
+                let intensity = 3;
+                const fadeInterval = setInterval(() => {
+                    intensity -= 0.1;
+                    flash.intensity = Math.max(0, intensity);
+                    
+                    if (intensity <= 0) {
+                        this.scene.remove(flash);
+                        clearInterval(fadeInterval);
+                    }
+                }, 50);
+            }
+            
+            updateStadiumLighting() {
+                // Subtle stadium light flickering for realism
+                this.visualEffects.stadiumLights.forEach(light => {
+                    light.userData.flickerTime += 0.016;
+                    
+                    if (Math.random() < 0.001) { // Very rare flicker
+                        const flicker = 0.9 + Math.random() * 0.2;
+                        light.intensity = light.userData.originalIntensity * flicker;
+                    } else {
+                        // Subtle brightness variation
+                        const variation = Math.sin(light.userData.flickerTime) * 0.05;
+                        light.intensity = light.userData.originalIntensity * (1 + variation);
+                    }
+                });
+            }
+            
             updatePerformance() {
                 this.frameCount++;
                 const currentTime = Date.now();
