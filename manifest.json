@@ -1,0 +1,152 @@
+{
+  "name": "Blaze Intelligence - Lone Star Legends Championship",
+  "short_name": "Blaze Legends",
+  "description": "Professional baseball simulation powered by Blaze Intelligence. Play single-player or real-time multiplayer games with advanced physics and stunning graphics.",
+  "start_url": "/blaze-branded-game.html",
+  "display": "fullscreen",
+  "orientation": "any",
+  "theme_color": "#FF6B35",
+  "background_color": "#0A0A0A",
+  "scope": "/",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["games", "sports", "entertainment"],
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/game-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Gameplay - Batting"
+    },
+    {
+      "src": "/screenshots/game-2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Multiplayer Match"
+    },
+    {
+      "src": "/screenshots/game-3.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Stadium View"
+    },
+    {
+      "src": "/screenshots/mobile-1.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "label": "Mobile Gameplay"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Quick Play",
+      "short_name": "Play",
+      "description": "Start a quick single-player game",
+      "url": "/blaze-branded-game.html?mode=quick",
+      "icons": [
+        {
+          "src": "/icons/play-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Multiplayer",
+      "short_name": "Online",
+      "description": "Join an online multiplayer match",
+      "url": "/blaze-branded-game.html?mode=multiplayer",
+      "icons": [
+        {
+          "src": "/icons/multiplayer-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Statistics",
+      "short_name": "Stats",
+      "description": "View your player statistics",
+      "url": "/blaze-branded-game.html?view=stats",
+      "icons": [
+        {
+          "src": "/icons/stats-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "replay",
+          "accept": ["video/*", "image/*"]
+        }
+      ]
+    }
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+blazegame",
+      "url": "/join?game=%s"
+    }
+  ]
+}

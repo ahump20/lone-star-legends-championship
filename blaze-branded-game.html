@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Blaze Intelligence - Lone Star Legends Championship</title>
+    
+    <!-- Blaze Intelligence Brand Colors and Mobile-First Design -->
+    <style>
+        :root {
+            /* Blaze Intelligence Brand Colors */
+            --blaze-orange: #FF6B35;
+            --blaze-burnt-orange: #CC5500;
+            --blaze-deep-orange: #FF8C42;
+            --blaze-black: #0A0A0A;
+            --blaze-dark: #1A1A1A;
+            --blaze-white: #FFFFFF;
+            --blaze-light: #F5F5F5;
+            --blaze-gray: #808080;
+            
+            /* Game-specific accent colors */
+            --field-green: #2D5016;
+            --warning-red: #DC143C;
+            --success-green: #228B22;
+            --highlight-gold: #FFD700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--blaze-black);
+            color: var(--blaze-white);
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        /* Blaze Intelligence Header */
+        .blaze-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(135deg, var(--blaze-black) 0%, var(--blaze-dark) 100%);
+            border-bottom: 3px solid var(--blaze-orange);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 2000;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .blaze-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .blaze-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--blaze-orange);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: var(--blaze-black);
+            box-shadow: 0 2px 10px rgba(255, 107, 53, 0.5);
+        }
+
+        .blaze-logo-text {
+            color: var(--blaze-white);
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .blaze-logo-subtitle {
+            color: var(--blaze-orange);
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        /* Game Canvas */
+        #gameCanvas {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 60px);
+            display: block;
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8C8 50%, var(--field-green) 100%);
+        }
+
+        /* Mobile Touch Controls */
+        .touch-controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to top, rgba(26, 26, 26, 0.95), transparent);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 20px;
+            pointer-events: none;
+            z-index: 1500;
+        }
+
+        .touch-joystick {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, var(--blaze-dark), var(--blaze-black));
+            border: 3px solid var(--blaze-orange);
+            border-radius: 50%;
+            position: relative;
+            pointer-events: auto;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+        }
+
+        .joystick-knob {
+            width: 50px;
+            height: 50px;
+            background: var(--blaze-orange);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .touch-buttons {
+            display: flex;
+            gap: 15px;
+            pointer-events: auto;
+        }
+
+        .touch-button {
+            width: 80px;
+            height: 80px;
+            background: var(--blaze-black);
+            border: 3px solid var(--blaze-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blaze-white);
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+            transition: all 0.1s;
+        }
+
+        .touch-button:active {
+            background: var(--blaze-orange);
+            color: var(--blaze-black);
+            transform: scale(0.95);
+        }
+
+        .touch-button.swing {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--blaze-burnt-orange), var(--blaze-orange));
+            font-size: 16px;
+        }
+
+        /* Blaze-styled HUD */
+        .game-hud {
+            position: fixed;
+            top: 70px;
+            left: 10px;
+            right: 10px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .scoreboard-container {
+            background: rgba(26, 26, 26, 0.95);
+            border: 2px solid var(--blaze-orange);
+            border-radius: 12px;
+            padding: 15px;
+            max-width: 350px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .team-score {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .team-score:last-child {
+            border-bottom: none;
+        }
+
+        .team-name {
+            color: var(--blaze-orange);
+            font-weight: bold;
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--blaze-white);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .game-info {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 107, 53, 0.3);
+            display: flex;
+            justify-content: space-around;
+            font-size: 12px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            color: var(--blaze-gray);
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            color: var(--blaze-orange);
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Multiplayer Status */
+        .multiplayer-status {
+            position: fixed;
+            top: 70px;
+            right: 10px;
+            background: rgba(26, 26, 26, 0.95);
+            border: 2px solid var(--blaze-orange);
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            color: var(--blaze-white);
+            font-size: 14px;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-button {
+            width: 40px;
+            height: 40px;
+            background: var(--blaze-orange);
+            border: none;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(255, 107, 53, 0.5);
+        }
+
+        .menu-line {
+            width: 20px;
+            height: 2px;
+            background: var(--blaze-black);
+            transition: all 0.3s;
+        }
+
+        /* Mobile-optimized overlay menu */
+        .mobile-menu {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 10, 0.98);
+            display: none;
+            flex-direction: column;
+            padding: 30px;
+            z-index: 3000;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .menu-section {
+            margin-bottom: 30px;
+        }
+
+        .menu-title {
+            color: var(--blaze-orange);
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--blaze-orange);
+            padding-bottom: 10px;
+        }
+
+        .menu-button {
+            background: var(--blaze-black);
+            border: 2px solid var(--blaze-orange);
+            border-radius: 10px;
+            color: var(--blaze-white);
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-button:active {
+            background: var(--blaze-orange);
+            color: var(--blaze-black);
+        }
+
+        /* Player Profile Card */
+        .player-profile {
+            background: var(--blaze-dark);
+            border: 2px solid var(--blaze-orange);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--blaze-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--blaze-black);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            color: var(--blaze-white);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .profile-level {
+            color: var(--blaze-orange);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            color: var(--blaze-orange);
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: var(--blaze-gray);
+            font-size: 11px;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--blaze-black);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-logo {
+            width: 120px;
+            height: 120px;
+            background: var(--blaze-orange);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            font-weight: bold;
+            color: var(--blaze-black);
+            margin-bottom: 30px;
+            animation: logoGlow 2s infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 107, 53, 0.5); }
+            50% { box-shadow: 0 0 50px rgba(255, 107, 53, 0.8); }
+        }
+
+        .loading-text {
+            color: var(--blaze-white);
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: var(--blaze-dark);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: var(--blaze-orange);
+            width: 0%;
+            animation: loadProgress 2s ease-in-out;
+        }
+
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .blaze-header {
+                height: 50px;
+            }
+
+            .blaze-logo-text {
+                font-size: 14px;
+            }
+
+            .blaze-logo-subtitle {
+                display: none;
+            }
+
+            #gameCanvas {
+                top: 50px;
+                height: calc(100% - 50px);
+            }
+
+            .game-hud {
+                top: 60px;
+            }
+
+            .scoreboard-container {
+                max-width: 280px;
+                padding: 10px;
+            }
+
+            .touch-controls {
+                height: 180px;
+            }
+
+            .touch-joystick {
+                width: 100px;
+                height: 100px;
+            }
+
+            .touch-button {
+                width: 70px;
+                height: 70px;
+                font-size: 12px;
+            }
+
+            .touch-button.swing {
+                width: 85px;
+                height: 85px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .multiplayer-status {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .scoreboard-container {
+                max-width: 200px;
+            }
+
+            .team-name {
+                font-size: 14px;
+            }
+
+            .score {
+                font-size: 20px;
+            }
+        }
+
+        /* Landscape mode optimizations */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .blaze-header {
+                height: 40px;
+            }
+
+            #gameCanvas {
+                top: 40px;
+                height: calc(100% - 40px);
+            }
+
+            .touch-controls {
+                height: 120px;
+                padding: 10px;
+            }
+
+            .touch-joystick {
+                width: 80px;
+                height: 80px;
+            }
+
+            .touch-button {
+                width: 60px;
+                height: 60px;
+            }
+
+            .scoreboard-container {
+                padding: 8px;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">B</div>
+        <div class="loading-text">Blaze Intelligence</div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+
+    <!-- Blaze Intelligence Header -->
+    <header class="blaze-header">
+        <div class="blaze-logo">
+            <div class="blaze-logo-icon">B</div>
+            <div>
+                <div class="blaze-logo-text">Blaze Intelligence</div>
+                <div class="blaze-logo-subtitle">Lone Star Legends</div>
+            </div>
+        </div>
+        <button class="mobile-menu-button" onclick="toggleMenu()">
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
+        </button>
+    </header>
+
+    <!-- Game Canvas -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Game HUD -->
+    <div class="game-hud">
+        <div class="scoreboard-container">
+            <div class="team-score">
+                <span class="team-name">Away</span>
+                <span class="score" id="awayScore">0</span>
+            </div>
+            <div class="team-score">
+                <span class="team-name">Home</span>
+                <span class="score" id="homeScore">0</span>
+            </div>
+            <div class="game-info">
+                <div class="info-item">
+                    <div class="info-label">Inning</div>
+                    <div class="info-value" id="inning">1</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Balls</div>
+                    <div class="info-value" id="balls">0</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Strikes</div>
+                    <div class="info-value" id="strikes">0</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Outs</div>
+                    <div class="info-value" id="outs">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multiplayer Status -->
+    <div class="multiplayer-status">
+        <div class="status-indicator"></div>
+        <div class="status-text" id="connectionStatus">Online</div>
+    </div>
+
+    <!-- Mobile Touch Controls -->
+    <div class="touch-controls" id="touchControls">
+        <div class="touch-joystick" id="joystick">
+            <div class="joystick-knob" id="joystickKnob"></div>
+        </div>
+        <div class="touch-buttons">
+            <button class="touch-button" id="throwBtn">Throw</button>
+            <button class="touch-button swing" id="swingBtn">Swing</button>
+            <button class="touch-button" id="runBtn">Run</button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="menu-section">
+            <div class="menu-title">Player Profile</div>
+            <div class="player-profile">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="playerAvatar">P</div>
+                    <div class="profile-info">
+                        <div class="profile-name" id="playerName">Player</div>
+                        <div class="profile-level">Level <span id="playerLevel">1</span></div>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="playerWins">0</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="playerAvg">.000</div>
+                        <div class="stat-label">AVG</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="playerHR">0</div>
+                        <div class="stat-label">Home Runs</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-title">Game Modes</div>
+            <button class="menu-button" onclick="startSinglePlayer()">Single Player</button>
+            <button class="menu-button" onclick="startMultiplayer()">Multiplayer</button>
+            <button class="menu-button" onclick="startPractice()">Practice Mode</button>
+            <button class="menu-button" onclick="startTournament()">Tournament</button>
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-title">Settings</div>
+            <button class="menu-button" onclick="toggleSound()">Sound: <span id="soundStatus">ON</span></button>
+            <button class="menu-button" onclick="toggleVibration()">Vibration: <span id="vibrationStatus">ON</span></button>
+            <button class="menu-button" onclick="changeControls()">Controls</button>
+            <button class="menu-button" onclick="viewStats()">Statistics</button>
+        </div>
+    </div>
+
+    <!-- Three.js and Socket.io for multiplayer -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    
+    <script>
+        // Blaze Intelligence Baseball Game - Mobile & Multiplayer Edition
+        
+        class BlazeBaseballGame {
+            constructor() {
+                // Core game properties
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                
+                // Mobile touch handling
+                this.touchStartX = 0;
+                this.touchStartY = 0;
+                this.joystickActive = false;
+                this.joystickVector = { x: 0, y: 0 };
+                
+                // Multiplayer
+                this.socket = null;
+                this.roomId = null;
+                this.playerId = null;
+                this.isHost = false;
+                this.opponent = null;
+                
+                // Player profile
+                this.playerProfile = {
+                    name: 'Player',
+                    level: 1,
+                    wins: 0,
+                    losses: 0,
+                    battingAvg: 0,
+                    homeRuns: 0,
+                    strikeouts: 0,
+                    gamesPlayed: 0
+                };
+                
+                // Game settings
+                this.settings = {
+                    sound: true,
+                    vibration: true,
+                    controls: 'default'
+                };
+                
+                // Initialize
+                this.init();
+            }
+            
+            init() {
+                this.setupThreeJS();
+                this.setupMobileControls();
+                this.loadPlayerProfile();
+                this.connectMultiplayer();
+                this.hideLoadingScreen();
+            }
+            
+            setupThreeJS() {
+                // Scene setup
+                this.scene = new THREE.Scene();
+                this.scene.fog = new THREE.Fog(0x87CEEB, 100, 500);
+                
+                // Camera setup
+                const aspect = window.innerWidth / window.innerHeight;
+                this.camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
+                this.camera.position.set(0, 15, 30);
+                this.camera.lookAt(0, 0, 0);
+                
+                // Renderer setup
+                const canvas = document.getElementById('gameCanvas');
+                this.renderer = new THREE.WebGLRenderer({ 
+                    canvas: canvas,
+                    antialias: true,
+                    alpha: true
+                });
+                this.renderer.setSize(window.innerWidth, window.innerHeight - 60);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                
+                // Add stadium field
+                this.createField();
+                
+                // Add lighting
+                this.setupLighting();
+                
+                // Handle resize
+                window.addEventListener('resize', () => this.handleResize());
+                
+                // Start animation loop
+                this.animate();
+            }
+            
+            createField() {
+                // Create baseball field with Blaze colors
+                const fieldGeometry = new THREE.PlaneGeometry(200, 200);
+                const fieldMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x2D5016 // Field green
+                });
+                const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+                field.rotation.x = -Math.PI / 2;
+                field.receiveShadow = true;
+                this.scene.add(field);
+                
+                // Add infield with Blaze orange accents
+                const infieldGeometry = new THREE.RingGeometry(0, 30, 4, 1);
+                const infieldMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0xD2691E // Dirt color
+                });
+                const infield = new THREE.Mesh(infieldGeometry, infieldMaterial);
+                infield.rotation.x = -Math.PI / 2;
+                infield.rotation.z = Math.PI / 4;
+                infield.position.y = 0.01;
+                this.scene.add(infield);
+                
+                // Add Blaze-branded home plate
+                const plateGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.1, 5);
+                const plateMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0xFFFFFF 
+                });
+                const plate = new THREE.Mesh(plateGeometry, plateMaterial);
+                plate.position.set(0, 0.05, 15);
+                this.scene.add(plate);
+                
+                // Add bases with orange highlights
+                this.createBases();
+            }
+            
+            createBases() {
+                const baseGeometry = new THREE.BoxGeometry(1.5, 0.2, 1.5);
+                const baseMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0xFFFFFF 
+                });
+                
+                // Add orange glow to bases
+                const glowMaterial = new THREE.MeshBasicMaterial({
+                    color: 0xFF6B35,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                
+                const positions = [
+                    [15, 0.1, 0],   // First base
+                    [0, 0.1, -15],  // Second base
+                    [-15, 0.1, 0]   // Third base
+                ];
+                
+                positions.forEach(pos => {
+                    const base = new THREE.Mesh(baseGeometry, baseMaterial);
+                    base.position.set(...pos);
+                    base.castShadow = true;
+                    this.scene.add(base);
+                    
+                    // Add glow effect
+                    const glowGeometry = new THREE.BoxGeometry(2, 0.3, 2);
+                    const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+                    glow.position.set(...pos);
+                    this.scene.add(glow);
+                });
+            }
+            
+            setupLighting() {
+                // Ambient light
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+                this.scene.add(ambientLight);
+                
+                // Main directional light (sun)
+                const sunLight = new THREE.DirectionalLight(0xffffff, 1);
+                sunLight.position.set(50, 100, 50);
+                sunLight.castShadow = true;
+                sunLight.shadow.camera.left = -50;
+                sunLight.shadow.camera.right = 50;
+                sunLight.shadow.camera.top = 50;
+                sunLight.shadow.camera.bottom = -50;
+                this.scene.add(sunLight);
+                
+                // Stadium lights with Blaze orange tint
+                const stadiumLight1 = new THREE.SpotLight(0xFF6B35, 0.5);
+                stadiumLight1.position.set(-30, 50, 30);
+                stadiumLight1.angle = Math.PI / 4;
+                this.scene.add(stadiumLight1);
+                
+                const stadiumLight2 = new THREE.SpotLight(0xFF6B35, 0.5);
+                stadiumLight2.position.set(30, 50, 30);
+                stadiumLight2.angle = Math.PI / 4;
+                this.scene.add(stadiumLight2);
+            }
+            
+            setupMobileControls() {
+                // Joystick controls
+                const joystick = document.getElementById('joystick');
+                const knob = document.getElementById('joystickKnob');
+                
+                // Touch start
+                joystick.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.joystickActive = true;
+                    const touch = e.touches[0];
+                    const rect = joystick.getBoundingClientRect();
+                    this.handleJoystickMove(touch, rect, knob);
+                });
+                
+                // Touch move
+                joystick.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    if (!this.joystickActive) return;
+                    const touch = e.touches[0];
+                    const rect = joystick.getBoundingClientRect();
+                    this.handleJoystickMove(touch, rect, knob);
+                });
+                
+                // Touch end
+                joystick.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    this.joystickActive = false;
+                    this.joystickVector = { x: 0, y: 0 };
+                    knob.style.transform = 'translate(-50%, -50%)';
+                });
+                
+                // Button controls
+                document.getElementById('swingBtn').addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.swing();
+                    if (this.settings.vibration && navigator.vibrate) {
+                        navigator.vibrate(50);
+                    }
+                });
+                
+                document.getElementById('throwBtn').addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.throw();
+                    if (this.settings.vibration && navigator.vibrate) {
+                        navigator.vibrate(30);
+                    }
+                });
+                
+                document.getElementById('runBtn').addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.run();
+                });
+                
+                // Prevent default touch behaviors
+                document.addEventListener('touchmove', (e) => {
+                    if (e.target.closest('.touch-controls')) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            }
+            
+            handleJoystickMove(touch, rect, knob) {
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const maxDistance = rect.width / 2 - 25;
+                
+                let deltaX = touch.clientX - centerX;
+                let deltaY = touch.clientY - centerY;
+                
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                
+                if (distance > maxDistance) {
+                    deltaX = (deltaX / distance) * maxDistance;
+                    deltaY = (deltaY / distance) * maxDistance;
+                }
+                
+                // Update joystick vector
+                this.joystickVector.x = deltaX / maxDistance;
+                this.joystickVector.y = -deltaY / maxDistance;
+                
+                // Update knob position
+                knob.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
+            }
+            
+            connectMultiplayer() {
+                // Connect to WebSocket server
+                try {
+                    this.socket = io('wss://blaze-multiplayer.humphrey-austin20.workers.dev', {
+                        transports: ['websocket'],
+                        reconnection: true,
+                        reconnectionAttempts: 5,
+                        reconnectionDelay: 1000
+                    });
+                    
+                    this.socket.on('connect', () => {
+                        console.log('Connected to multiplayer server');
+                        this.updateConnectionStatus('Online');
+                        this.playerId = this.socket.id;
+                    });
+                    
+                    this.socket.on('disconnect', () => {
+                        console.log('Disconnected from server');
+                        this.updateConnectionStatus('Offline');
+                    });
+                    
+                    this.socket.on('room-joined', (data) => {
+                        this.roomId = data.roomId;
+                        this.isHost = data.isHost;
+                        console.log(`Joined room ${this.roomId} as ${this.isHost ? 'host' : 'guest'}`);
+                    });
+                    
+                    this.socket.on('opponent-joined', (data) => {
+                        this.opponent = data;
+                        console.log('Opponent joined:', data);
+                        this.startMultiplayerGame();
+                    });
+                    
+                    this.socket.on('game-update', (data) => {
+                        this.handleOpponentAction(data);
+                    });
+                    
+                } catch (error) {
+                    console.error('Failed to connect to multiplayer:', error);
+                    this.updateConnectionStatus('Offline');
+                }
+            }
+            
+            updateConnectionStatus(status) {
+                const statusEl = document.getElementById('connectionStatus');
+                const indicator = document.querySelector('.status-indicator');
+                
+                statusEl.textContent = status;
+                
+                if (status === 'Online') {
+                    indicator.style.background = '#228B22';
+                } else if (status === 'Connecting...') {
+                    indicator.style.background = '#FF6B35';
+                } else {
+                    indicator.style.background = '#DC143C';
+                }
+            }
+            
+            loadPlayerProfile() {
+                // Load from localStorage
+                const saved = localStorage.getItem('blazePlayerProfile');
+                if (saved) {
+                    this.playerProfile = JSON.parse(saved);
+                    this.updateProfileDisplay();
+                } else {
+                    // Create new profile
+                    this.createNewProfile();
+                }
+            }
+            
+            savePlayerProfile() {
+                localStorage.setItem('blazePlayerProfile', JSON.stringify(this.playerProfile));
+            }
+            
+            createNewProfile() {
+                const name = prompt('Enter your player name:') || 'Player';
+                this.playerProfile.name = name;
+                this.playerProfile.level = 1;
+                this.savePlayerProfile();
+                this.updateProfileDisplay();
+            }
+            
+            updateProfileDisplay() {
+                document.getElementById('playerName').textContent = this.playerProfile.name;
+                document.getElementById('playerLevel').textContent = this.playerProfile.level;
+                document.getElementById('playerWins').textContent = this.playerProfile.wins;
+                document.getElementById('playerAvg').textContent = '.' + Math.floor(this.playerProfile.battingAvg * 1000);
+                document.getElementById('playerHR').textContent = this.playerProfile.homeRuns;
+                document.getElementById('playerAvatar').textContent = this.playerProfile.name[0].toUpperCase();
+            }
+            
+            swing() {
+                console.log('Swing!');
+                // Send to multiplayer
+                if (this.socket && this.roomId) {
+                    this.socket.emit('game-action', {
+                        roomId: this.roomId,
+                        action: 'swing',
+                        playerId: this.playerId
+                    });
+                }
+            }
+            
+            throw() {
+                console.log('Throw!');
+                if (this.socket && this.roomId) {
+                    this.socket.emit('game-action', {
+                        roomId: this.roomId,
+                        action: 'throw',
+                        playerId: this.playerId
+                    });
+                }
+            }
+            
+            run() {
+                console.log('Run!');
+                if (this.socket && this.roomId) {
+                    this.socket.emit('game-action', {
+                        roomId: this.roomId,
+                        action: 'run',
+                        playerId: this.playerId
+                    });
+                }
+            }
+            
+            handleOpponentAction(data) {
+                // Handle opponent's game actions
+                console.log('Opponent action:', data);
+            }
+            
+            startMultiplayerGame() {
+                console.log('Starting multiplayer game!');
+                // Initialize multiplayer game
+            }
+            
+            handleResize() {
+                const width = window.innerWidth;
+                const height = window.innerHeight - 60;
+                
+                this.camera.aspect = width / height;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(width, height);
+            }
+            
+            hideLoadingScreen() {
+                setTimeout(() => {
+                    const loadingScreen = document.getElementById('loadingScreen');
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }, 2000);
+            }
+            
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                // Update player movement based on joystick
+                if (this.joystickActive) {
+                    // Move player based on joystick vector
+                    // this.movePlayer(this.joystickVector.x, this.joystickVector.y);
+                }
+                
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+        
+        // Global functions for menu
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+        
+        function startSinglePlayer() {
+            console.log('Starting single player');
+            toggleMenu();
+            // Start single player game
+        }
+        
+        function startMultiplayer() {
+            console.log('Starting multiplayer');
+            toggleMenu();
+            if (game.socket) {
+                game.socket.emit('find-match');
+            }
+        }
+        
+        function startPractice() {
+            console.log('Starting practice mode');
+            toggleMenu();
+        }
+        
+        function startTournament() {
+            console.log('Starting tournament');
+            toggleMenu();
+        }
+        
+        function toggleSound() {
+            game.settings.sound = !game.settings.sound;
+            document.getElementById('soundStatus').textContent = game.settings.sound ? 'ON' : 'OFF';
+        }
+        
+        function toggleVibration() {
+            game.settings.vibration = !game.settings.vibration;
+            document.getElementById('vibrationStatus').textContent = game.settings.vibration ? 'ON' : 'OFF';
+        }
+        
+        function changeControls() {
+            console.log('Change controls');
+            toggleMenu();
+        }
+        
+        function viewStats() {
+            console.log('View stats');
+            toggleMenu();
+        }
+        
+        // Initialize game
+        let game;
+        window.addEventListener('DOMContentLoaded', () => {
+            game = new BlazeBaseballGame();
+        });
+        
+        // Handle PWA installation
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(err => {
+                console.log('Service worker registration failed:', err);
+            });
+        }
+        
+        // Prevent pull-to-refresh on mobile
+        document.body.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
