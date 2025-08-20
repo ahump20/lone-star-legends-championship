@@ -1,0 +1,29 @@
+name = "blaze-legends-multiplayer"
+main = "blaze-multiplayer-server.js"
+compatibility_date = "2024-01-01"
+workers_dev = true
+
+[env.production]
+name = "blaze-legends-multiplayer"
+route = "blaze-legends.humphrey-austin20.workers.dev/*"
+
+[[durable_objects.bindings]]
+name = "GAME_ROOMS"
+class_name = "GameRoom"
+script_name = "blaze-legends-multiplayer"
+
+[[kv_namespaces]]
+binding = "PLAYER_STATS"
+id = "YOUR_KV_NAMESPACE_ID"
+preview_id = "YOUR_PREVIEW_KV_ID"
+
+[site]
+bucket = "./public"
+
+[build]
+command = "npm run build"
+watch_paths = ["src/**/*.js"]
+
+[miniflare]
+durable_objects_persist = true
+kv_persist = true

@@ -1003,7 +1003,12 @@
             connectMultiplayer() {
                 // Connect to WebSocket server
                 try {
-                    this.socket = io('wss://blaze-multiplayer.humphrey-austin20.workers.dev', {
+                    // Production WebSocket URL - deploy with deploy-multiplayer.sh
+                    const wsUrl = window.location.hostname === 'localhost' 
+                        ? 'ws://localhost:8787/ws'  // Local development
+                        : 'wss://blaze-legends-multiplayer.humphrey-austin20.workers.dev/ws'; // Production
+                    
+                    this.socket = io(wsUrl, {
                         transports: ['websocket'],
                         reconnection: true,
                         reconnectionAttempts: 5,
