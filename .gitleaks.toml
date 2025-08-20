@@ -1,0 +1,84 @@
+# Gitleaks Configuration for Blaze Intelligence Security
+
+title = "Blaze Intelligence Security Scan"
+
+[extend]
+useDefault = true
+
+[[rules]]
+description = "API Keys"
+id = "api-key"
+regex = '''(?i)(api[_-]?key|apikey)\s*[:=]\s*['"]?[a-z0-9]{20,}['"]?'''
+tags = ["api", "key"]
+
+[[rules]]
+description = "Database URLs"
+id = "database-url"
+regex = '''(?i)(database[_-]?url|db[_-]?url)\s*[:=]\s*['"]?[a-z0-9+]+://[^\s'"]+['"]?'''
+tags = ["database", "url"]
+
+[[rules]]
+description = "JWT Secrets"
+id = "jwt-secret"
+regex = '''(?i)(jwt[_-]?secret|token[_-]?secret)\s*[:=]\s*['"]?[a-z0-9]{20,}['"]?'''
+tags = ["jwt", "secret"]
+
+[[rules]]
+description = "Cloudflare Tokens"
+id = "cloudflare-token"
+regex = '''(?i)(cloudflare[_-]?token|cf[_-]?token)\s*[:=]\s*['"]?[a-z0-9-_]{40,}['"]?'''
+tags = ["cloudflare", "token"]
+
+[[rules]]
+description = "Stripe Keys"
+id = "stripe-key"
+regex = '''(?i)(stripe[_-]?(secret|public)[_-]?key|sk_live_|pk_live_)\s*[:=]?\s*['"]?[a-z0-9_]{20,}['"]?'''
+tags = ["stripe", "payment"]
+
+[[rules]]
+description = "OpenAI API Keys"
+id = "openai-key"
+regex = '''(?i)(openai[_-]?api[_-]?key|sk-[a-z0-9]{20,})'''
+tags = ["openai", "ai"]
+
+[[rules]]
+description = "Anthropic API Keys"
+id = "anthropic-key"
+regex = '''(?i)(anthropic[_-]?api[_-]?key|sk-ant-[a-z0-9-_]{20,})'''
+tags = ["anthropic", "ai"]
+
+[[rules]]
+description = "Google AI API Keys"
+id = "google-ai-key"
+regex = '''(?i)(google[_-]?ai[_-]?api[_-]?key|AIza[a-z0-9_-]{35})'''
+tags = ["google", "ai"]
+
+[[rules]]
+description = "Private Keys"
+id = "private-key"
+regex = '''-----BEGIN[ A-Z]*PRIVATE KEY-----'''
+tags = ["private-key"]
+
+[[rules]]
+description = "Passwords"
+id = "password"
+regex = '''(?i)(password|passwd|pwd)\s*[:=]\s*['"]?[^\s'"]{8,}['"]?'''
+tags = ["password"]
+
+[allowlist]
+description = "Allowlist for example files and documentation"
+paths = [
+    ".env.example",
+    "README.md",
+    "docs/",
+    "*.md"
+]
+
+# Example patterns that should be ignored
+regexes = [
+    '''your_[a-z_]+_here''',
+    '''example[_-]?[a-z]*''',
+    '''placeholder[_-]?[a-z]*''',
+    '''sk-[x]{20,}''',
+    '''AIza[X]{35}'''
+]
