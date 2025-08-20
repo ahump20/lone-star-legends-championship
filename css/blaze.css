@@ -9,12 +9,37 @@
   --shadow:0 18px 45px rgba(0,0,0,.45);
   --font-heading:'Space Grotesk',system-ui,sans-serif;
   --font-body:Inter,system-ui,sans-serif;
+  
+  /* Memphis Blues */
+  --memphis-midnight: #001F3F;
+  --beale-street-neon: #FF6B35;
+  --mississippi-depth: #0A1628;
+  
+  /* Gradients that tell stories */
+  --graceland-gradient: linear-gradient(135deg, #FFD700, #FF6B35, #CC5500);
+  --grindhouse-gradient: linear-gradient(180deg, #0A0A0A, #1A1A2E, #16213E);
+  
+  /* Success/Warning/Error */
+  --success-green: #4CAF50;
+  --warning-amber: #FF9800;
+  --error-red: #F44336;
 }
 /* global base */
 html,body{background:var(--blaze-bg);color:var(--blaze-text);font-family:var(--font-body);}
 .container{width:min(1200px,92vw);margin-inline:auto;}
-.blaze-card{background:linear-gradient(135deg,rgba(22,24,28,.92),rgba(22,24,28,.72));
-  border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);box-shadow:var(--shadow);}
+.blaze-card{
+  background: var(--grindhouse-gradient);
+  border: 1px solid var(--beale-street-neon);
+  border-radius: var(--radius);
+  box-shadow: 
+    0 0 40px rgba(255, 107, 53, 0.1),
+    inset 0 0 20px rgba(255, 107, 53, 0.05);
+  transform-style: preserve-3d;
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.blaze-card:hover {
+  transform: translateZ(10px) rotateX(2deg);
+}
 .btn-blaze{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.2rem;border-radius:14px;
   text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,.12);}
 .btn-primary{background:linear-gradient(90deg,var(--blaze-burnt),var(--blaze-orange));color:#0b0c0e;border:0;

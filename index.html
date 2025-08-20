@@ -29,11 +29,18 @@
       @keyframes blzPulse {0%{box-shadow:0 0 0 0 rgba(255,107,53,.45)}70%{box-shadow:0 0 0 12px rgba(255,107,53,0)}100%{box-shadow:0 0 0 0 rgba(255,107,53,0)}}
     </style>
     <!-- three.js for hero -->
-    <script src="https://unpkg.com/three@0.160.0/build/three.min.js" defer></script>
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <!-- Enhanced Blaze Intelligence Systems -->
+    <script src="/js/blaze-realtime.js" defer></script>
+    <script src="/js/champion-enigma.js" defer></script>
+    <script src="/js/decision-velocity.js" defer></script>
   </head>
   <body class="home">
-    <!-- Background canvas (subtle hero) -->
+    <!-- Champion Enigma Engine Canvas -->
     <canvas id="blaze-hero" aria-hidden="true" style="position:fixed;inset:0;z-index:-1;"></canvas>
+    
+    <!-- Decision Velocity Container (will be created by JS) -->
+    <div id="decision-velocity-container"></div>
 
     <!-- Topbar -->
     <header class="topbar">
@@ -103,26 +110,19 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="/js/hero.js" defer></script>
     <script>
-      (async function(){
-        const dot = document.getElementById('live-dot');
-        const rEl = document.getElementById('readiness');
-        const lEl = document.getElementById('leverage');
-        const uEl = document.getElementById('updated');
-        try{
-          const res = await fetch('/data/readiness.json', { cache:'no-store' });
-          if(!res.ok) throw new Error('feed unavailable');
-          const d = await res.json();
-          rEl.textContent = (d.readiness ?? 0).toFixed(2);
-          lEl.textContent = (d.leverage ?? 0).toFixed(2);
-          uEl.textContent = new Date(d.timestamp || Date.now()).toLocaleTimeString();
-        }catch(e){
-          rEl.textContent = 'offline';
-          lEl.textContent = 'offline';
-          dot.style.background = '#F44336';
+      // Initialize real-time connection
+      document.addEventListener('DOMContentLoaded', () => {
+        // The BlazeRealTime engine handles all live data updates
+        if (window.BlazeRealTime) {
+          console.log('🔥 Blaze Intelligence Real-Time Engine: ACTIVE');
+          
+          // Subscribe to updates for custom handling
+          window.BlazeRealTime.subscribe('update', (data) => {
+            console.log('Live update received:', data);
+          });
         }
-      })();
+      });
     </script>
   </body>
 </html>
