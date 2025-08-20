@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Portfolio Showcase</title>
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-burnt-orange: #CC5500;
+            --blaze-black: #0A0A0A;
+            --blaze-dark: #1A1A1A;
+            --blaze-white: #FFFFFF;
+            --blaze-gray: #808080;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--blaze-black);
+            color: var(--blaze-white);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Navigation */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--blaze-orange);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--blaze-orange);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--blaze-black);
+            font-size: 20px;
+        }
+
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--blaze-orange);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--blaze-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--blaze-orange);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #heroCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 1000px;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: var(--blaze-orange);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 40px rgba(255, 107, 53, 0.6);
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            color: var(--blaze-white);
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .hero-tagline {
+            font-size: 1.2rem;
+            color: var(--blaze-gray);
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        .hero-cta {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--blaze-burnt-orange), var(--blaze-orange));
+            color: var(--blaze-white);
+            padding: 20px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+        }
+
+        /* Projects Grid */
+        .projects-section {
+            padding: 100px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            color: var(--blaze-orange);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--blaze-gray);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .project-card {
+            background: rgba(26, 26, 26, 0.95);
+            border: 2px solid var(--blaze-orange);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+        }
+
+        .project-hero {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .project-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(10, 10, 10, 0.8) 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+        }
+
+        .project-badge {
+            background: var(--blaze-orange);
+            color: var(--blaze-black);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .project-content {
+            padding: 30px;
+        }
+
+        .project-title {
+            font-size: 1.8rem;
+            color: var(--blaze-white);
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .project-description {
+            color: var(--blaze-gray);
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+
+        .project-tech {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tech-tag {
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--blaze-orange);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .project-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--blaze-orange);
+            border-radius: 25px;
+            background: transparent;
+            color: var(--blaze-orange);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .project-btn:hover {
+            background: var(--blaze-orange);
+            color: var(--blaze-black);
+        }
+
+        .project-btn.primary {
+            background: var(--blaze-orange);
+            color: var(--blaze-black);
+        }
+
+        .project-btn.primary:hover {
+            background: var(--blaze-burnt-orange);
+            border-color: var(--blaze-burnt-orange);
+        }
+
+        /* Statistics Section */
+        .stats-section {
+            background: linear-gradient(135deg, var(--blaze-dark) 0%, rgba(255, 107, 53, 0.1) 100%);
+            padding: 80px 20px;
+            margin: 80px 0;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stats-title {
+            font-size: 2.5rem;
+            color: var(--blaze-orange);
+            margin-bottom: 60px;
+            text-transform: uppercase;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .stat-item {
+            padding: 30px;
+        }
+
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--blaze-orange);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--blaze-white);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-title {
+            font-size: 2.5rem;
+            color: var(--blaze-orange);
+            margin-bottom: 20px;
+        }
+
+        .contact-description {
+            font-size: 1.2rem;
+            color: var(--blaze-gray);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .contact-item {
+            background: rgba(26, 26, 26, 0.8);
+            border: 2px solid var(--blaze-orange);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            color: var(--blaze-orange);
+            margin-bottom: 15px;
+        }
+
+        .contact-label {
+            color: var(--blaze-white);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .contact-value {
+            color: var(--blaze-gray);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.4rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.5rem;
+                letter-spacing: 2px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stat-value {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-header">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="nav-icon">B</div>
+                <div class="nav-title">Blaze Intelligence</div>
+            </div>
+            <div class="nav-links">
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#analytics" class="nav-link">Analytics</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <canvas id="heroCanvas"></canvas>
+        <div class="hero-content">
+            <h1 class="hero-title">Blaze Intelligence</h1>
+            <p class="hero-subtitle">Sports Analytics & Intelligence Platform</p>
+            <p class="hero-tagline">"Where cognitive performance meets quarterly performance"</p>
+            <a href="#projects" class="hero-cta">Explore Projects</a>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects-section">
+        <div class="section-header">
+            <h2 class="section-title">Featured Projects</h2>
+            <p class="section-description">
+                Cutting-edge sports analytics solutions powered by advanced AI, 
+                real-time data processing, and immersive 3D visualizations.
+            </p>
+        </div>
+
+        <div class="projects-grid">
+            <!-- Lone Star Legends Championship -->
+            <div class="project-card">
+                <div class="project-hero">
+                    <canvas class="project-canvas" id="baseballCanvas"></canvas>
+                    <div class="project-overlay">
+                        <div class="project-badge">Featured</div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Lone Star Legends Championship</h3>
+                    <p class="project-description">
+                        Professional-grade 3D baseball simulation with real-time multiplayer, 
+                        advanced physics, and comprehensive analytics integration. Features 
+                        mobile PWA support and particle effects.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Three.js</span>
+                        <span class="tech-tag">WebSocket</span>
+                        <span class="tech-tag">PWA</span>
+                        <span class="tech-tag">Analytics</span>
+                    </div>
+                    <div class="project-actions">
+                        <a href="blaze-branded-game.html" class="project-btn primary">Play Game</a>
+                        <a href="https://github.com/ahump20/lone-star-legends-championship" class="project-btn">View Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Integration Hub -->
+            <div class="project-card">
+                <div class="project-hero">
+                    <canvas class="project-canvas" id="analyticsCanvas"></canvas>
+                    <div class="project-overlay">
+                        <div class="project-badge">Live Data</div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Analytics Integration Hub</h3>
+                    <p class="project-description">
+                        Real-time sports analytics dashboard featuring Cardinals, Titans, 
+                        Longhorns, and Grizzlies data. Live feeds, predictive models, 
+                        and interactive visualizations.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Chart.js</span>
+                        <span class="tech-tag">Three.js</span>
+                        <span class="tech-tag">Real-time</span>
+                        <span class="tech-tag">ML Models</span>
+                    </div>
+                    <div class="project-actions">
+                        <a href="blaze-analytics-integration.html" class="project-btn primary">View Analytics</a>
+                        <a href="#" class="project-btn">API Docs</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multiplayer Infrastructure -->
+            <div class="project-card">
+                <div class="project-hero">
+                    <canvas class="project-canvas" id="multiplayerCanvas"></canvas>
+                    <div class="project-overlay">
+                        <div class="project-badge">Scalable</div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Multiplayer Infrastructure</h3>
+                    <p class="project-description">
+                        Cloudflare Workers-based multiplayer system with Durable Objects 
+                        for state management. Real-time WebSocket communication and 
+                        anti-cheat validation.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Cloudflare</span>
+                        <span class="tech-tag">WebSocket</span>
+                        <span class="tech-tag">Durable Objects</span>
+                        <span class="tech-tag">Edge Computing</span>
+                    </div>
+                    <div class="project-actions">
+                        <a href="deploy-multiplayer.sh" class="project-btn primary">Deploy Guide</a>
+                        <a href="blaze-multiplayer-server.js" class="project-btn">Source Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Portfolio -->
+            <div class="project-card">
+                <div class="project-hero">
+                    <canvas class="project-canvas" id="portfolioCanvas"></canvas>
+                    <div class="project-overlay">
+                        <div class="project-badge">Interactive</div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">3D Portfolio Showcase</h3>
+                    <p class="project-description">
+                        Interactive Three.js portfolio with hero headers, particle systems, 
+                        and responsive design. Showcases all Blaze Intelligence projects 
+                        with immersive visualizations.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Three.js</span>
+                        <span class="tech-tag">Particles</span>
+                        <span class="tech-tag">Responsive</span>
+                        <span class="tech-tag">WebGL</span>
+                    </div>
+                    <div class="project-actions">
+                        <a href="#" class="project-btn primary">This Page</a>
+                        <a href="icon-generator.html" class="project-btn">Tools</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="stats-section">
+        <div class="stats-container">
+            <h2 class="stats-title">Platform Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalProjects">12</div>
+                    <div class="stat-label">Active Projects</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="dataPoints">2.8M+</div>
+                    <div class="stat-label">Data Points</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="accuracy">94.6%</div>
+                    <div class="stat-label">Accuracy Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="uptime">99.9%</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="response">&lt;100ms</div>
+                    <div class="stat-label">Response Time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="savings">67-80%</div>
+                    <div class="stat-label">Cost Savings</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="contact-container">
+            <h2 class="contact-title">Connect With Blaze Intelligence</h2>
+            <p class="contact-description">
+                Ready to revolutionize your sports analytics? Get in touch to discuss 
+                custom solutions, partnerships, or project collaborations.
+            </p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-label">Email</div>
+                    <div class="contact-value">ahump20@outlook.com</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📱</div>
+                    <div class="contact-label">Phone</div>
+                    <div class="contact-value">(210) 273-5538</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🌐</div>
+                    <div class="contact-label">Website</div>
+                    <div class="contact-value">blaze-intelligence.com</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        // Blaze Intelligence Portfolio Showcase
+        
+        class BlazePortfolio {
+            constructor() {
+                this.scenes = {};
+                this.renderers = {};
+                this.cameras = {};
+                this.animationIds = {};
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupHeroScene();
+                this.setupProjectScenes();
+                this.startAnimations();
+                this.setupInteractions();
+            }
+            
+            setupHeroScene() {
+                const canvas = document.getElementById('heroCanvas');
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+                
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                camera.position.z = 8;
+                
+                // Create hero background with floating elements
+                this.createHeroElements(scene);
+                
+                this.scenes.hero = scene;
+                this.cameras.hero = camera;
+                this.renderers.hero = renderer;
+            }
+            
+            createHeroElements(scene) {
+                // Create floating geometric shapes representing different sports
+                const shapes = [
+                    { geometry: new THREE.SphereGeometry(0.3, 16, 16), color: 0xFF6B35, sport: 'baseball' },
+                    { geometry: new THREE.BoxGeometry(0.4, 0.4, 0.4), color: 0xCC5500, sport: 'football' },
+                    { geometry: new THREE.ConeGeometry(0.25, 0.5, 8), color: 0xFF8C42, sport: 'basketball' },
+                    { geometry: new THREE.OctahedronGeometry(0.3), color: 0xB8460E, sport: 'data' }
+                ];
+                
+                for (let i = 0; i < 50; i++) {
+                    const shapeData = shapes[Math.floor(Math.random() * shapes.length)];
+                    const material = new THREE.MeshBasicMaterial({ 
+                        color: shapeData.color,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    
+                    const mesh = new THREE.Mesh(shapeData.geometry, material);
+                    
+                    mesh.position.x = (Math.random() - 0.5) * 20;
+                    mesh.position.y = (Math.random() - 0.5) * 20;
+                    mesh.position.z = (Math.random() - 0.5) * 20;
+                    
+                    mesh.userData = {
+                        velocity: new THREE.Vector3(
+                            (Math.random() - 0.5) * 0.02,
+                            (Math.random() - 0.5) * 0.02,
+                            (Math.random() - 0.5) * 0.02
+                        ),
+                        sport: shapeData.sport
+                    };
+                    
+                    scene.add(mesh);
+                }
+                
+                // Add connecting network lines
+                this.createNetworkLines(scene);
+            }
+            
+            createNetworkLines(scene) {
+                const points = [];
+                for (let i = 0; i < 30; i++) {
+                    points.push(new THREE.Vector3(
+                        (Math.random() - 0.5) * 15,
+                        (Math.random() - 0.5) * 15,
+                        (Math.random() - 0.5) * 15
+                    ));
+                }
+                
+                const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                const material = new THREE.LineBasicMaterial({ 
+                    color: 0xFF6B35,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                
+                const lines = new THREE.Line(geometry, material);
+                scene.add(lines);
+            }
+            
+            setupProjectScenes() {
+                const canvases = [
+                    { id: 'baseballCanvas', type: 'baseball' },
+                    { id: 'analyticsCanvas', type: 'analytics' },
+                    { id: 'multiplayerCanvas', type: 'multiplayer' },
+                    { id: 'portfolioCanvas', type: 'portfolio' }
+                ];
+                
+                canvases.forEach(canvasData => {
+                    const canvas = document.getElementById(canvasData.id);
+                    if (!canvas) return;
+                    
+                    const scene = new THREE.Scene();
+                    const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+                    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+                    
+                    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+                    camera.position.z = 5;
+                    
+                    this.createProjectScene(scene, canvasData.type);
+                    
+                    this.scenes[canvasData.id] = scene;
+                    this.cameras[canvasData.id] = camera;
+                    this.renderers[canvasData.id] = renderer;
+                });
+            }
+            
+            createProjectScene(scene, type) {
+                switch (type) {
+                    case 'baseball':
+                        this.createBaseballScene(scene);
+                        break;
+                    case 'analytics':
+                        this.createAnalyticsScene(scene);
+                        break;
+                    case 'multiplayer':
+                        this.createMultiplayerScene(scene);
+                        break;
+                    case 'portfolio':
+                        this.createPortfolioScene(scene);
+                        break;
+                }
+            }
+            
+            createBaseballScene(scene) {
+                // Baseball field visualization
+                const fieldGeometry = new THREE.PlaneGeometry(8, 8);
+                const fieldMaterial = new THREE.MeshBasicMaterial({ color: 0x2D5016, transparent: true, opacity: 0.6 });
+                const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+                field.rotation.x = -Math.PI / 2;
+                scene.add(field);
+                
+                // Baseball
+                const ballGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+                const ballMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+                const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+                ball.position.set(0, 1, 0);
+                ball.userData = { type: 'ball' };
+                scene.add(ball);
+                
+                // Bases
+                const baseGeometry = new THREE.BoxGeometry(0.3, 0.1, 0.3);
+                const baseMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+                
+                const positions = [[2, 0, 0], [0, 0, -2], [-2, 0, 0], [0, 0, 2]];
+                positions.forEach(pos => {
+                    const base = new THREE.Mesh(baseGeometry, baseMaterial);
+                    base.position.set(...pos);
+                    scene.add(base);
+                });
+            }
+            
+            createAnalyticsScene(scene) {
+                // Data visualization elements
+                const barCount = 8;
+                for (let i = 0; i < barCount; i++) {
+                    const height = 1 + Math.random() * 3;
+                    const barGeometry = new THREE.BoxGeometry(0.3, height, 0.3);
+                    const barMaterial = new THREE.MeshBasicMaterial({ 
+                        color: new THREE.Color().setHSL(0.1 + i * 0.1, 0.8, 0.6)
+                    });
+                    
+                    const bar = new THREE.Mesh(barGeometry, barMaterial);
+                    bar.position.set((i - barCount/2) * 0.5, height/2, 0);
+                    bar.userData = { type: 'bar', originalHeight: height };
+                    scene.add(bar);
+                }
+                
+                // Floating data points
+                for (let i = 0; i < 20; i++) {
+                    const pointGeometry = new THREE.SphereGeometry(0.05, 8, 8);
+                    const pointMaterial = new THREE.MeshBasicMaterial({ color: 0xFF6B35 });
+                    const point = new THREE.Mesh(pointGeometry, pointMaterial);
+                    
+                    point.position.set(
+                        (Math.random() - 0.5) * 6,
+                        Math.random() * 4,
+                        (Math.random() - 0.5) * 6
+                    );
+                    
+                    point.userData = {
+                        velocity: new THREE.Vector3(
+                            (Math.random() - 0.5) * 0.02,
+                            (Math.random() - 0.5) * 0.02,
+                            (Math.random() - 0.5) * 0.02
+                        )
+                    };
+                    
+                    scene.add(point);
+                }
+            }
+            
+            createMultiplayerScene(scene) {
+                // Network nodes
+                const nodeCount = 6;
+                const nodes = [];
+                
+                for (let i = 0; i < nodeCount; i++) {
+                    const nodeGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+                    const nodeMaterial = new THREE.MeshBasicMaterial({ color: 0xFF6B35 });
+                    const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+                    
+                    const angle = (i / nodeCount) * Math.PI * 2;
+                    node.position.set(Math.cos(angle) * 2, 0, Math.sin(angle) * 2);
+                    
+                    nodes.push(node);
+                    scene.add(node);
+                }
+                
+                // Connect nodes with lines
+                for (let i = 0; i < nodeCount; i++) {
+                    for (let j = i + 1; j < nodeCount; j++) {
+                        const points = [nodes[i].position, nodes[j].position];
+                        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                        const material = new THREE.LineBasicMaterial({ 
+                            color: 0xCC5500,
+                            transparent: true,
+                            opacity: 0.5
+                        });
+                        
+                        const line = new THREE.Line(geometry, material);
+                        scene.add(line);
+                    }
+                }
+                
+                // Central hub
+                const hubGeometry = new THREE.OctahedronGeometry(0.3);
+                const hubMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+                const hub = new THREE.Mesh(hubGeometry, hubMaterial);
+                hub.userData = { type: 'hub' };
+                scene.add(hub);
+            }
+            
+            createPortfolioScene(scene) {
+                // Portfolio grid
+                const gridSize = 5;
+                for (let x = 0; x < gridSize; x++) {
+                    for (let z = 0; z < gridSize; z++) {
+                        const tileGeometry = new THREE.BoxGeometry(0.8, 0.1, 0.8);
+                        const tileColor = new THREE.Color().setHSL((x + z) * 0.1, 0.6, 0.5);
+                        const tileMaterial = new THREE.MeshBasicMaterial({ color: tileColor });
+                        
+                        const tile = new THREE.Mesh(tileGeometry, tileMaterial);
+                        tile.position.set(
+                            (x - gridSize/2) * 1,
+                            Math.sin((x + z) * 0.5) * 0.2,
+                            (z - gridSize/2) * 1
+                        );
+                        
+                        tile.userData = { 
+                            originalY: tile.position.y,
+                            phase: (x + z) * 0.5
+                        };
+                        
+                        scene.add(tile);
+                    }
+                }
+            }
+            
+            startAnimations() {
+                // Hero animation
+                this.animateHero();
+                
+                // Project animations
+                Object.keys(this.scenes).forEach(key => {
+                    if (key !== 'hero') {
+                        this.animateProject(key);
+                    }
+                });
+            }
+            
+            animateHero() {
+                const animate = () => {
+                    this.animationIds.hero = requestAnimationFrame(animate);
+                    
+                    const scene = this.scenes.hero;
+                    const camera = this.cameras.hero;
+                    const renderer = this.renderers.hero;
+                    
+                    if (!scene || !camera || !renderer) return;
+                    
+                    // Animate floating elements
+                    scene.children.forEach(child => {
+                        if (child.userData.velocity) {
+                            child.position.add(child.userData.velocity);
+                            child.rotation.x += 0.01;
+                            child.rotation.y += 0.01;
+                            
+                            // Wrap around
+                            if (Math.abs(child.position.x) > 10) child.position.x *= -1;
+                            if (Math.abs(child.position.y) > 10) child.position.y *= -1;
+                            if (Math.abs(child.position.z) > 10) child.position.z *= -1;
+                        }
+                    });
+                    
+                    renderer.render(scene, camera);
+                };
+                
+                animate();
+            }
+            
+            animateProject(sceneKey) {
+                const animate = () => {
+                    this.animationIds[sceneKey] = requestAnimationFrame(animate);
+                    
+                    const scene = this.scenes[sceneKey];
+                    const camera = this.cameras[sceneKey];
+                    const renderer = this.renderers[sceneKey];
+                    
+                    if (!scene || !camera || !renderer) return;
+                    
+                    const time = Date.now() * 0.001;
+                    
+                    // Scene-specific animations
+                    scene.children.forEach(child => {
+                        if (child.userData.type === 'ball') {
+                            child.position.y = 1 + Math.sin(time * 2) * 0.5;
+                            child.rotation.x += 0.02;
+                        } else if (child.userData.type === 'bar') {
+                            const scale = 0.8 + Math.sin(time * 2 + child.position.x) * 0.3;
+                            child.scale.y = scale;
+                        } else if (child.userData.type === 'hub') {
+                            child.rotation.y = time;
+                            child.rotation.x = Math.sin(time) * 0.3;
+                        } else if (child.userData.velocity) {
+                            child.position.add(child.userData.velocity);
+                        } else if (child.userData.originalY !== undefined) {
+                            child.position.y = child.userData.originalY + Math.sin(time + child.userData.phase) * 0.3;
+                        }
+                    });
+                    
+                    renderer.render(scene, camera);
+                };
+                
+                animate();
+            }
+            
+            setupInteractions() {
+                // Handle window resize
+                window.addEventListener('resize', () => {
+                    this.handleResize();
+                });
+                
+                // Handle card hover effects
+                document.querySelectorAll('.project-card').forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        const canvas = card.querySelector('canvas');
+                        if (canvas) {
+                            canvas.style.transform = 'scale(1.05)';
+                        }
+                    });
+                    
+                    card.addEventListener('mouseleave', () => {
+                        const canvas = card.querySelector('canvas');
+                        if (canvas) {
+                            canvas.style.transform = 'scale(1)';
+                        }
+                    });
+                });
+                
+                // Smooth scrolling for navigation
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const target = document.querySelector(link.getAttribute('href'));
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                });
+            }
+            
+            handleResize() {
+                // Resize hero scene
+                if (this.cameras.hero && this.renderers.hero) {
+                    this.cameras.hero.aspect = window.innerWidth / window.innerHeight;
+                    this.cameras.hero.updateProjectionMatrix();
+                    this.renderers.hero.setSize(window.innerWidth, window.innerHeight);
+                }
+                
+                // Resize project scenes
+                Object.keys(this.scenes).forEach(key => {
+                    if (key !== 'hero') {
+                        const canvas = document.getElementById(key);
+                        if (canvas && this.cameras[key] && this.renderers[key]) {
+                            this.cameras[key].aspect = canvas.clientWidth / canvas.clientHeight;
+                            this.cameras[key].updateProjectionMatrix();
+                            this.renderers[key].setSize(canvas.clientWidth, canvas.clientHeight);
+                        }
+                    }
+                });
+            }
+            
+            // Public API for external interactions
+            getProjectData() {
+                return {
+                    projects: [
+                        {
+                            name: 'Lone Star Legends Championship',
+                            type: 'Game Development',
+                            status: 'Live',
+                            technologies: ['Three.js', 'WebSocket', 'PWA'],
+                            metrics: {
+                                players: '2,847+',
+                                accuracy: '94.6%',
+                                uptime: '99.9%'
+                            }
+                        },
+                        {
+                            name: 'Analytics Integration Hub',
+                            type: 'Data Visualization',
+                            status: 'Live',
+                            technologies: ['Chart.js', 'Three.js', 'Real-time'],
+                            metrics: {
+                                dataPoints: '2.8M+',
+                                teams: '4',
+                                updateFreq: '<100ms'
+                            }
+                        },
+                        {
+                            name: 'Multiplayer Infrastructure',
+                            type: 'Backend System',
+                            status: 'Deployed',
+                            technologies: ['Cloudflare', 'WebSocket', 'Edge'],
+                            metrics: {
+                                latency: '<50ms',
+                                concurrent: '1000+',
+                                availability: '99.99%'
+                            }
+                        }
+                    ]
+                };
+            }
+        }
+        
+        // Initialize portfolio
+        let portfolio;
+        window.addEventListener('DOMContentLoaded', () => {
+            portfolio = new BlazePortfolio();
+        });
+        
+        // Export for external use
+        window.BlazePortfolio = BlazePortfolio;
+    </script>
+</body>
+</html>
