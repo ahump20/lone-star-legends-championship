@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Analytics - Blaze Intelligence</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/components.css">
+    <script src="js/image-loader.js"></script>
+    <style>
+        body {
+            font-family: var(--font-body);
+            background: var(--blaze-black);
+            color: var(--blaze-white);
+            margin: 0;
+            padding: 0;
+        }
+
+        .hero-section {
+            height: 60vh;
+            min-height: 400px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(204, 85, 0, 0.2));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: var(--space-8);
+        }
+
+        .hero-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-5xl);
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-4);
+        }
+
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+            padding: var(--space-8);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            background: rgba(26, 26, 26, 0.9);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            transition: all var(--transition-base);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .team-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-orange-md);
+            border-color: var(--blaze-orange);
+        }
+
+        .team-image-container {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--blaze-grey-900), var(--blaze-grey-800));
+        }
+
+        .team-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: var(--space-4);
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+
+        .team-name {
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            color: var(--blaze-white);
+            margin: 0;
+        }
+
+        .team-sport {
+            color: var(--blaze-orange);
+            font-size: var(--text-sm);
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wider);
+        }
+
+        .team-content {
+            padding: var(--space-6);
+        }
+
+        .team-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-4);
+            margin-top: var(--space-4);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: var(--text-2xl);
+            font-weight: var(--font-bold);
+            color: var(--blaze-orange);
+        }
+
+        .stat-label {
+            font-size: var(--text-xs);
+            color: var(--blaze-grey-300);
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wide);
+        }
+
+        .team-actions {
+            display: flex;
+            gap: var(--space-3);
+            margin-top: var(--space-6);
+        }
+
+        /* Placeholder for teams without images */
+        .team-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(204, 85, 0, 0.1));
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <div class="hero-background" data-blaze-image="hero-analytics" data-blaze-variant="hero"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Team Analytics Hub</h1>
+            <p style="font-size: var(--text-xl); color: var(--blaze-grey-300); max-width: 600px; margin: 0 auto;">
+                Comprehensive performance analytics for our partner teams
+            </p>
+        </div>
+    </div>
+
+    <div class="teams-grid">
+        <!-- St. Louis Cardinals -->
+        <div class="team-card">
+            <div class="team-image-container">
+                <div class="team-placeholder">⚾</div>
+                <div class="team-overlay">
+                    <h3 class="team-name">St. Louis Cardinals</h3>
+                    <span class="team-sport">MLB Baseball</span>
+                </div>
+            </div>
+            <div class="team-content">
+                <p style="color: var(--blaze-grey-300); line-height: 1.6;">
+                    Advanced analytics for America's most successful National League franchise.
+                </p>
+                <div class="team-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">162</div>
+                        <div class="stat-label">Games</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">45</div>
+                        <div class="stat-label">Metrics</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">92%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+                <div class="team-actions">
+                    <button class="btn btn-primary btn-sm" style="flex: 1;">View Dashboard</button>
+                    <button class="btn btn-secondary btn-sm" style="flex: 1;">Analytics</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tennessee Titans -->
+        <div class="team-card">
+            <div class="team-image-container">
+                <div class="team-placeholder">🏈</div>
+                <div class="team-overlay">
+                    <h3 class="team-name">Tennessee Titans</h3>
+                    <span class="team-sport">NFL Football</span>
+                </div>
+            </div>
+            <div class="team-content">
+                <p style="color: var(--blaze-grey-300); line-height: 1.6;">
+                    Real-time performance insights for NFL game strategy and player development.
+                </p>
+                <div class="team-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">17</div>
+                        <div class="stat-label">Games</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">52</div>
+                        <div class="stat-label">Metrics</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">94%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+                <div class="team-actions">
+                    <button class="btn btn-primary btn-sm" style="flex: 1;">View Dashboard</button>
+                    <button class="btn btn-secondary btn-sm" style="flex: 1;">Analytics</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Texas Longhorns -->
+        <div class="team-card">
+            <div class="team-image-container">
+                <div class="team-placeholder">🤘</div>
+                <div class="team-overlay">
+                    <h3 class="team-name">Texas Longhorns</h3>
+                    <span class="team-sport">NCAA Football</span>
+                </div>
+            </div>
+            <div class="team-content">
+                <p style="color: var(--blaze-grey-300); line-height: 1.6;">
+                    Championship-level analytics for one of college football's premier programs.
+                </p>
+                <div class="team-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">13</div>
+                        <div class="stat-label">Games</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">48</div>
+                        <div class="stat-label">Metrics</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">91%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+                <div class="team-actions">
+                    <button class="btn btn-primary btn-sm" style="flex: 1;">View Dashboard</button>
+                    <button class="btn btn-secondary btn-sm" style="flex: 1;">Analytics</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Memphis Grizzlies -->
+        <div class="team-card">
+            <div class="team-image-container">
+                <div class="team-placeholder">🏀</div>
+                <div class="team-overlay">
+                    <h3 class="team-name">Memphis Grizzlies</h3>
+                    <span class="team-sport">NBA Basketball</span>
+                </div>
+            </div>
+            <div class="team-content">
+                <p style="color: var(--blaze-grey-300); line-height: 1.6;">
+                    Advanced basketball analytics for playoff-caliber performance optimization.
+                </p>
+                <div class="team-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">82</div>
+                        <div class="stat-label">Games</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">38</div>
+                        <div class="stat-label">Metrics</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">95%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+                <div class="team-actions">
+                    <button class="btn btn-primary btn-sm" style="flex: 1;">View Dashboard</button>
+                    <button class="btn btn-secondary btn-sm" style="flex: 1;">Analytics</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding: var(--space-8); background: rgba(26, 26, 26, 0.5);">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h2 style="font-family: var(--font-heading); font-size: var(--text-3xl); margin-bottom: var(--space-4);">
+                Professional Sports Analytics
+            </h2>
+            <p style="color: var(--blaze-grey-300); font-size: var(--text-lg); line-height: 1.6;">
+                Our platform delivers championship-level insights without relying on individual personalities or past achievements. 
+                We focus on data-driven performance metrics, team dynamics, and strategic intelligence that drives winning outcomes.
+            </p>
+            <div style="margin-top: var(--space-8);">
+                <button class="btn btn-primary btn-lg">Explore Full Platform</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

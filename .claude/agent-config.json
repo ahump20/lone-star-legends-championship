@@ -1,0 +1,106 @@
+{
+  "name": "Blaze Intelligence Development Agent",
+  "version": "1.0.0",
+  "description": "Automated agent for Blaze Intelligence platform development and maintenance",
+  "capabilities": [
+    "code-review",
+    "performance-optimization",
+    "data-pipeline-management",
+    "deployment-automation"
+  ],
+  "tasks": {
+    "daily": [
+      {
+        "name": "Update Analytics Data",
+        "schedule": "0 8 * * *",
+        "actions": [
+          "Fetch latest sports data from APIs",
+          "Process CEE normalization scores",
+          "Update dashboard metrics",
+          "Generate daily reports"
+        ]
+      },
+      {
+        "name": "Performance Check",
+        "schedule": "0 */6 * * *",
+        "actions": [
+          "Monitor API response times",
+          "Check Cloudflare Workers health",
+          "Validate data accuracy",
+          "Alert on anomalies"
+        ]
+      }
+    ],
+    "triggers": {
+      "onPush": [
+        "Run tests",
+        "Check code quality",
+        "Deploy to preview"
+      ],
+      "onMerge": [
+        "Deploy to production",
+        "Update documentation",
+        "Send notifications"
+      ]
+    }
+  },
+  "integrations": {
+    "cloudflare": {
+      "pages": "blaze-intelligence",
+      "workers": [
+        "blaze-intelligence-worker"
+      ],
+      "kv": [
+        "BLAZE_CACHE",
+        "BLAZE_SESSIONS"
+      ],
+      "d1": [
+        "blaze-analytics"
+      ]
+    },
+    "github": {
+      "repo": "blaze-intelligence",
+      "branch": "main",
+      "workflows": [
+        ".github/workflows/deploy.yml"
+      ]
+    },
+    "monitoring": {
+      "sentry": {
+        "project": "blaze-intelligence"
+      },
+      "analytics": {
+        "ga4": "G-XXXXXXXXXX"
+      }
+    }
+  },
+  "commands": {
+    "deploy": "npx wrangler pages deploy . --project-name blaze-intelligence",
+    "test": "npm test",
+    "lint": "npm run lint",
+    "build": "npm run build",
+    "dev": "npx wrangler pages dev ."
+  },
+  "environment": {
+    "production": {
+      "url": "https://blaze-intelligence.com",
+      "branch": "main"
+    },
+    "preview": {
+      "url": "https://preview.blaze-intelligence.pages.dev",
+      "branch": "develop"
+    }
+  },
+  "notifications": {
+    "email": "ahump20@outlook.com",
+    "slack": {
+      "webhook": "$SLACK_WEBHOOK_URL",
+      "channel": "#blaze-dev"
+    }
+  },
+  "prompts": {
+    "codeReview": "Review this code for performance, security, and best practices. Focus on championship-level quality.",
+    "dataAnalysis": "Analyze the sports data and provide insights using the CEE normalization framework.",
+    "deployment": "Deploy changes following the Four Pillars framework: TITANS (thorough testing), LONGHORNS (excellence), CARDINALS (process), GRIZZLIES (resilience)."
+  }
+}
