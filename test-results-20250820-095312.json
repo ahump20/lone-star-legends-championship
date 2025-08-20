@@ -1,0 +1,10 @@
+{
+    "timestamp": "2025-08-20T14:53:12Z",
+    "passed": 17,
+    "failed": 6,
+    "skipped": 0,
+    "success_rate": 73,
+    "results": [
+        "✗ ML Baseball Prediction","✓ ML Engine Load","✓ Health Check API","✓ Teams API Response","✓ Players API Response","✗ Sports API Response","✓ Ingestion Script Exists","✓ Cardinals Agent Script","✓ Readiness Data Generated","✓ Baseball Engine Load","✓ Sports Data Module","✗ Game Simulation Init","✓ Wrangler Installed","✓ D1 Database Exists","✗ KV Namespaces Configured","✓ Pages Deployment Active","✗ No Exposed Secrets","✓ .env.example Exists","✗ No API Keys in Code","✓ NIL API Endpoint"
+    ]
+}

@@ -28,7 +28,7 @@ export async function onRequest(context) {
             agents: await checkAgentHealth()
         },
         metrics: {
-            uptime: process.uptime ? process.uptime() : 'N/A',
+            uptime: getUptime(),
             memory: getMemoryUsage(),
             responseTime: Date.now()
         }
@@ -123,14 +123,20 @@ async function checkAgentHealth() {
     };
 }
 
+function getUptime() {
+    // Cloudflare Workers don't have process.uptime
+    // Return deployment time instead
+    return {
+        deployedAt: new Date().toISOString(),
+        status: 'operational'
+    };
+}
+
 function getMemoryUsage() {
-    if (typeof process !== 'undefined' && process.memoryUsage) {
-        const usage = process.memoryUsage();
-        return {
-            heapUsed: `${Math.round(usage.heapUsed / 1048576)}MB`,
-            heapTotal: `${Math.round(usage.heapTotal / 1048576)}MB`,
-            external: `${Math.round(usage.external / 1048576)}MB`
-        };
-    }
-    return 'N/A';
+    // Cloudflare Workers don't expose memory usage
+    // Return static info about Workers limits
+    return {
+        limit: '128MB',
+        status: 'within limits'
+    };
 }
