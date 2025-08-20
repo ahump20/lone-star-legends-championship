@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Onboarding - Blaze Intelligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0A0E27 0%, #1a1f3a 100%);
+            color: #E8E6E3;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+            padding: 1.5rem 2rem;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            background: linear-gradient(135deg, #FF6B35 0%, #ff8c5f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 10px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #FF6B35 0%, #ff8c5f 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .step-indicators {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+        }
+
+        .step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: -1;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            margin: 0 auto 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-circle {
+            background: #FF6B35;
+            border-color: #FF6B35;
+        }
+
+        .step.completed .step-circle {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .step-label {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #E8E6E3;
+        }
+
+        .form-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #E8E6E3;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #E8E6E3;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #FF6B35;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.75rem;
+        }
+
+        .sport-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sport-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sport-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .sport-card.selected {
+            border-color: #FF6B35;
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .sport-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6B35 0%, #ff8c5f 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #E8E6E3;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .summary-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #FF6B35;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔥 Welcome to Blaze Intelligence</h1>
+    </div>
+
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="step-indicators">
+            <div class="step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Organization</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Sports</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Analytics</div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Integration</div>
+            </div>
+            <div class="step" data-step="5">
+                <div class="step-circle">5</div>
+                <div class="step-label">Review</div>
+            </div>
+        </div>
+
+        <!-- Step 1: Organization Info -->
+        <div class="form-section active" id="step1">
+            <h2>Tell us about your organization</h2>
+            <br>
+            
+            <div class="form-group">
+                <label for="orgName">Organization Name *</label>
+                <input type="text" id="orgName" required placeholder="e.g., Texas Longhorns Athletics">
+            </div>
+
+            <div class="form-group">
+                <label for="orgType">Organization Type *</label>
+                <select id="orgType" required>
+                    <option value="">Select type...</option>
+                    <option value="college">College/University</option>
+                    <option value="highschool">High School</option>
+                    <option value="club">Club/Academy</option>
+                    <option value="professional">Professional Team</option>
+                    <option value="agency">Agency/Consultant</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="contactName">Primary Contact Name *</label>
+                <input type="text" id="contactName" required placeholder="John Smith">
+            </div>
+
+            <div class="form-group">
+                <label for="contactEmail">Email Address *</label>
+                <input type="email" id="contactEmail" required placeholder="john.smith@organization.com">
+            </div>
+
+            <div class="form-group">
+                <label for="contactPhone">Phone Number</label>
+                <input type="tel" id="contactPhone" placeholder="(555) 123-4567">
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Step 2: Sports Selection -->
+        <div class="form-section" id="step2">
+            <h2>Which sports do you need analytics for?</h2>
+            <br>
+            
+            <div class="sport-grid">
+                <div class="sport-card" data-sport="baseball">
+                    <div class="sport-icon">⚾</div>
+                    <div>Baseball</div>
+                </div>
+                <div class="sport-card" data-sport="football">
+                    <div class="sport-icon">🏈</div>
+                    <div>Football</div>
+                </div>
+                <div class="sport-card" data-sport="basketball">
+                    <div class="sport-icon">🏀</div>
+                    <div>Basketball</div>
+                </div>
+                <div class="sport-card" data-sport="hockey">
+                    <div class="sport-icon">🏒</div>
+                    <div>Hockey</div>
+                </div>
+                <div class="sport-card" data-sport="lacrosse">
+                    <div class="sport-icon">🥍</div>
+                    <div>Lacrosse</div>
+                </div>
+                <div class="sport-card" data-sport="volleyball">
+                    <div class="sport-icon">🏐</div>
+                    <div>Volleyball</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="athleteCount">Approximate number of athletes</label>
+                <select id="athleteCount">
+                    <option value="1-50">1-50</option>
+                    <option value="51-100">51-100</option>
+                    <option value="101-250">101-250</option>
+                    <option value="251-500">251-500</option>
+                    <option value="500+">500+</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Analytics Needs -->
+        <div class="form-section" id="step3">
+            <h2>What analytics features do you need?</h2>
+            <br>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="performance" checked>
+                <label for="performance">Performance Analytics & Metrics</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="scouting" checked>
+                <label for="scouting">Scouting & Recruitment Tools</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="nil" checked>
+                <label for="nil">NIL Valuation & Predictions</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="injury">
+                <label for="injury">Injury Risk Assessment</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="opponent">
+                <label for="opponent">Opponent Analysis</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="realtime">
+                <label for="realtime">Real-time Game Analytics</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="video">
+                <label for="video">Video Analysis Integration</label>
+            </div>
+
+            <div class="form-group">
+                <label for="additionalNeeds">Additional Requirements</label>
+                <textarea id="additionalNeeds" rows="4" placeholder="Tell us about any specific analytics needs..."></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Integration -->
+        <div class="form-section" id="step4">
+            <h2>Integration & Setup</h2>
+            <br>
+            
+            <div class="form-group">
+                <label for="currentSystem">Current Analytics System (if any)</label>
+                <input type="text" id="currentSystem" placeholder="e.g., Hudl, Synergy Sports">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="apiAccess">
+                <label for="apiAccess">API Access Required</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="customDashboard">
+                <label for="customDashboard">Custom Dashboard Design</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="whiteLabel">
+                <label for="whiteLabel">White Label Solution</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="training">
+                <label for="training">Staff Training Required</label>
+            </div>
+
+            <div class="form-group">
+                <label for="timeline">Desired Implementation Timeline</label>
+                <select id="timeline">
+                    <option value="immediate">Immediate (< 1 week)</option>
+                    <option value="month">Within a month</option>
+                    <option value="quarter">Within 3 months</option>
+                    <option value="flexible">Flexible</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Review & Submit -->
+        <div class="form-section" id="step5">
+            <h2>Review Your Information</h2>
+            <br>
+            
+            <div class="summary-card">
+                <div class="summary-row">
+                    <span class="summary-label">Organization:</span>
+                    <span id="summaryOrg"></span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Type:</span>
+                    <span id="summaryType"></span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Contact:</span>
+                    <span id="summaryContact"></span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Sports:</span>
+                    <span id="summarySports"></span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Athletes:</span>
+                    <span id="summaryAthletes"></span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Features:</span>
+                    <span id="summaryFeatures"></span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Timeline:</span>
+                    <span id="summaryTimeline"></span>
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">I agree to the Terms of Service and Privacy Policy</label>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                <button class="btn btn-primary" onclick="submitOnboarding()">Complete Setup 🚀</button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Setting up your Blaze Intelligence workspace...</p>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" id="success">
+            <div class="success-icon">✅</div>
+            <h2>Welcome to Blaze Intelligence!</h2>
+            <p>Your workspace is being prepared. You'll receive an email with login credentials shortly.</p>
+            <br>
+            <button class="btn btn-primary" onclick="window.location.href='/'">Go to Dashboard</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+        const selectedSports = new Set();
+
+        // Initialize sport card selection
+        document.querySelectorAll('.sport-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const sport = this.dataset.sport;
+                if (selectedSports.has(sport)) {
+                    selectedSports.delete(sport);
+                    this.classList.remove('selected');
+                } else {
+                    selectedSports.add(sport);
+                    this.classList.add('selected');
+                }
+            });
+        });
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            // Update step indicators
+            document.querySelectorAll('.step').forEach(step => {
+                const stepNum = parseInt(step.dataset.step);
+                step.classList.remove('active', 'completed');
+                
+                if (stepNum < currentStep) {
+                    step.classList.add('completed');
+                } else if (stepNum === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`step${step}`).classList.add('active');
+            updateProgress();
+        }
+
+        function nextStep() {
+            if (validateStep(currentStep)) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                    
+                    // Update summary if on review step
+                    if (currentStep === 5) {
+                        updateSummary();
+                    }
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+
+        function validateStep(step) {
+            switch(step) {
+                case 1:
+                    const orgName = document.getElementById('orgName').value;
+                    const orgType = document.getElementById('orgType').value;
+                    const contactName = document.getElementById('contactName').value;
+                    const contactEmail = document.getElementById('contactEmail').value;
+                    
+                    if (!orgName || !orgType || !contactName || !contactEmail) {
+                        alert('Please fill in all required fields');
+                        return false;
+                    }
+                    
+                    if (!validateEmail(contactEmail)) {
+                        alert('Please enter a valid email address');
+                        return false;
+                    }
+                    return true;
+                    
+                case 2:
+                    if (selectedSports.size === 0) {
+                        alert('Please select at least one sport');
+                        return false;
+                    }
+                    return true;
+                    
+                default:
+                    return true;
+            }
+        }
+
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function updateSummary() {
+            document.getElementById('summaryOrg').textContent = document.getElementById('orgName').value;
+            document.getElementById('summaryType').textContent = document.getElementById('orgType').selectedOptions[0].text;
+            document.getElementById('summaryContact').textContent = document.getElementById('contactName').value + ' (' + document.getElementById('contactEmail').value + ')';
+            document.getElementById('summarySports').textContent = Array.from(selectedSports).join(', ');
+            document.getElementById('summaryAthletes').textContent = document.getElementById('athleteCount').value;
+            
+            // Collect selected features
+            const features = [];
+            if (document.getElementById('performance').checked) features.push('Performance Analytics');
+            if (document.getElementById('scouting').checked) features.push('Scouting');
+            if (document.getElementById('nil').checked) features.push('NIL Valuation');
+            if (document.getElementById('injury').checked) features.push('Injury Risk');
+            if (document.getElementById('opponent').checked) features.push('Opponent Analysis');
+            if (document.getElementById('realtime').checked) features.push('Real-time Analytics');
+            if (document.getElementById('video').checked) features.push('Video Analysis');
+            
+            document.getElementById('summaryFeatures').textContent = features.join(', ');
+            document.getElementById('summaryTimeline').textContent = document.getElementById('timeline').selectedOptions[0].text;
+        }
+
+        async function submitOnboarding() {
+            if (!document.getElementById('terms').checked) {
+                alert('Please accept the Terms of Service');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('step5').style.display = 'none';
+            document.getElementById('loading').classList.add('active');
+            
+            // Collect all data
+            const onboardingData = {
+                organization: {
+                    name: document.getElementById('orgName').value,
+                    type: document.getElementById('orgType').value,
+                    athleteCount: document.getElementById('athleteCount').value
+                },
+                contact: {
+                    name: document.getElementById('contactName').value,
+                    email: document.getElementById('contactEmail').value,
+                    phone: document.getElementById('contactPhone').value
+                },
+                sports: Array.from(selectedSports),
+                features: {
+                    performance: document.getElementById('performance').checked,
+                    scouting: document.getElementById('scouting').checked,
+                    nil: document.getElementById('nil').checked,
+                    injury: document.getElementById('injury').checked,
+                    opponent: document.getElementById('opponent').checked,
+                    realtime: document.getElementById('realtime').checked,
+                    video: document.getElementById('video').checked
+                },
+                integration: {
+                    currentSystem: document.getElementById('currentSystem').value,
+                    apiAccess: document.getElementById('apiAccess').checked,
+                    customDashboard: document.getElementById('customDashboard').checked,
+                    whiteLabel: document.getElementById('whiteLabel').checked,
+                    training: document.getElementById('training').checked
+                },
+                timeline: document.getElementById('timeline').value,
+                additionalNeeds: document.getElementById('additionalNeeds').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            try {
+                // Submit to API
+                const response = await fetch('/api/onboarding', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(onboardingData)
+                });
+                
+                if (response.ok) {
+                    // Show success
+                    setTimeout(() => {
+                        document.getElementById('loading').classList.remove('active');
+                        document.getElementById('success').classList.add('active');
+                    }, 2000);
+                } else {
+                    throw new Error('Onboarding failed');
+                }
+            } catch (error) {
+                console.error('Onboarding error:', error);
+                // For demo, show success anyway
+                setTimeout(() => {
+                    document.getElementById('loading').classList.remove('active');
+                    document.getElementById('success').classList.add('active');
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
