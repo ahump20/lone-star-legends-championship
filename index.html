@@ -24,12 +24,27 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, var(--blaze-black), #1a1a1a);
+            background: #0A0A0A;
             color: var(--blaze-white);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 20%, rgba(255, 107, 53, 0.08) 0%, transparent 40%);
+            pointer-events: none;
         }
 
         .main-menu {
@@ -159,7 +174,7 @@
             </div>
         </div>
         
-        <a href="blaze-branded-game.html" class="play-button">🎮 PLAY NOW</a>
+        <a href="game.html" class="play-button">🎮 PLAY NOW</a>
         
         <div class="features">
             <h3 style="color: #FFD700; text-align: center; margin-bottom: 20px;">Game Features:</h3>
@@ -175,6 +190,9 @@
 
         <div class="game-links">
             <h3 style="color: #FFD700; margin-bottom: 15px;">Blaze Intelligence Command Center:</h3>
+            <a href="game.html" class="game-link" style="background: linear-gradient(45deg, #FF6B35, #CC5500); border-color: #FF6B35;">
+                🎮 PLAY THE GAME NOW
+            </a>
             <a href="blaze-analytics-integration.html" class="game-link">
                 📊 Live Sports Analytics Hub
             </a>
