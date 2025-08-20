@@ -1,0 +1,25 @@
+:root{
+  --blaze-orange:#FF6B35;
+  --blaze-burnt:#CC5500;
+  --blaze-bg:#0A0A0A;
+  --blaze-panel:#16181c;
+  --blaze-text:#ECECF0;
+  --blaze-muted:#A1A5AE;
+  --radius:16px;
+  --shadow:0 18px 45px rgba(0,0,0,.45);
+  --font-heading:'Space Grotesk',system-ui,sans-serif;
+  --font-body:Inter,system-ui,sans-serif;
+}
+/* global base */
+html,body{background:var(--blaze-bg);color:var(--blaze-text);font-family:var(--font-body);}
+.container{width:min(1200px,92vw);margin-inline:auto;}
+.blaze-card{background:linear-gradient(135deg,rgba(22,24,28,.92),rgba(22,24,28,.72));
+  border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);box-shadow:var(--shadow);}
+.btn-blaze{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.2rem;border-radius:14px;
+  text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,.12);}
+.btn-primary{background:linear-gradient(90deg,var(--blaze-burnt),var(--blaze-orange));color:#0b0c0e;border:0;
+  box-shadow:0 10px 30px rgba(255,107,53,.35);}
+.btn-ghost{background:transparent;color:var(--blaze-text);}
+/* nuke legacy field + rogue logos on home only */
+body.home canvas#hero-canvas, body.home canvas#field, body.home #three-bg, body.home .legacy-field {display:none!important;}
+body.home .hero img[alt*="logo"], body.home .hero [data-legacy-logo], body.home .uncropped-logo, body.home .legacy-logo {display:none!important;}
