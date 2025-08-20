@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Lone Star Legends Championship</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#FF6B35">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Google Fonts: Space Grotesk for headings, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        /*
+         * =============================================
+         * BASE STYLES & BRAND THEME
+         * =============================================
+         */
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-burnt-orange: #CC5500;
+            --blaze-black: #0A0A0A;
+            --blaze-white: #FFFFFF;
+            --blaze-grey: #1A1A1A;
+            --blaze-text-secondary: #a0a0a0;
+            --blaze-success: #4CAF50;
+            --blaze-error: #F44336;
+
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            
+            --transition-fast: 0.2s ease;
+            --transition-medium: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--blaze-black);
+            color: var(--blaze-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /*
+         * =============================================
+         * 3D HERO CANVAS
+         * =============================================
+         */
+        #hero-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        /*
+         * =============================================
+         * MAIN LAYOUT & CONTAINER
+         * =============================================
+         */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /*
+         * =============================================
+         * HEADER & LOGO
+         * =============================================
+         */
+        header {
+            text-align: center;
+            padding: 3rem 2rem 2rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { 
+                opacity: 0; 
+                transform: translateY(-30px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blaze-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--blaze-black);
+            font-family: var(--font-heading);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+            animation: iconPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .header-text .title {
+            font-family: var(--font-heading);
+            font-size: 3em;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 107, 53, 0.3);
+            letter-spacing: 1px;
+            margin: 0;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.2); }
+        }
+
+        .header-text .subtitle {
+            font-size: 1.2em;
+            color: var(--blaze-text-secondary);
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        /*
+         * =============================================
+         * MAIN CONTENT
+         * =============================================
+         */
+        main {
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: rgba(26, 26, 26, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .play-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--blaze-burnt-orange), var(--blaze-orange));
+            border: 2px solid var(--blaze-orange);
+            border-radius: 16px;
+            color: var(--blaze-white);
+            font-size: 1.8em;
+            font-weight: bold;
+            font-family: var(--font-heading);
+            padding: 1.2rem 3rem;
+            text-decoration: none;
+            transition: all var(--transition-medium);
+            cursor: pointer;
+            letter-spacing: 1px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .play-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .play-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(255, 107, 53, 0.5);
+        }
+
+        .play-button:hover::before {
+            left: 100%;
+        }
+
+        /*
+         * =============================================
+         * VIDEO EMBED SECTION
+         * =============================================
+         */
+        #video-embed {
+            margin: 2rem 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(255, 107, 53, 0.2);
+            background: var(--blaze-grey);
+            position: relative;
+        }
+
+        #video-embed::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            animation: shimmer 2s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        #video-embed iframe {
+            border: 0;
+            width: 100%;
+            aspect-ratio: 16/9;
+            display: block;
+        }
+
+        /*
+         * =============================================
+         * CONTENT GRID
+         * =============================================
+         */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        /*
+         * =============================================
+         * COMMAND CENTER
+         * =============================================
+         */
+        .command-center {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 107, 53, 0.1);
+        }
+        
+        .section-title {
+            font-family: var(--font-heading);
+            color: var(--blaze-orange);
+            margin-bottom: 1.5rem;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(to bottom, var(--blaze-orange), var(--blaze-burnt-orange));
+            border-radius: 2px;
+        }
+
+        .game-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .game-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--blaze-grey);
+            border: 1px solid transparent;
+            border-radius: 12px;
+            color: var(--blaze-white);
+            font-size: 1em;
+            padding: 1rem 1.25rem;
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--blaze-orange);
+            transform: scaleY(0);
+            transition: transform var(--transition-fast);
+        }
+
+        .game-link:hover {
+            background: rgba(255, 107, 53, 0.1);
+            border-color: var(--blaze-orange);
+            transform: translateX(5px);
+        }
+
+        .game-link:hover::before {
+            transform: scaleY(1);
+        }
+
+        .game-link-arrow {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all var(--transition-fast);
+        }
+
+        .game-link:hover .game-link-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /*
+         * =============================================
+         * LIVE DATA CARD
+         * =============================================
+         */
+        aside {
+            position: sticky;
+            top: 2rem;
+        }
+
+        .live-data {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(26, 26, 26, 0.7));
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .live-data::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .readiness-card {
+            position: relative;
+            z-index: 1;
+        }
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #444;
+            margin-right: 10px;
+            position: relative;
+        }
+
+        .status-indicator.active {
+            background-color: var(--blaze-orange);
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.error {
+            background-color: var(--blaze-error);
+        }
+
+        @keyframes pulse {
+            0% { 
+                box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.7);
+            }
+            70% { 
+                box-shadow: 0 0 0 15px rgba(255, 107, 53, 0);
+            }
+            100% { 
+                box-shadow: 0 0 0 0 rgba(255, 107, 53, 0);
+            }
+        }
+
+        .data-row {
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .data-label {
+            color: var(--blaze-text-secondary);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .data-value {
+            font-family: var(--font-heading);
+            font-size: 2.2em;
+            color: var(--blaze-orange);
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        /* Skeleton Loader */
+        .skeleton {
+            background: linear-gradient(90deg, 
+                rgba(255, 107, 53, 0.1) 25%, 
+                rgba(255, 107, 53, 0.2) 50%, 
+                rgba(255, 107, 53, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+            height: 2.2em;
+            width: 100px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .last-updated {
+            color: var(--blaze-text-secondary);
+            font-size: 0.8em;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 107, 53, 0.1);
+        }
+
+        /*
+         * =============================================
+         * FEATURES SECTION
+         * =============================================
+         */
+        .features-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(26, 26, 26, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 107, 53, 0.1);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--blaze-grey);
+            border-radius: 12px;
+            transition: all var(--transition-fast);
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-title {
+            font-family: var(--font-heading);
+            color: var(--blaze-white);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            color: var(--blaze-text-secondary);
+            font-size: 0.9em;
+        }
+
+        /*
+         * =============================================
+         * FOOTER
+         * =============================================
+         */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 107, 53, 0.1);
+            color: var(--blaze-text-secondary);
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .controls-info {
+            background: rgba(26, 26, 26, 0.5);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 107, 53, 0.1);
+        }
+
+        .controls-info h4 {
+            color: var(--blaze-orange);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-heading);
+        }
+
+        .copyright {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        /*
+         * =============================================
+         * MOBILE RESPONSIVENESS
+         * =============================================
+         */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header-text .title {
+                font-size: 2em;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            aside {
+                position: relative;
+                top: 0;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .play-button {
+                font-size: 1.5em;
+                padding: 1rem 2rem;
+            }
+
+            .data-value {
+                font-size: 1.8em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                flex-direction: column;
+            }
+
+            .game-link {
+                font-size: 0.9em;
+                padding: 0.8rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 3D Background Canvas -->
+    <canvas id="hero-canvas"></canvas>
+
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="blaze-icon">B</div>
+                <div class="header-text">
+                    <h1 class="title">Blaze Intelligence</h1>
+                    <h2 class="subtitle">Lone Star Legends Championship</h2>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero-section">
+                <a href="game.html" class="play-button">🎮 PLAY NOW</a>
+                
+                <!-- Video Embed Section -->
+                <div id="video-embed">
+                    <iframe
+                        src="https://iframe.videodelivery.net/138facaf760c65e9b4efab3715ae6f50?autoplay=false&muted=false&controls=true&preload=metadata"
+                        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </section>
+
+            <div class="content-grid">
+                <nav class="command-center">
+                    <h3 class="section-title">Command Center</h3>
+                    <div class="game-links">
+                        <a href="blaze-analytics-integration.html" class="game-link">
+                            <span>📊 Live Sports Analytics Hub</span>
+                            <svg class="game-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                        <a href="fbs-coverage-integration.html" class="game-link">
+                            <span>🏈 FBS Coverage & Predictions</span>
+                            <svg class="game-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                        <a href="blaze-portfolio-showcase.html" class="game-link">
+                            <span>🚀 Three.js Portfolio Showcase</span>
+                            <svg class="game-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                        <a href="claude-baseball-demo.html" class="game-link">
+                            <span>🎯 Three.js Game Demo</span>
+                            <svg class="game-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                        <a href="statistics-dashboard.html" class="game-link">
+                            <span>📈 Statistics Dashboard</span>
+                            <svg class="game-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                        <a href="multiplayer-client.html" class="game-link">
+                            <span>🌐 Multiplayer Mode</span>
+                            <svg class="game-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                </nav>
+
+                <aside>
+                    <div class="live-data">
+                        <h3 class="section-title">Live Data</h3>
+                        <div id="readiness-card" class="readiness-card">
+                            <div class="status-row">
+                                <span class="status-indicator" id="status-indicator"></span>
+                                <span id="status-text">Connecting to live feed...</span>
+                            </div>
+                            
+                            <div class="data-row">
+                                <div class="data-label">Readiness</div>
+                                <div id="readiness-value" class="data-value skeleton"></div>
+                            </div>
+                            
+                            <div class="data-row">
+                                <div class="data-label">Leverage</div>
+                                <div id="leverage-value" class="data-value skeleton"></div>
+                            </div>
+                            
+                            <div class="last-updated">
+                                Last updated: <span id="last-updated">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <section class="features-section">
+                <h3 class="section-title">Game Features</h3>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">⚾</div>
+                        <div class="feature-title">3D Baseball</div>
+                        <div class="feature-desc">Full simulation with realistic physics</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎮</div>
+                        <div class="feature-title">Total Control</div>
+                        <div class="feature-desc">Batting, running & fielding</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🏟️</div>
+                        <div class="feature-title">Stadium</div>
+                        <div class="feature-desc">Professional graphics & lighting</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🏆</div>
+                        <div class="feature-title">Home Run Derby</div>
+                        <div class="feature-desc">Complete 9-inning games</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="controls-info">
+                    <h4>🎮 Game Controls</h4>
+                    <p><strong>Movement:</strong> WASD keys | <strong>Action:</strong> SPACE to swing/throw | <strong>Running:</strong> Arrow keys for base running</p>
+                    <p>📱 Desktop browsers with keyboard required</p>
+                </div>
+                <div class="copyright">
+                    &copy; 2025 Blaze Intelligence. All Rights Reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Video SEO Schema -->
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"VideoObject",
+      "name":"Sports Management & Operations Lecture",
+      "description":"Professor interview discussing sports operations, management strategies, and analytics insights with Austin Humphrey.",
+      "thumbnailUrl":["https://blaze-intelligence.com/img/poster-prof-interview.jpg"],
+      "uploadDate":"2025-08-20",
+      "embedUrl":"https://blaze-intelligence.com/#video-embed"
+    }
+    </script>
+
+    <script>
+        /**
+         * =============================================
+         * ENHANCED THREE.JS HERO BACKGROUND
+         * =============================================
+         */
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ 
+            canvas: document.getElementById('hero-canvas'), 
+            alpha: true,
+            antialias: true 
+        });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        camera.position.z = 5;
+
+        // --- Enhanced Baseball Object ---
+        const baseballGroup = new THREE.Group();
+        
+        // Baseball sphere
+        const sphereGeometry = new THREE.SphereGeometry(1.2, 32, 32);
+        const sphereMaterial = new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            roughness: 0.4,
+            metalness: 0.1,
+        });
+        const baseball = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        baseballGroup.add(baseball);
+
+        // Baseball stitches
+        const stitchCurve1 = new THREE.CatmullRomCurve3([
+            new THREE.Vector3(-0.8, 0.8, 0.5),
+            new THREE.Vector3(0, 1.1, 0.2),
+            new THREE.Vector3(0.8, 0.8, 0.5),
+        ]);
+        
+        const stitchCurve2 = new THREE.CatmullRomCurve3([
+            new THREE.Vector3(-0.8, -0.8, 0.5),
+            new THREE.Vector3(0, -1.1, 0.2),
+            new THREE.Vector3(0.8, -0.8, 0.5),
+        ]);
+
+        const stitchGeometry1 = new THREE.TubeGeometry(stitchCurve1, 20, 0.02, 8, false);
+        const stitchGeometry2 = new THREE.TubeGeometry(stitchCurve2, 20, 0.02, 8, false);
+        
+        const stitchMaterial = new THREE.MeshStandardMaterial({
+            color: 0xFF6B35,
+            emissive: 0xFF6B35,
+            emissiveIntensity: 0.3,
+            roughness: 0.6,
+        });
+        
+        const stitch1 = new THREE.Mesh(stitchGeometry1, stitchMaterial);
+        const stitch2 = new THREE.Mesh(stitchGeometry2, stitchMaterial);
+        
+        baseballGroup.add(stitch1);
+        baseballGroup.add(stitch2);
+        
+        scene.add(baseballGroup);
+
+        // --- Enhanced Lighting ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+        
+        const pointLight = new THREE.PointLight(0xffffff, 1);
+        pointLight.position.set(5, 5, 5);
+        scene.add(pointLight);
+        
+        const blazeLight = new THREE.PointLight(0xFF6B35, 2, 100);
+        blazeLight.position.set(-10, -5, 10);
+        scene.add(blazeLight);
+
+        // Rim light for baseball
+        const rimLight = new THREE.DirectionalLight(0xFF6B35, 0.5);
+        rimLight.position.set(0, 0, 5);
+        scene.add(rimLight);
+
+        // --- Enhanced Particle System ---
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCnt = window.innerWidth < 768 ? 2000 : 5000; // Reduce on mobile
+        const posArray = new Float32Array(particlesCnt * 3);
+        const scaleArray = new Float32Array(particlesCnt);
+        
+        for (let i = 0; i < particlesCnt * 3; i += 3) {
+            posArray[i] = (Math.random() - 0.5) * 15;
+            posArray[i + 1] = (Math.random() - 0.5) * 15;
+            posArray[i + 2] = (Math.random() - 0.5) * 15;
+            scaleArray[i / 3] = Math.random();
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        particlesGeometry.setAttribute('scale', new THREE.BufferAttribute(scaleArray, 1));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.015,
+            color: 0xFF6B35,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending,
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // --- Mouse Interaction ---
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // --- Animation Variables ---
+        let time = 0;
+
+        // --- Animation Loop ---
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.01;
+
+            // Smooth mouse follow
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+
+            // Baseball rotation and mouse tracking
+            baseballGroup.rotation.x += 0.002;
+            baseballGroup.rotation.y += 0.003;
+            baseballGroup.rotation.z = targetX * 0.2;
+            baseballGroup.position.x = targetX * 0.5;
+            baseballGroup.position.y = targetY * 0.5;
+
+            // Pulsing blaze light
+            blazeLight.intensity = 2 + Math.sin(time * 2) * 0.5;
+            blazeLight.position.x = Math.sin(time) * 10;
+            blazeLight.position.z = Math.cos(time) * 10;
+
+            // Particle movement
+            particlesMesh.rotation.y = time * 0.1;
+            particlesMesh.rotation.x = targetY * 0.1;
+            
+            // Floating particles effect
+            const positions = particlesGeometry.attributes.position.array;
+            for (let i = 1; i < positions.length; i += 3) {
+                positions[i] += Math.sin(time + i) * 0.001;
+            }
+            particlesGeometry.attributes.position.needsUpdate = true;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // --- Handle Window Resize ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        });
+
+        /**
+         * =============================================
+         * ENHANCED LIVE DATA FETCHING
+         * =============================================
+         */
+        async function fetchReadinessData() {
+            const readinessValue = document.getElementById('readiness-value');
+            const leverageValue = document.getElementById('leverage-value');
+            const lastUpdated = document.getElementById('last-updated');
+            const statusIndicator = document.getElementById('status-indicator');
+            const statusText = document.getElementById('status-text');
+
+            // Show skeleton loaders
+            readinessValue.classList.add('skeleton');
+            leverageValue.classList.add('skeleton');
+            readinessValue.textContent = '';
+            leverageValue.textContent = '';
+
+            try {
+                // Simulate network delay for demo
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                const response = await fetch('data/readiness.json');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+
+                // Remove skeleton loaders
+                readinessValue.classList.remove('skeleton');
+                leverageValue.classList.remove('skeleton');
+
+                // Update UI with fetched data
+                readinessValue.textContent = data.readiness.toFixed(2);
+                leverageValue.textContent = data.leverage.toFixed(2);
+                lastUpdated.textContent = new Date(data.timestamp).toLocaleTimeString();
+                statusText.textContent = 'Cardinals Live';
+                statusIndicator.classList.add('active');
+                statusIndicator.classList.remove('error');
+
+                // Add success animation
+                readinessValue.style.animation = 'fadeInUp 0.5s ease-out';
+                leverageValue.style.animation = 'fadeInUp 0.5s ease-out 0.1s';
+
+            } catch (error) {
+                console.warn('Could not fetch readiness.json:', error);
+                
+                // Remove skeleton loaders
+                readinessValue.classList.remove('skeleton');
+                leverageValue.classList.remove('skeleton');
+                
+                // Show error state
+                readinessValue.textContent = '--';
+                leverageValue.textContent = '--';
+                statusText.textContent = 'Offline';
+                statusIndicator.classList.add('error');
+                statusIndicator.classList.remove('active');
+                lastUpdated.textContent = 'Unable to connect';
+            }
+        }
+
+        // Fetch data when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchReadinessData();
+            
+            // Refresh data every 30 seconds
+            setInterval(fetchReadinessData, 30000);
+        });
+
+        // Add page visibility handling to pause animations when tab is hidden
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Pause animations when page is hidden
+                renderer.setAnimationLoop(null);
+            } else {
+                // Resume animations when page is visible
+                renderer.setAnimationLoop(animate);
+            }
+        });
+    </script>
+</body>
+</html>

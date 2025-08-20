@@ -1,29 +1,31 @@
-name = "blaze-legends-multiplayer"
-main = "blaze-multiplayer-server.js"
-compatibility_date = "2024-01-01"
-workers_dev = true
+name = "blaze-intelligence"
+compatibility_date = "2024-08-20"
+pages_build_output_dir = "./"
 
-[env.production]
-name = "blaze-legends-multiplayer"
-route = "blaze-legends.humphrey-austin20.workers.dev/*"
+# D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "blaze-db"
+database_id = "d3d5415d-0264-41ee-840f-bf12d88d3319"
 
-[[durable_objects.bindings]]
-name = "GAME_ROOMS"
-class_name = "GameRoom"
-script_name = "blaze-legends-multiplayer"
+# KV Namespaces
+[[kv_namespaces]]
+binding = "CACHE"
+id = "a53c3726fc3044be82e79d2d1e371d26"
 
 [[kv_namespaces]]
-binding = "PLAYER_STATS"
-id = "YOUR_KV_NAMESPACE_ID"
-preview_id = "YOUR_PREVIEW_KV_ID"
+binding = "SESSIONS"
+id = "44bb17e8a3cb463a8331f4d11d7ed63d"
 
-[site]
-bucket = "./public"
+[[kv_namespaces]]
+binding = "ANALYTICS"
+id = "c8a0984ce5134c9d9f691818d3c551a3"
 
-[build]
-command = "npm run build"
-watch_paths = ["src/**/*.js"]
+# Environment Variables
+[vars]
+ENVIRONMENT = "production"
 
-[miniflare]
-durable_objects_persist = true
-kv_persist = true
+# Development settings
+[dev]
+port = 8787
+local_protocol = "http"

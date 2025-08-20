@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Lone Star Legends Championship</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#FF6B35">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-burnt-orange: #CC5500;
+            --blaze-black: #0A0A0A;
+            --blaze-white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0A0A0A;
+            color: var(--blaze-white);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 20%, rgba(255, 107, 53, 0.08) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .main-menu {
+            text-align: center;
+            background: rgba(10, 10, 10, 0.95);
+            border: 4px solid var(--blaze-orange);
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 600px;
+            box-shadow: 0 0 40px rgba(255, 107, 53, 0.5);
+        }
+
+        .blaze-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .blaze-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--blaze-orange);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--blaze-black);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.6);
+        }
+
+        .title {
+            font-size: 3em;
+            color: var(--blaze-orange);
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: var(--blaze-white);
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .play-button {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--blaze-burnt-orange), var(--blaze-orange));
+            border: 4px solid var(--blaze-orange);
+            border-radius: 15px;
+            color: var(--blaze-white);
+            font-size: 2em;
+            font-weight: bold;
+            padding: 20px 40px;
+            text-decoration: none;
+            margin: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .play-button:hover {
+            background: linear-gradient(45deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.6);
+        }
+
+        .game-links {
+            margin: 30px 0;
+        }
+
+        .game-link {
+            display: block;
+            background: rgba(45, 90, 61, 0.8);
+            border: 2px solid #4a7c59;
+            border-radius: 10px;
+            color: #90EE90;
+            font-size: 1.2em;
+            padding: 15px 25px;
+            text-decoration: none;
+            margin: 10px 0;
+            transition: all 0.2s;
+        }
+
+        .game-link:hover {
+            background: rgba(45, 90, 61, 1);
+            border-color: #90EE90;
+            transform: translateX(10px);
+        }
+
+        .features {
+            text-align: left;
+            margin: 30px 0;
+            color: #CCC;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .feature-list li::before {
+            content: "⚾ ";
+            color: #FFD700;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-menu">
+        <div class="blaze-logo">
+            <div class="blaze-icon">B</div>
+            <div>
+                <h1 class="title">Blaze Intelligence</h1>
+                <h2 class="subtitle">Lone Star Legends Championship</h2>
+            </div>
+        </div>
+        
+        <a href="game.html" class="play-button">🎮 PLAY NOW</a>
+        
+        <!-- Video Embed Section -->
+        <div id="video-embed" style="margin: 30px 0; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);">
+            <iframe
+                src="https://iframe.videodelivery.net/138facaf760c65e9b4efab3715ae6f50?autoplay=false&muted=false&controls=true&preload=metadata"
+                style="border:0; width:100%; aspect-ratio:16/9;"
+                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                allowfullscreen>
+            </iframe>
+        </div>
+        
+        <div class="features">
+            <h3 style="color: #FFD700; text-align: center; margin-bottom: 20px;">Game Features:</h3>
+            <ul class="feature-list">
+                <li>Full 3D Baseball Simulation</li>
+                <li>Control Batting, Running & Fielding</li>
+                <li>Realistic Stadium with Physics</li>
+                <li>Home Run Derby Action</li>
+                <li>Complete 9-Inning Games</li>
+                <li>Professional Graphics & Lighting</li>
+            </ul>
+        </div>
+
+        <div class="game-links">
+            <h3 style="color: #FFD700; margin-bottom: 15px;">Blaze Intelligence Command Center:</h3>
+            <a href="game.html" class="game-link" style="background: linear-gradient(45deg, #FF6B35, #CC5500); border-color: #FF6B35;">
+                🎮 PLAY THE GAME NOW
+            </a>
+            <a href="blaze-analytics-integration.html" class="game-link">
+                📊 Live Sports Analytics Hub
+            </a>
+            <a href="fbs-coverage-integration.html" class="game-link">
+                🏈 FBS Coverage & Predictions
+            </a>
+            <a href="blaze-portfolio-showcase.html" class="game-link">
+                🚀 Three.js Portfolio Showcase
+            </a>
+            <a href="claude-baseball-demo.html" class="game-link">
+                🎯 Three.js Game Demo
+            </a>
+            <a href="statistics-dashboard.html" class="game-link">
+                📈 Statistics Dashboard
+            </a>
+            <a href="multiplayer-client.html" class="game-link">
+                🌐 Multiplayer Mode
+            </a>
+        </div>
+
+        <div style="margin-top: 30px; color: #888; font-size: 0.9em;">
+            <p>🎮 Controls: WASD to move, SPACE to swing/throw, Arrow keys for base running</p>
+            <p>📱 Works on desktop browsers with keyboard</p>
+        </div>
+    </div>
+    
+    <!-- Video SEO Schema -->
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"VideoObject",
+      "name":"Sports Management & Operations Lecture",
+      "description":"Professor interview discussing sports operations, management strategies, and analytics insights with Austin Humphrey.",
+      "thumbnailUrl":["https://blaze-intelligence.com/img/poster-prof-interview.jpg"],
+      "uploadDate":"2025-08-20",
+      "embedUrl":"https://blaze-intelligence.com/#video-embed"
+    }
+    </script>
+</body>
+</html>
