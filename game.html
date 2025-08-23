@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Lone Star Legends Baseball</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0A0A0A;
+            color: white;
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: 100vh;
+            display: block;
+        }
+
+        .ui-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .team-score {
+            background: rgba(255, 107, 53, 0.2);
+            border: 2px solid #FF6B35;
+            border-radius: 10px;
+            padding: 15px 25px;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 14px;
+            color: #FF6B35;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .score {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            margin: 5px 0;
+        }
+
+        .inning-display {
+            text-align: center;
+            background: rgba(10, 10, 10, 0.8);
+            border: 2px solid #FF6B35;
+            border-radius: 10px;
+            padding: 10px 20px;
+        }
+
+        .inning-label {
+            font-size: 12px;
+            color: #FF6B35;
+            text-transform: uppercase;
+        }
+
+        .inning-number {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #FF6B35, #CC5500);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            text-transform: uppercase;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .instructions {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid #FF6B35;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .hit-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 200;
+        }
+
+        .hit-indicator.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .score-board {
+                padding: 0 10px;
+            }
+            
+            .team-score {
+                padding: 10px 15px;
+                min-width: 100px;
+            }
+            
+            .score {
+                font-size: 28px;
+            }
+            
+            .controls {
+                bottom: 10px;
+                gap: 10px;
+            }
+            
+            .control-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    
+    <div class="ui-overlay">
+        <div class="score-board">
+            <div class="team-score">
+                <div class="team-name">Lone Stars</div>
+                <div class="score" id="homeScore">0</div>
+            </div>
+            <div class="inning-display">
+                <div class="inning-label">Inning</div>
+                <div class="inning-number" id="inning">1</div>
+            </div>
+            <div class="team-score">
+                <div class="team-name">Visitors</div>
+                <div class="score" id="awayScore">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="instructions">
+        Use Arrow Keys or WASD to move • SPACE to swing • Click buttons on mobile
+    </div>
+
+    <div class="controls">
+        <button class="control-btn" onclick="game.swing()">⚾ SWING</button>
+        <button class="control-btn" onclick="game.pitch()">🎯 PITCH</button>
+        <button class="control-btn" onclick="game.reset()">🔄 RESET</button>
+    </div>
+
+    <div class="hit-indicator" id="hitIndicator">HOME RUN!</div>
+
+    <script>
+        class BaseballGame {
+            constructor() {
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                this.renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameCanvas'), antialias: true });
+                
+                this.homeScore = 0;
+                this.awayScore = 0;
+                this.inning = 1;
+                this.balls = [];
+                this.isSwinging = false;
+                this.batRotation = 0;
+                
+                this.init();
+                this.animate();
+            }
+
+            init() {
+                // Setup renderer
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.scene.fog = new THREE.Fog(0x0A0A0A, 100, 500);
+
+                // Camera position
+                this.camera.position.set(0, 15, 30);
+                this.camera.lookAt(0, 0, 0);
+
+                // Lighting
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                this.scene.add(ambientLight);
+
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                directionalLight.position.set(50, 100, 50);
+                directionalLight.castShadow = true;
+                directionalLight.shadow.camera.left = -50;
+                directionalLight.shadow.camera.right = 50;
+                directionalLight.shadow.camera.top = 50;
+                directionalLight.shadow.camera.bottom = -50;
+                this.scene.add(directionalLight);
+
+                // Create stadium lights
+                this.createStadiumLights();
+
+                // Create field
+                this.createField();
+
+                // Create bases
+                this.createBases();
+
+                // Create pitcher's mound
+                this.createPitchersMound();
+
+                // Create batter
+                this.createBatter();
+
+                // Create bat
+                this.createBat();
+
+                // Setup controls
+                this.setupControls();
+
+                // Handle window resize
+                window.addEventListener('resize', () => this.onWindowResize());
+            }
+
+            createField() {
+                // Main field (grass)
+                const fieldGeometry = new THREE.PlaneGeometry(200, 200);
+                const fieldMaterial = new THREE.MeshLambertMaterial({ color: 0x2D5016 });
+                const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+                field.rotation.x = -Math.PI / 2;
+                field.receiveShadow = true;
+                this.scene.add(field);
+
+                // Infield (dirt)
+                const infieldGeometry = new THREE.CircleGeometry(30, 32, 0, Math.PI / 2);
+                const infieldMaterial = new THREE.MeshLambertMaterial({ color: 0x8B7355 });
+                const infield = new THREE.Mesh(infieldGeometry, infieldMaterial);
+                infield.rotation.x = -Math.PI / 2;
+                infield.rotation.z = -Math.PI / 4;
+                infield.position.y = 0.01;
+                this.scene.add(infield);
+
+                // Foul lines
+                const lineGeometry = new THREE.PlaneGeometry(1, 100);
+                const lineMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+                
+                const leftLine = new THREE.Mesh(lineGeometry, lineMaterial);
+                leftLine.rotation.x = -Math.PI / 2;
+                leftLine.rotation.z = Math.PI / 4;
+                leftLine.position.set(-35, 0.02, -35);
+                this.scene.add(leftLine);
+
+                const rightLine = new THREE.Mesh(lineGeometry, lineMaterial);
+                rightLine.rotation.x = -Math.PI / 2;
+                rightLine.rotation.z = -Math.PI / 4;
+                rightLine.position.set(35, 0.02, -35);
+                this.scene.add(rightLine);
+
+                // Outfield wall
+                const wallGeometry = new THREE.BoxGeometry(140, 10, 2);
+                const wallMaterial = new THREE.MeshLambertMaterial({ color: 0x1a4d2e });
+                const wall = new THREE.Mesh(wallGeometry, wallMaterial);
+                wall.position.set(0, 5, -70);
+                wall.castShadow = true;
+                this.scene.add(wall);
+            }
+
+            createBases() {
+                const baseGeometry = new THREE.BoxGeometry(2, 0.2, 2);
+                const baseMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+
+                // Home plate
+                const homePlate = new THREE.Mesh(baseGeometry, baseMaterial);
+                homePlate.position.set(0, 0.1, 0);
+                this.scene.add(homePlate);
+
+                // First base
+                const firstBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                firstBase.position.set(20, 0.1, -20);
+                this.scene.add(firstBase);
+
+                // Second base
+                const secondBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                secondBase.position.set(0, 0.1, -40);
+                this.scene.add(secondBase);
+
+                // Third base
+                const thirdBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                thirdBase.position.set(-20, 0.1, -20);
+                this.scene.add(thirdBase);
+            }
+
+            createPitchersMound() {
+                const moundGeometry = new THREE.CylinderGeometry(3, 4, 0.5, 32);
+                const moundMaterial = new THREE.MeshLambertMaterial({ color: 0x8B7355 });
+                const mound = new THREE.Mesh(moundGeometry, moundMaterial);
+                mound.position.set(0, 0.25, -18);
+                this.scene.add(mound);
+
+                // Pitcher
+                const pitcherGeometry = new THREE.CapsuleGeometry(0.5, 2, 8, 16);
+                const pitcherMaterial = new THREE.MeshLambertMaterial({ color: 0xFF6B35 });
+                this.pitcher = new THREE.Mesh(pitcherGeometry, pitcherMaterial);
+                this.pitcher.position.set(0, 2, -18);
+                this.pitcher.castShadow = true;
+                this.scene.add(this.pitcher);
+            }
+
+            createBatter() {
+                const batterGeometry = new THREE.CapsuleGeometry(0.5, 2, 8, 16);
+                const batterMaterial = new THREE.MeshLambertMaterial({ color: 0x1E90FF });
+                this.batter = new THREE.Mesh(batterGeometry, batterMaterial);
+                this.batter.position.set(0, 2, 2);
+                this.batter.castShadow = true;
+                this.scene.add(this.batter);
+            }
+
+            createBat() {
+                const batGeometry = new THREE.CylinderGeometry(0.1, 0.3, 3, 16);
+                const batMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+                this.bat = new THREE.Mesh(batGeometry, batMaterial);
+                this.bat.position.set(1, 2.5, 2);
+                this.bat.rotation.z = Math.PI / 4;
+                this.bat.castShadow = true;
+                this.scene.add(this.bat);
+            }
+
+            createStadiumLights() {
+                const lightPositions = [
+                    [-40, 30, -40],
+                    [40, 30, -40],
+                    [-40, 30, 20],
+                    [40, 30, 20]
+                ];
+
+                lightPositions.forEach(pos => {
+                    // Light pole
+                    const poleGeometry = new THREE.CylinderGeometry(0.5, 0.5, 30, 8);
+                    const poleMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
+                    const pole = new THREE.Mesh(poleGeometry, poleMaterial);
+                    pole.position.set(pos[0], 15, pos[2]);
+                    this.scene.add(pole);
+
+                    // Light fixture
+                    const light = new THREE.PointLight(0xFFFFFF, 0.5, 100);
+                    light.position.set(pos[0], pos[1], pos[2]);
+                    this.scene.add(light);
+
+                    // Light bulb visual
+                    const bulbGeometry = new THREE.SphereGeometry(1, 16, 16);
+                    const bulbMaterial = new THREE.MeshBasicMaterial({ 
+                        color: 0xFFFF00,
+                        emissive: 0xFFFF00,
+                        emissiveIntensity: 0.5
+                    });
+                    const bulb = new THREE.Mesh(bulbGeometry, bulbMaterial);
+                    bulb.position.set(pos[0], pos[1], pos[2]);
+                    this.scene.add(bulb);
+                });
+            }
+
+            pitch() {
+                // Create baseball
+                const ballGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+                const ballMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+                const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+                ball.position.copy(this.pitcher.position);
+                ball.position.y = 3;
+                ball.castShadow = true;
+                
+                ball.velocity = new THREE.Vector3(0, 0, 0.8);
+                ball.gravity = -0.01;
+                
+                this.balls.push(ball);
+                this.scene.add(ball);
+
+                // Animate pitcher
+                this.pitcher.rotation.x = -0.3;
+                setTimeout(() => {
+                    this.pitcher.rotation.x = 0;
+                }, 200);
+            }
+
+            swing() {
+                if (this.isSwinging) return;
+                
+                this.isSwinging = true;
+                this.batRotation = 0;
+                
+                // Check for hits
+                this.balls.forEach(ball => {
+                    const distance = ball.position.distanceTo(this.bat.position);
+                    if (distance < 2 && ball.position.z > -1 && ball.position.z < 3) {
+                        // Hit!
+                        ball.velocity.z = -1.5;
+                        ball.velocity.y = 0.8;
+                        ball.velocity.x = (Math.random() - 0.5) * 0.8;
+                        
+                        // Check if it's a home run
+                        if (Math.random() > 0.7) {
+                            this.showHitIndicator('HOME RUN!');
+                            this.homeScore++;
+                            this.updateScore();
+                        } else if (Math.random() > 0.5) {
+                            this.showHitIndicator('DOUBLE!');
+                        } else {
+                            this.showHitIndicator('HIT!');
+                        }
+                    }
+                });
+
+                setTimeout(() => {
+                    this.isSwinging = false;
+                }, 500);
+            }
+
+            showHitIndicator(text) {
+                const indicator = document.getElementById('hitIndicator');
+                indicator.textContent = text;
+                indicator.classList.add('show');
+                setTimeout(() => {
+                    indicator.classList.remove('show');
+                }, 2000);
+            }
+
+            updateScore() {
+                document.getElementById('homeScore').textContent = this.homeScore;
+                document.getElementById('awayScore').textContent = this.awayScore;
+                document.getElementById('inning').textContent = this.inning;
+            }
+
+            reset() {
+                // Remove all balls
+                this.balls.forEach(ball => {
+                    this.scene.remove(ball);
+                });
+                this.balls = [];
+                
+                // Reset scores
+                this.homeScore = 0;
+                this.awayScore = 0;
+                this.inning = 1;
+                this.updateScore();
+            }
+
+            setupControls() {
+                document.addEventListener('keydown', (event) => {
+                    switch(event.code) {
+                        case 'Space':
+                            event.preventDefault();
+                            this.swing();
+                            break;
+                        case 'KeyP':
+                            this.pitch();
+                            break;
+                        case 'KeyR':
+                            this.reset();
+                            break;
+                        case 'ArrowLeft':
+                        case 'KeyA':
+                            this.batter.position.x = Math.max(-2, this.batter.position.x - 0.5);
+                            this.bat.position.x = this.batter.position.x + 1;
+                            break;
+                        case 'ArrowRight':
+                        case 'KeyD':
+                            this.batter.position.x = Math.min(2, this.batter.position.x + 0.5);
+                            this.bat.position.x = this.batter.position.x + 1;
+                            break;
+                    }
+                });
+            }
+
+            onWindowResize() {
+                this.camera.aspect = window.innerWidth / window.innerHeight;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+
+                // Update balls
+                this.balls.forEach((ball, index) => {
+                    ball.position.add(ball.velocity);
+                    ball.velocity.y += ball.gravity;
+                    
+                    // Remove balls that go out of bounds
+                    if (ball.position.z > 10 || ball.position.z < -100 || 
+                        Math.abs(ball.position.x) > 100 || ball.position.y < 0) {
+                        this.scene.remove(ball);
+                        this.balls.splice(index, 1);
+                    }
+                });
+
+                // Animate bat swing
+                if (this.isSwinging) {
+                    this.batRotation += 0.3;
+                    this.bat.rotation.y = -this.batRotation;
+                    if (this.batRotation > Math.PI) {
+                        this.bat.rotation.y = 0;
+                    }
+                }
+
+                // Slight camera movement for dynamism
+                this.camera.position.x = Math.sin(Date.now() * 0.0001) * 2;
+                this.camera.position.y = 15 + Math.sin(Date.now() * 0.0002) * 1;
+                this.camera.lookAt(0, 0, -10);
+
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+
+        // Initialize game when page loads
+        const game = new BaseballGame();
+
+        // Auto-pitch every 3 seconds
+        setInterval(() => {
+            if (game.balls.length < 3) {
+                game.pitch();
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
