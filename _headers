@@ -1,8 +1,14 @@
-/* 
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+/
   Cache-Control: public, max-age=0, must-revalidate
 
-/images/*
-  Cache-Control: public, max-age=31536000, immutable
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
 
 /css/*
   Cache-Control: public, max-age=31536000, immutable
@@ -10,35 +16,14 @@
 /js/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Long cache for images
-/public/images/*
-  Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
-
 /images/*
   Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
 
-# JavaScript and CSS with moderate caching
-/*.js
-  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
 
-/*.css
-  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
-
-# API endpoints - no cache
-/api/*
-  Cache-Control: no-store, no-cache, must-revalidate
-  Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
-  Access-Control-Allow-Headers: Content-Type, Authorization, X-Client-ID
-
-# Font files
-/*.woff2
-  Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
-
-# Security headers for admin pages
-/cms-admin
-  X-Frame-Options: SAMEORIGIN
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.blaze-intelligence.com wss://multiplayer.blaze-intelligence.com
+# Preload critical resources
+/*
+  Link: </css/blaze.css>; rel=preload; as=style
+  Link: </js/blaze-realtime.js>; rel=preload; as=script
+  Link: <https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap>; rel=preload; as=style
