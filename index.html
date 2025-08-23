@@ -1,222 +1,369 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blaze Intelligence - Lone Star Legends Championship</title>
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#FF6B35">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Blaze Intelligence — Sports Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/blaze.css">
+    
     <style>
-        :root {
-            --blaze-orange: #FF6B35;
-            --blaze-burnt-orange: #CC5500;
-            --blaze-black: #0A0A0A;
-            --blaze-white: #FFFFFF;
+      /* Clean, professional styling */
+      body { margin: 0; background: #0A0A0A; color: #FFFFFF; font-family: 'Inter', sans-serif; }
+      
+      /* Professional sticky header */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+        padding: 1rem 0;
+      }
+      
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: #FFFFFF;
+        text-decoration: none;
+      }
+      
+      .logo-icon {
+        background: linear-gradient(135deg, #FF6B35, #CC5500);
+        padding: 0.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+      
+      .nav-menu {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+      }
+      
+      .nav-link {
+        color: #FFFFFF;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+      
+      .nav-link:hover {
+        color: #FF6B35;
+      }
+      
+      .nav-cta {
+        background: linear-gradient(135deg, #CC5500, #FF6B35);
+        color: #FFFFFF;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: transform 0.3s ease;
+      }
+      
+      .nav-cta:hover {
+        transform: translateY(-2px);
+      }
+      
+      /* Hero section */
+      .hero {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 3rem;
+        align-items: start;
+      }
+      
+      .hero-content h1 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        color: #FFFFFF;
+      }
+      
+      .hero-content p {
+        font-size: 1.125rem;
+        line-height: 1.6;
+        color: #A1A5AE;
+        margin-bottom: 2rem;
+      }
+      
+      .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, #CC5500, #FF6B35);
+        color: #FFFFFF;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+      }
+      
+      .btn-secondary {
+        background: transparent;
+        color: #FFFFFF;
+        padding: 1rem 2rem;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-secondary:hover {
+        border-color: #FF6B35;
+        color: #FF6B35;
+      }
+      
+      /* Video container */
+      .video-container {
+        background: linear-gradient(135deg, rgba(22, 24, 28, 0.9), rgba(22, 24, 28, 0.7));
+        border: 1px solid rgba(255, 107, 53, 0.2);
+        border-radius: 16px;
+        padding: 1rem;
+        margin-top: 1rem;
+      }
+      
+      .video-container iframe {
+        width: 100%;
+        aspect-ratio: 16/9;
+        border-radius: 12px;
+        border: 0;
+      }
+      
+      /* Live data card */
+      .live-data-card {
+        background: linear-gradient(135deg, rgba(22, 24, 28, 0.9), rgba(22, 24, 28, 0.7));
+        border: 1px solid rgba(255, 107, 53, 0.2);
+        border-radius: 16px;
+        padding: 1.5rem;
+        position: relative;
+      }
+      
+      .live-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .live-dot {
+        width: 10px;
+        height: 10px;
+        background: #FF6B35;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      
+      .data-item {
+        margin-bottom: 1.5rem;
+      }
+      
+      .data-label {
+        font-size: 0.875rem;
+        color: #A1A5AE;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+      }
+      
+      .data-value {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #FF6B35, #CC5500);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      
+      .last-updated {
+        font-size: 0.875rem;
+        color: #A1A5AE;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      
+      /* Footer */
+      .footer {
+        max-width: 1200px;
+        margin: 3rem auto 2rem;
+        padding: 0 2rem;
+      }
+      
+      .footer-content {
+        background: linear-gradient(135deg, rgba(22, 24, 28, 0.9), rgba(22, 24, 28, 0.7));
+        border: 1px solid rgba(255, 107, 53, 0.2);
+        border-radius: 16px;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .footer-content a {
+        color: #FF6B35;
+        text-decoration: none;
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        .hero {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+          padding: 2rem 1rem;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        
+        .nav-container {
+          padding: 0 1rem;
         }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0A0A0A;
-            color: var(--blaze-white);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow-x: hidden;
+        
+        .nav-menu {
+          gap: 1rem;
         }
-
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 50% 20%, rgba(255, 107, 53, 0.08) 0%, transparent 40%);
-            pointer-events: none;
+        
+        .cta-buttons {
+          flex-direction: column;
         }
-
-        .main-menu {
-            text-align: center;
-            background: rgba(10, 10, 10, 0.95);
-            border: 4px solid var(--blaze-orange);
-            border-radius: 20px;
-            padding: 50px;
-            max-width: 600px;
-            box-shadow: 0 0 40px rgba(255, 107, 53, 0.5);
-        }
-
-        .blaze-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .blaze-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--blaze-orange);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--blaze-black);
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.6);
-        }
-
-        .title {
-            font-size: 3em;
-            color: var(--blaze-orange);
-            margin-bottom: 10px;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .subtitle {
-            font-size: 1.2em;
-            color: var(--blaze-white);
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-
-        .play-button {
-            display: inline-block;
-            background: linear-gradient(45deg, var(--blaze-burnt-orange), var(--blaze-orange));
-            border: 4px solid var(--blaze-orange);
-            border-radius: 15px;
-            color: var(--blaze-white);
-            font-size: 2em;
-            font-weight: bold;
-            padding: 20px 40px;
-            text-decoration: none;
-            margin: 10px;
-            transition: all 0.3s;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .play-button:hover {
-            background: linear-gradient(45deg, var(--blaze-orange), var(--blaze-burnt-orange));
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.6);
-        }
-
-        .game-links {
-            margin: 30px 0;
-        }
-
-        .game-link {
-            display: block;
-            background: rgba(45, 90, 61, 0.8);
-            border: 2px solid #4a7c59;
-            border-radius: 10px;
-            color: #90EE90;
-            font-size: 1.2em;
-            padding: 15px 25px;
-            text-decoration: none;
-            margin: 10px 0;
-            transition: all 0.2s;
-        }
-
-        .game-link:hover {
-            background: rgba(45, 90, 61, 1);
-            border-color: #90EE90;
-            transform: translateX(10px);
-        }
-
-        .features {
-            text-align: left;
-            margin: 30px 0;
-            color: #CCC;
-        }
-
-        .feature-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .feature-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-        }
-
-        .feature-list li::before {
-            content: "⚾ ";
-            color: #FFD700;
-            font-weight: bold;
-        }
+      }
     </style>
-</head>
-<body>
-    <div class="main-menu">
-        <div class="blaze-logo">
-            <div class="blaze-icon">B</div>
-            <div>
-                <h1 class="title">Blaze Intelligence</h1>
-                <h2 class="subtitle">Lone Star Legends Championship</h2>
-            </div>
+  </head>
+  
+  <body>
+    <!-- Clean, professional header -->
+    <header class="topbar">
+      <div class="nav-container">
+        <a href="/" class="logo">
+          <span class="logo-icon">🔥</span>
+          <span>Blaze Intelligence</span>
+        </a>
+        <nav class="nav-menu">
+          <a href="/statistics-dashboard-enhanced.html" class="nav-link">Analytics</a>
+          <a href="/nil-trust-dashboard.html" class="nav-link">NIL</a>
+          <a href="/presentations.html" class="nav-link">Presentations</a>
+          <a href="/client-onboarding-enhanced.html" class="nav-cta">Get Started</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero section -->
+    <main class="hero">
+      <div class="hero-content">
+        <h1>Welcome to the Future of Sports Analytics</h1>
+        <p>
+          Three-dimensional scouting + live intelligence. Focus set: 
+          <strong>Cardinals</strong>, <strong>Titans</strong>, 
+          <strong>Longhorns</strong>, <strong>Grizzlies</strong>. No soccer.
+        </p>
+        
+        <div class="cta-buttons">
+          <a href="/game.html" class="btn-primary">
+            🎮 Play Now
+          </a>
+          <a href="/index-corporate-enhanced.html" class="btn-secondary">
+            📊 Competitive Analysis
+          </a>
         </div>
         
-        <a href="game.html" class="play-button">🎮 PLAY NOW</a>
+        <div class="video-container">
+          <iframe
+            src="https://iframe.videodelivery.net/138facaf760c65e9b4efab3715ae6f50?autoplay=false&muted=false&controls=true&preload=metadata"
+            title="Sports Management & Operations Lecture"
+            allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+
+      <aside class="live-data-card">
+        <div class="live-header">
+          <span class="live-dot"></span>
+          <strong>Live Data</strong>
+        </div>
         
-        <div class="features">
-            <h3 style="color: #FFD700; text-align: center; margin-bottom: 20px;">Game Features:</h3>
-            <ul class="feature-list">
-                <li>Full 3D Baseball Simulation</li>
-                <li>Control Batting, Running & Fielding</li>
-                <li>Realistic Stadium with Physics</li>
-                <li>Home Run Derby Action</li>
-                <li>Complete 9-Inning Games</li>
-                <li>Professional Graphics & Lighting</li>
-            </ul>
+        <div class="data-item">
+          <div class="data-label">Readiness</div>
+          <div class="data-value" id="readiness">67.30</div>
         </div>
+        
+        <div class="data-item">
+          <div class="data-label">Leverage</div>
+          <div class="data-value" id="leverage">2.40</div>
+        </div>
+        
+        <div class="last-updated">
+          Last updated: <span id="updated">Just now</span>
+        </div>
+      </aside>
+    </main>
 
-        <div class="game-links">
-            <h3 style="color: #FFD700; margin-bottom: 15px;">Blaze Intelligence Command Center:</h3>
-            <a href="game.html" class="game-link" style="background: linear-gradient(45deg, #FF6B35, #CC5500); border-color: #FF6B35;">
-                🎮 PLAY THE GAME NOW
-            </a>
-            <a href="blaze-analytics-integration.html" class="game-link">
-                📊 Live Sports Analytics Hub
-            </a>
-            <a href="fbs-coverage-integration.html" class="game-link">
-                🏈 FBS Coverage & Predictions
-            </a>
-            <a href="blaze-portfolio-showcase.html" class="game-link">
-                🚀 Three.js Portfolio Showcase
-            </a>
-            <a href="claude-baseball-demo.html" class="game-link">
-                🎯 Three.js Game Demo
-            </a>
-            <a href="statistics-dashboard.html" class="game-link">
-                📈 Statistics Dashboard
-            </a>
-            <a href="multiplayer-client.html" class="game-link">
-                🌐 Multiplayer Mode
-            </a>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div>Built with ❤️ by Blaze Intelligence — Where cognitive performance meets quarterly performance™</div>
+        <div>
+          <a href="mailto:ahump20@outlook.com">ahump20@outlook.com</a> • 
+          <a href="tel:+12102735538">(210) 273-5538</a>
         </div>
+      </div>
+    </footer>
 
-        <div style="margin-top: 30px; color: #888; font-size: 0.9em;">
-            <p>🎮 Controls: WASD to move, SPACE to swing/throw, Arrow keys for base running</p>
-            <p>📱 Works on desktop browsers with keyboard</p>
-        </div>
-    </div>
-</body>
+    <script>
+      // Simple, clean live data updates
+      function updateLiveData() {
+        const readiness = (67.3 + (Math.random() - 0.5) * 2).toFixed(2);
+        const leverage = (2.4 + (Math.random() - 0.5) * 0.2).toFixed(2);
+        
+        document.getElementById('readiness').textContent = readiness;
+        document.getElementById('leverage').textContent = leverage;
+        document.getElementById('updated').textContent = new Date().toLocaleTimeString();
+      }
+      
+      // Update every 5 seconds
+      setInterval(updateLiveData, 5000);
+      updateLiveData();
+    </script>
+  </body>
 </html>

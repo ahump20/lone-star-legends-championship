@@ -1,0 +1,61 @@
+{
+  "timestamp": "2025-08-20T13:54:35.839Z",
+  "team": "St. Louis Cardinals",
+  "readiness": 84.38999999999999,
+  "leverage": 1.5,
+  "metrics": {
+    "offensive": {
+      "score": 83.5,
+      "trend": "up",
+      "key_players": [
+        {
+          "name": "Nolan Arenado",
+          "position": "3B",
+          "status": "ready",
+          "recent_performance": 0.285
+        },
+        {
+          "name": "Paul Goldschmidt",
+          "position": "1B",
+          "status": "ready",
+          "recent_performance": 0.268
+        }
+      ]
+    },
+    "pitching": {
+      "score": 86.1,
+      "trend": "down",
+      "rotation_status": "full",
+      "bullpen_availability": 0.85
+    },
+    "defensive": {
+      "score": 82.9,
+      "trend": "up",
+      "fielding_percentage": 0.986
+    }
+  },
+  "next_game": {
+    "opponent": "TBD",
+    "date": "2025-08-21T13:54:35.839Z",
+    "predicted_outcome": {
+      "win_probability": 0.5,
+      "projected_score": {
+        "cardinals": 4.5,
+        "opponent": 4
+      }
+    }
+  },
+  "insights": [
+    "Solid performance metrics with room for optimization",
+    "Pitching staff in elite form - dominating opposing lineups",
+    "Offense clicking - maintain aggressive approach at plate"
+  ],
+  "recent_performance": {
+    "last_5_games": "3-2",
+    "run_differential": 12,
+    "home_away_split": {
+      "home": "42-39",
+      "away": "41-40"
+    }
+  }
+}

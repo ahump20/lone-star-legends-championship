@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Academic Presentations</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#FF6B35">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-burnt-orange: #CC5500;
+            --blaze-black: #0A0A0A;
+            --blaze-white: #FFFFFF;
+            --blaze-grey: #1A1A1A;
+            --blaze-text-secondary: #a0a0a0;
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--blaze-black);
+            color: var(--blaze-white);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(26, 26, 26, 0.9);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5em;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--blaze-text-secondary);
+            font-size: 1.1em;
+        }
+
+        .presentations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .presentation-card {
+            background: rgba(26, 26, 26, 0.9);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .presentation-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .presentation-card:hover {
+            border-color: var(--blaze-orange);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .presentation-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .presentation-icon {
+            font-size: 3em;
+            margin-bottom: 1rem;
+        }
+
+        .presentation-title {
+            font-family: var(--font-heading);
+            font-size: 1.4em;
+            color: var(--blaze-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .presentation-course {
+            color: var(--blaze-text-secondary);
+            font-size: 0.9em;
+            margin-bottom: 1rem;
+        }
+
+        .presentation-description {
+            color: var(--blaze-white);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .presentation-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .presentation-date {
+            color: var(--blaze-text-secondary);
+            font-size: 0.85em;
+        }
+
+        .view-button {
+            background: linear-gradient(135deg, var(--blaze-burnt-orange), var(--blaze-orange));
+            color: var(--blaze-white);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--blaze-orange);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+
+        .presentation-viewer {
+            background: rgba(26, 26, 26, 0.9);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .viewer-title {
+            font-family: var(--font-heading);
+            font-size: 1.5em;
+            color: var(--blaze-orange);
+        }
+
+        .download-button {
+            background: transparent;
+            border: 2px solid var(--blaze-orange);
+            color: var(--blaze-orange);
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .download-button:hover {
+            background: var(--blaze-orange);
+            color: var(--blaze-black);
+        }
+
+        .iframe-container {
+            width: 100%;
+            height: 600px;
+            border: 2px solid rgba(255, 107, 53, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .note {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 107, 53, 0.1);
+            border-left: 3px solid var(--blaze-orange);
+            border-radius: 8px;
+            color: var(--blaze-text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← Back to Home</a>
+        
+        <div class="header">
+            <h1>Academic Presentations</h1>
+            <p class="subtitle">Sports Management & Operations Research</p>
+        </div>
+
+        <div class="presentations-grid">
+            <!-- Texas Longhorns Revenue Analysis -->
+            <div class="presentation-card" onclick="viewPresentation('longhorns')">
+                <div class="presentation-icon">🏈</div>
+                <h2 class="presentation-title">Texas Longhorns Revenue Analysis</h2>
+                <p class="presentation-course">MAN6224-O Sports Management and Operations</p>
+                <p class="presentation-description">
+                    Comprehensive revenue analysis and strategic recommendations for the Texas Longhorns athletic program, 
+                    including merchandise, ticket sales, media rights, and sponsorship opportunities.
+                </p>
+                <div class="presentation-meta">
+                    <span class="presentation-date">Week 2.3</span>
+                    <button class="view-button">View Presentation</button>
+                </div>
+            </div>
+
+            <!-- UT DCTF NIL Sponsorship Proposal -->
+            <div class="presentation-card" onclick="viewPresentation('nil')">
+                <div class="presentation-icon">💰</div>
+                <h2 class="presentation-title">UT DCTF NIL Sponsorship Proposal</h2>
+                <p class="presentation-course">Sports Marketing and Sponsorships Sales</p>
+                <p class="presentation-description">
+                    Strategic NIL (Name, Image, Likeness) sponsorship proposal for University of Texas athletes 
+                    in partnership with Dave Campbell's Texas Football magazine.
+                </p>
+                <div class="presentation-meta">
+                    <span class="presentation-date">Week 4</span>
+                    <button class="view-button">View Presentation</button>
+                </div>
+            </div>
+
+            <!-- Assignment 3.3 Presentation -->
+            <div class="presentation-card" onclick="viewPresentation('assignment33')">
+                <div class="presentation-icon">📊</div>
+                <h2 class="presentation-title">Sports Analytics Case Study</h2>
+                <p class="presentation-course">Advanced Sports Analytics</p>
+                <p class="presentation-description">
+                    Data-driven analysis and strategic recommendations leveraging advanced analytics 
+                    for competitive advantage in professional sports.
+                </p>
+                <div class="presentation-meta">
+                    <span class="presentation-date">Assignment 3.3</span>
+                    <button class="view-button">View Presentation</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Presentation Viewer (hidden by default) -->
+        <div id="presentation-viewer" class="presentation-viewer" style="display: none;">
+            <div class="viewer-header">
+                <h2 class="viewer-title" id="viewer-title">Presentation Title</h2>
+                <a id="download-link" class="download-button" href="#" download>
+                    📥 Download
+                </a>
+            </div>
+            <div class="iframe-container">
+                <iframe id="presentation-iframe" src=""></iframe>
+            </div>
+            <div class="note">
+                <strong>Note:</strong> PowerPoint files are hosted locally due to size constraints. 
+                For best viewing experience, open the local PowerPoint files directly to access all animations and interactive features.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const presentations = {
+            longhorns: {
+                title: 'Texas Longhorns Revenue Analysis',
+                file: 'Texas_Longhorns_Revenue_Analysis_Briefing.pptx',
+                cloudflareUrl: 'https://blaze-intelligence.pages.dev/presentations/Texas_Longhorns_Revenue_Analysis_Briefing.pptx',
+                localPath: '/Users/AustinHumphrey/Library/CloudStorage/OneDrive-FullSailUniversity/MAN6224-O Sports Management and Operations/week 2/2.3/Texas_Longhorns_Revenue_Analysis_Briefing.pptx'
+            },
+            nil: {
+                title: 'UT DCTF NIL Sponsorship Proposal',
+                file: 'UT_DCTF_NIL_Sponsorship_Proposal.pptx',
+                cloudflareUrl: 'https://blaze-intelligence.pages.dev/presentations/UT_DCTF_NIL_Sponsorship_Proposal.pptx',
+                localPath: '/Users/AustinHumphrey/Library/CloudStorage/OneDrive-FullSailUniversity/Other/SPORTS MARKETING AND SPONSORSHIPS SALES/Week 4/Sponsorship proposal/UT_DCTF_NIL_Sponsorship_Proposal.pptx'
+            },
+            assignment33: {
+                title: 'Sports Analytics Case Study',
+                file: 'Assignment_3.3_Presentation_Repaired.pptx',
+                cloudflareUrl: 'https://blaze-intelligence.pages.dev/presentations/Assignment_3.3_Presentation_Repaired.pptx',
+                localPath: '/Users/AustinHumphrey/Library/Mobile Documents/com~apple~CloudDocs/Assignment 3.3 Presentation Repaired.pptx'
+            }
+        };
+
+        function viewPresentation(id) {
+            const presentation = presentations[id];
+            if (!presentation) return;
+
+            // Hide the grid
+            document.querySelector('.presentations-grid').style.display = 'none';
+            
+            // Show the viewer
+            const viewer = document.getElementById('presentation-viewer');
+            viewer.style.display = 'block';
+            
+            // Update viewer content
+            document.getElementById('viewer-title').textContent = presentation.title;
+            document.getElementById('download-link').href = presentation.cloudflareUrl;
+            
+            // Use Office Online viewer for PowerPoint files
+            const iframe = document.getElementById('presentation-iframe');
+            const viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(presentation.cloudflareUrl)}`;
+            iframe.src = viewerUrl;
+            
+            // Scroll to viewer
+            viewer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Add back button functionality
+        document.querySelector('.back-button').addEventListener('click', (e) => {
+            const viewer = document.getElementById('presentation-viewer');
+            if (viewer.style.display === 'block') {
+                e.preventDefault();
+                viewer.style.display = 'none';
+                document.querySelector('.presentations-grid').style.display = 'grid';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>

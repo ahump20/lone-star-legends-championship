@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEE Scorecard - Champion Enigma Engine | Blaze Intelligence</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-burnt-orange: #CC5500;
+            --blaze-black: #0A0A0A;
+            --blaze-white: #FFFFFF;
+            --blaze-grey: #1A1A1A;
+            --blaze-grey-light: #2A2A2A;
+            --blaze-text-secondary: #a0a0a0;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--blaze-black);
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.05) 0%, transparent 50%);
+            color: var(--blaze-white);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 107, 53, 0.1);
+        }
+
+        .header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .athlete-selector {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .athlete-selector select {
+            padding: 0.75rem 1rem;
+            background: var(--blaze-grey);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--blaze-white);
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .athlete-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--blaze-grey-light);
+            border-radius: 8px;
+        }
+
+        .athlete-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dimension-card {
+            background: rgba(26, 26, 26, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .dimension-card:hover {
+            border-color: var(--blaze-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 107, 53, 0.1);
+        }
+
+        .dimension-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .dimension-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--blaze-white);
+        }
+
+        .dimension-score {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .confidence-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .confidence-label {
+            font-size: 0.85rem;
+            color: var(--blaze-text-secondary);
+            min-width: 80px;
+        }
+
+        .confidence-track {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--danger), var(--warning), var(--success));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .confidence-value {
+            font-size: 0.85rem;
+            color: var(--blaze-white);
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .percentile-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid var(--blaze-orange);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--blaze-orange);
+        }
+
+        .features-list {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .feature-name {
+            color: var(--blaze-text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-sign {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .feature-sign.positive {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .feature-sign.negative {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .feature-contrib {
+            color: var(--blaze-white);
+            font-weight: 500;
+        }
+
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .chart-container {
+            background: rgba(26, 26, 26, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--blaze-white);
+        }
+
+        .legend {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: var(--blaze-grey);
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .legend-label {
+            font-size: 0.9rem;
+            color: var(--blaze-text-secondary);
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .loader {
+            border: 4px solid var(--blaze-grey);
+            border-top: 4px solid var(--blaze-orange);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .dimensions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Champion Enigma Engine Scorecard</h1>
+            <div class="athlete-selector">
+                <select id="cohortSelect">
+                    <option value="mlb.closer">MLB Closer</option>
+                    <option value="mlb.starter">MLB Starter</option>
+                    <option value="nfl.qb">NFL QB</option>
+                    <option value="nfl.wr">NFL WR</option>
+                    <option value="nba.pg">NBA PG</option>
+                    <option value="ncaa.qb">NCAA QB</option>
+                    <option value="ncaa.pitcher">NCAA Pitcher</option>
+                </select>
+                <div class="athlete-info">
+                    <div class="athlete-avatar">JD</div>
+                    <div>
+                        <div style="font-weight: 600;">Jayden Daniels</div>
+                        <div style="font-size: 0.85rem; color: var(--blaze-text-secondary);">LSU • QB</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="scorecardContent">
+            <div class="loading">
+                <div class="loader"></div>
+            </div>
+        </div>
+
+        <div class="charts-section">
+            <div class="chart-container">
+                <h3 class="chart-title">Dimension Comparison</h3>
+                <canvas id="radarChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3 class="chart-title">Percentile Distribution</h3>
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--success);"></div>
+                <span class="legend-label">Elite (85+)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--warning);"></div>
+                <span class="legend-label">Playoff (70-84)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--blaze-orange);"></div>
+                <span class="legend-label">Above Avg (60-69)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--blaze-grey-light);"></div>
+                <span class="legend-label">Median (50-59)</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let radarChart = null;
+        let barChart = null;
+
+        async function loadScorecard() {
+            const cohort = document.getElementById('cohortSelect').value;
+            const athleteId = 'LSU_QB_001'; // Demo athlete
+            
+            try {
+                // Show loading
+                document.getElementById('scorecardContent').innerHTML = `
+                    <div class="loading">
+                        <div class="loader"></div>
+                    </div>
+                `;
+                
+                // Fetch CEE scores
+                const response = await fetch(`/api/cee/score?athleteId=${athleteId}&cohort=${cohort}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch scores');
+                }
+                
+                const data = await response.json();
+                
+                // Render scorecard
+                renderScorecard(data);
+                
+                // Update charts
+                updateCharts(data.dimensions);
+                
+            } catch (error) {
+                console.error('Error loading scorecard:', error);
+                // Use demo data as fallback
+                const demoData = generateDemoData(athleteId, cohort);
+                renderScorecard(demoData);
+                updateCharts(demoData.dimensions);
+            }
+        }
+
+        function renderScorecard(data) {
+            const html = `
+                <div class="dimensions-grid">
+                    ${data.dimensions.map(dim => renderDimensionCard(dim)).join('')}
+                </div>
+            `;
+            document.getElementById('scorecardContent').innerHTML = html;
+        }
+
+        function renderDimensionCard(dimension) {
+            const scoreColor = getScoreColor(dimension.score);
+            
+            return `
+                <div class="dimension-card">
+                    <div class="dimension-header">
+                        <div class="dimension-name">${dimension.name}</div>
+                        <div class="dimension-score">${dimension.score.toFixed(1)}</div>
+                    </div>
+                    
+                    <div class="percentile-badge">
+                        ${(dimension.percentile * 100).toFixed(0)}th percentile
+                    </div>
+                    
+                    <div class="confidence-bar">
+                        <span class="confidence-label">Confidence</span>
+                        <div class="confidence-track">
+                            <div class="confidence-fill" style="width: ${dimension.confidence * 100}%"></div>
+                        </div>
+                        <span class="confidence-value">${(dimension.confidence * 100).toFixed(0)}%</span>
+                    </div>
+                    
+                    <div class="features-list">
+                        ${dimension.top_k_features.slice(0, 3).map(feature => `
+                            <div class="feature-item">
+                                <div class="feature-name">
+                                    <span class="feature-sign ${feature.sign === '+' ? 'positive' : 'negative'}">
+                                        ${feature.sign}
+                                    </span>
+                                    ${formatFeatureName(feature.name)}
+                                </div>
+                                <span class="feature-contrib">${feature.contrib.toFixed(2)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatFeatureName(name) {
+            return name.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim()
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ');
+        }
+
+        function getScoreColor(score) {
+            if (score >= 85) return 'var(--success)';
+            if (score >= 70) return 'var(--warning)';
+            if (score >= 60) return 'var(--blaze-orange)';
+            return 'var(--blaze-grey-light)';
+        }
+
+        function updateCharts(dimensions) {
+            // Radar Chart
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            
+            if (radarChart) {
+                radarChart.destroy();
+            }
+            
+            radarChart = new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: dimensions.map(d => d.name),
+                    datasets: [{
+                        label: 'Score',
+                        data: dimensions.map(d => d.score),
+                        borderColor: '#FF6B35',
+                        backgroundColor: 'rgba(255, 107, 53, 0.2)',
+                        pointBackgroundColor: '#FF6B35',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#FF6B35'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20,
+                                color: '#a0a0a0'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            pointLabels: {
+                                color: '#ffffff',
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Bar Chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            
+            if (barChart) {
+                barChart.destroy();
+            }
+            
+            barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: dimensions.map(d => d.name.split(' ')[0]),
+                    datasets: [{
+                        label: 'Percentile',
+                        data: dimensions.map(d => d.percentile * 100),
+                        backgroundColor: dimensions.map(d => getScoreColor(d.score))
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: '#a0a0a0'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#a0a0a0'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateDemoData(athleteId, cohort) {
+            const dimensions = [
+                'Clutch Gene', 'Killer Instinct', 'Flow State', 'Mental Fortress',
+                'Predator Mindset', 'Champion Aura', 'Winner DNA', 'Beast Mode'
+            ];
+            
+            return {
+                athleteId,
+                cohort,
+                asOf: new Date().toISOString(),
+                dimensions: dimensions.map(name => ({
+                    name,
+                    score: 65 + Math.random() * 25,
+                    confidence: 0.7 + Math.random() * 0.25,
+                    percentile: 0.6 + Math.random() * 0.35,
+                    top_k_features: [
+                        {
+                            name: 'highLeverage_WPA',
+                            contrib: Math.random() * 0.5,
+                            sign: Math.random() > 0.5 ? '+' : '-',
+                            source: 'pbp',
+                            recency_days: Math.floor(Math.random() * 10)
+                        },
+                        {
+                            name: 'decision_latency_ms',
+                            contrib: Math.random() * 0.3,
+                            sign: Math.random() > 0.5 ? '+' : '-',
+                            source: 'cv',
+                            recency_days: Math.floor(Math.random() * 10)
+                        },
+                        {
+                            name: 'hrv_rmssd',
+                            contrib: Math.random() * 0.2,
+                            sign: Math.random() > 0.5 ? '+' : '-',
+                            source: 'wearable',
+                            recency_days: Math.floor(Math.random() * 10)
+                        }
+                    ],
+                    evidence_summary: {
+                        n_eff: 35 + Math.floor(Math.random() * 20),
+                        median_recency_days: Math.floor(Math.random() * 14),
+                        coverage: {
+                            cv: Math.random(),
+                            wearable: Math.random(),
+                            pbp: Math.random(),
+                            social: Math.random()
+                        }
+                    }
+                })),
+                version: 'cee-norm-0.9.0'
+            };
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadScorecard();
+            
+            // Reload on cohort change
+            document.getElementById('cohortSelect').addEventListener('change', loadScorecard);
+        });
+    </script>
+</body>
+</html>

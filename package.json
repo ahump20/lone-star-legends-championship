@@ -19,14 +19,17 @@
     "dashboard": "python3 -m http.server 8082"
   },
   "dependencies": {
+    "chart.js": "^4.5.0",
+    "concurrently": "^8.2.0",
+    "hono": "^4.9.2",
     "ws": "^8.14.0",
-    "concurrently": "^8.2.0"
+    "zod": "^4.0.17"
   },
   "devDependencies": {
+    "http-server": "^14.1.1",
     "nodemon": "^3.0.0",
     "prettier": "^3.0.0",
-    "http-server": "^14.1.1",
-    "@wrangler/cli": "^3.0.0"
+    "wrangler": "^3.0.0"
   },
   "keywords": [
     "blaze-intelligence",
@@ -36,7 +39,7 @@
     "3d-game",
     "real-time-data",
     "cardinals",
-    "titans", 
+    "titans",
     "longhorns",
     "grizzlies",
     "ai-coordination",
@@ -50,7 +53,7 @@
   "homepage": "https://ahump20.github.io/lone-star-legends-championship/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ahump20/lone-star-legends-championship.git"
+    "url": "git+https://github.com/ahump20/lone-star-legends-championship.git"
   },
   "engines": {
     "node": ">=16.0.0",
@@ -75,7 +78,7 @@
     "data_processing": "2.8M+ points/hour",
     "supported_teams": [
       "Cardinals (MLB)",
-      "Titans (NFL)", 
+      "Titans (NFL)",
       "Longhorns (NCAA)",
       "Grizzlies (NBA)"
     ]
@@ -91,5 +94,8 @@
     "domain": "blaze-intelligence.com",
     "cdn": "Cloudflare",
     "ssl": true
+  },
+  "bugs": {
+    "url": "https://github.com/ahump20/lone-star-legends-championship/issues"
   }
 }

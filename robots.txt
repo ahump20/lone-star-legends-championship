@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /cms-admin
+Disallow: /functions/
+Disallow: /api/
+
+# Allow specific API endpoints for SEO
+Allow: /api/nil
+Allow: /api/stats
+
+# Sitemap location
+Sitemap: https://blaze-intelligence.pages.dev/sitemap.xml
+
+# Crawl delay (be gentle)
+Crawl-delay: 1

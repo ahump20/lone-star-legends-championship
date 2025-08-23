@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Lone Star Legends Championship</title>
+    <link rel="stylesheet" href="css/blaze-theme.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body {
+            background: var(--blaze-navy);
+            color: var(--blaze-white);
+            font-family: var(--font-body);
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: 100vh;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .game-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Scoreboard */
+        .scoreboard {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--blaze-gradient-midnight);
+            border: 2px solid var(--blaze-orange);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+            min-width: 600px;
+        }
+
+        .score-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .team-score {
+            text-align: center;
+        }
+
+        .team-name {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: var(--blaze-orange);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .inning-display {
+            text-align: center;
+            padding: var(--spacing-md);
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: var(--radius-md);
+        }
+
+        .inning-label {
+            font-size: 0.9rem;
+            color: var(--blaze-gray-light);
+            text-transform: uppercase;
+        }
+
+        .inning-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--blaze-orange);
+        }
+
+        /* Count Display */
+        .count-display {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .count-item {
+            text-align: center;
+        }
+
+        .count-label {
+            font-size: 0.8rem;
+            color: var(--blaze-gray-light);
+            text-transform: uppercase;
+        }
+
+        .count-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: var(--spacing-xs);
+        }
+
+        .count-indicators {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin-top: var(--spacing-xs);
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--blaze-gray-dark);
+        }
+
+        .indicator.active {
+            background: var(--blaze-orange);
+            box-shadow: 0 0 10px var(--blaze-orange);
+        }
+
+        /* Base Display */
+        .bases-display {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            pointer-events: auto;
+        }
+
+        .base-diamond {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            transform: rotate(45deg);
+            margin: 25px auto;
+        }
+
+        .base {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--blaze-gray-dark);
+            border: 2px solid var(--blaze-orange);
+            transition: all var(--transition-base);
+        }
+
+        .base.occupied {
+            background: var(--blaze-orange);
+            box-shadow: 0 0 15px var(--blaze-orange);
+        }
+
+        .base.first { top: 40px; right: 0; }
+        .base.second { top: 0; left: 40px; }
+        .base.third { top: 40px; left: 0; }
+        .base.home { bottom: 0; left: 40px; }
+
+        /* Controls */
+        .game-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: var(--spacing-md);
+            pointer-events: auto;
+        }
+
+        .control-btn {
+            padding: var(--spacing-md) var(--spacing-xl);
+            background: var(--blaze-gradient-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            color: var(--blaze-white);
+            font-family: var(--font-heading);
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-orange);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-orange-lg);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .control-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--blaze-orange);
+        }
+
+        /* Play by Play */
+        .play-log {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 300px;
+            max-height: 400px;
+            background: var(--blaze-gradient-midnight);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            pointer-events: auto;
+            overflow-y: auto;
+        }
+
+        .play-log-header {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: var(--blaze-orange);
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .play-item {
+            padding: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+            background: rgba(255, 107, 53, 0.05);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            color: var(--blaze-gray-light);
+            animation: slideIn 0.3s ease;
+        }
+
+        .play-item.highlight {
+            background: rgba(255, 107, 53, 0.15);
+            color: var(--blaze-white);
+            border-left: 3px solid var(--blaze-orange);
+        }
+
+        /* Batter Info */
+        .batter-info {
+            position: absolute;
+            right: 20px;
+            bottom: 120px;
+            background: var(--blaze-gradient-midnight);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            pointer-events: auto;
+            min-width: 250px;
+        }
+
+        .batter-name {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: var(--blaze-orange);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .batter-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-sm);
+            font-size: 0.9rem;
+        }
+
+        .stat-label {
+            color: var(--blaze-gray-light);
+        }
+
+        .stat-value {
+            color: var(--blaze-white);
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--blaze-navy);
+            border: 2px solid var(--blaze-orange);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--blaze-orange);
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+        }
+
+        .modal-body {
+            color: var(--blaze-gray-light);
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            margin-top: var(--spacing-xl);
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--blaze-navy);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--blaze-gray-dark);
+            border-top: 4px solid var(--blaze-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: var(--spacing-xl);
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--blaze-orange);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading Game Engine...</div>
+    </div>
+
+    <!-- 3D Game Canvas -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Game UI Overlay -->
+    <div class="game-ui">
+        <!-- Scoreboard -->
+        <div class="scoreboard">
+            <div class="score-header">
+                <div class="team-score">
+                    <div class="team-name" id="awayTeamName">Longhorns</div>
+                    <div class="score-value" id="awayScore">0</div>
+                </div>
+                <div class="inning-display">
+                    <div class="inning-label" id="inningHalf">Top</div>
+                    <div class="inning-value" id="inningNumber">1</div>
+                </div>
+                <div class="team-score">
+                    <div class="team-name" id="homeTeamName">Cardinals</div>
+                    <div class="score-value" id="homeScore">0</div>
+                </div>
+            </div>
+            
+            <div class="count-display">
+                <div class="count-item">
+                    <div class="count-label">Balls</div>
+                    <div class="count-indicators" id="ballIndicators">
+                        <span class="indicator"></span>
+                        <span class="indicator"></span>
+                        <span class="indicator"></span>
+                        <span class="indicator"></span>
+                    </div>
+                </div>
+                <div class="count-item">
+                    <div class="count-label">Strikes</div>
+                    <div class="count-indicators" id="strikeIndicators">
+                        <span class="indicator"></span>
+                        <span class="indicator"></span>
+                        <span class="indicator"></span>
+                    </div>
+                </div>
+                <div class="count-item">
+                    <div class="count-label">Outs</div>
+                    <div class="count-indicators" id="outIndicators">
+                        <span class="indicator"></span>
+                        <span class="indicator"></span>
+                        <span class="indicator"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Base Display -->
+        <div class="bases-display">
+            <div class="base-diamond">
+                <div class="base second" id="base2"></div>
+                <div class="base third" id="base3"></div>
+                <div class="base first" id="base1"></div>
+                <div class="base home"></div>
+            </div>
+        </div>
+
+        <!-- Play by Play -->
+        <div class="play-log">
+            <div class="play-log-header">Play by Play</div>
+            <div id="playLog"></div>
+        </div>
+
+        <!-- Batter Info -->
+        <div class="batter-info">
+            <div class="batter-name" id="batterName">Loading...</div>
+            <div class="batter-stats">
+                <span class="stat-label">AVG:</span>
+                <span class="stat-value" id="batterAvg">-</span>
+                <span class="stat-label">AB:</span>
+                <span class="stat-value" id="batterAB">-</span>
+                <span class="stat-label">H:</span>
+                <span class="stat-value" id="batterHits">-</span>
+                <span class="stat-label">RBI:</span>
+                <span class="stat-value" id="batterRBI">-</span>
+            </div>
+        </div>
+
+        <!-- Game Controls -->
+        <div class="game-controls">
+            <button class="control-btn" id="pitchBtn">⚾ PITCH</button>
+            <button class="control-btn secondary" id="pauseBtn">⏸ PAUSE</button>
+            <button class="control-btn secondary" id="resetBtn">🔄 RESET</button>
+            <button class="control-btn secondary" id="exportBtn">📊 EXPORT</button>
+            <button class="control-btn secondary" id="autoBtn">🤖 AUTO</button>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div class="modal" id="gameOverModal">
+        <div class="modal-content">
+            <div class="modal-header">🏆 Game Over!</div>
+            <div class="modal-body" id="gameOverStats">
+                <!-- Final stats will be inserted here -->
+            </div>
+            <div class="modal-actions">
+                <button class="control-btn" onclick="resetGame()">Play Again</button>
+                <button class="control-btn secondary" onclick="exportGameData()">Export Stats</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/baseball-game-engine.js"></script>
+    <script>
+        // Initialize game engine
+        let gameEngine;
+        let scene, camera, renderer;
+        let isAutoPlay = false;
+        let autoPlayInterval;
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            initGame();
+            initThreeJS();
+            hideLoadingScreen();
+        });
+
+        function initGame() {
+            gameEngine = new BaseballGameEngine();
+            gameEngine.startGame();
+            updateUI();
+            
+            // Setup event listeners
+            document.getElementById('pitchBtn').addEventListener('click', pitch);
+            document.getElementById('pauseBtn').addEventListener('click', togglePause);
+            document.getElementById('resetBtn').addEventListener('click', resetGame);
+            document.getElementById('exportBtn').addEventListener('click', exportGameData);
+            document.getElementById('autoBtn').addEventListener('click', toggleAutoPlay);
+        }
+
+        function initThreeJS() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.Fog(0x0A0E27, 10, 100);
+            
+            camera = new THREE.PerspectiveCamera(
+                60,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                1000
+            );
+            camera.position.set(0, 30, 50);
+            camera.lookAt(0, 0, 0);
+            
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('gameCanvas'),
+                antialias: true 
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 30, 10);
+            scene.add(directionalLight);
+            
+            // Create baseball field
+            createBaseballField();
+            
+            // Animation loop
+            animate();
+        }
+
+        function createBaseballField() {
+            // Field grass
+            const fieldGeometry = new THREE.PlaneGeometry(100, 100);
+            const fieldMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x2d5016,
+                roughness: 0.8
+            });
+            const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+            field.rotation.x = -Math.PI / 2;
+            scene.add(field);
+            
+            // Infield dirt
+            const infieldGeometry = new THREE.CircleGeometry(20, 32);
+            const infieldMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x8B7355,
+                roughness: 0.9
+            });
+            const infield = new THREE.Mesh(infieldGeometry, infieldMaterial);
+            infield.rotation.x = -Math.PI / 2;
+            infield.position.y = 0.01;
+            scene.add(infield);
+            
+            // Bases
+            const baseGeometry = new THREE.BoxGeometry(1, 0.1, 1);
+            const baseMaterial = new THREE.MeshStandardMaterial({ color: 0xFFFFFF });
+            
+            const positions = [
+                [13, 0.05, 0],    // First base
+                [0, 0.05, -13],   // Second base
+                [-13, 0.05, 0],   // Third base
+                [0, 0.05, 13]     // Home plate
+            ];
+            
+            positions.forEach(pos => {
+                const base = new THREE.Mesh(baseGeometry, baseMaterial);
+                base.position.set(...pos);
+                scene.add(base);
+            });
+            
+            // Pitcher's mound
+            const moundGeometry = new THREE.CylinderGeometry(2, 3, 0.5, 16);
+            const moundMaterial = new THREE.MeshStandardMaterial({ color: 0x8B7355 });
+            const mound = new THREE.Mesh(moundGeometry, moundMaterial);
+            mound.position.set(0, 0.25, 6);
+            scene.add(mound);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Rotate camera slightly
+            const time = Date.now() * 0.0005;
+            camera.position.x = Math.sin(time) * 5;
+            camera.lookAt(0, 0, 0);
+            
+            renderer.render(scene, camera);
+        }
+
+        function pitch() {
+            if (gameEngine.gameOver) return;
+            
+            const result = gameEngine.pitch();
+            if (result) {
+                updateUI();
+                
+                // Check if game is over
+                if (gameEngine.gameOver) {
+                    showGameOver();
+                }
+            }
+        }
+
+        function updateUI() {
+            const state = gameEngine.getGameState();
+            
+            // Update scores
+            document.getElementById('awayScore').textContent = state.teams.away.score;
+            document.getElementById('homeScore').textContent = state.teams.home.score;
+            
+            // Update inning
+            document.getElementById('inningHalf').textContent = state.isTopInning ? 'Top' : 'Bottom';
+            document.getElementById('inningNumber').textContent = state.inning;
+            
+            // Update count indicators
+            updateIndicators('ballIndicators', state.balls, 4);
+            updateIndicators('strikeIndicators', state.strikes, 3);
+            updateIndicators('outIndicators', state.outs, 3);
+            
+            // Update bases
+            updateBases(state.bases);
+            
+            // Update batter info
+            if (state.currentBatter) {
+                document.getElementById('batterName').textContent = state.currentBatter;
+                const batter = gameEngine.currentBatter;
+                if (batter) {
+                    document.getElementById('batterAvg').textContent = batter.battingAverage.toFixed(3);
+                    document.getElementById('batterAB').textContent = batter.atBats;
+                    document.getElementById('batterHits').textContent = batter.hits;
+                    document.getElementById('batterRBI').textContent = batter.rbis;
+                }
+            }
+            
+            // Update play log
+            updatePlayLog(state.playByPlay);
+        }
+
+        function updateIndicators(elementId, count, max) {
+            const indicators = document.getElementById(elementId).children;
+            for (let i = 0; i < max; i++) {
+                indicators[i].classList.toggle('active', i < count);
+            }
+        }
+
+        function updateBases(bases) {
+            document.getElementById('base1').classList.toggle('occupied', bases[0] !== null);
+            document.getElementById('base2').classList.toggle('occupied', bases[1] !== null);
+            document.getElementById('base3').classList.toggle('occupied', bases[2] !== null);
+        }
+
+        function updatePlayLog(plays) {
+            const logElement = document.getElementById('playLog');
+            logElement.innerHTML = '';
+            
+            plays.forEach((play, index) => {
+                const playItem = document.createElement('div');
+                playItem.className = 'play-item';
+                if (index === 0) playItem.classList.add('highlight');
+                playItem.textContent = play;
+                logElement.appendChild(playItem);
+            });
+        }
+
+        function togglePause() {
+            const btn = document.getElementById('pauseBtn');
+            if (gameEngine.isPaused) {
+                gameEngine.resumeGame();
+                btn.textContent = '⏸ PAUSE';
+            } else {
+                gameEngine.pauseGame();
+                btn.textContent = '▶ RESUME';
+            }
+        }
+
+        function resetGame() {
+            if (confirm('Are you sure you want to reset the game?')) {
+                gameEngine.resetGame();
+                gameEngine.startGame();
+                updateUI();
+                document.getElementById('gameOverModal').classList.remove('active');
+                if (isAutoPlay) {
+                    toggleAutoPlay();
+                }
+            }
+        }
+
+        function toggleAutoPlay() {
+            isAutoPlay = !isAutoPlay;
+            const btn = document.getElementById('autoBtn');
+            
+            if (isAutoPlay) {
+                btn.textContent = '⏹ STOP';
+                autoPlayInterval = setInterval(() => {
+                    if (!gameEngine.gameOver && !gameEngine.isPaused) {
+                        pitch();
+                    } else if (gameEngine.gameOver) {
+                        clearInterval(autoPlayInterval);
+                        isAutoPlay = false;
+                        btn.textContent = '🤖 AUTO';
+                    }
+                }, 2000);
+            } else {
+                btn.textContent = '🤖 AUTO';
+                clearInterval(autoPlayInterval);
+            }
+        }
+
+        function exportGameData() {
+            const state = gameEngine.getGameState();
+            const exportData = {
+                game: {
+                    date: new Date().toISOString(),
+                    teams: state.teams,
+                    finalScore: `${state.teams.away.name} ${state.teams.away.score} - ${state.teams.home.name} ${state.teams.home.score}`,
+                    innings: state.inning
+                },
+                statistics: state.stats,
+                playByPlay: gameEngine.gameLog
+            };
+            
+            // Create and download JSON file
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `blaze-game-${Date.now()}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            alert('Game data exported successfully!');
+        }
+
+        function showGameOver() {
+            const state = gameEngine.getGameState();
+            const modal = document.getElementById('gameOverModal');
+            const statsElement = document.getElementById('gameOverStats');
+            
+            const winner = state.teams.home.score > state.teams.away.score ? state.teams.home : state.teams.away;
+            const loser = winner === state.teams.home ? state.teams.away : state.teams.home;
+            
+            statsElement.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h2 style="color: var(--blaze-orange);">${winner.name} Win!</h2>
+                    <div style="font-size: 2rem; margin: 10px 0;">
+                        ${winner.score} - ${loser.score}
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3 style="color: var(--blaze-orange); margin-bottom: 10px;">${state.teams.away.name}</h3>
+                        <p>Hits: ${state.teams.away.hits}</p>
+                        <p>Errors: ${state.teams.away.errors}</p>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--blaze-orange); margin-bottom: 10px;">${state.teams.home.name}</h3>
+                        <p>Hits: ${state.teams.home.hits}</p>
+                        <p>Errors: ${state.teams.home.errors}</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 107, 53, 0.2);">
+                    <h3 style="color: var(--blaze-orange); margin-bottom: 10px;">Game Statistics</h3>
+                    <p>Total Pitches: ${state.stats.totalPitches}</p>
+                    <p>Total Hits: ${state.stats.totalHits}</p>
+                    <p>Home Runs: ${state.stats.homeRuns}</p>
+                    <p>Strikeouts: ${state.stats.strikeouts}</p>
+                    <p>Walks: ${state.stats.walks}</p>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function hideLoadingScreen() {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').style.display = 'none';
+            }, 1000);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

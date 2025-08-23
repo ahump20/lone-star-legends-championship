@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | Blaze Intelligence</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-burnt-orange: #CC5500;
+            --blaze-black: #0A0A0A;
+            --blaze-white: #FFFFFF;
+            --blaze-grey: #1A1A1A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--blaze-black);
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+            color: var(--blaze-white);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .error-container {
+            text-align: center;
+            max-width: 600px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 60px rgba(255, 107, 53, 0.5);
+        }
+
+        .error-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--blaze-white);
+        }
+
+        .error-message {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            color: var(--blaze-white);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--blaze-orange);
+            border: 2px solid var(--blaze-orange);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 107, 53, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .blaze-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .search-container {
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 0.5rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--blaze-white);
+            font-size: 1rem;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--blaze-orange);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .quick-links {
+            margin-top: 2rem;
+        }
+
+        .quick-links h3 {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .quick-link {
+            padding: 0.5rem;
+            color: var(--blaze-orange);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            border-radius: 6px;
+        }
+
+        .quick-link:hover {
+            background: rgba(255, 107, 53, 0.1);
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 640px) {
+            .error-code {
+                font-size: 80px;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="blaze-logo">🔥</div>
+        <div class="error-code">404</div>
+        <h1 class="error-title">Page Not Found</h1>
+        <p class="error-message">
+            The page you're looking for seems to have vanished into the analytics void. 
+            It might have been moved, deleted, or perhaps it never existed in this dimension.
+        </p>
+        
+        <div class="error-actions">
+            <a href="/" class="btn btn-primary">Return Home</a>
+            <a href="/game.html" class="btn btn-secondary">Play Game</a>
+        </div>
+
+        <div class="search-container">
+            <form class="search-form" action="/search" method="get">
+                <input 
+                    type="search" 
+                    name="q" 
+                    class="search-input" 
+                    placeholder="Search Blaze Intelligence..."
+                    aria-label="Search">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+
+        <div class="quick-links">
+            <h3>Popular Pages</h3>
+            <div class="quick-links-grid">
+                <a href="/index-corporate.html" class="quick-link">→ Enterprise Platform</a>
+                <a href="/client-onboarding.html" class="quick-link">→ Start Free Trial</a>
+                <a href="/nil-trust-dashboard.html" class="quick-link">→ NIL Dashboard</a>
+                <a href="/presentations.html" class="quick-link">→ Research</a>
+                <a href="/statistics-dashboard.html" class="quick-link">→ Statistics</a>
+                <a href="/multiplayer-client.html" class="quick-link">→ Multiplayer</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Log 404 events for monitoring
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_not_found', {
+                page_location: window.location.href,
+                page_referrer: document.referrer
+            });
+        }
+
+        // Auto-suggest based on URL
+        const path = window.location.pathname;
+        const suggestions = {
+            'corporate': '/index-corporate.html',
+            'onboard': '/client-onboarding.html',
+            'nil': '/nil-trust-dashboard.html',
+            'stats': '/statistics-dashboard.html',
+            'admin': '/cms-admin.html',
+            'multi': '/multiplayer-client.html'
+        };
+
+        for (const [keyword, url] of Object.entries(suggestions)) {
+            if (path.includes(keyword)) {
+                setTimeout(() => {
+                    if (confirm(`Did you mean to visit ${url}?`)) {
+                        window.location.href = url;
+                    }
+                }, 1000);
+                break;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - 3D Biometric Visualization Engine</title>
+    
+    <!-- Design Tokens -->
+    <link rel="stylesheet" href="css/tokens.css">
+    
+    <!-- Three.js and Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    
+    <!-- Chart.js for 2D overlays -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Configuration -->
+    <script src="js/config.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--blaze-black);
+            color: var(--blaze-white);
+            overflow: hidden;
+        }
+
+        /* Main Container */
+        .visualization-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* 3D Canvas */
+        #biometric-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Header Overlay */
+        .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 2rem;
+            background: linear-gradient(180deg, rgba(10, 10, 10, 0.9), transparent);
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-img {
+            height: 40px;
+            width: auto;
+        }
+
+        .header-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            width: 300px;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            z-index: 100;
+        }
+
+        .panel-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            color: var(--blaze-orange);
+            margin-bottom: 1rem;
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--blaze-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .control-slider {
+            width: 100%;
+            appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+
+        .control-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--blaze-orange);
+            cursor: pointer;
+        }
+
+        .control-value {
+            display: inline-block;
+            margin-left: 0.5rem;
+            color: var(--blaze-orange);
+            font-weight: 600;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .control-btn {
+            padding: 0.5rem;
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 8px;
+            color: var(--blaze-white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 107, 53, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .control-btn.active {
+            background: var(--blaze-orange);
+            border-color: var(--blaze-orange);
+        }
+
+        /* Metrics Panel */
+        .metrics-panel {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            width: 350px;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            z-index: 100;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .metric-label {
+            color: var(--blaze-text-secondary);
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: var(--blaze-orange);
+        }
+
+        .metric-chart {
+            height: 150px;
+            margin-top: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Heat Map Overlay */
+        .heatmap-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 200px;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 16px;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .heatmap-title {
+            text-align: center;
+            color: var(--blaze-orange);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            gap: 1px;
+            height: 140px;
+        }
+
+        .heatmap-cell {
+            border-radius: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .heat-low { background: rgba(66, 165, 245, 0.3); }
+        .heat-medium { background: rgba(255, 193, 7, 0.5); }
+        .heat-high { background: rgba(255, 107, 53, 0.7); }
+        .heat-extreme { background: rgba(255, 0, 0, 0.9); }
+
+        /* Timeline Scrubber */
+        .timeline-container {
+            position: absolute;
+            bottom: 240px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 800px;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .timeline-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .play-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--blaze-orange);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+        }
+
+        .timeline-slider {
+            flex: 1;
+            appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+
+        .timeline-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--blaze-orange);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+        }
+
+        .timeline-time {
+            color: var(--blaze-text-secondary);
+            font-family: monospace;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--blaze-black);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-logo {
+            width: 200px;
+            height: auto;
+            margin-bottom: 2rem;
+        }
+
+        .loading-text {
+            font-size: 1.25rem;
+            color: var(--blaze-orange);
+            margin-bottom: 1rem;
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .control-panel,
+            .metrics-panel {
+                display: none;
+            }
+
+            .heatmap-overlay {
+                width: 90%;
+                bottom: 10px;
+            }
+
+            .timeline-container {
+                width: 90%;
+                bottom: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="visualization-container">
+        <!-- 3D Canvas -->
+        <canvas id="biometric-canvas"></canvas>
+
+        <!-- Loading Screen -->
+        <div class="loading-screen" id="loadingScreen">
+            <div class="loading-logo" style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto;">🔥</div>
+            <div class="loading-text">Initializing 3D Biometric Engine...</div>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loadingProgress"></div>
+            </div>
+        </div>
+
+        <!-- Header Overlay -->
+        <div class="header-overlay">
+            <div class="header-content">
+                <div class="header-logo">
+                    <div class="logo-img" style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🔥</div>
+                    <h1 class="header-title">3D Biometric Visualization</h1>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="control-btn" onclick="window.location.href='index.html'">Dashboard</button>
+                    <button class="control-btn" onclick="toggleFullscreen()">Fullscreen</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <h3 class="panel-title">Visualization Controls</h3>
+            
+            <div class="control-group">
+                <label class="control-label">
+                    Rotation Speed: <span class="control-value" id="rotationValue">1.0</span>
+                </label>
+                <input type="range" class="control-slider" id="rotationSlider" 
+                       min="0" max="2" step="0.1" value="1">
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">
+                    Particle Density: <span class="control-value" id="particleValue">5000</span>
+                </label>
+                <input type="range" class="control-slider" id="particleSlider" 
+                       min="1000" max="10000" step="500" value="5000">
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Visualization Mode</label>
+                <div class="control-buttons">
+                    <button class="control-btn active" onclick="setVisualizationMode('skeleton')">Skeleton</button>
+                    <button class="control-btn" onclick="setVisualizationMode('muscle')">Muscle</button>
+                    <button class="control-btn" onclick="setVisualizationMode('neural')">Neural</button>
+                    <button class="control-btn" onclick="setVisualizationMode('energy')">Energy</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Camera View</label>
+                <div class="control-buttons">
+                    <button class="control-btn" onclick="setCameraView('front')">Front</button>
+                    <button class="control-btn" onclick="setCameraView('side')">Side</button>
+                    <button class="control-btn" onclick="setCameraView('top')">Top</button>
+                    <button class="control-btn" onclick="setCameraView('free')">Free</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metrics Panel -->
+        <div class="metrics-panel">
+            <h3 class="panel-title">Live Biometrics</h3>
+            
+            <div class="metric-row">
+                <span class="metric-label">Heart Rate</span>
+                <span class="metric-value" id="heartRate">72 bpm</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Velocity</span>
+                <span class="metric-value" id="velocity">27.8 ft/s</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Force Output</span>
+                <span class="metric-value" id="forceOutput">2,150 N</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Joint Stress</span>
+                <span class="metric-value" id="jointStress">Low</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Fatigue Index</span>
+                <span class="metric-value" id="fatigueIndex">12%</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Recovery Score</span>
+                <span class="metric-value" id="recoveryScore">88/100</span>
+            </div>
+
+            <div class="metric-chart">
+                <canvas id="biometricChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Heat Map Overlay -->
+        <div class="heatmap-overlay">
+            <div class="heatmap-title">Muscle Activation Heat Map</div>
+            <div class="heatmap-grid" id="heatmapGrid">
+                <!-- Generated dynamically -->
+            </div>
+        </div>
+
+        <!-- Timeline Scrubber -->
+        <div class="timeline-container">
+            <div class="timeline-controls">
+                <button class="play-btn" id="playBtn" onclick="togglePlayback()">▶</button>
+                <input type="range" class="timeline-slider" id="timelineSlider" 
+                       min="0" max="100" value="0">
+                <span class="timeline-time" id="timelineTime">00:00 / 05:00</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Three.js Scene
+        let scene, camera, renderer, controls;
+        let humanModel, skeleton, particles;
+        let isPlaying = false;
+        let currentTime = 0;
+        let visualizationMode = 'skeleton';
+
+        function init() {
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.fog = new THREE.Fog(0x0A0A0A, 10, 100);
+
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(
+                75,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                1000
+            );
+            camera.position.set(0, 5, 10);
+
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('biometric-canvas'),
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            // Orbit Controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.maxDistance = 30;
+            controls.minDistance = 3;
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 10, 5);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+
+            const pointLight = new THREE.PointLight(0xFF6B35, 1, 50);
+            pointLight.position.set(0, 5, 0);
+            scene.add(pointLight);
+
+            // Create human model
+            createHumanModel();
+
+            // Create particle system
+            createParticleSystem();
+
+            // Create ground plane
+            createGroundPlane();
+
+            // Initialize heat map
+            initializeHeatMap();
+
+            // Initialize metrics chart
+            initializeMetricsChart();
+
+            // Start animation
+            animate();
+
+            // Hide loading screen
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 2000);
+        }
+
+        function createHumanModel() {
+            // Create simplified human skeleton
+            const bodyGeometry = new THREE.CylinderGeometry(0.5, 0.3, 3, 8);
+            const bodyMaterial = new THREE.MeshPhongMaterial({
+                color: 0x4444ff,
+                transparent: true,
+                opacity: 0.7,
+                wireframe: visualizationMode === 'skeleton'
+            });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = 2;
+
+            // Head
+            const headGeometry = new THREE.SphereGeometry(0.3, 8, 8);
+            const headMaterial = new THREE.MeshPhongMaterial({
+                color: 0x6666ff,
+                transparent: true,
+                opacity: 0.7
+            });
+            const head = new THREE.Mesh(headGeometry, headMaterial);
+            head.position.y = 4;
+
+            // Arms
+            const armGeometry = new THREE.CylinderGeometry(0.1, 0.1, 2, 8);
+            const armMaterial = new THREE.MeshPhongMaterial({
+                color: 0x5555ff,
+                transparent: true,
+                opacity: 0.7
+            });
+
+            const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+            leftArm.position.set(-1, 2.5, 0);
+            leftArm.rotation.z = Math.PI / 4;
+
+            const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+            rightArm.position.set(1, 2.5, 0);
+            rightArm.rotation.z = -Math.PI / 4;
+
+            // Legs
+            const legGeometry = new THREE.CylinderGeometry(0.15, 0.1, 2.5, 8);
+            const legMaterial = new THREE.MeshPhongMaterial({
+                color: 0x5555ff,
+                transparent: true,
+                opacity: 0.7
+            });
+
+            const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
+            leftLeg.position.set(-0.3, 0, 0);
+
+            const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
+            rightLeg.position.set(0.3, 0, 0);
+
+            // Group all parts
+            humanModel = new THREE.Group();
+            humanModel.add(body, head, leftArm, rightArm, leftLeg, rightLeg);
+            scene.add(humanModel);
+
+            // Add skeleton helper
+            if (visualizationMode === 'skeleton') {
+                skeleton = new THREE.SkeletonHelper(humanModel);
+                skeleton.material.linewidth = 2;
+                scene.add(skeleton);
+            }
+        }
+
+        function createParticleSystem() {
+            const particleCount = 5000;
+            const particlesGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                // Create particles around the human model
+                const radius = 5 + Math.random() * 10;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.random() * Math.PI;
+
+                positions[i] = radius * Math.sin(phi) * Math.cos(theta);
+                positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
+                positions[i + 2] = radius * Math.cos(phi);
+
+                // Color based on energy levels
+                colors[i] = 1;
+                colors[i + 1] = 0.4 + Math.random() * 0.3;
+                colors[i + 2] = 0.2;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6,
+                blending: THREE.AdditiveBlending
+            });
+
+            particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
+        }
+
+        function createGroundPlane() {
+            const planeGeometry = new THREE.PlaneGeometry(50, 50);
+            const planeMaterial = new THREE.MeshStandardMaterial({
+                color: 0x111111,
+                roughness: 0.8,
+                metalness: 0.2
+            });
+            const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+            plane.rotation.x = -Math.PI / 2;
+            plane.position.y = -2;
+            plane.receiveShadow = true;
+            scene.add(plane);
+
+            // Add grid
+            const gridHelper = new THREE.GridHelper(50, 50, 0xFF6B35, 0x333333);
+            gridHelper.position.y = -1.99;
+            scene.add(gridHelper);
+        }
+
+        function initializeHeatMap() {
+            const heatmapGrid = document.getElementById('heatmapGrid');
+            for (let i = 0; i < 200; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'heatmap-cell';
+                
+                // Random heat level
+                const heat = Math.random();
+                if (heat > 0.75) cell.classList.add('heat-extreme');
+                else if (heat > 0.5) cell.classList.add('heat-high');
+                else if (heat > 0.25) cell.classList.add('heat-medium');
+                else cell.classList.add('heat-low');
+                
+                heatmapGrid.appendChild(cell);
+            }
+        }
+
+        function initializeMetricsChart() {
+            const ctx = document.getElementById('biometricChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 20}, (_, i) => i),
+                    datasets: [{
+                        label: 'Heart Rate',
+                        data: Array.from({length: 20}, () => 70 + Math.random() * 30),
+                        borderColor: '#FF6B35',
+                        backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { display: false },
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#888' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Update controls
+            controls.update();
+
+            // Rotate human model
+            const rotationSpeed = parseFloat(document.getElementById('rotationSlider').value);
+            if (humanModel && isPlaying) {
+                humanModel.rotation.y += 0.01 * rotationSpeed;
+            }
+
+            // Animate particles
+            if (particles) {
+                particles.rotation.y += 0.001;
+                particles.rotation.x += 0.0005;
+            }
+
+            // Update metrics
+            updateMetrics();
+
+            // Render scene
+            renderer.render(scene, camera);
+        }
+
+        function updateMetrics() {
+            // Simulate changing metrics
+            if (Math.random() > 0.95) {
+                document.getElementById('heartRate').textContent = `${Math.floor(70 + Math.random() * 50)} bpm`;
+                document.getElementById('velocity').textContent = `${(25 + Math.random() * 5).toFixed(1)} ft/s`;
+                document.getElementById('forceOutput').textContent = `${Math.floor(2000 + Math.random() * 500)} N`;
+                document.getElementById('fatigueIndex').textContent = `${Math.floor(Math.random() * 30)}%`;
+                document.getElementById('recoveryScore').textContent = `${Math.floor(80 + Math.random() * 20)}/100`;
+            }
+        }
+
+        // Control functions
+        function setVisualizationMode(mode) {
+            visualizationMode = mode;
+            document.querySelectorAll('.control-buttons button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update visualization based on mode
+            if (humanModel) {
+                humanModel.children.forEach(child => {
+                    if (child.material) {
+                        child.material.wireframe = mode === 'skeleton';
+                        child.material.color.setHex(
+                            mode === 'muscle' ? 0xff4444 :
+                            mode === 'neural' ? 0x44ff44 :
+                            mode === 'energy' ? 0xffff44 : 0x4444ff
+                        );
+                    }
+                });
+            }
+        }
+
+        function setCameraView(view) {
+            const positions = {
+                front: [0, 5, 10],
+                side: [10, 5, 0],
+                top: [0, 15, 0],
+                free: camera.position.toArray()
+            };
+            
+            if (view !== 'free') {
+                camera.position.set(...positions[view]);
+                camera.lookAt(0, 2, 0);
+            }
+        }
+
+        function togglePlayback() {
+            isPlaying = !isPlaying;
+            document.getElementById('playBtn').innerHTML = isPlaying ? '⏸' : '▶';
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Event listeners
+        document.getElementById('rotationSlider').addEventListener('input', (e) => {
+            document.getElementById('rotationValue').textContent = e.target.value;
+        });
+
+        document.getElementById('particleSlider').addEventListener('input', (e) => {
+            document.getElementById('particleValue').textContent = e.target.value;
+            // Would regenerate particles with new count
+        });
+
+        document.getElementById('timelineSlider').addEventListener('input', (e) => {
+            currentTime = e.target.value;
+            const minutes = Math.floor(currentTime * 3);
+            const seconds = Math.floor((currentTime * 3 - minutes) * 60);
+            document.getElementById('timelineTime').textContent = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} / 05:00`;
+        });
+
+        // Loading progress simulation
+        let loadingProgress = 0;
+        const loadingInterval = setInterval(() => {
+            loadingProgress += 5;
+            document.getElementById('loadingProgress').style.width = `${loadingProgress}%`;
+            if (loadingProgress >= 100) {
+                clearInterval(loadingInterval);
+            }
+        }, 50);
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize on load
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

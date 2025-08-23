@@ -458,10 +458,10 @@
             }
 
             connect() {
-                const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-                const host = window.location.hostname;
-                const port = '8081';
-                const wsUrl = `${protocol}//${host}:${port}/baseball-multiplayer`;
+                // Use the deployed Worker URL for WebSocket
+                const roomId = new URLSearchParams(window.location.search).get('room') || 'default';
+                const playerId = `player_${Math.random().toString(36).substr(2, 9)}`;
+                const wsUrl = `wss://blaze-intelligence-worker.humphrey-austin20.workers.dev/ws?room=${roomId}&player=${playerId}`;
                 
                 console.log('🔗 Connecting to:', wsUrl);
                 
