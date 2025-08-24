@@ -10,7 +10,7 @@ import path from 'path';
 
 class SecurityScanner {
     constructor() {
-        this.baseUrl = process.env.BASE_URL || 'https://fe5b775f.blaze-intelligence-lsl.pages.dev';
+        this.baseUrl = process.env.BASE_URL || 'https://3eca9ea9.blaze-intelligence-lsl.pages.dev';
         this.results = {
             secretsScanning: { files: [], violations: [] },
             securityHeaders: {},

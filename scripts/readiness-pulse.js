@@ -7,7 +7,7 @@
 
 import fs from 'fs';
 
-const PROD_URL = 'https://fe5b775f.blaze-intelligence-lsl.pages.dev';
+const PROD_URL = 'https://3eca9ea9.blaze-intelligence-lsl.pages.dev';
 const PULSE_DIR = './dist/.pulse';
 
 async function main() {
