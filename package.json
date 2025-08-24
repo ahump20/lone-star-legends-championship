@@ -1,6 +1,7 @@
 {
   "name": "blaze-intelligence-lone-star-legends",
   "version": "3.0.0",
+  "type": "module",
   "description": "Blaze Intelligence - Lone Star Legends Championship: Advanced 3D baseball game with real-time sports analytics and AI coordination",
   "main": "index.html",
   "scripts": {
@@ -16,7 +17,16 @@
     "format": "npx prettier --write *.html *.js",
     "api": "python3 simple-api-server.py",
     "multiplayer": "node multiplayer-server.js",
-    "dashboard": "python3 -m http.server 8082"
+    "dashboard": "python3 -m http.server 8082",
+    "ship": "node scripts/ship.js",
+    "qa": "node scripts/simple-qa-check.js",
+    "scan": "node security-scanner.js",
+    "enigma": "node scripts/enigma-pulse.js",
+    "readiness": "node scripts/readiness-pulse.js",
+    "mp:probe": "node scripts/test-multiplayer-connection.js",
+    "pages": "npx wrangler pages deploy ./dist -p",
+    "reset": "node scripts/reset-workspace.js",
+    "logs": "npx wrangler tail --format pretty"
   },
   "dependencies": {
     "chart.js": "^4.5.0",
