@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sports Analytics & Performance Intelligence | Blaze Intelligence</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Evidence-based sports analytics platform combining cognitive performance with quarterly results. Featuring Cardinals, Titans, Longhorns, and Grizzlies intelligence.">
+  <meta name="keywords" content="sports analytics, performance intelligence, flow state, baseball analytics, football analytics, basketball analytics, cognitive performance">
+  <link rel="canonical" href="https://blaze-intelligence.com/">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Sports Analytics & Performance Intelligence | Blaze Intelligence">
+  <meta property="og:description" content="Evidence-based sports analytics platform combining cognitive performance with quarterly results.">
+  <meta property="og:image" content="https://blaze-intelligence.com/images/og-blaze-analytics.jpg">
+  <meta property="og:url" content="https://blaze-intelligence.com/">
+  <meta property="og:type" content="website">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="/css/blaze.css">
+  <link rel="stylesheet" href="/css/components.css">
+  
+  <!-- Flow State Integration -->
+  <link rel="stylesheet" href="/flow-styles.css" id="flow-state-styles">
+  <script type="module" src="/flow-state-api.js"></script>
+  <script type="module" src="/flow-widgets.js"></script>
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#FF6B35">
+  
+  <!-- Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Blaze Intelligence",
+    "description": "Sports analytics and performance optimization platform",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "127"
+    }
+  }
+  </script>
+    
+    <style>
+      /* Clean, professional styling */
+      body { margin: 0; background: #0A0A0A; color: #FFFFFF; font-family: 'Inter', sans-serif; }
+      
+      /* Professional sticky header */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+        padding: 1rem 0;
+      }
+      
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: #FFFFFF;
+        text-decoration: none;
+      }
+      
+      .logo-icon {
+        background: linear-gradient(135deg, #FF6B35, #CC5500);
+        padding: 0.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+      
+      .nav-menu {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+      }
+      
+      .nav-link {
+        color: #FFFFFF;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+      
+      .nav-link:hover {
+        color: #FF6B35;
+      }
+      
+      .nav-cta {
+        background: linear-gradient(135deg, #CC5500, #FF6B35);
+        color: #FFFFFF;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: transform 0.3s ease;
+      }
+      
+      .nav-cta:hover {
+        transform: translateY(-2px);
+      }
+      
+      /* Hero section */
+      .hero {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 3rem;
+        align-items: start;
+      }
+      
+      .hero-content h1 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        color: #FFFFFF;
+      }
+      
+      .hero-content p {
+        font-size: 1.125rem;
+        line-height: 1.6;
+        color: #A1A5AE;
+        margin-bottom: 2rem;
+      }
+      
+      .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, #CC5500, #FF6B35);
+        color: #FFFFFF;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+      }
+      
+      .btn-secondary {
+        background: transparent;
+        color: #FFFFFF;
+        padding: 1rem 2rem;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-secondary:hover {
+        border-color: #FF6B35;
+        color: #FF6B35;
+      }
+      
+      /* Video container */
+      .video-container {
+        background: linear-gradient(135deg, rgba(22, 24, 28, 0.9), rgba(22, 24, 28, 0.7));
+        border: 1px solid rgba(255, 107, 53, 0.2);
+        border-radius: 16px;
+        padding: 1rem;
+        margin-top: 1rem;
+      }
+      
+      .video-container iframe {
+        width: 100%;
+        aspect-ratio: 16/9;
+        border-radius: 12px;
+        border: 0;
+      }
+      
+      /* Live data card */
+      .live-data-card {
+        background: linear-gradient(135deg, rgba(22, 24, 28, 0.9), rgba(22, 24, 28, 0.7));
+        border: 1px solid rgba(255, 107, 53, 0.2);
+        border-radius: 16px;
+        padding: 1.5rem;
+        position: relative;
+      }
+      
+      .live-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .live-dot {
+        width: 10px;
+        height: 10px;
+        background: #FF6B35;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      
+      .data-item {
+        margin-bottom: 1.5rem;
+      }
+      
+      .data-label {
+        font-size: 0.875rem;
+        color: #A1A5AE;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+      }
+      
+      .data-value {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #FF6B35, #CC5500);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      
+      .last-updated {
+        font-size: 0.875rem;
+        color: #A1A5AE;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      
+      /* Footer */
+      .footer {
+        max-width: 1200px;
+        margin: 3rem auto 2rem;
+        padding: 0 2rem;
+      }
+      
+      .footer-content {
+        background: linear-gradient(135deg, rgba(22, 24, 28, 0.9), rgba(22, 24, 28, 0.7));
+        border: 1px solid rgba(255, 107, 53, 0.2);
+        border-radius: 16px;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .footer-content a {
+        color: #FF6B35;
+        text-decoration: none;
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        .hero {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+          padding: 2rem 1rem;
+        }
+        
+        .nav-container {
+          padding: 0 1rem;
+        }
+        
+        .nav-menu {
+          gap: 1rem;
+        }
+        
+        .cta-buttons {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  
+  <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Unified Navigation -->
+    <header class="topbar" id="unified-navigation">
+      <div class="nav-container">
+        <a href="/" class="logo">
+          <span class="logo-icon">🔥</span>
+          <span>Blaze Intelligence</span>
+        </a>
+        
+        <!-- Main Navigation Menu -->
+        <nav class="nav-menu">
+          <!-- Analytics Hub -->
+          <div class="nav-dropdown">
+            <a href="/analytics/" class="nav-link nav-dropdown-trigger">Analytics <span class="dropdown-arrow">▾</span></a>
+            <div class="nav-dropdown-content">
+              <a href="/analytics/" class="dropdown-item">Overview Dashboard</a>
+              <a href="/analytics/dashboard/" class="dropdown-item">Statistics Dashboard</a>
+              <a href="/analytics/real-time/" class="dropdown-item">Real-time Analytics</a>
+              <a href="/analytics/nil-valuation/" class="dropdown-item">NIL Valuation</a>
+            </div>
+          </div>
+          
+          <!-- Capabilities Platform -->
+          <div class="nav-dropdown">
+            <a href="/capabilities/" class="nav-link nav-dropdown-trigger">Capabilities <span class="dropdown-arrow">▾</span></a>
+            <div class="nav-dropdown-content">
+              <a href="/capabilities/biomechanics/" class="dropdown-item">3D Biomechanics</a>
+              <a href="/capabilities/flow-state/" class="dropdown-item">Flow State</a>
+              <a href="/capabilities/scouting/" class="dropdown-item">Advanced Scouting</a>
+            </div>
+          </div>
+          
+          <!-- Interactive Demos -->
+          <div class="nav-dropdown">
+            <a href="/games/" class="nav-link nav-dropdown-trigger">Games <span class="dropdown-arrow">▾</span></a>
+            <div class="nav-dropdown-content">
+              <a href="/games/baseball/" class="dropdown-item">Baseball Demo</a>
+              <a href="/games/simulator/" class="dropdown-item">3D Simulator</a>
+              <a href="/games/advanced/" class="dropdown-item">Advanced Simulator</a>
+            </div>
+          </div>
+          
+          <!-- Company -->
+          <a href="/company/presentations/" class="nav-link">Presentations</a>
+          
+          <!-- Pricing -->
+          <a href="/pricing/" class="nav-link">Pricing</a>
+          
+          <!-- Get Started CTA -->
+          <a href="/onboarding/" class="nav-cta">Get Started</a>
+        </nav>
+        
+        <!-- Mobile menu toggle -->
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+      
+      <!-- Mobile Navigation -->
+      <div class="mobile-nav" id="mobile-nav">
+        <div class="mobile-nav-content">
+          <a href="/" class="mobile-nav-link">Home</a>
+          <a href="/analytics/" class="mobile-nav-link">Analytics</a>
+          <a href="/capabilities/" class="mobile-nav-link">Capabilities</a>
+          <a href="/games/" class="mobile-nav-link">Games</a>
+          <a href="/pricing/" class="mobile-nav-link">Pricing</a>
+          <a href="/company/" class="mobile-nav-link">Company</a>
+          <a href="/onboarding/" class="mobile-nav-cta">Get Started</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content">
+      <!-- Hero section -->
+      <section class="hero">
+      <div class="hero-content">
+        <h1>Welcome to the Future of Sports Analytics</h1>
+        <p>
+          Three-dimensional scouting + live intelligence. Focus set: 
+          <strong>Cardinals</strong>, <strong>Titans</strong>, 
+          <strong>Longhorns</strong>, <strong>Grizzlies</strong>. No soccer.
+        </p>
+        
+        <div class="cta-buttons">
+          <a href="/game.html" class="btn-primary">
+            🎮 Play Now
+          </a>
+          <a href="/index-corporate-enhanced.html" class="btn-secondary">
+            📊 Competitive Analysis
+          </a>
+        </div>
+        
+        <div class="video-container">
+          <iframe
+            src="https://iframe.videodelivery.net/138facaf760c65e9b4efab3715ae6f50?autoplay=false&muted=false&controls=true&preload=metadata"
+            title="Sports Management & Operations Lecture"
+            allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+
+      <aside class="live-data-card">
+        <div class="live-header">
+          <span class="live-dot"></span>
+          <strong>Live Data</strong>
+        </div>
+        
+        <div class="data-item">
+          <div class="data-label">Readiness</div>
+          <div class="data-value" id="readiness">67.30</div>
+        </div>
+        
+        <div class="data-item">
+          <div class="data-label">Leverage</div>
+          <div class="data-value" id="leverage">2.40</div>
+        </div>
+        
+        <div class="last-updated">
+          Last updated: <span id="updated">Just now</span>
+        </div>
+        
+        <!-- Flow Dashboard Tile -->
+        <div class="tile" id="flow-dashboard-tile" style="margin-top: 20px;">
+          <div class="label">Flow State</div>
+          <div class="value" id="flow-dashboard-value">--</div>
+          <div style="font-size: 12px; color: #A1A5AE; margin-top: 4px;">
+            Real-time flow metrics
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div>Built with ❤️ by Blaze Intelligence — Where cognitive performance meets quarterly performance™</div>
+        <div>
+          <a href="mailto:ahump20@outlook.com">ahump20@outlook.com</a> • 
+          <a href="tel:+12102735538">(210) 273-5538</a> • 
+          <a href="#flow-methods" style="color: #FF6B35;">Flow Science Methods & Definitions</a>
+        </div>
+      </div>
+      
+      <!-- Scientific Flow Evidence Section -->
+      <div class="callout" style="margin-top: 20px;">
+        <h3>Evidence-Based Flow State Integration</h3>
+        <ul>
+          <li><strong>Research Foundation:</strong> Built on Csíkszentmihályi's 40+ years of flow research</li>
+          <li><strong>Neuroscience Backing:</strong> Leverages transient hypofrontality and theta-alpha brain wave states (8-12Hz)</li>
+          <li><strong>Validated Performance:</strong> Research demonstrates 10-25% performance improvements in optimal challenge conditions</li>
+          <li><strong>4% Challenge Rule:</strong> Implements Kotler's optimal challenge-to-skill ratio for sustained flow states</li>
+          <li><strong>MSPE Integration:</strong> Mindfulness-Based Sport Performance Enhancement with tactical breathing protocols</li>
+        </ul>
+        <div style="margin-top: 12px; font-size: 12px; opacity: 0.8;">
+          Sources: Flow Research Collective, Applied Neuroscience Institute, McKinsey Global Institute Performance Studies
+        </div>
+      </div>
+    </footer>
+    </main>
+
+    <!-- Flow Meter Widget -->
+    <div id="flow-meter-container"></div>
+
+    <!-- Base Scripts -->
+    <script src="/js/core.js"></script>
+    
+    <!-- SEO Migration Monitor -->
+    <script src="/scripts/seo-migration-monitor.js"></script>
+
+    <script>
+      // Simple, clean live data updates
+      function updateLiveData() {
+        const readiness = (67.3 + (Math.random() - 0.5) * 2).toFixed(2);
+        const leverage = (2.4 + (Math.random() - 0.5) * 0.2).toFixed(2);
+        
+        document.getElementById('readiness').textContent = readiness;
+        document.getElementById('leverage').textContent = leverage;
+        document.getElementById('updated').textContent = new Date().toLocaleTimeString();
+      }
+      
+      // Update every 5 seconds
+      setInterval(updateLiveData, 5000);
+      updateLiveData();
+      
+      // Update flow dashboard tile
+      function updateFlowDashboard() {
+        if (window.flowAPI) {
+          const state = window.flowAPI.getCurrentState();
+          const valueEl = document.getElementById('flow-dashboard-value');
+          if (valueEl && state.currentMetrics.flowScore !== undefined) {
+            valueEl.textContent = Math.round(state.currentMetrics.flowScore);
+          }
+        }
+      }
+      
+      setInterval(updateFlowDashboard, 2000);
+      setTimeout(updateFlowDashboard, 1000);
+    </script>
+    
+    <script type="module">
+      import { FlowMeterWidget } from './flow-widgets.js';
+      
+      // Initialize flow meter
+      document.addEventListener('DOMContentLoaded', () => {
+        const flowMeter = new FlowMeterWidget('flow-meter-container', {
+          autoStart: true,
+          showMSPE: true,
+          enableBreathing: true
+        });
+        
+        window.blazeFlowMeter = flowMeter;
+      });
+      
+      // Track engagement
+      let engagementTimer = 0;
+      setInterval(() => {
+        engagementTimer += 30;
+        if (engagementTimer % 120 === 0) {
+          window.flowAPI?.trackEvent('engagement_milestone', {
+            timeOnPage: engagementTimer,
+            scrollPercent: Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100)
+          });
+        }
+      }, 30000);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,57 @@
+# Blaze Intelligence - Enhanced HTTP Headers Configuration
+# Security, performance, and SEO optimization headers
+
+# Global security headers for all pages
+/*
+  # Security Headers
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  
+  # SEO and Performance Headers
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# Static assets - long cache for immutable content
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Long cache for images
+/public/images/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+# JavaScript and CSS with moderate caching
+/*.js
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/*.css
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# API endpoints - no cache
+/api/*
+  Cache-Control: no-store, no-cache, must-revalidate
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+  Access-Control-Allow-Headers: Content-Type, Authorization, X-Client-ID
+
+# Font files
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+# Security headers for admin pages
+/cms-admin
+  X-Frame-Options: SAMEORIGIN
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.blaze-intelligence.com wss://multiplayer.blaze-intelligence.com

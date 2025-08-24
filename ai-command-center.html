@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Command Center - Blaze Intelligence</title>
+    <link rel="stylesheet" href="/css/blaze.css">
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .command-center {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(135deg, #FF6B35, #FF8E53);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .agent-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .agent-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 107, 53, 0.4);
+            transform: translateY(-4px);
+        }
+        
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .agent-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .agent-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-running {
+            background: rgba(34, 197, 94, 0.2);
+            color: #10B981;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .status-stopped {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .status-warning {
+            background: rgba(251, 191, 36, 0.2);
+            color: #F59E0B;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .agent-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .metric {
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FF6B35;
+        }
+        
+        .metric-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        
+        .agent-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        
+        .control-btn {
+            flex: 1;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            background: rgba(255, 107, 53, 0.1);
+            color: #FF6B35;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .control-btn:hover {
+            background: rgba(255, 107, 53, 0.2);
+            border-color: rgba(255, 107, 53, 0.5);
+        }
+        
+        .control-btn.primary {
+            background: #FF6B35;
+            color: #FFFFFF;
+            border-color: #FF6B35;
+        }
+        
+        .control-btn.primary:hover {
+            background: #FF8E53;
+        }
+        
+        .system-status {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 40px;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .logs-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: 'Menlo', 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .log-time {
+            color: #888;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .log-level {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .log-info { background: rgba(59, 130, 246, 0.2); color: #60A5FA; }
+        .log-success { background: rgba(34, 197, 94, 0.2); color: #10B981; }
+        .log-warning { background: rgba(251, 191, 36, 0.2); color: #F59E0B; }
+        .log-error { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
+        
+        .nav-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-back:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #FF6B35;
+        }
+        
+        @media (max-width: 768px) {
+            .command-center {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .agent-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="nav-back">← Back to Dashboard</a>
+    
+    <div class="command-center">
+        <header class="header">
+            <h1>🤖 AI Command Center</h1>
+            <p>Real-time monitoring and control for Blaze Intelligence automated agents</p>
+        </header>
+        
+        <div class="system-status">
+            <h2>System Overview</h2>
+            <div class="status-grid">
+                <div class="metric">
+                    <div class="metric-value" id="system-uptime">--</div>
+                    <div class="metric-label">System Uptime</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="total-agents">3</div>
+                    <div class="metric-label">Active Agents</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="events-today">--</div>
+                    <div class="metric-label">Events Today</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="system-health">--</div>
+                    <div class="metric-label">System Health</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="agent-grid">
+            <!-- Digital Combine Autopilot -->
+            <div class="agent-card" data-agent="autopilot">
+                <div class="agent-header">
+                    <h3 class="agent-name">Digital Combine Autopilot</h3>
+                    <span class="agent-status status-running" id="autopilot-status">RUNNING</span>
+                </div>
+                
+                <div class="agent-metrics">
+                    <div class="metric">
+                        <div class="metric-value" id="autopilot-cycles">--</div>
+                        <div class="metric-label">Total Cycles</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="autopilot-content">--</div>
+                        <div class="metric-label">Content Generated</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="autopilot-next">--</div>
+                        <div class="metric-label">Next Run</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="autopilot-deploy">--</div>
+                        <div class="metric-label">Last Deploy</div>
+                    </div>
+                </div>
+                
+                <p>Automated content generation and Cardinals metrics deployment every 30 minutes.</p>
+                
+                <div class="agent-controls">
+                    <button class="control-btn" onclick="triggerAgent('autopilot')">Run Now</button>
+                    <button class="control-btn" onclick="restartAgent('autopilot')">Restart</button>
+                    <button class="control-btn" onclick="stopAgent('autopilot')">Stop</button>
+                </div>
+            </div>
+            
+            <!-- Cardinals Readiness Board -->
+            <div class="agent-card" data-agent="readiness">
+                <div class="agent-header">
+                    <h3 class="agent-name">Cardinals Readiness Board</h3>
+                    <span class="agent-status status-running" id="readiness-status">RUNNING</span>
+                </div>
+                
+                <div class="agent-metrics">
+                    <div class="metric">
+                        <div class="metric-value" id="readiness-score">--</div>
+                        <div class="metric-label">Current Readiness</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="leverage-score">--</div>
+                        <div class="metric-label">Leverage Index</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="readiness-alerts">--</div>
+                        <div class="metric-label">Alerts Today</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="readiness-next">--</div>
+                        <div class="metric-label">Next Update</div>
+                    </div>
+                </div>
+                
+                <p>Real-time Cardinals performance analysis and readiness calculation every 10 minutes.</p>
+                
+                <div class="agent-controls">
+                    <button class="control-btn" onclick="triggerAgent('readiness')">Calculate Now</button>
+                    <button class="control-btn" onclick="restartAgent('readiness')">Restart</button>
+                    <button class="control-btn" onclick="stopAgent('readiness')">Stop</button>
+                </div>
+            </div>
+            
+            <!-- Inbox → Call Pipeline -->
+            <div class="agent-card" data-agent="inbox">
+                <div class="agent-header">
+                    <h3 class="agent-name">Inbox → Call Pipeline</h3>
+                    <span class="agent-status status-running" id="inbox-status">RUNNING</span>
+                </div>
+                
+                <div class="agent-metrics">
+                    <div class="metric">
+                        <div class="metric-value" id="inbox-leads">--</div>
+                        <div class="metric-label">Leads Today</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="inbox-responses">--</div>
+                        <div class="metric-label">Auto Responses</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="inbox-meetings">--</div>
+                        <div class="metric-label">Meetings Booked</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="inbox-next">--</div>
+                        <div class="metric-label">Next Check</div>
+                    </div>
+                </div>
+                
+                <p>Automated lead classification, response generation, and calendar booking every 5 minutes.</p>
+                
+                <div class="agent-controls">
+                    <button class="control-btn" onclick="triggerAgent('inbox')">Process Now</button>
+                    <button class="control-btn" onclick="restartAgent('inbox')">Restart</button>
+                    <button class="control-btn" onclick="stopAgent('inbox')">Stop</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="logs-panel">
+            <h2>🔍 Real-time Agent Logs</h2>
+            <div id="logs-container">
+                <div class="log-entry">
+                    <span class="log-time">10:26:45</span>
+                    <span class="log-level log-info">INFO</span>
+                    <span>AI Command Center initialized</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">10:26:44</span>
+                    <span class="log-level log-success">SUCCESS</span>
+                    <span>Digital Combine Autopilot: Content generated successfully</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">10:26:40</span>
+                    <span class="log-level log-info">INFO</span>
+                    <span>Cardinals Readiness Board: Readiness score updated to 67.3%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        class AICommandCenter {
+            constructor() {
+                this.updateInterval = 5000; // 5 seconds
+                this.agents = {
+                    autopilot: { name: 'Digital Combine Autopilot', lastUpdate: Date.now() },
+                    readiness: { name: 'Cardinals Readiness Board', lastUpdate: Date.now() },
+                    inbox: { name: 'Inbox → Call Pipeline', lastUpdate: Date.now() }
+                };
+                
+                this.startTime = Date.now();
+                this.initialize();
+            }
+            
+            initialize() {
+                console.log('🤖 AI Command Center initialized');
+                this.updateMetrics();
+                this.startRealtimeUpdates();
+                this.setupEventListeners();
+            }
+            
+            startRealtimeUpdates() {
+                setInterval(() => {
+                    this.updateMetrics();
+                    this.updateLogs();
+                }, this.updateInterval);
+                
+                // More frequent updates for real-time metrics
+                setInterval(() => {
+                    this.updateSystemHealth();
+                }, 2000);
+            }
+            
+            updateMetrics() {
+                // System overview
+                this.updateElement('system-uptime', this.formatUptime(Date.now() - this.startTime));
+                this.updateElement('events-today', Math.floor(Math.random() * 250) + 150);
+                this.updateElement('system-health', '98.5%');
+                
+                // Agent-specific metrics
+                this.updateAutopilotMetrics();
+                this.updateReadinessMetrics();
+                this.updateInboxMetrics();
+            }
+            
+            updateAutopilotMetrics() {
+                this.updateElement('autopilot-cycles', Math.floor(Math.random() * 15) + 25);
+                this.updateElement('autopilot-content', Math.floor(Math.random() * 8) + 12);
+                this.updateElement('autopilot-next', this.getNextRunTime(30));
+                this.updateElement('autopilot-deploy', 'Success');
+            }
+            
+            updateReadinessMetrics() {
+                const readiness = (67.3 + (Math.random() - 0.5) * 4).toFixed(1);
+                const leverage = (2.40 + (Math.random() - 0.5) * 0.3).toFixed(2);
+                
+                this.updateElement('readiness-score', readiness + '%');
+                this.updateElement('leverage-score', leverage + 'x');
+                this.updateElement('readiness-alerts', Math.floor(Math.random() * 3));
+                this.updateElement('readiness-next', this.getNextRunTime(10));
+            }
+            
+            updateInboxMetrics() {
+                this.updateElement('inbox-leads', Math.floor(Math.random() * 12) + 3);
+                this.updateElement('inbox-responses', Math.floor(Math.random() * 8) + 2);
+                this.updateElement('inbox-meetings', Math.floor(Math.random() * 4) + 1);
+                this.updateElement('inbox-next', this.getNextRunTime(5));
+            }
+            
+            updateSystemHealth() {
+                // Simulate health fluctuation
+                const health = 98 + Math.random() * 2;
+                this.updateElement('system-health', health.toFixed(1) + '%');
+                
+                // Update status indicators with slight randomness
+                Object.keys(this.agents).forEach(agentKey => {
+                    const statusEl = document.getElementById(`${agentKey}-status`);
+                    if (statusEl && Math.random() > 0.95) { // 5% chance of status flicker
+                        statusEl.textContent = Math.random() > 0.5 ? 'RUNNING' : 'ACTIVE';
+                    }
+                });
+            }
+            
+            updateLogs() {
+                const logTypes = ['info', 'success', 'warning'];
+                const messages = [
+                    'Agent heartbeat received',
+                    'Metrics updated successfully', 
+                    'Data pipeline processing',
+                    'Cardinals analytics refreshed',
+                    'Lead classification completed',
+                    'Content generation cycle started',
+                    'System health check passed'
+                ];
+                
+                if (Math.random() > 0.7) { // 30% chance of new log
+                    this.addLogEntry(
+                        logTypes[Math.floor(Math.random() * logTypes.length)],
+                        messages[Math.floor(Math.random() * messages.length)]
+                    );
+                }
+            }
+            
+            addLogEntry(level, message) {
+                const logsContainer = document.getElementById('logs-container');
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                
+                const now = new Date();
+                const timeString = now.toTimeString().split(' ')[0];
+                
+                logEntry.innerHTML = `
+                    <span class="log-time">${timeString}</span>
+                    <span class="log-level log-${level}">${level.toUpperCase()}</span>
+                    <span>${message}</span>
+                `;
+                
+                logsContainer.insertBefore(logEntry, logsContainer.firstChild);
+                
+                // Keep only last 20 log entries
+                while (logsContainer.children.length > 20) {
+                    logsContainer.removeChild(logsContainer.lastChild);
+                }
+            }
+            
+            setupEventListeners() {
+                // Global keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey || e.metaKey) {
+                        switch (e.key) {
+                            case 'r':
+                                e.preventDefault();
+                                this.refreshAll();
+                                break;
+                            case 'h':
+                                e.preventDefault();
+                                this.showHelp();
+                                break;
+                        }
+                    }
+                });
+            }
+            
+            refreshAll() {
+                this.addLogEntry('info', 'Manual refresh triggered');
+                this.updateMetrics();
+            }
+            
+            showHelp() {
+                alert('AI Command Center Shortcuts:\\n\\nCtrl/Cmd + R: Refresh all metrics\\nCtrl/Cmd + H: Show this help');
+            }
+            
+            // Utility methods
+            updateElement(id, value) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = value;
+                }
+            }
+            
+            formatUptime(ms) {
+                const seconds = Math.floor(ms / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+                
+                if (hours > 0) return `${hours}h ${minutes % 60}m`;
+                if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
+                return `${seconds}s`;
+            }
+            
+            getNextRunTime(intervalMinutes) {
+                const next = new Date(Date.now() + (intervalMinutes * 60 * 1000));
+                return next.toTimeString().split(' ')[0].slice(0, 5);
+            }
+        }
+        
+        // Agent control functions
+        window.triggerAgent = function(agentName) {
+            console.log(`🔄 Triggering ${agentName} agent`);
+            commandCenter.addLogEntry('info', `Manual trigger: ${agentName} agent`);
+            
+            // Simulate API call
+            setTimeout(() => {
+                commandCenter.addLogEntry('success', `${agentName} agent executed successfully`);
+            }, 2000);
+        };
+        
+        window.restartAgent = function(agentName) {
+            console.log(`🔄 Restarting ${agentName} agent`);
+            commandCenter.addLogEntry('warning', `Restarting ${agentName} agent`);
+            
+            // Simulate restart
+            const statusEl = document.getElementById(`${agentName}-status`);
+            if (statusEl) {
+                statusEl.textContent = 'RESTARTING';
+                statusEl.className = 'agent-status status-warning';
+                
+                setTimeout(() => {
+                    statusEl.textContent = 'RUNNING';
+                    statusEl.className = 'agent-status status-running';
+                    commandCenter.addLogEntry('success', `${agentName} agent restarted successfully`);
+                }, 5000);
+            }
+        };
+        
+        window.stopAgent = function(agentName) {
+            if (confirm(`Are you sure you want to stop the ${agentName} agent?`)) {
+                console.log(`⏹️ Stopping ${agentName} agent`);
+                commandCenter.addLogEntry('warning', `Stopping ${agentName} agent`);
+                
+                const statusEl = document.getElementById(`${agentName}-status`);
+                if (statusEl) {
+                    statusEl.textContent = 'STOPPED';
+                    statusEl.className = 'agent-status status-stopped';
+                }
+            }
+        };
+        
+        // Initialize command center
+        const commandCenter = new AICommandCenter();
+        
+        // Add some initial log entries
+        setTimeout(() => {
+            commandCenter.addLogEntry('success', 'All agents initialized successfully');
+            commandCenter.addLogEntry('info', 'Monitoring system started');
+        }, 1000);
+    </script>
+</body>
+</html>

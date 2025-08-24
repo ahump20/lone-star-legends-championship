@@ -1,0 +1,89 @@
+# Blaze Intelligence - URL Migration Redirects
+# Based on SITE_ARCHITECTURE.md mapping strategy
+# These 301 redirects preserve SEO value during consolidation
+
+# Test redirect for debugging (force processing)
+/test-simple                          /analytics/                   301!
+/test-simple2                         https://blaze-intelligence.pages.dev/analytics/    301!
+
+# Analytics Hub Redirects
+/statistics-dashboard-enhanced.html    /analytics/dashboard/    301
+/statistics-dashboard.html             /analytics/dashboard/    301
+/nil-trust-dashboard.html              /analytics/nil-valuation/ 301
+/blaze-analytics-integration.html      /analytics/real-time/    301
+/cee-scorecard.html                    /analytics/scorecard/    301
+
+# Games & Interactive Demos Redirects
+/game.html                            /games/baseball/         301
+/claude-baseball-demo.html            /games/baseball/         301
+/blaze-branded-game.html              /games/baseball/         301
+/proper-baseball-game.html            /games/baseball/         301
+/threejs-baseball-simulator.html      /games/simulator/        301
+/enhanced-threejs-simulator.html      /games/advanced/         301
+/lone-star-legends-game.html          /games/advanced/         301
+/enhanced-stadium-demo.html           /games/stadium/          301
+/multiplayer-client.html              /games/multiplayer/      301
+
+# Capabilities Platform Redirects
+/3d-biometric-viewer.html             /capabilities/biomechanics/ 301
+/flow-snippets.html                   /capabilities/flow-state/ 301
+
+# Company Section Redirects
+/presentations.html                   /company/presentations/  301
+/team-showcase.html                   /company/team/           301
+/blaze-portfolio-showcase.html        /company/portfolio/      301
+
+# Client Tools Redirects
+/client-onboarding-enhanced.html      /onboarding/            301
+/client-onboarding.html               /onboarding/            301
+
+# Legacy/Duplicate Homepage Redirects
+/index-corporate.html                 /company/about/         301
+/index-corporate-enhanced.html        /company/about/         301
+/index-enhanced.html                  /                       301
+/index-final.html                     /                       301
+/index-temp.html                      /                       301
+/index-backup.html                    /                       301
+
+# Admin/CMS Redirects
+/cms-admin.html                       /admin/cms/             301
+/integration-hub.html                 /admin/integrations/    301
+
+# Development Tool Redirects (to 404)
+/icon-generator.html                  /404.html               301
+/demo.html                           /games/                  301
+
+# Pricing & Business Redirects
+/pricing.html                        /pricing/                301
+
+# FBS Integration Redirect
+/fbs-coverage-integration.html       /capabilities/coverage/ 301
+
+# AI Command Center Redirect
+/ai-command-center.html              /admin/ai-center/       301
+
+# Old Domain Redirects (when deploying to blaze-intelligence.com)
+https://blaze-intelligence-lsl.pages.dev/*           https://blaze-intelligence.com/:splat 301!
+https://blaze-intelligence-official.pages.dev/*     https://blaze-intelligence.com/:splat 301!
+https://blaze-intelligence-website.pages.dev/*      https://blaze-intelligence.com/:splat 301!
+https://blaze-intelligence-site.pages.dev/*         https://blaze-intelligence.com/:splat 301!
+https://blaze-intelligence-enhanced.pages.dev/*     https://blaze-intelligence.com/:splat 301!
+https://blazeintelligence.pages.dev/*               https://blaze-intelligence.com/:splat 301!
+
+# API Endpoint Redirects (maintain backward compatibility)
+/api/*                              /api/:splat              200
+
+# Static Asset Redirects
+/css/*                              /css/:splat              200
+/js/*                               /js/:splat               200
+/images/*                           /images/:splat           200
+/videos/*                           /videos/:splat           200
+/data/*                             /data/:splat             200
+
+# Special Pages
+/robots.txt                         /robots.txt              200
+/manifest.json                      /manifest.json           200
+/sw.js                              /sw.js                   200
+
+# Fallback for unmatched routes
+/*                                  /404.html                404

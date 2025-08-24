@@ -15,6 +15,11 @@
     <script src="js/config.js"></script>
     <script src="js/image-loader.js"></script>
     
+    <!-- Flow State Integration -->
+    <link rel="stylesheet" href="/flow-styles.css" id="flow-state-styles">
+    <script type="module" src="/flow-state-api.js"></script>
+    <script type="module" src="/flow-widgets.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -882,6 +887,49 @@
         setTimeout(() => {
             dashboard.startRealTime();
         }, 2000);
+    </script>
+    
+    <!-- Flow Meter Widget -->
+    <div id="flow-meter-container"></div>
+    
+    <script type="module">
+        import { FlowMeterWidget } from './flow-widgets.js';
+        
+        // Initialize flow meter for analytics
+        document.addEventListener('DOMContentLoaded', () => {
+            const flowMeter = new FlowMeterWidget('flow-meter-container', {
+                autoStart: true,
+                showMSPE: true,
+                enableBreathing: true
+            });
+            
+            window.blazeFlowMeter = flowMeter;
+        });
+        
+        // Track dashboard interactions for flow analysis
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('.btn-primary, .nav-cta, .cta-button, .metric-card')) {
+                window.flowAPI?.trackEvent('analytics_interaction', {
+                    element: e.target.className,
+                    text: e.target.textContent?.slice(0, 50),
+                    page: 'analytics_dashboard'
+                });
+            }
+        });
+        
+        // Track scroll engagement
+        let lastScrollTime = Date.now();
+        window.addEventListener('scroll', () => {
+            const now = Date.now();
+            if (now - lastScrollTime > 1000) {
+                const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+                window.flowAPI?.trackEvent('dashboard_scroll_engagement', {
+                    scrollPercent,
+                    timeOnPage: now - (window.flowAPI?.sessionStart || now)
+                });
+                lastScrollTime = now;
+            }
+        });
     </script>
 </body>
 </html>

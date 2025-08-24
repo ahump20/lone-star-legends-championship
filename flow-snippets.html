@@ -1,0 +1,187 @@
+<!-- Flow State Integration Snippets for Blaze Intelligence -->
+
+<!-- 1. HEAD SECTION - Add to <head> of target pages -->
+<link rel="stylesheet" href="/flow-styles.css" id="flow-state-styles">
+<script type="module" src="/flow-state-api.js"></script>
+<script type="module" src="/flow-widgets.js"></script>
+
+<!-- 2. FLOW METER WIDGET - Add before closing </body> -->
+<div id="flow-meter-container"></div>
+<script type="module">
+    import { FlowMeterWidget } from './flow-widgets.js';
+    
+    // Initialize flow meter
+    document.addEventListener('DOMContentLoaded', () => {
+        const flowMeter = new FlowMeterWidget('flow-meter-container', {
+            autoStart: true,
+            showMSPE: true,
+            enableBreathing: true
+        });
+        
+        // Store reference globally for game integration
+        window.blazeFlowMeter = flowMeter;
+    });
+</script>
+
+<!-- 3. DASHBOARD TILE INTEGRATION - Add to analytics pages -->
+<div class="tile" id="flow-dashboard-tile">
+    <div class="label">Flow State</div>
+    <div class="value" id="flow-dashboard-value">--</div>
+    <div style="font-size: 12px; color: #A1A5AE; margin-top: 4px;">
+        Real-time flow metrics
+    </div>
+</div>
+
+<script>
+    // Update dashboard tile with flow data
+    function updateFlowDashboard() {
+        if (window.flowAPI) {
+            const state = window.flowAPI.getCurrentState();
+            const valueEl = document.getElementById('flow-dashboard-value');
+            if (valueEl && state.currentMetrics.flowScore !== undefined) {
+                valueEl.textContent = Math.round(state.currentMetrics.flowScore);
+            }
+        }
+    }
+    
+    // Update every 2 seconds
+    setInterval(updateFlowDashboard, 2000);
+    
+    // Initial update
+    setTimeout(updateFlowDashboard, 1000);
+</script>
+
+<!-- 4. GAME INTEGRATION HOOK - Add to game pages -->
+<script>
+    // Listen for challenge level changes from flow widget
+    window.addEventListener('flowChallengeChange', (event) => {
+        const { level } = event.detail;
+        
+        // Adjust game difficulty based on flow widget
+        if (window.gameInstance) {
+            // Example integration - adjust based on your game structure
+            window.gameInstance.setDifficulty(level);
+            
+            // Track the adjustment
+            console.log(`Game difficulty adjusted to level ${level} via flow state`);
+        }
+    });
+    
+    // Send game performance back to flow system
+    function reportGamePerformance(score, accuracy, reactionTime) {
+        if (window.flowAPI) {
+            window.flowAPI.trackEvent('game_performance', {
+                score,
+                accuracy,
+                reactionTime,
+                timestamp: Date.now()
+            });
+            
+            // Update flow metrics based on performance
+            const metrics = {
+                focus: Math.min(100, accuracy * 100),
+                engagement: Math.min(100, (score / 1000) * 100),
+                skill: Math.min(100, (1000 / reactionTime) * 10)
+            };
+            
+            window.flowAPI.updateMetrics(metrics);
+        }
+    }
+</script>
+
+<!-- 5. SCIENTIFIC ANCHORS - Add to footer or about sections -->
+<div class="callout">
+    <h3>Flow State Science</h3>
+    <ul>
+        <li><strong>Evidence-Based:</strong> Built on Csíkszentmihályi's 40+ years of flow research</li>
+        <li><strong>Neuroscience:</strong> Leverages transient hypofrontality and optimal brain wave states</li>
+        <li><strong>Proven Results:</strong> Research shows 10-25% performance improvements</li>
+        <li><strong>4% Rule:</strong> Implements Kotler's optimal challenge-to-skill ratio</li>
+        <li><strong>MSPE Integration:</strong> Mindfulness-based sport performance enhancement</li>
+    </ul>
+    <div style="margin-top: 12px; font-size: 12px; opacity: 0.8;">
+        Sources: Flow Research Collective, Applied Neuroscience Institute, 
+        <a href="#methods" style="color: #FF6B35;">Methods & Definitions</a>
+    </div>
+</div>
+
+<!-- 6. TELEMETRY EVENT TRIGGERS - Add where relevant -->
+<script>
+    // Track key interactions for flow analysis
+    document.addEventListener('click', (e) => {
+        if (e.target.matches('.btn-primary, .nav-cta, .cta-button')) {
+            window.flowAPI?.trackEvent('high_intent_action', {
+                element: e.target.className,
+                text: e.target.textContent,
+                page: window.location.pathname
+            });
+        }
+    });
+    
+    // Track engagement milestones
+    let engagementTimer = 0;
+    setInterval(() => {
+        engagementTimer += 30;
+        if (engagementTimer % 120 === 0) { // Every 2 minutes
+            window.flowAPI?.trackEvent('engagement_milestone', {
+                timeOnPage: engagementTimer,
+                scrollPercent: Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100)
+            });
+        }
+    }, 30000);
+</script>
+
+<!-- 7. PERFORMANCE OPTIMIZATION - Add to pages with heavy content -->
+<script>
+    // Lazy load flow widgets on user interaction
+    let flowWidgetLoaded = false;
+    
+    function loadFlowWidget() {
+        if (flowWidgetLoaded) return;
+        flowWidgetLoaded = true;
+        
+        import('./flow-widgets.js').then(({ FlowMeterWidget }) => {
+            const flowMeter = new FlowMeterWidget('flow-meter-container', {
+                autoStart: true,
+                showMSPE: document.querySelector('.analytics-dashboard, .game-container') ? true : false
+            });
+            window.blazeFlowMeter = flowMeter;
+        });
+    }
+    
+    // Load on first meaningful interaction
+    ['click', 'scroll', 'keydown'].forEach(event => {
+        document.addEventListener(event, loadFlowWidget, { once: true });
+    });
+    
+    // Fallback: load after 10 seconds
+    setTimeout(loadFlowWidget, 10000);
+</script>
+
+<!-- 8. RESPONSIVE BREAKPOINTS - Additional CSS for mobile -->
+<style>
+    @media (max-width: 768px) {
+        .flow-meter {
+            right: 10px;
+            width: 250px;
+            font-size: 12px;
+        }
+        
+        .flow-tiles {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .flow-tile-value {
+            font-size: 14px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .flow-meter {
+            position: relative;
+            right: auto;
+            width: 100%;
+            margin: 16px 0;
+        }
+    }
+</style>

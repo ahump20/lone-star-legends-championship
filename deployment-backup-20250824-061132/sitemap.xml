@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  
+  <!-- Homepage -->
+  <url>
+    <loc>https://blaze-intelligence.com/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Analytics Hub -->
+  <url>
+    <loc>https://blaze-intelligence.com/analytics/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/analytics/dashboard/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/analytics/real-time/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/analytics/nil-valuation/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/analytics/reports/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/analytics/scorecard/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Capabilities Platform -->
+  <url>
+    <loc>https://blaze-intelligence.com/capabilities/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/capabilities/biomechanics/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/capabilities/flow-state/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/capabilities/scouting/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/capabilities/performance/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/capabilities/predictive/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Interactive Games -->
+  <url>
+    <loc>https://blaze-intelligence.com/games/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/games/baseball/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/games/simulator/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/games/advanced/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/games/stadium/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/games/multiplayer/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Pricing -->
+  <url>
+    <loc>https://blaze-intelligence.com/pricing/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Company Pages -->
+  <url>
+    <loc>https://blaze-intelligence.com/company/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/company/about/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/company/team/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/company/presentations/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/company/portfolio/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/company/careers/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/company/contact/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Resources -->
+  <url>
+    <loc>https://blaze-intelligence.com/resources/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/resources/documentation/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/resources/api-reference/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/resources/help-center/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/resources/case-studies/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/resources/blog/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blaze-intelligence.com/resources/research/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Client Onboarding -->
+  <url>
+    <loc>https://blaze-intelligence.com/onboarding/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
