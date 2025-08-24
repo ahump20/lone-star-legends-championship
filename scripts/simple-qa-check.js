@@ -4,7 +4,7 @@
  * /qa - Simple QA verification for production deployment
  */
 
-const PROD_URL = 'https://eb9ff2fa.blaze-intelligence-lsl.pages.dev';
+const PROD_URL = 'https://18adea55.blaze-intelligence-lsl.pages.dev';
 
 async function checkEndpoint(url, description) {
     try {
