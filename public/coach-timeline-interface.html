@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Tell Detector - Coach Timeline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f172a 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: auto;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: #ff6b35;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .main-container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .athlete-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .athlete-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .athlete-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .athlete-details p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .session-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .timeline-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-tracks {
+            margin-bottom: 2rem;
+        }
+
+        .track {
+            margin-bottom: 1.5rem;
+        }
+
+        .track-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .track-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .track-psych .track-icon {
+            background: #8b5cf6;
+        }
+
+        .track-mechanics .track-icon {
+            background: #06b6d4;
+        }
+
+        .track-risk .track-icon {
+            background: #f59e0b;
+        }
+
+        .track-label {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .track-timeline {
+            position: relative;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .timeline-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-spike {
+            position: absolute;
+            top: 10px;
+            bottom: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 8px;
+        }
+
+        .timeline-spike:hover {
+            transform: scaleY(1.2);
+            z-index: 10;
+        }
+
+        .spike-green {
+            background: linear-gradient(180deg, #10b981, #059669);
+        }
+
+        .spike-yellow {
+            background: linear-gradient(180deg, #f59e0b, #d97706);
+        }
+
+        .spike-red {
+            background: linear-gradient(180deg, #ef4444, #dc2626);
+        }
+
+        .grit-index-display {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .grit-score {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .grit-label {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+        }
+
+        .grit-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .grit-indicator {
+            text-align: center;
+        }
+
+        .indicator-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .indicator-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .detail-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .detail-panel.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-content {
+            line-height: 1.6;
+        }
+
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-section h4 {
+            color: #ff6b35;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .detail-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .metric-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .metric-value {
+            font-weight: bold;
+        }
+
+        .video-preview {
+            width: 100%;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 1rem 0;
+        }
+
+        .explanation-box {
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .explanation-box .title {
+            color: #ff6b35;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .time-scrubber {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            margin: 1.5rem 0;
+            cursor: pointer;
+        }
+
+        .scrubber-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b35, #f7931e);
+            border-radius: 20px;
+            transition: width 0.3s ease;
+            width: 35%;
+        }
+
+        .scrubber-handle {
+            position: absolute;
+            top: 50%;
+            left: 35%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            cursor: grab;
+        }
+
+        .time-markers {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .timeline-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .session-controls {
+                justify-content: center;
+            }
+
+            .detail-panel {
+                width: 100%;
+            }
+
+            .grit-indicators {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🎯 Blaze Tell Detector</h1>
+        <p>Real-time pressure detection through dual-signal fusion • Coaching intelligence that wins championships</p>
+    </header>
+
+    <div class="main-container">
+        <div class="timeline-header">
+            <div class="athlete-info">
+                <div class="athlete-avatar">JR</div>
+                <div class="athlete-details">
+                    <h3>Jake Rodriguez</h3>
+                    <p>Pitcher • Session: August 24, 2025 2:47 PM</p>
+                </div>
+            </div>
+            <div class="session-controls">
+                <button class="btn btn-secondary">Export Report</button>
+                <button class="btn btn-primary" onclick="startAnalysis()">▶ Analyze Live</button>
+            </div>
+        </div>
+
+        <div class="grit-index-display">
+            <div class="grit-score" id="gritScore">78</div>
+            <div class="grit-label">Composite Grit Index</div>
+            <div class="grit-indicators">
+                <div class="grit-indicator">
+                    <div class="indicator-value" style="color: #8b5cf6;">6.2</div>
+                    <div class="indicator-label">Psych Load</div>
+                </div>
+                <div class="grit-indicator">
+                    <div class="indicator-value" style="color: #06b6d4;">8.1</div>
+                    <div class="indicator-label">Mechanics</div>
+                </div>
+                <div class="grit-indicator">
+                    <div class="indicator-value" style="color: #f59e0b;">4.3</div>
+                    <div class="indicator-label">Risk Level</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="time-scrubber" onclick="seekTimeline(event)">
+            <div class="scrubber-progress"></div>
+            <div class="scrubber-handle"></div>
+        </div>
+        <div class="time-markers">
+            <span>0:00</span>
+            <span>1:30</span>
+            <span>3:00</span>
+            <span>4:30</span>
+            <span>6:00</span>
+        </div>
+
+        <div class="timeline-container">
+            <div class="timeline-tracks">
+                <!-- Psych Track -->
+                <div class="track track-psych">
+                    <div class="track-header">
+                        <div class="track-icon">🧠</div>
+                        <div class="track-label">Psych</div>
+                    </div>
+                    <div class="track-timeline" id="psychTrack">
+                        <div class="timeline-bar">
+                            <!-- Spikes will be dynamically generated -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mechanics Track -->
+                <div class="track track-mechanics">
+                    <div class="track-header">
+                        <div class="track-icon">⚙️</div>
+                        <div class="track-label">Mechanics</div>
+                    </div>
+                    <div class="track-timeline" id="mechanicsTrack">
+                        <div class="timeline-bar">
+                            <!-- Spikes will be dynamically generated -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Risk Track -->
+                <div class="track track-risk">
+                    <div class="track-header">
+                        <div class="track-icon">⚠️</div>
+                        <div class="track-label">Risk</div>
+                    </div>
+                    <div class="track-timeline" id="riskTrack">
+                        <div class="timeline-bar">
+                            <!-- Spikes will be dynamically generated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Panel -->
+    <div class="detail-panel" id="detailPanel">
+        <div class="detail-header">
+            <h3 id="detailTitle">Spike Analysis</h3>
+            <button class="close-btn" onclick="closeDetailPanel()">×</button>
+        </div>
+        
+        <div class="detail-content">
+            <div class="video-preview">
+                📹 Video Preview
+                <br><span style="font-size: 0.8rem;">Click to play synchronized clip</span>
+            </div>
+
+            <div class="explanation-box">
+                <div class="title">What Happened</div>
+                <div id="spikeExplanation">Jaw set ↑ + gaze jitter ↑ → command risk</div>
+            </div>
+
+            <div class="detail-section">
+                <h4>Facial Signals</h4>
+                <div class="detail-metric">
+                    <span class="metric-label">Jaw Tension (AU17)</span>
+                    <span class="metric-value" id="jawTension">8.2</span>
+                </div>
+                <div class="detail-metric">
+                    <span class="metric-label">Eye Movement</span>
+                    <span class="metric-value" id="eyeMovement">High</span>
+                </div>
+                <div class="detail-metric">
+                    <span class="metric-label">Blink Rate</span>
+                    <span class="metric-value" id="blinkRate">24/min</span>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>Biomechanics</h4>
+                <div class="detail-metric">
+                    <span class="metric-label">Hip Rotation</span>
+                    <span class="metric-value" id="hipRotation">-12°</span>
+                </div>
+                <div class="detail-metric">
+                    <span class="metric-label">Shoulder Stability</span>
+                    <span class="metric-value" id="shoulderStability">6.8</span>
+                </div>
+                <div class="detail-metric">
+                    <span class="metric-label">Balance Score</span>
+                    <span class="metric-value" id="balanceScore">7.3</span>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>Context</h4>
+                <div class="detail-metric">
+                    <span class="metric-label">Game Situation</span>
+                    <span class="metric-value" id="gameSituation">Bases loaded, 2 outs</span>
+                </div>
+                <div class="detail-metric">
+                    <span class="metric-label">Leverage Index</span>
+                    <span class="metric-value" id="leverageIndex">2.84</span>
+                </div>
+                <div class="detail-metric">
+                    <span class="metric-label">Fatigue Level</span>
+                    <span class="metric-value" id="fatigueLevel">Moderate</span>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>Coaching Recommendations</h4>
+                <div style="color: rgba(255, 255, 255, 0.8); line-height: 1.5;">
+                    • Focus on breathing technique between pitches<br>
+                    • Practice high-pressure situational drills<br>
+                    • Work on hip-shoulder separation consistency<br>
+                    • Consider shorter rest between innings
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulated timeline data
+        const timelineData = {
+            psych: [
+                { time: 15, intensity: 'green', value: 3.2 },
+                { time: 28, intensity: 'yellow', value: 5.8 },
+                { time: 45, intensity: 'red', value: 8.7 },
+                { time: 67, intensity: 'yellow', value: 4.9 },
+                { time: 82, intensity: 'green', value: 2.1 },
+                { time: 95, intensity: 'red', value: 9.2 }
+            ],
+            mechanics: [
+                { time: 12, intensity: 'green', value: 1.8 },
+                { time: 34, intensity: 'yellow', value: 4.3 },
+                { time: 48, intensity: 'red', value: 7.9 },
+                { time: 71, intensity: 'green', value: 2.6 },
+                { time: 88, intensity: 'yellow', value: 5.1 }
+            ],
+            risk: [
+                { time: 18, intensity: 'green', value: 2.1 },
+                { time: 42, intensity: 'yellow', value: 6.2 },
+                { time: 47, intensity: 'red', value: 8.8 },
+                { time: 63, intensity: 'yellow', value: 4.7 },
+                { time: 79, intensity: 'green', value: 1.9 },
+                { time: 97, intensity: 'red', value: 9.1 }
+            ]
+        };
+
+        // Generate timeline spikes
+        function generateTimeline() {
+            ['psych', 'mechanics', 'risk'].forEach(track => {
+                const trackElement = document.getElementById(`${track}Track`).querySelector('.timeline-bar');
+                
+                timelineData[track].forEach(spike => {
+                    const spikeElement = document.createElement('div');
+                    spikeElement.className = `timeline-spike spike-${spike.intensity}`;
+                    spikeElement.style.left = `${spike.time}%`;
+                    spikeElement.style.width = `${Math.max(8, spike.value)}px`;
+                    spikeElement.setAttribute('data-track', track);
+                    spikeElement.setAttribute('data-time', spike.time);
+                    spikeElement.setAttribute('data-value', spike.value);
+                    spikeElement.setAttribute('data-intensity', spike.intensity);
+                    
+                    spikeElement.addEventListener('click', () => showSpikeDetail(spikeElement));
+                    trackElement.appendChild(spikeElement);
+                });
+            });
+        }
+
+        // Show spike details in side panel
+        function showSpikeDetail(spikeElement) {
+            const track = spikeElement.getAttribute('data-track');
+            const time = spikeElement.getAttribute('data-time');
+            const value = spikeElement.getAttribute('data-value');
+            const intensity = spikeElement.getAttribute('data-intensity');
+
+            // Update detail panel content
+            document.getElementById('detailTitle').textContent = `${track.charAt(0).toUpperCase() + track.slice(1)} Spike Analysis`;
+            
+            // Generate contextual explanation based on track and intensity
+            let explanation = '';
+            let recommendations = '';
+            
+            if (track === 'psych' && intensity === 'red') {
+                explanation = 'Jaw set ↑ + gaze jitter ↑ → high pressure response detected';
+                recommendations = '• Deep breathing technique\n• Mental reset routine\n• Confidence anchoring drill';
+            } else if (track === 'mechanics' && intensity === 'red') {
+                explanation = 'Hip-shoulder timing disrupted → power loss + injury risk';
+                recommendations = '• Focus on kinetic chain sequence\n• Slow-motion practice reps\n• Core stability work';
+            } else if (track === 'risk' && intensity === 'red') {
+                explanation = 'Fatigue + pressure → form breakdown imminent';
+                recommendations = '• Consider pitch count\n• Hydration check\n• Mechanics simplification';
+            } else {
+                explanation = `${track.charAt(0).toUpperCase() + track.slice(1)} signal elevation detected`;
+                recommendations = '• Continue monitoring\n• Maintain current approach\n• Stay alert for changes';
+            }
+            
+            document.getElementById('spikeExplanation').textContent = explanation;
+            
+            // Randomize some metric values for demo
+            document.getElementById('jawTension').textContent = (Math.random() * 10).toFixed(1);
+            document.getElementById('eyeMovement').textContent = intensity === 'red' ? 'High' : intensity === 'yellow' ? 'Moderate' : 'Normal';
+            document.getElementById('blinkRate').textContent = `${Math.floor(Math.random() * 20 + 15)}/min`;
+            document.getElementById('hipRotation').textContent = `${(Math.random() * 30 - 15).toFixed(0)}°`;
+            document.getElementById('shoulderStability').textContent = (Math.random() * 10).toFixed(1);
+            document.getElementById('balanceScore').textContent = (Math.random() * 10).toFixed(1);
+            document.getElementById('leverageIndex').textContent = (Math.random() * 3).toFixed(2);
+            
+            // Show detail panel
+            document.getElementById('detailPanel').classList.add('active');
+        }
+
+        // Close detail panel
+        function closeDetailPanel() {
+            document.getElementById('detailPanel').classList.remove('active');
+        }
+
+        // Seek timeline position
+        function seekTimeline(event) {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const percent = ((event.clientX - rect.left) / rect.width) * 100;
+            
+            const progress = document.querySelector('.scrubber-progress');
+            const handle = document.querySelector('.scrubber-handle');
+            
+            progress.style.width = `${percent}%`;
+            handle.style.left = `${percent}%`;
+            
+            // Update time display and sync with video
+            const totalTime = 6 * 60; // 6 minutes in seconds
+            const currentTime = (percent / 100) * totalTime;
+            const minutes = Math.floor(currentTime / 60);
+            const seconds = Math.floor(currentTime % 60);
+            
+            console.log(`Seeking to ${minutes}:${seconds.toString().padStart(2, '0')}`);
+        }
+
+        // Start live analysis
+        function startAnalysis() {
+            const button = event.target;
+            button.innerHTML = '🔴 Recording';
+            button.style.background = 'linear-gradient(45deg, #ef4444, #dc2626)';
+            
+            setTimeout(() => {
+                button.innerHTML = '⏹️ Stop Analysis';
+                button.style.background = 'linear-gradient(45deg, #6b7280, #4b5563)';
+            }, 2000);
+        }
+
+        // Update Grit Index with animation
+        function updateGritIndex(newScore) {
+            const scoreElement = document.getElementById('gritScore');
+            const currentScore = parseInt(scoreElement.textContent);
+            
+            let startScore = currentScore;
+            const increment = (newScore - currentScore) / 30;
+            
+            const animation = setInterval(() => {
+                startScore += increment;
+                scoreElement.textContent = Math.round(startScore);
+                
+                if (Math.abs(startScore - newScore) < 1) {
+                    scoreElement.textContent = newScore;
+                    clearInterval(animation);
+                }
+            }, 50);
+        }
+
+        // Initialize timeline on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            generateTimeline();
+            
+            // Simulate real-time updates
+            setInterval(() => {
+                const newGrit = Math.floor(Math.random() * 20 + 70);
+                updateGritIndex(newGrit);
+            }, 5000);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeDetailPanel();
+            }
+            if (event.key === ' ') {
+                event.preventDefault();
+                startAnalysis();
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            // Regenerate timeline to maintain proper positioning
+            ['psych', 'mechanics', 'risk'].forEach(track => {
+                const trackElement = document.getElementById(`${track}Track`).querySelector('.timeline-bar');
+                trackElement.innerHTML = '';
+            });
+            generateTimeline();
+        });
+    </script>
+</body>
+</html>

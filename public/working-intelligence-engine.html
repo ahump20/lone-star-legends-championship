@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Blaze Intelligence Engine - Live Pattern Discovery</title>
+    
+    <!-- External Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #BF5700;
+            --primary-light: #FF7A00;
+            --accent: #FFB81C;
+            --dark: #0A0A0F;
+            --darker: #050507;
+            --light: #F8F9FA;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glow: rgba(191, 87, 0, 0.5);
+            --success: #00D4AA;
+            --warning: #FFB81C;
+            --danger: #FF4757;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* Background Video */
+        .background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -2;
+            object-fit: cover;
+            opacity: 0.3;
+        }
+
+        /* Three.js Background Canvas */
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .logo-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--glass);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.connected { background: var(--success); }
+        .status-dot.connecting { background: var(--warning); }
+        .status-dot.disconnected { background: var(--danger); }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-profile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-headshot {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            box-shadow: 0 10px 30px var(--glow);
+            object-fit: cover;
+        }
+
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--glow);
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero-subtitle {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 3rem;
+            font-weight: 500;
+        }
+
+        /* Live Stats */
+        .live-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px var(--glow);
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+            animation: countUp 1s ease-out;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+        }
+
+        .stat-trend {
+            font-size: 0.9rem;
+            color: var(--success);
+            margin-top: 0.5rem;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 4rem;
+        }
+
+        .control-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .control-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 15px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--dark);
+        }
+
+        .btn-secondary {
+            background: var(--glass);
+            color: var(--light);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--glow);
+        }
+
+        /* Intelligence Feed */
+        .intelligence-feed {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 4rem;
+        }
+
+        .feed-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .feed-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .insight-item {
+            background: var(--darker);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .insight-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .insight-type {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .insight-confidence {
+            font-family: 'Orbitron', monospace;
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .insight-text {
+            color: var(--light);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .insight-recommendation {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-advantage {
+            color: var(--success);
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        /* Video Section */
+        .video-section {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 4rem;
+        }
+
+        .video-container {
+            text-align: center;
+        }
+
+        .video-player {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Processing Indicator */
+        .processing-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            text-align: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--glass-border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1.2rem; }
+            .stat-number { font-size: 2rem; }
+            .control-buttons { flex-direction: column; }
+            .container { padding: 1rem; }
+            .hero-profile { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Video -->
+    <video class="background-video" autoplay muted loop>
+        <source src="videos/Blaze_Intelligence_Video_Production.mp4" type="video/mp4">
+    </video>
+
+    <!-- Three.js Background Canvas -->
+    <canvas id="background-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="images/blaze-logo.png" alt="Blaze Logo" class="logo-image">
+                Blaze Intelligence Engine
+            </div>
+            <div class="connection-status">
+                <span class="status-dot disconnected" id="connection-dot"></span>
+                <span id="connection-text">Ready to Connect</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-profile">
+                    <img src="images/austin-headshot-professional.jpg" alt="Austin Humphrey" class="hero-headshot">
+                    <img src="images/blaze-vertical-logo.png" alt="Blaze Intelligence" class="hero-logo">
+                </div>
+                <h1 class="hero-title">Live Intelligence Engine</h1>
+                <p class="hero-subtitle">
+                    Real-time pattern detection that discovers hidden insights and competitive advantages
+                </p>
+            </section>
+
+            <!-- Live Stats -->
+            <section class="live-stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="patterns-discovered">0</span>
+                    <span class="stat-label">Patterns Discovered</span>
+                    <div class="stat-trend">Live processing</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="insights-generated">0</span>
+                    <span class="stat-label">Insights Generated</span>
+                    <div class="stat-trend">Championship level</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="data-points">0</span>
+                    <span class="stat-label">Data Points Processed</span>
+                    <div class="stat-trend">Real-time analysis</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="processing-cycles">0</span>
+                    <span class="stat-label">Processing Cycles</span>
+                    <div class="stat-trend">Every 30 seconds</div>
+                </div>
+            </section>
+
+            <!-- Control Panel -->
+            <section class="control-panel">
+                <div class="control-header">
+                    <h2 class="control-title">Intelligence Control Center</h2>
+                </div>
+                <div class="control-buttons">
+                    <button class="btn btn-primary" onclick="triggerImmediateAnalysis()">
+                        <i class="fas fa-bolt"></i>
+                        Discover Hidden Patterns
+                    </button>
+                    <button class="btn btn-secondary" onclick="connectToEngine()">
+                        <i class="fas fa-satellite-dish"></i>
+                        Connect to Live Engine
+                    </button>
+                    <button class="btn btn-secondary" onclick="simulatePatternDiscovery()">
+                        <i class="fas fa-brain"></i>
+                        Simulate Intelligence
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewDemo()">
+                        <i class="fas fa-play"></i>
+                        View Demo
+                    </button>
+                </div>
+            </section>
+
+            <!-- Video Section -->
+            <section class="video-section">
+                <div class="video-container">
+                    <h2 class="feed-title" style="margin-bottom: 2rem;">🔥 Blaze Intelligence Demonstration</h2>
+                    <video class="video-player" controls poster="images/blaze-banner-6.png">
+                        <source src="videos/Blaze_Intelligence_Video_Production.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </section>
+
+            <!-- Intelligence Feed -->
+            <section class="intelligence-feed">
+                <div class="feed-header">
+                    <h2 class="feed-title">Live Intelligence Feed</h2>
+                    <div class="feed-controls">
+                        <span id="last-update">Last update: Never</span>
+                    </div>
+                </div>
+                <div id="intelligence-feed-content">
+                    <div class="insight-item">
+                        <div class="insight-header">
+                            <span class="insight-type">System</span>
+                            <span class="insight-confidence">Ready</span>
+                        </div>
+                        <div class="insight-text">
+                            🔥 Blaze Intelligence Engine initialized and ready for pattern discovery.
+                        </div>
+                        <div class="insight-recommendation">
+                            💡 Click "Discover Hidden Patterns" to begin real-time intelligence analysis.
+                        </div>
+                        <div class="insight-advantage">
+                            🏆 Advanced pattern recognition creates unfair competitive advantages.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Processing Indicator -->
+    <div class="processing-indicator" id="processing-indicator">
+        <div class="spinner"></div>
+        <div>🧠 Processing Intelligence...</div>
+    </div>
+
+    <script>
+        // Intelligence engine state
+        let websocket = null;
+        let isConnected = false;
+        let intelligenceStats = {
+            patternsDiscovered: 0,
+            insightsGenerated: 0,
+            dataPointsProcessed: 0,
+            processingCycles: 0
+        };
+
+        // DOM elements
+        const connectionDot = document.getElementById('connection-dot');
+        const connectionText = document.getElementById('connection-text');
+        const patternsCounter = document.getElementById('patterns-discovered');
+        const insightsCounter = document.getElementById('insights-generated');
+        const dataPointsCounter = document.getElementById('data-points');
+        const processingCyclesCounter = document.getElementById('processing-cycles');
+        const intelligenceFeed = document.getElementById('intelligence-feed-content');
+        const lastUpdateElement = document.getElementById('last-update');
+        const processingIndicator = document.getElementById('processing-indicator');
+
+        // Initialize Three.js background
+        function initThreeJSBackground() {
+            const canvas = document.getElementById('background-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Create particle system
+            const geometry = new THREE.BufferGeometry();
+            const particleCount = 2000;
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 2000;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 2000;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 2000;
+                
+                // Orange/yellow color scheme
+                colors[i * 3] = 0.75 + Math.random() * 0.25;     // Red
+                colors[i * 3 + 1] = 0.34 + Math.random() * 0.35; // Green
+                colors[i * 3 + 2] = 0;                           // Blue
+            }
+            
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            
+            const material = new THREE.PointsMaterial({
+                size: 2,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6
+            });
+            
+            const particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+            
+            camera.position.z = 100;
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                particles.rotation.x += 0.0005;
+                particles.rotation.y += 0.001;
+                
+                // Pulsing effect
+                const time = Date.now() * 0.001;
+                material.opacity = 0.4 + 0.2 * Math.sin(time);
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Connect to intelligence engine
+        function connectToEngine() {
+            updateConnectionStatus('connecting', 'Connecting...');
+            
+            // Try to connect to WebSocket server
+            try {
+                websocket = new WebSocket('ws://localhost:8766');
+                
+                websocket.onopen = function() {
+                    isConnected = true;
+                    updateConnectionStatus('connected', 'Connected');
+                    displaySystemMessage('Connected to Live Intelligence Engine', '🔥 Real-time pattern discovery active');
+                };
+                
+                websocket.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    handleIntelligenceMessage(data);
+                };
+                
+                websocket.onclose = function() {
+                    isConnected = false;
+                    updateConnectionStatus('disconnected', 'Disconnected');
+                };
+                
+                websocket.onerror = function() {
+                    updateConnectionStatus('disconnected', 'Connection Failed');
+                    // Fall back to simulation mode
+                    setTimeout(() => {
+                        updateConnectionStatus('disconnected', 'Simulation Mode');
+                        displaySystemMessage('Simulation Mode Active', '🎮 Demonstrating intelligence discovery capabilities');
+                    }, 2000);
+                };
+                
+            } catch (error) {
+                updateConnectionStatus('disconnected', 'Simulation Mode');
+                displaySystemMessage('Simulation Mode Active', '🎮 Demonstrating intelligence discovery capabilities');
+            }
+        }
+
+        // Update connection status
+        function updateConnectionStatus(status, text) {
+            connectionDot.className = `status-dot ${status}`;
+            connectionText.textContent = text;
+        }
+
+        // Handle intelligence messages
+        function handleIntelligenceMessage(data) {
+            if (data.type === 'live_intelligence_update' || data.type === 'immediate_analysis_complete') {
+                if (data.data && data.data.report_metadata) {
+                    const stats = data.data.report_metadata.processing_stats;
+                    updateStatsDisplay(stats);
+                }
+                
+                if (data.data && data.data.pattern_insights) {
+                    displayPatternInsights(data.data.pattern_insights);
+                }
+            }
+            
+            lastUpdateElement.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
+        }
+
+        // Update stats display with animation
+        function updateStatsDisplay(stats) {
+            animateCounter(patternsCounter, stats.patterns_discovered || intelligenceStats.patternsDiscovered);
+            animateCounter(insightsCounter, stats.insights_generated || intelligenceStats.insightsGenerated);
+            animateCounter(dataPointsCounter, stats.data_points_processed || intelligenceStats.dataPointsProcessed);
+            animateCounter(processingCyclesCounter, stats.processing_cycles || intelligenceStats.processingCycles);
+        }
+
+        // Animate counter
+        function animateCounter(element, targetValue) {
+            const currentValue = parseInt(element.textContent) || 0;
+            const increment = Math.max(1, Math.ceil((targetValue - currentValue) / 20));
+            
+            let current = currentValue;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= targetValue) {
+                    current = targetValue;
+                    clearInterval(timer);
+                }
+                element.textContent = current.toLocaleString();
+            }, 50);
+        }
+
+        // Display pattern insights
+        function displayPatternInsights(insights) {
+            // Clear existing insights except first one
+            const existingInsights = intelligenceFeed.children;
+            while (existingInsights.length > 1) {
+                intelligenceFeed.removeChild(existingInsights[existingInsights.length - 1]);
+            }
+
+            insights.forEach((insight, index) => {
+                setTimeout(() => {
+                    const insightElement = document.createElement('div');
+                    insightElement.className = 'insight-item';
+                    insightElement.innerHTML = `
+                        <div class="insight-header">
+                            <span class="insight-type">${insight.type.replace('_', ' ')}</span>
+                            <span class="insight-confidence">${(insight.confidence * 100).toFixed(1)}%</span>
+                        </div>
+                        <div class="insight-text">${insight.insight}</div>
+                        <div class="insight-recommendation">💡 ${insight.recommendation}</div>
+                        <div class="insight-advantage">🏆 ${insight.advantage}</div>
+                    `;
+                    intelligenceFeed.appendChild(insightElement);
+                }, index * 500); // Stagger the animations
+            });
+        }
+
+        // Display system message
+        function displaySystemMessage(type, message) {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'insight-item';
+            messageElement.innerHTML = `
+                <div class="insight-header">
+                    <span class="insight-type">System</span>
+                    <span class="insight-confidence">Active</span>
+                </div>
+                <div class="insight-text">${message}</div>
+            `;
+            intelligenceFeed.insertBefore(messageElement, intelligenceFeed.children[1] || intelligenceFeed.firstChild);
+        }
+
+        // Trigger immediate analysis
+        function triggerImmediateAnalysis() {
+            showProcessingIndicator();
+            
+            if (isConnected && websocket) {
+                // Send real request
+                websocket.send(JSON.stringify({
+                    type: 'trigger_immediate_analysis'
+                }));
+            } else {
+                // Simulate analysis
+                simulateIntelligenceAnalysis();
+            }
+        }
+
+        // Simulate intelligence analysis
+        function simulateIntelligenceAnalysis() {
+            setTimeout(() => {
+                // Update stats
+                intelligenceStats.patternsDiscovered += Math.floor(Math.random() * 8) + 3;
+                intelligenceStats.insightsGenerated += Math.floor(Math.random() * 5) + 2;
+                intelligenceStats.dataPointsProcessed += Math.floor(Math.random() * 2000) + 1000;
+                intelligenceStats.processingCycles += 1;
+                
+                updateStatsDisplay(intelligenceStats);
+                
+                // Display new insights
+                const simulatedInsights = [
+                    {
+                        type: 'cross_domain_analysis',
+                        confidence: 0.94,
+                        insight: 'Universal athlete readiness patterns discovered across MLB and NFL data',
+                        recommendation: 'Apply cross-sport readiness algorithms for 15% performance boost',
+                        advantage: 'Multi-sport intelligence creates unfair competitive advantage'
+                    },
+                    {
+                        type: 'behavioral_sequences',
+                        confidence: 0.96,
+                        insight: 'Championship-level grit patterns detected in micro-expression sequences',
+                        recommendation: 'Use Tell Detector™ for pre-game mental state optimization',
+                        advantage: 'Behavioral prediction gives 8-second advantage in pressure situations'
+                    },
+                    {
+                        type: 'predictive_signals',
+                        confidence: 0.93,
+                        insight: 'Video analysis patterns predict injury risk 72 hours in advance',
+                        recommendation: 'Implement predictive injury prevention protocols',
+                        advantage: 'Early injury prediction saves $2.3M per team annually'
+                    }
+                ];
+                
+                displayPatternInsights(simulatedInsights);
+                hideProcessingIndicator();
+                lastUpdateElement.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
+                
+            }, 2000);
+        }
+
+        // Simulate pattern discovery (for demo purposes)
+        function simulatePatternDiscovery() {
+            simulateIntelligenceAnalysis();
+        }
+
+        // View demo
+        function viewDemo() {
+            const videoSection = document.querySelector('.video-section');
+            videoSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Auto-play video if possible
+            const video = document.querySelector('.video-player');
+            video.play().catch(e => {
+                console.log('Video autoplay prevented by browser');
+            });
+        }
+
+        // Show processing indicator
+        function showProcessingIndicator() {
+            processingIndicator.style.display = 'block';
+        }
+
+        // Hide processing indicator
+        function hideProcessingIndicator() {
+            processingIndicator.style.display = 'none';
+        }
+
+        // Auto-start simulation every 45 seconds
+        function startAutoSimulation() {
+            setInterval(() => {
+                if (!isConnected) {
+                    // Subtle background updates
+                    intelligenceStats.patternsDiscovered += Math.floor(Math.random() * 3) + 1;
+                    intelligenceStats.dataPointsProcessed += Math.floor(Math.random() * 500) + 200;
+                    
+                    updateStatsDisplay(intelligenceStats);
+                    lastUpdateElement.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
+                }
+            }, 45000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initThreeJSBackground();
+            startAutoSimulation();
+            
+            // Auto-connect after a delay
+            setTimeout(() => {
+                connectToEngine();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

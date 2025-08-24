@@ -1,0 +1,9 @@
+[
+  {
+    "lead_id": "34e76a55-b3d0-4518-9449-d7fe983125ed",
+    "scheduled_for": "2025-08-24T17:25:26.894888",
+    "action_type": "personal_consultation_offer",
+    "priority": "high",
+    "message_template": "hot_lead_consultation"
+  }
+]

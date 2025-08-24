@@ -1,0 +1,77 @@
+{
+  "market_segments": [
+    {
+      "name": "professional-sports-teams",
+      "target": "MLB, NFL, NBA, NCAA teams",
+      "pricing": "$25,000-$100,000/year",
+      "features": [
+        "Full intelligence suite",
+        "Tell Detector\u2122",
+        "24/7 support"
+      ]
+    },
+    {
+      "name": "talent-agencies",
+      "target": "Sports agencies and scouts",
+      "pricing": "$5,000-$25,000/year",
+      "features": [
+        "Character analysis",
+        "Performance prediction",
+        "Draft intelligence"
+      ]
+    },
+    {
+      "name": "high-school-athletics",
+      "target": "Elite high school programs",
+      "pricing": "$1,000-$5,000/year",
+      "features": [
+        "Basic analytics",
+        "Injury prevention",
+        "Recruitment optimization"
+      ]
+    },
+    {
+      "name": "individual-athletes",
+      "target": "Professional and elite amateur athletes",
+      "pricing": "$500-$2,000/year",
+      "features": [
+        "Personal analytics",
+        "Mental training",
+        "Performance tracking"
+      ]
+    }
+  ],
+  "acquisition_funnel": {
+    "awareness": [
+      "SEO-optimized landing pages",
+      "Sports industry blog content",
+      "Conference speaking engagements",
+      "Social media demonstrations"
+    ],
+    "interest": [
+      "Free Tell Detector\u2122 demo",
+      "Intelligence analysis sample",
+      "ROI calculator",
+      "Case study downloads"
+    ],
+    "consideration": [
+      "30-day free trial",
+      "Personalized demo calls",
+      "Custom POC development",
+      "Reference client calls"
+    ],
+    "decision": [
+      "Flexible pricing options",
+      "Implementation support",
+      "Success guarantee",
+      "Executive sponsor program"
+    ],
+    "retention": [
+      "Quarterly business reviews",
+      "Feature enhancement requests",
+      "Success story development",
+      "Referral incentive program"
+    ]
+  },
+  "created_at": "2025-08-24T16:06:28.293594"
+}

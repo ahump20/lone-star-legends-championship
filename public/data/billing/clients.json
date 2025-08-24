@@ -1,0 +1,42 @@
+{
+  "updated_at": "2025-08-24T15:38:49.230944",
+  "total_clients": 3,
+  "clients": {
+    "c5d65356-58d5-4f41-a58f-6ea85c338d6e": {
+      "client_id": "c5d65356-58d5-4f41-a58f-6ea85c338d6e",
+      "email": "test@example.com",
+      "name": "Test Athlete",
+      "created_at": "2025-08-24T15:30:26.065252",
+      "subscription_ids": [
+        "1f116a03-4ab4-4cc9-961c-7cafd642b16c"
+      ],
+      "total_spent": 0.0,
+      "lifetime_value": 0.0,
+      "status": "active"
+    },
+    "39bb3bfe-3eb0-43f6-9b37-251793ba3c7e": {
+      "client_id": "39bb3bfe-3eb0-43f6-9b37-251793ba3c7e",
+      "email": "test@example.com",
+      "name": "Test Athlete",
+      "created_at": "2025-08-24T15:30:39.784030",
+      "subscription_ids": [
+        "1ae32939-fb7a-4c15-9912-51c1085460ea"
+      ],
+      "total_spent": 0.0,
+      "lifetime_value": 0.0,
+      "status": "active"
+    },
+    "e6e64394-0eec-49d7-b762-1678afa87fd0": {
+      "client_id": "e6e64394-0eec-49d7-b762-1678afa87fd0",
+      "email": "test@example.com",
+      "name": "Test Athlete",
+      "created_at": "2025-08-24T15:38:48.723460",
+      "subscription_ids": [
+        "4c7c0298-11af-4167-be98-79b0160438d2"
+      ],
+      "total_spent": 0.0,
+      "lifetime_value": 0.0,
+      "status": "active"
+    }
+  }
+}

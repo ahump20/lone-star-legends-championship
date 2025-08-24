@@ -1,0 +1,170 @@
+{
+  "clients": [
+    {
+      "id": "b5be104e-101f-43c7-97a0-50f065144521",
+      "name": "St. Louis Cardinals",
+      "type": "MLB Team",
+      "tier": "Enterprise Premium",
+      "monthly_fee": 85000,
+      "features": [
+        "Full Intelligence Suite",
+        "Tell Detector\u2122 Unlimited",
+        "24/7 Processing",
+        "Custom Integrations",
+        "Dedicated Support",
+        "Real-time Video Analysis"
+      ],
+      "usage_stats": {
+        "patterns_discovered": 2847,
+        "video_minutes_analyzed": 12500,
+        "tell_detector_analyses": 890,
+        "api_calls_monthly": 45000,
+        "dashboard_users": 15
+      },
+      "contact": {
+        "primary": "John Mozeliak - President of Baseball Operations",
+        "technical": "Analytics Team Lead",
+        "billing": "Finance Department"
+      }
+    },
+    {
+      "id": "d2f0fb8b-1b60-44d6-9c48-7c9e7bb0b9bc",
+      "name": "Tennessee Titans",
+      "type": "NFL Team",
+      "tier": "Enterprise Premium",
+      "monthly_fee": 95000,
+      "features": [
+        "Full Intelligence Suite",
+        "Tell Detector\u2122 Unlimited",
+        "Draft Intelligence",
+        "Injury Prediction",
+        "Team Chemistry Analysis",
+        "Contract Negotiation Insights"
+      ],
+      "usage_stats": {
+        "patterns_discovered": 1923,
+        "video_minutes_analyzed": 8750,
+        "tell_detector_analyses": 645,
+        "api_calls_monthly": 38000,
+        "dashboard_users": 12
+      },
+      "contact": {
+        "primary": "Ran Carthon - General Manager",
+        "technical": "Player Personnel Analytics",
+        "billing": "Team Operations"
+      }
+    },
+    {
+      "id": "04c625f1-b4bc-4121-9d0a-b00f383197d3",
+      "name": "University of Texas Athletics",
+      "type": "NCAA Division I",
+      "tier": "Enterprise Standard",
+      "monthly_fee": 25000,
+      "features": [
+        "Multi-Sport Analytics",
+        "Recruitment Intelligence",
+        "Tell Detector\u2122 Standard",
+        "NIL Valuation",
+        "Academic-Athletic Balance"
+      ],
+      "usage_stats": {
+        "patterns_discovered": 1456,
+        "video_minutes_analyzed": 6200,
+        "tell_detector_analyses": 420,
+        "api_calls_monthly": 22000,
+        "dashboard_users": 8
+      },
+      "contact": {
+        "primary": "Chris Del Conte - Athletic Director",
+        "technical": "Sports Analytics Department",
+        "billing": "University Finance"
+      }
+    },
+    {
+      "id": "1b8e8549-e4aa-4f12-9c12-8827c7360534",
+      "name": "Memphis Grizzlies",
+      "type": "NBA Team",
+      "tier": "Enterprise Premium",
+      "monthly_fee": 75000,
+      "features": [
+        "Player Development Intelligence",
+        "Game Strategy Optimization",
+        "Tell Detector\u2122 Unlimited",
+        "Fan Engagement Analytics",
+        "Salary Cap Intelligence"
+      ],
+      "usage_stats": {
+        "patterns_discovered": 2134,
+        "video_minutes_analyzed": 9800,
+        "tell_detector_analyses": 678,
+        "api_calls_monthly": 41000,
+        "dashboard_users": 10
+      },
+      "contact": {
+        "primary": "Zach Kleiman - Executive VP of Basketball Operations",
+        "technical": "Basketball Analytics Team",
+        "billing": "Team Finance"
+      }
+    },
+    {
+      "id": "18e78fd2-0e9d-46b3-a310-aec6e123e47a",
+      "name": "CAA Sports Agency",
+      "type": "Talent Agency",
+      "tier": "Professional",
+      "monthly_fee": 15000,
+      "features": [
+        "Client Character Analysis",
+        "Contract Negotiation Intelligence",
+        "Market Value Optimization",
+        "Media Training Insights",
+        "Brand Value Assessment"
+      ],
+      "usage_stats": {
+        "patterns_discovered": 892,
+        "video_minutes_analyzed": 3400,
+        "tell_detector_analyses": 285,
+        "api_calls_monthly": 12000,
+        "dashboard_users": 6
+      },
+      "contact": {
+        "primary": "Client Services Director",
+        "technical": "Analytics Coordinator",
+        "billing": "Agency Finance"
+      }
+    },
+    {
+      "id": "eae01d49-313e-4827-aca8-f4e4e2502f4c",
+      "name": "Elite Performance Institute",
+      "type": "Training Facility",
+      "tier": "Professional",
+      "monthly_fee": 8000,
+      "features": [
+        "Athlete Development Tracking",
+        "Injury Prevention Intelligence",
+        "Performance Optimization",
+        "Mental Training Insights",
+        "Nutrition Intelligence"
+      ],
+      "usage_stats": {
+        "patterns_discovered": 634,
+        "video_minutes_analyzed": 2100,
+        "tell_detector_analyses": 156,
+        "api_calls_monthly": 8500,
+        "dashboard_users": 4
+      },
+      "contact": {
+        "primary": "Head Performance Director",
+        "technical": "Sports Science Team",
+        "billing": "Facility Operations"
+      }
+    }
+  ],
+  "system_metrics": {
+    "total_clients": 6,
+    "active_sessions": 6,
+    "intelligence_processes_running": 0,
+    "total_patterns_discovered": 0,
+    "total_revenue_monthly": 303000
+  },
+  "created_at": "2025-08-24T16:08:03.951680"
+}

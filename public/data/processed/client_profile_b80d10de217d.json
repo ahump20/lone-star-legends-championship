@@ -1,0 +1,89 @@
+{
+  "client_id": "b80d10de217d",
+  "organization_name": "Oakland Athletics",
+  "sport": "baseball",
+  "league": "MLB",
+  "created_at": "2025-08-24T14:30:10.232305",
+  "team_archetype": "moneyball",
+  "customization_profile": {},
+  "enabled_modules": [
+    "player_evaluation",
+    "market_intelligence",
+    "prospect_pipeline"
+  ],
+  "dashboard_configuration": {
+    "layout_style": "quantitative",
+    "primary_widgets": [
+      "comparative_analysis",
+      "market_opportunities",
+      "competitive_intelligence",
+      "betting_insights"
+    ],
+    "secondary_widgets": [
+      "prospect_tracking_widget"
+    ],
+    "refresh_frequency": "hourly",
+    "alert_settings": {
+      "injury_alerts": true,
+      "performance_alerts": true,
+      "market_alerts": false,
+      "development_milestones": true,
+      "alert_delivery": "dashboard"
+    },
+    "customization_options": {}
+  },
+  "user_roles": [
+    {
+      "role_name": "analytics_team",
+      "user_count": 5,
+      "permissions": [
+        "view_all",
+        "raw_data_access",
+        "create_custom_reports",
+        "api_access"
+      ],
+      "dashboard_template": "data_heavy",
+      "data_access_level": "raw_data_access",
+      "report_frequency": "real_time",
+      "alert_threshold": "custom"
+    },
+    {
+      "role_name": "scouting_director",
+      "user_count": 1,
+      "permissions": [
+        "view_scouting",
+        "edit_watchlists",
+        "add_notes",
+        "export_reports"
+      ],
+      "dashboard_template": "scouting_focused",
+      "data_access_level": "detailed",
+      "report_frequency": "daily",
+      "alert_threshold": "medium"
+    }
+  ],
+  "data_preferences": {
+    "report_format": "quantitative",
+    "data_granularity": "standard",
+    "historical_depth": 3,
+    "update_frequency": "daily",
+    "export_formats": [
+      "pdf",
+      "excel",
+      "json"
+    ],
+    "language": "english",
+    "timezone": "ET",
+    "metric_units": "imperial"
+  },
+  "integration_settings": {
+    "existing_systems": [],
+    "api_endpoints": false,
+    "webhook_notifications": false,
+    "single_sign_on": false,
+    "data_warehouse_sync": false,
+    "mobile_app_access": true,
+    "slack_integration": false,
+    "email_reports": true
+  }
+}

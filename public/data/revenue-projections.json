@@ -1,0 +1,72 @@
+{
+  "projections": {
+    "current_metrics": {
+      "monthly_recurring_revenue": 303000,
+      "annual_run_rate": 3636000,
+      "average_contract_value": 50500.0,
+      "client_count": 6
+    },
+    "growth_projections": {
+      "quarter_1": {
+        "new_clients": 8,
+        "mrr_growth": 180000,
+        "projected_mrr": 483000,
+        "client_segments": {
+          "enterprise_premium": 3,
+          "enterprise_standard": 3,
+          "professional": 2
+        }
+      },
+      "quarter_2": {
+        "new_clients": 12,
+        "mrr_growth": 275000,
+        "projected_mrr": 758000,
+        "client_segments": {
+          "enterprise_premium": 4,
+          "enterprise_standard": 5,
+          "professional": 3
+        }
+      },
+      "year_1_target": {
+        "total_clients": 50,
+        "target_mrr": 2000000,
+        "target_arr": 24000000,
+        "market_segments": {
+          "professional_sports": 25,
+          "college_athletics": 15,
+          "agencies_facilities": 10
+        }
+      },
+      "year_2_target": {
+        "total_clients": 150,
+        "target_mrr": 5500000,
+        "target_arr": 66000000,
+        "international_expansion": true,
+        "new_sports_verticals": [
+          "Soccer",
+          "Hockey",
+          "Olympic Sports"
+        ]
+      }
+    },
+    "pricing_strategy": {
+      "enterprise_premium": {
+        "monthly_fee": "75000-125000",
+        "target_clients": "MLB, NFL, NBA, Premier Soccer",
+        "features": "Full suite + custom integrations"
+      },
+      "enterprise_standard": {
+        "monthly_fee": "25000-50000",
+        "target_clients": "NCAA D1, Minor League, International",
+        "features": "Core intelligence + Tell Detector"
+      },
+      "professional": {
+        "monthly_fee": "5000-20000",
+        "target_clients": "Agencies, Facilities, High Schools",
+        "features": "Essential analytics + limited Tell Detector"
+      }
+    }
+  },
+  "created_at": "2025-08-24T16:08:03.952902",
+  "confidence_level": "85%"
+}

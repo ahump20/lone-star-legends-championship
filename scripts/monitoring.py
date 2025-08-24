@@ -116,7 +116,7 @@ class BlazeMonitor:
             status=status,
             latency=avg_latency,
             success_rate=success_rate,
-            data_freshness=int(data_freshness),
+            data_freshness=int(data_freshness) if data_freshness != float('inf') else 999999,
             errors=errors,
             timestamp=datetime.now()
         )

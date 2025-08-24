@@ -1,0 +1,36 @@
+{
+  "base_url": "https://api.blaze.ai",
+  "version": "v1",
+  "endpoints": {
+    "/intelligence/discover": {
+      "method": "POST",
+      "description": "Trigger pattern discovery analysis",
+      "rate_limit": "100 requests/minute",
+      "authentication": "API Key + JWT"
+    },
+    "/tell-detector/analyze": {
+      "method": "POST",
+      "description": "Analyze micro-expressions and character traits",
+      "rate_limit": "50 requests/minute",
+      "authentication": "API Key + JWT"
+    },
+    "/insights/generate": {
+      "method": "POST",
+      "description": "Generate actionable intelligence insights",
+      "rate_limit": "25 requests/minute",
+      "authentication": "API Key + JWT"
+    },
+    "/analytics/dashboard": {
+      "method": "GET",
+      "description": "Retrieve client analytics dashboard data",
+      "rate_limit": "200 requests/minute",
+      "authentication": "API Key + JWT"
+    },
+    "/billing/usage": {
+      "method": "GET",
+      "description": "Get client usage and billing information",
+      "rate_limit": "10 requests/minute",
+      "authentication": "API Key + JWT"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-08-24T13:55:34.795784",
-  "pipeline_runtime": "17.2 seconds",
+  "timestamp": "2025-08-24T14:33:42.207047",
+  "pipeline_runtime": "15.6 seconds",
   "total_records_processed": 861,
   "leagues_covered": [
     "MLB",
@@ -11,5 +11,5 @@
   ],
   "hav_f_calculated_for": 861,
   "system_health": "operational",
-  "next_run_scheduled": "2025-08-24T14:25:34.795871"
+  "next_run_scheduled": "2025-08-24T15:03:42.207072"
 }

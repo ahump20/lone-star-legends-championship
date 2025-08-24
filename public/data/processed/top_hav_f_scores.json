@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-24T13:55:34.755975",
+  "timestamp": "2025-08-24T14:33:42.196487",
   "total_players_evaluated": 861,
   "top_performers": [
     {
@@ -111,6 +111,15 @@
       "nil_trust": 34.5
     },
     {
+      "player_id": 683090,
+      "name": "Matthew Lugo",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
       "player_id": 545361,
       "name": "Mike Trout",
       "league": "MLB",
@@ -122,15 +131,6 @@
     {
       "player_id": 694359,
       "name": "Niko Kavadas",
-      "league": "MLB",
-      "hav_f_overall": 58.9,
-      "championship_readiness": 68.0,
-      "cognitive_leverage": 71.2,
-      "nil_trust": 34.5
-    },
-    {
-      "player_id": 694384,
-      "name": "Nolan Schanuel",
       "league": "MLB",
       "hav_f_overall": 58.9,
       "championship_readiness": 68.0,

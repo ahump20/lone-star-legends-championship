@@ -1,0 +1,183 @@
+{
+  "timestamp": "2025-08-24T14:29:42.711363",
+  "total_clips_analyzed": 2,
+  "analysis_summary": {
+    "baseball": {
+      "count": 1,
+      "most_common_grade": "A-"
+    },
+    "football": {
+      "count": 1,
+      "most_common_grade": "A"
+    }
+  },
+  "player_analyses": [
+    {
+      "clip_id": "mlb_batting_001",
+      "player_id": "player_001",
+      "sport": "baseball",
+      "analyzed_at": "2025-08-24T14:29:42.711460",
+      "frame_count": 60,
+      "duration_seconds": 2.0,
+      "analysis_version": "1.0",
+      "action_type": "batting",
+      "keypoint_analysis": {
+        "stance_setup": {
+          "detected": true,
+          "confidence": 0.8950851619746055,
+          "quality_score": 0.8934575468220504
+        },
+        "load_phase": {
+          "detected": false,
+          "confidence": 0.6147254774023239,
+          "quality_score": 0.7152315510778076
+        },
+        "stride": {
+          "detected": true,
+          "confidence": 0.7613104624604893,
+          "quality_score": 0.7578807156945825
+        },
+        "swing_initiation": {
+          "detected": true,
+          "confidence": 0.6577688592994466,
+          "quality_score": 0.7958102229465269
+        },
+        "bat_path": {
+          "detected": true,
+          "confidence": 0.8904027938397328,
+          "quality_score": 0.7836391549287709
+        },
+        "contact_point": {
+          "detected": true,
+          "confidence": 0.7706774626317567,
+          "quality_score": 0.5071101748595399
+        },
+        "follow_through": {
+          "detected": true,
+          "confidence": 0.8193328072936111,
+          "quality_score": 0.814188058079749
+        }
+      },
+      "mechanics_metrics": {
+        "bat_speed": {
+          "value": 68.1,
+          "percentile": 59,
+          "grade": "C"
+        },
+        "launch_angle": {
+          "value": 9.6,
+          "percentile": 43,
+          "grade": "C"
+        },
+        "swing_efficiency": {
+          "value": 0.933,
+          "percentile": 39,
+          "grade": "A-"
+        },
+        "balance_score": {
+          "value": 0.809,
+          "percentile": 67,
+          "grade": "C"
+        }
+      },
+      "swing_analysis": {
+        "swing_plane_efficiency": 0.697,
+        "hand_speed": 23.6,
+        "time_to_contact": 0.144,
+        "barrel_accuracy": 0.839,
+        "power_potential": "Below Average"
+      },
+      "overall_grade": "A-",
+      "improvement_areas": [
+        "Swing Efficiency"
+      ],
+      "injury_risk_factors": [
+        {
+          "factor": "Contact Point",
+          "risk_level": "Low",
+          "recommendation": "Focus on contact point consistency in training"
+        }
+      ]
+    },
+    {
+      "clip_id": "nfl_qb_002",
+      "player_id": "player_002",
+      "sport": "football",
+      "analyzed_at": "2025-08-24T14:29:42.712762",
+      "frame_count": 90,
+      "duration_seconds": 3.0,
+      "analysis_version": "1.0",
+      "action_type": "quarterback",
+      "keypoint_analysis": {
+        "dropback": {
+          "detected": true,
+          "confidence": 0.8644061560364935,
+          "execution_score": 0.5015780384083358
+        },
+        "footwork": {
+          "detected": true,
+          "confidence": 0.6168969442618868,
+          "execution_score": 0.512008913015134
+        },
+        "throwing_motion": {
+          "detected": false,
+          "confidence": 0.6840248960497047,
+          "execution_score": 0.8195241572604429
+        },
+        "release_point": {
+          "detected": true,
+          "confidence": 0.8600574724658825,
+          "execution_score": 0.8080915303222592
+        },
+        "arm_angle": {
+          "detected": false,
+          "confidence": 0.7752245871915828,
+          "execution_score": 0.5277456035729235
+        },
+        "follow_through": {
+          "detected": true,
+          "confidence": 0.7062105389913781,
+          "execution_score": 0.5631254504347223
+        },
+        "pocket_presence": {
+          "detected": true,
+          "confidence": 0.7467079148484157,
+          "execution_score": 0.776144042678279
+        }
+      },
+      "mechanics_metrics": {
+        "arm_strength": {
+          "value": 59.65,
+          "percentile": 84,
+          "grade": "C"
+        },
+        "accuracy_potential": {
+          "value": 0.66,
+          "percentile": 73,
+          "grade": "C"
+        },
+        "release_time": {
+          "value": 2.71,
+          "percentile": 78,
+          "grade": "A"
+        },
+        "mobility_score": {
+          "value": 0.92,
+          "percentile": 30,
+          "grade": "A-"
+        }
+      },
+      "throwing_analysis": {
+        "spiral_consistency": 0.677,
+        "arm_slot_variance": 2.3,
+        "footwork_efficiency": 0.75,
+        "pocket_mobility": 0.808
+      },
+      "overall_grade": "A",
+      "nfl_readiness": 0.64,
+      "improvement_areas": [
+        "Mobility Score"
+      ]
+    }
+  ]
+}

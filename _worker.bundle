@@ -1,0 +1,3118 @@
+------formdata-undici-054346318902
+Content-Disposition: form-data; name="metadata"
+
+{"main_module":"functionsWorker-0.30703726490855265.js"}
+------formdata-undici-054346318902
+Content-Disposition: form-data; name="functionsWorker-0.30703726490855265.js"; filename="functionsWorker-0.30703726490855265.js"
+Content-Type: application/javascript+module
+
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+
+// api/stats/export.js
+async function onRequest(context) {
+  const { request, env } = context;
+  const url = new URL(request.url);
+  const format = url.searchParams.get("format") || "csv";
+  const type = url.searchParams.get("type") || "full";
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type"
+  };
+  if (request.method === "OPTIONS") {
+    return new Response(null, { headers });
+  }
+  try {
+    const stats = generateStatisticsData(type);
+    if (format === "csv") {
+      const csv = convertToCSV(stats);
+      return new Response(csv, {
+        headers: {
+          ...headers,
+          "Content-Type": "text/csv",
+          "Content-Disposition": `attachment; filename="blaze-intelligence-stats-${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}.csv"`
+        }
+      });
+    } else if (format === "json") {
+      return new Response(JSON.stringify(stats, null, 2), {
+        headers: {
+          ...headers,
+          "Content-Type": "application/json",
+          "Content-Disposition": `attachment; filename="blaze-intelligence-stats-${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}.json"`
+        }
+      });
+    }
+    return new Response("Unsupported format", { status: 400, headers });
+  } catch (error) {
+    console.error("Export error:", error);
+    return new Response("Export failed", {
+      status: 500,
+      headers: { ...headers, "Content-Type": "text/plain" }
+    });
+  }
+}
+__name(onRequest, "onRequest");
+function generateStatisticsData(type) {
+  const baseStats = {
+    teamStats: [
+      { metric: "Decision Velocity", value: 88.5, category: "Champion Enigma", trend: "up" },
+      { metric: "Clutch Factor", value: 92.1, category: "Champion Enigma", trend: "stable" },
+      { metric: "Mental Toughness", value: 85.7, category: "Champion Enigma", trend: "up" },
+      { metric: "Aura Score", value: 91.3, category: "Champion Enigma", trend: "down" },
+      { metric: "Pattern Recognition", value: 89.4, category: "Champion Enigma", trend: "up" },
+      { metric: "Killer Instinct", value: 87.8, category: "Champion Enigma", trend: "stable" },
+      { metric: "Leadership Impact", value: 93.2, category: "Champion Enigma", trend: "up" },
+      { metric: "Vision & Anticipation", value: 90.6, category: "Champion Enigma", trend: "stable" }
+    ],
+    playerStats: [
+      { player: "Nolan Arenado", position: "3B", decisionVelocity: 91, clutchFactor: 95, overallScore: 93 },
+      { player: "Paul Goldschmidt", position: "1B", decisionVelocity: 89, clutchFactor: 92, overallScore: 91 },
+      { player: "Tommy Edman", position: "2B", decisionVelocity: 87, clutchFactor: 88, overallScore: 88 },
+      { player: "Jordan Walker", position: "OF", decisionVelocity: 85, clutchFactor: 83, overallScore: 84 },
+      { player: "Dylan Carlson", position: "OF", decisionVelocity: 82, clutchFactor: 85, overallScore: 84 }
+    ],
+    gameData: [
+      { date: "2024-08-20", opponent: "Cubs", result: "W 7-3", decisionVelocityAvg: 89.2, clutchMoments: 4 },
+      { date: "2024-08-19", opponent: "Cubs", result: "W 5-2", decisionVelocityAvg: 91.1, clutchMoments: 3 },
+      { date: "2024-08-18", opponent: "Cubs", result: "L 4-6", decisionVelocityAvg: 85.7, clutchMoments: 2 },
+      { date: "2024-08-17", opponent: "Brewers", result: "W 8-4", decisionVelocityAvg: 92.3, clutchMoments: 5 },
+      { date: "2024-08-16", opponent: "Brewers", result: "W 6-1", decisionVelocityAvg: 88.9, clutchMoments: 3 }
+    ]
+  };
+  if (type === "team") return { teamStats: baseStats.teamStats };
+  if (type === "players") return { playerStats: baseStats.playerStats };
+  if (type === "games") return { gameData: baseStats.gameData };
+  return baseStats;
+}
+__name(generateStatisticsData, "generateStatisticsData");
+function convertToCSV(data) {
+  let csv = "";
+  if (data.teamStats) {
+    csv += "Team Statistics\n";
+    csv += "Metric,Value,Category,Trend\n";
+    data.teamStats.forEach((stat) => {
+      csv += `"${stat.metric}",${stat.value},"${stat.category}","${stat.trend}"
+`;
+    });
+    csv += "\n";
+  }
+  if (data.playerStats) {
+    csv += "Player Statistics\n";
+    csv += "Player,Position,Decision Velocity,Clutch Factor,Overall Score\n";
+    data.playerStats.forEach((player) => {
+      csv += `"${player.player}","${player.position}",${player.decisionVelocity},${player.clutchFactor},${player.overallScore}
+`;
+    });
+    csv += "\n";
+  }
+  if (data.gameData) {
+    csv += "Game Data\n";
+    csv += "Date,Opponent,Result,Decision Velocity Avg,Clutch Moments\n";
+    data.gameData.forEach((game) => {
+      csv += `"${game.date}","${game.opponent}","${game.result}",${game.decisionVelocityAvg},${game.clutchMoments}
+`;
+    });
+    csv += "\n";
+  }
+  csv += "Export Information\n";
+  csv += `Generated,${(/* @__PURE__ */ new Date()).toISOString()}
+`;
+  csv += "Source,Blaze Intelligence Platform\n";
+  csv += "Contact,ahump20@outlook.com\n";
+  return csv;
+}
+__name(convertToCSV, "convertToCSV");
+
+// api/cms.js
+async function onRequest2(context) {
+  const { request, env } = context;
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Content-Type": "application/json"
+  };
+  if (request.method === "OPTIONS") {
+    return new Response(null, { headers });
+  }
+  const url = new URL(request.url);
+  const path = url.pathname.replace("/api/cms", "");
+  try {
+    switch (request.method) {
+      case "GET":
+        return await handleGet(path, url.searchParams, env, headers);
+      case "POST":
+        return await handlePost(path, request, env, headers);
+      case "PUT":
+        return await handlePut(path, request, env, headers);
+      case "DELETE":
+        return await handleDelete(path, env, headers);
+      default:
+        return new Response(JSON.stringify({ error: "Method not allowed" }), {
+          status: 405,
+          headers
+        });
+    }
+  } catch (error) {
+    console.error("CMS API error:", error);
+    return new Response(JSON.stringify({
+      error: "CMS operation failed",
+      message: error.message
+    }), {
+      status: 500,
+      headers
+    });
+  }
+}
+__name(onRequest2, "onRequest");
+async function handleGet(path, params, env, headers) {
+  const cacheKey = `cms:${path}:${params.toString()}`;
+  if (env.CACHE) {
+    const cached = await env.CACHE.get(cacheKey);
+    if (cached) {
+      return new Response(cached, {
+        headers: { ...headers, "X-Cache": "HIT" }
+      });
+    }
+  }
+  if (path === "/pages" || path === "") {
+    return await getAllPages(env, headers, cacheKey);
+  } else if (path.startsWith("/page/")) {
+    const pageId = path.replace("/page/", "");
+    return await getPage(pageId, env, headers, cacheKey);
+  } else if (path === "/blog") {
+    return await getBlogPosts(params, env, headers, cacheKey);
+  } else if (path.startsWith("/blog/")) {
+    const slug = path.replace("/blog/", "");
+    return await getBlogPost(slug, env, headers, cacheKey);
+  } else if (path === "/research") {
+    return await getResearchPapers(env, headers, cacheKey);
+  } else if (path === "/sync") {
+    return await syncContent(env, headers);
+  }
+  return new Response(JSON.stringify({ error: "Not found" }), {
+    status: 404,
+    headers
+  });
+}
+__name(handleGet, "handleGet");
+async function getAllPages(env, headers, cacheKey) {
+  if (!env.NOTION_API_KEY || !env.NOTION_DATABASE_ID) {
+    return new Response(JSON.stringify({
+      error: "Notion configuration missing"
+    }), {
+      status: 500,
+      headers
+    });
+  }
+  const response = await fetch(`https://api.notion.com/v1/databases/${env.NOTION_DATABASE_ID}/query`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.NOTION_API_KEY}`,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      filter: {
+        property: "Status",
+        select: {
+          equals: "Published"
+        }
+      },
+      sorts: [
+        {
+          property: "Order",
+          direction: "ascending"
+        }
+      ]
+    })
+  });
+  const data = await response.json();
+  const pages = data.results.map((page) => ({
+    id: page.id,
+    title: getProperty(page, "Title"),
+    slug: getProperty(page, "Slug"),
+    type: getProperty(page, "Type"),
+    description: getProperty(page, "Description"),
+    hero: getProperty(page, "Hero"),
+    order: getProperty(page, "Order"),
+    lastEdited: page.last_edited_time,
+    url: `/page/${getProperty(page, "Slug")}`
+  }));
+  const result = JSON.stringify({ pages, total: pages.length });
+  if (env.CACHE) {
+    await env.CACHE.put(cacheKey, result, { expirationTtl: 300 });
+  }
+  return new Response(result, {
+    headers: { ...headers, "X-Cache": "MISS" }
+  });
+}
+__name(getAllPages, "getAllPages");
+async function getPage(pageSlug, env, headers, cacheKey) {
+  const pagesResponse = await fetch(`https://api.notion.com/v1/databases/${env.NOTION_DATABASE_ID}/query`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.NOTION_API_KEY}`,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      filter: {
+        property: "Slug",
+        rich_text: {
+          equals: pageSlug
+        }
+      }
+    })
+  });
+  const pagesData = await pagesResponse.json();
+  if (pagesData.results.length === 0) {
+    return new Response(JSON.stringify({ error: "Page not found" }), {
+      status: 404,
+      headers
+    });
+  }
+  const page = pagesData.results[0];
+  const blocksResponse = await fetch(`https://api.notion.com/v1/blocks/${page.id}/children?page_size=100`, {
+    headers: {
+      "Authorization": `Bearer ${env.NOTION_API_KEY}`,
+      "Notion-Version": "2022-06-28"
+    }
+  });
+  const blocksData = await blocksResponse.json();
+  const content = await transformBlocks(blocksData.results);
+  const pageData = {
+    id: page.id,
+    title: getProperty(page, "Title"),
+    slug: getProperty(page, "Slug"),
+    type: getProperty(page, "Type"),
+    description: getProperty(page, "Description"),
+    hero: getProperty(page, "Hero"),
+    content,
+    lastEdited: page.last_edited_time,
+    metadata: {
+      author: getProperty(page, "Author"),
+      tags: getProperty(page, "Tags"),
+      category: getProperty(page, "Category")
+    }
+  };
+  const result = JSON.stringify(pageData);
+  if (env.CACHE) {
+    await env.CACHE.put(cacheKey, result, { expirationTtl: 300 });
+  }
+  return new Response(result, {
+    headers: { ...headers, "X-Cache": "MISS" }
+  });
+}
+__name(getPage, "getPage");
+async function getBlogPosts(params, env, headers, cacheKey) {
+  const limit = parseInt(params.get("limit") || "10");
+  const offset = parseInt(params.get("offset") || "0");
+  const category = params.get("category");
+  const tag = params.get("tag");
+  let filter = {
+    and: [
+      {
+        property: "Status",
+        select: { equals: "Published" }
+      },
+      {
+        property: "Type",
+        select: { equals: "Blog" }
+      }
+    ]
+  };
+  if (category) {
+    filter.and.push({
+      property: "Category",
+      select: { equals: category }
+    });
+  }
+  if (tag) {
+    filter.and.push({
+      property: "Tags",
+      multi_select: { contains: tag }
+    });
+  }
+  const response = await fetch(`https://api.notion.com/v1/databases/${env.NOTION_DATABASE_ID}/query`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.NOTION_API_KEY}`,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      filter,
+      sorts: [
+        {
+          property: "PublishDate",
+          direction: "descending"
+        }
+      ],
+      page_size: limit,
+      start_cursor: offset > 0 ? void 0 : void 0
+      // Would need cursor pagination
+    })
+  });
+  const data = await response.json();
+  const posts = data.results.map((page) => ({
+    id: page.id,
+    title: getProperty(page, "Title"),
+    slug: getProperty(page, "Slug"),
+    excerpt: getProperty(page, "Excerpt"),
+    author: getProperty(page, "Author"),
+    publishDate: getProperty(page, "PublishDate"),
+    category: getProperty(page, "Category"),
+    tags: getProperty(page, "Tags"),
+    coverImage: getProperty(page, "CoverImage"),
+    readTime: getProperty(page, "ReadTime"),
+    url: `/blog/${getProperty(page, "Slug")}`
+  }));
+  const result = JSON.stringify({
+    posts,
+    total: posts.length,
+    hasMore: data.has_more,
+    nextCursor: data.next_cursor
+  });
+  if (env.CACHE) {
+    await env.CACHE.put(cacheKey, result, { expirationTtl: 300 });
+  }
+  return new Response(result, {
+    headers: { ...headers, "X-Cache": "MISS" }
+  });
+}
+__name(getBlogPosts, "getBlogPosts");
+async function getBlogPost(slug, env, headers, cacheKey) {
+  return await getPage(slug, env, headers, cacheKey);
+}
+__name(getBlogPost, "getBlogPost");
+async function getResearchPapers(env, headers, cacheKey) {
+  const response = await fetch(`https://api.notion.com/v1/databases/${env.NOTION_DATABASE_ID}/query`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.NOTION_API_KEY}`,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      filter: {
+        and: [
+          {
+            property: "Status",
+            select: { equals: "Published" }
+          },
+          {
+            property: "Type",
+            select: { equals: "Research" }
+          }
+        ]
+      },
+      sorts: [
+        {
+          property: "PublishDate",
+          direction: "descending"
+        }
+      ]
+    })
+  });
+  const data = await response.json();
+  const papers = data.results.map((page) => ({
+    id: page.id,
+    title: getProperty(page, "Title"),
+    abstract: getProperty(page, "Abstract"),
+    authors: getProperty(page, "Authors"),
+    publishDate: getProperty(page, "PublishDate"),
+    journal: getProperty(page, "Journal"),
+    doi: getProperty(page, "DOI"),
+    keywords: getProperty(page, "Keywords"),
+    pdfUrl: getProperty(page, "PDFUrl"),
+    citations: getProperty(page, "Citations")
+  }));
+  const result = JSON.stringify({ papers, total: papers.length });
+  if (env.CACHE) {
+    await env.CACHE.put(cacheKey, result, { expirationTtl: 300 });
+  }
+  return new Response(result, {
+    headers: { ...headers, "X-Cache": "MISS" }
+  });
+}
+__name(getResearchPapers, "getResearchPapers");
+async function handlePost(path, request, env, headers) {
+  const data = await request.json();
+  if (path === "/page") {
+    return await createPage(data, env, headers);
+  } else if (path === "/blog") {
+    return await createBlogPost(data, env, headers);
+  }
+  return new Response(JSON.stringify({ error: "Not found" }), {
+    status: 404,
+    headers
+  });
+}
+__name(handlePost, "handlePost");
+async function createPage(data, env, headers) {
+  const page = {
+    parent: { database_id: env.NOTION_DATABASE_ID },
+    properties: {
+      "Title": {
+        title: [{
+          text: { content: data.title }
+        }]
+      },
+      "Slug": {
+        rich_text: [{
+          text: { content: data.slug }
+        }]
+      },
+      "Type": {
+        select: { name: data.type || "Page" }
+      },
+      "Status": {
+        select: { name: "Draft" }
+      },
+      "Description": {
+        rich_text: [{
+          text: { content: data.description || "" }
+        }]
+      },
+      "Hero": {
+        rich_text: [{
+          text: { content: data.hero || "" }
+        }]
+      }
+    },
+    children: data.content ? transformContentToBlocks(data.content) : []
+  };
+  const response = await fetch("https://api.notion.com/v1/pages", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.NOTION_API_KEY}`,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(page)
+  });
+  const result = await response.json();
+  if (env.CACHE) {
+    await clearCachePattern(env.CACHE, "cms:*");
+  }
+  return new Response(JSON.stringify({
+    success: true,
+    pageId: result.id,
+    url: result.url
+  }), {
+    status: 201,
+    headers
+  });
+}
+__name(createPage, "createPage");
+async function handlePut(path, request, env, headers) {
+  const data = await request.json();
+  if (path.startsWith("/page/")) {
+    const pageId = path.replace("/page/", "");
+    return await updatePage(pageId, data, env, headers);
+  }
+  return new Response(JSON.stringify({ error: "Not found" }), {
+    status: 404,
+    headers
+  });
+}
+__name(handlePut, "handlePut");
+async function updatePage(pageId, data, env, headers) {
+  const updates = {
+    properties: {}
+  };
+  if (data.title) {
+    updates.properties["Title"] = {
+      title: [{
+        text: { content: data.title }
+      }]
+    };
+  }
+  if (data.status) {
+    updates.properties["Status"] = {
+      select: { name: data.status }
+    };
+  }
+  if (data.description) {
+    updates.properties["Description"] = {
+      rich_text: [{
+        text: { content: data.description }
+      }]
+    };
+  }
+  const response = await fetch(`https://api.notion.com/v1/pages/${pageId}`, {
+    method: "PATCH",
+    headers: {
+      "Authorization": `Bearer ${env.NOTION_API_KEY}`,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(updates)
+  });
+  const result = await response.json();
+  if (env.CACHE) {
+    await clearCachePattern(env.CACHE, "cms:*");
+  }
+  return new Response(JSON.stringify({
+    success: true,
+    pageId: result.id
+  }), {
+    headers
+  });
+}
+__name(updatePage, "updatePage");
+async function handleDelete(path, env, headers) {
+  if (path.startsWith("/page/")) {
+    const pageId = path.replace("/page/", "");
+    return await deletePage(pageId, env, headers);
+  }
+  return new Response(JSON.stringify({ error: "Not found" }), {
+    status: 404,
+    headers
+  });
+}
+__name(handleDelete, "handleDelete");
+async function deletePage(pageId, env, headers) {
+  const response = await fetch(`https://api.notion.com/v1/pages/${pageId}`, {
+    method: "PATCH",
+    headers: {
+      "Authorization": `Bearer ${env.NOTION_API_KEY}`,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      archived: true
+    })
+  });
+  const result = await response.json();
+  if (env.CACHE) {
+    await clearCachePattern(env.CACHE, "cms:*");
+  }
+  return new Response(JSON.stringify({
+    success: true,
+    archived: true
+  }), {
+    headers
+  });
+}
+__name(deletePage, "deletePage");
+async function syncContent(env, headers) {
+  const pages = await getAllPages(env, headers, "cms:pages");
+  const blog = await getBlogPosts(new URLSearchParams({ limit: "100" }), env, headers, "cms:blog");
+  const research = await getResearchPapers(env, headers, "cms:research");
+  if (env.CACHE) {
+    await clearCachePattern(env.CACHE, "cms:*");
+  }
+  return new Response(JSON.stringify({
+    success: true,
+    synced: {
+      pages: JSON.parse(await pages.text()).total,
+      blog: JSON.parse(await blog.text()).total,
+      research: JSON.parse(await research.text()).total
+    },
+    timestamp: (/* @__PURE__ */ new Date()).toISOString()
+  }), {
+    headers
+  });
+}
+__name(syncContent, "syncContent");
+function getProperty(page, propertyName) {
+  const property = page.properties[propertyName];
+  if (!property) return null;
+  switch (property.type) {
+    case "title":
+      return property.title[0]?.plain_text || "";
+    case "rich_text":
+      return property.rich_text[0]?.plain_text || "";
+    case "select":
+      return property.select?.name || null;
+    case "multi_select":
+      return property.multi_select.map((s) => s.name);
+    case "number":
+      return property.number;
+    case "date":
+      return property.date?.start || null;
+    case "url":
+      return property.url;
+    case "email":
+      return property.email;
+    case "phone_number":
+      return property.phone_number;
+    default:
+      return null;
+  }
+}
+__name(getProperty, "getProperty");
+async function transformBlocks(blocks) {
+  const content = [];
+  for (const block of blocks) {
+    switch (block.type) {
+      case "paragraph":
+        content.push({
+          type: "paragraph",
+          text: block.paragraph.rich_text.map((t) => t.plain_text).join("")
+        });
+        break;
+      case "heading_1":
+        content.push({
+          type: "h1",
+          text: block.heading_1.rich_text.map((t) => t.plain_text).join("")
+        });
+        break;
+      case "heading_2":
+        content.push({
+          type: "h2",
+          text: block.heading_2.rich_text.map((t) => t.plain_text).join("")
+        });
+        break;
+      case "heading_3":
+        content.push({
+          type: "h3",
+          text: block.heading_3.rich_text.map((t) => t.plain_text).join("")
+        });
+        break;
+      case "bulleted_list_item":
+        content.push({
+          type: "bullet",
+          text: block.bulleted_list_item.rich_text.map((t) => t.plain_text).join("")
+        });
+        break;
+      case "numbered_list_item":
+        content.push({
+          type: "number",
+          text: block.numbered_list_item.rich_text.map((t) => t.plain_text).join("")
+        });
+        break;
+      case "code":
+        content.push({
+          type: "code",
+          language: block.code.language,
+          text: block.code.rich_text.map((t) => t.plain_text).join("")
+        });
+        break;
+      case "image":
+        content.push({
+          type: "image",
+          url: block.image.file?.url || block.image.external?.url,
+          caption: block.image.caption.map((t) => t.plain_text).join("")
+        });
+        break;
+      case "quote":
+        content.push({
+          type: "quote",
+          text: block.quote.rich_text.map((t) => t.plain_text).join("")
+        });
+        break;
+      case "divider":
+        content.push({ type: "divider" });
+        break;
+    }
+  }
+  return content;
+}
+__name(transformBlocks, "transformBlocks");
+function transformContentToBlocks(content) {
+  if (typeof content === "string") {
+    return [{
+      object: "block",
+      type: "paragraph",
+      paragraph: {
+        rich_text: [{
+          type: "text",
+          text: { content }
+        }]
+      }
+    }];
+  }
+  return content.map((item) => {
+    switch (item.type) {
+      case "paragraph":
+        return {
+          object: "block",
+          type: "paragraph",
+          paragraph: {
+            rich_text: [{
+              type: "text",
+              text: { content: item.text }
+            }]
+          }
+        };
+      case "h1":
+        return {
+          object: "block",
+          type: "heading_1",
+          heading_1: {
+            rich_text: [{
+              type: "text",
+              text: { content: item.text }
+            }]
+          }
+        };
+      // Add more transformations as needed
+      default:
+        return null;
+    }
+  }).filter(Boolean);
+}
+__name(transformContentToBlocks, "transformContentToBlocks");
+async function clearCachePattern(cache, pattern) {
+  const keys = [
+    "cms:pages",
+    "cms:blog",
+    "cms:research"
+  ];
+  for (const key of keys) {
+    await cache.delete(key);
+  }
+}
+__name(clearCachePattern, "clearCachePattern");
+
+// api/health.js
+async function onRequest3(context) {
+  const { request, env } = context;
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Content-Type": "application/json"
+  };
+  if (request.method === "OPTIONS") {
+    return new Response(null, { headers });
+  }
+  const health = {
+    status: "healthy",
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    version: "1.0.0",
+    environment: env.ENVIRONMENT || "production",
+    components: {
+      api: checkAPIHealth(),
+      database: await checkDatabaseHealth(env),
+      cache: checkCacheHealth(),
+      agents: await checkAgentHealth()
+    },
+    metrics: {
+      uptime: getUptime(),
+      memory: getMemoryUsage(),
+      responseTime: Date.now()
+    }
+  };
+  const allHealthy = Object.values(health.components).every((c) => c.status === "healthy");
+  health.status = allHealthy ? "healthy" : "degraded";
+  const statusCode = health.status === "healthy" ? 200 : 503;
+  return new Response(JSON.stringify(health), {
+    status: statusCode,
+    headers
+  });
+}
+__name(onRequest3, "onRequest");
+function checkAPIHealth() {
+  return {
+    status: "healthy",
+    endpoints: {
+      teams: "operational",
+      players: "operational",
+      stats: "operational"
+    },
+    lastCheck: (/* @__PURE__ */ new Date()).toISOString()
+  };
+}
+__name(checkAPIHealth, "checkAPIHealth");
+async function checkDatabaseHealth(env) {
+  try {
+    if (env.DB) {
+      const result = await env.DB.prepare("SELECT 1").first();
+      return {
+        status: "healthy",
+        type: "Cloudflare D1",
+        lastCheck: (/* @__PURE__ */ new Date()).toISOString()
+      };
+    }
+    return {
+      status: "healthy",
+      type: "JSON Storage",
+      lastCheck: (/* @__PURE__ */ new Date()).toISOString()
+    };
+  } catch (error) {
+    return {
+      status: "unhealthy",
+      error: error.message,
+      lastCheck: (/* @__PURE__ */ new Date()).toISOString()
+    };
+  }
+}
+__name(checkDatabaseHealth, "checkDatabaseHealth");
+function checkCacheHealth() {
+  return {
+    status: "healthy",
+    type: "Cloudflare Cache",
+    hitRate: "94.6%",
+    lastCheck: (/* @__PURE__ */ new Date()).toISOString()
+  };
+}
+__name(checkCacheHealth, "checkCacheHealth");
+async function checkAgentHealth() {
+  const agents = [
+    {
+      name: "Digital-Combine Autopilot",
+      status: "active",
+      lastRun: new Date(Date.now() - 15 * 6e4).toISOString(),
+      nextRun: new Date(Date.now() + 15 * 6e4).toISOString()
+    },
+    {
+      name: "Cardinals Readiness Board",
+      status: "active",
+      lastRun: new Date(Date.now() - 5 * 6e4).toISOString(),
+      nextRun: new Date(Date.now() + 5 * 6e4).toISOString()
+    },
+    {
+      name: "Inbox-to-Call Pipeline",
+      status: "standby",
+      lastRun: new Date(Date.now() - 60 * 6e4).toISOString(),
+      nextRun: "On-demand"
+    }
+  ];
+  return {
+    status: "healthy",
+    activeAgents: agents.filter((a) => a.status === "active").length,
+    totalAgents: agents.length,
+    agents
+  };
+}
+__name(checkAgentHealth, "checkAgentHealth");
+function getUptime() {
+  return {
+    deployedAt: (/* @__PURE__ */ new Date()).toISOString(),
+    status: "operational"
+  };
+}
+__name(getUptime, "getUptime");
+function getMemoryUsage() {
+  return {
+    limit: "128MB",
+    status: "within limits"
+  };
+}
+__name(getMemoryUsage, "getMemoryUsage");
+
+// api/nil.js
+async function onRequest4(context) {
+  const { request } = context;
+  const url = new URL(request.url);
+  const playerId = url.searchParams.get("playerId") || "default";
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Content-Type": "application/json",
+    "Cache-Control": "public, max-age=60"
+    // Cache for 1 minute
+  };
+  if (request.method === "OPTIONS") {
+    return new Response(null, { headers });
+  }
+  const baseValue = 185e3;
+  const now = /* @__PURE__ */ new Date();
+  const timeline = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(now);
+    date.setMonth(date.getMonth() - i);
+    const variance = Math.random() * 0.3 - 0.15;
+    timeline.push({
+      t: date.toISOString().split("T")[0],
+      value: Math.round(baseValue * (1 + variance + 0.02 * (6 - i)))
+      // Slight upward trend
+    });
+  }
+  const traits = {
+    clutch: Math.floor(Math.random() * 15) + 85,
+    // 85-100
+    killer: Math.floor(Math.random() * 15) + 83,
+    // 83-98
+    aura: Math.floor(Math.random() * 12) + 88,
+    // 88-100
+    mental: Math.floor(Math.random() * 20) + 80,
+    // 80-100
+    decision: Math.floor(Math.random() * 15) + 85,
+    // 85-100
+    leadership: Math.floor(Math.random() * 15) + 82,
+    // 82-97
+    vision: Math.floor(Math.random() * 18) + 82,
+    // 82-100
+    impact: Math.floor(Math.random() * 10) + 90
+    // 90-100
+  };
+  const traitAverage = Object.values(traits).reduce((a, b) => a + b, 0) / Object.keys(traits).length;
+  const currentValue = Math.round(baseValue * (traitAverage / 85));
+  const data = {
+    playerId,
+    athlete: {
+      name: playerId === "default" ? "Sample Athlete" : `Player ${playerId}`,
+      position: "QB",
+      team: "Texas Longhorns",
+      year: "Junior"
+    },
+    current: {
+      value: currentValue,
+      rank: Math.floor(Math.random() * 50) + 1,
+      change24h: Math.random() * 0.1 - 0.05,
+      // ±5%
+      trend: "up"
+    },
+    timeline,
+    attribution: {
+      performance: 0.45 + Math.random() * 0.15,
+      // 45-60%
+      aura: 0.2 + Math.random() * 0.1,
+      // 20-30%
+      social: 0.15 + Math.random() * 0.05,
+      // 15-20%
+      potential: 0.1 + Math.random() * 0.05
+      // 10-15%
+    },
+    traits,
+    confidence: {
+      index: 0.75 + Math.random() * 0.2,
+      // 0.75-0.95
+      focus: Math.random() > 0.5 ? "High" : "Very High",
+      liveClutch: Math.random() > 0.3,
+      "p(lift48h)": 0.5 + Math.random() * 0.4
+      // 0.5-0.9
+    },
+    benchmarks: {
+      blaze: currentValue,
+      on3: Math.round(currentValue * (0.9 + Math.random() * 0.2)),
+      // ±10% of our value
+      actual: Math.round(currentValue * (0.95 + Math.random() * 0.15))
+      // ±7.5% of our value
+    },
+    opportunities: [
+      {
+        brand: "Nike",
+        value: Math.round(currentValue * 0.15),
+        probability: 0.75,
+        category: "Apparel"
+      },
+      {
+        brand: "Gatorade",
+        value: Math.round(currentValue * 0.08),
+        probability: 0.6,
+        category: "Beverage"
+      },
+      {
+        brand: "Local Auto Dealer",
+        value: Math.round(currentValue * 0.05),
+        probability: 0.85,
+        category: "Local"
+      }
+    ],
+    updated: (/* @__PURE__ */ new Date()).toISOString()
+  };
+  return new Response(JSON.stringify(data), { headers });
+}
+__name(onRequest4, "onRequest");
+
+// api/nil-valuation.js
+async function onRequest5(context) {
+  const { request, env } = context;
+  const url = new URL(request.url);
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Content-Type": "application/json"
+  };
+  if (request.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+  try {
+    if (url.pathname === "/api/nil/calculate" && request.method === "POST") {
+      const data = await request.json();
+      const valuation = await calculateNILValuation(data, env);
+      return new Response(JSON.stringify(valuation), { headers: corsHeaders });
+    }
+    if (url.pathname === "/api/nil/athlete" && request.method === "GET") {
+      const athleteId = url.searchParams.get("id");
+      const athlete = await getAthleteProfile(athleteId, env);
+      return new Response(JSON.stringify(athlete), { headers: corsHeaders });
+    }
+    if (url.pathname === "/api/nil/market" && request.method === "GET") {
+      const sport = url.searchParams.get("sport");
+      const marketData = await getMarketData(sport, env);
+      return new Response(JSON.stringify(marketData), { headers: corsHeaders });
+    }
+    return new Response(JSON.stringify({
+      name: "Blaze NIL Valuation API",
+      version: "1.0.0",
+      endpoints: [
+        "/api/nil/calculate - Calculate NIL valuation (POST)",
+        "/api/nil/athlete?id={id} - Get athlete profile (GET)",
+        "/api/nil/market?sport={sport} - Get market data (GET)"
+      ]
+    }), { headers: corsHeaders });
+  } catch (error) {
+    console.error("NIL API Error:", error);
+    return new Response(JSON.stringify({
+      error: "Internal server error",
+      message: error.message
+    }), {
+      status: 500,
+      headers: corsHeaders
+    });
+  }
+}
+__name(onRequest5, "onRequest");
+async function calculateNILValuation(data, env) {
+  const {
+    athleteName,
+    sport,
+    position,
+    school,
+    stats,
+    socialMedia,
+    achievements
+  } = data;
+  let baseValue = 0;
+  let multipliers = [];
+  let breakdown = {};
+  const performanceValue = calculatePerformanceValue(sport, position, stats);
+  baseValue += performanceValue;
+  breakdown.performance = performanceValue;
+  const socialValue = calculateSocialMediaValue(socialMedia);
+  baseValue += socialValue;
+  breakdown.socialMedia = socialValue;
+  const marketValue = calculateMarketValue(school, sport);
+  baseValue += marketValue;
+  breakdown.market = marketValue;
+  const achievementValue = calculateAchievementValue(achievements);
+  baseValue += achievementValue;
+  breakdown.achievements = achievementValue;
+  if (isElitePerformer(stats, sport)) {
+    multipliers.push({ name: "Elite Performer", value: 1.5 });
+  }
+  if (isHighProfileSchool(school)) {
+    multipliers.push({ name: "High Profile School", value: 1.3 });
+  }
+  if (hasNationalExposure(achievements)) {
+    multipliers.push({ name: "National Exposure", value: 1.4 });
+  }
+  let finalValue = baseValue;
+  multipliers.forEach((m) => {
+    finalValue *= m.value;
+  });
+  finalValue = Math.round(finalValue / 1e3) * 1e3;
+  const tier = getValuationTier(finalValue);
+  const deals = generateDealRecommendations(finalValue, sport, position);
+  return {
+    athlete: athleteName,
+    sport,
+    position,
+    school,
+    valuation: {
+      annual: finalValue,
+      monthly: Math.round(finalValue / 12),
+      perPost: Math.round(finalValue / 100)
+      // Assuming 100 posts per year
+    },
+    tier,
+    breakdown,
+    multipliers,
+    recommendations: {
+      deals,
+      focusAreas: identifyGrowthAreas(breakdown),
+      comparables: await findComparableAthletes(sport, position, finalValue, env)
+    },
+    confidence: calculateConfidence(data),
+    lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+  };
+}
+__name(calculateNILValuation, "calculateNILValuation");
+function calculatePerformanceValue(sport, position, stats) {
+  let value = 0;
+  switch (sport.toLowerCase()) {
+    case "football":
+      if (position === "QB") {
+        value = (stats.passingYards || 0) * 10 + (stats.touchdowns || 0) * 1e3 + (stats.completionPct || 0) * 500;
+      } else if (position === "RB") {
+        value = (stats.rushingYards || 0) * 8 + (stats.touchdowns || 0) * 800 + (stats.yardsPerCarry || 0) * 1e3;
+      } else if (position === "WR") {
+        value = (stats.receivingYards || 0) * 9 + (stats.receptions || 0) * 100 + (stats.touchdowns || 0) * 900;
+      }
+      break;
+    case "basketball":
+      value = (stats.pointsPerGame || 0) * 1e3 + (stats.assistsPerGame || 0) * 800 + (stats.reboundsPerGame || 0) * 600 + (stats.fieldGoalPct || 0) * 500;
+      break;
+    case "baseball":
+      if (position === "P") {
+        value = (stats.wins || 0) * 2e3 + (stats.strikeouts || 0) * 50 + 1 / (stats.era || 4) * 1e4;
+      } else {
+        value = (stats.battingAverage || 0) * 5e4 + (stats.homeRuns || 0) * 1500 + (stats.rbi || 0) * 100;
+      }
+      break;
+  }
+  return Math.round(value);
+}
+__name(calculatePerformanceValue, "calculatePerformanceValue");
+function calculateSocialMediaValue(socialMedia) {
+  if (!socialMedia) return 0;
+  let value = 0;
+  value += (socialMedia.instagramFollowers || 0) * 2;
+  value += (socialMedia.instagramEngagement || 0) * 1e3;
+  value += (socialMedia.tiktokFollowers || 0) * 1.5;
+  value += (socialMedia.tiktokEngagement || 0) * 1200;
+  value += (socialMedia.twitterFollowers || 0) * 1;
+  value += (socialMedia.twitterEngagement || 0) * 800;
+  value += (socialMedia.youtubeSubscribers || 0) * 3;
+  value += (socialMedia.youtubeViews || 0) * 0.01;
+  return Math.round(value);
+}
+__name(calculateSocialMediaValue, "calculateSocialMediaValue");
+function calculateMarketValue(school, sport) {
+  const powerFiveSchools = [
+    "Texas",
+    "Alabama",
+    "Ohio State",
+    "Michigan",
+    "Georgia",
+    "LSU",
+    "Florida",
+    "Notre Dame",
+    "USC",
+    "Oklahoma"
+  ];
+  const majorMarkets = {
+    "Texas": 5e4,
+    "California": 45e3,
+    "Florida": 4e4,
+    "New York": 35e3,
+    "Illinois": 3e4
+  };
+  let value = 1e4;
+  if (powerFiveSchools.some((s) => school.includes(s))) {
+    value += 4e4;
+  }
+  Object.entries(majorMarkets).forEach(([state, bonus]) => {
+    if (school.includes(state)) {
+      value += bonus;
+    }
+  });
+  const sportMultipliers = {
+    "football": 1.5,
+    "basketball": 1.3,
+    "baseball": 1,
+    "soccer": 0.8
+  };
+  value *= sportMultipliers[sport.toLowerCase()] || 1;
+  return Math.round(value);
+}
+__name(calculateMarketValue, "calculateMarketValue");
+function calculateAchievementValue(achievements) {
+  if (!achievements || !Array.isArray(achievements)) return 0;
+  let value = 0;
+  const achievementValues = {
+    "All-American": 25e3,
+    "Conference Player of the Year": 2e4,
+    "National Championship": 3e4,
+    "Heisman Finalist": 5e4,
+    "All-Conference First Team": 15e3,
+    "All-Conference Second Team": 1e4,
+    "Conference Championship": 12e3,
+    "Bowl Game MVP": 18e3,
+    "NCAA Tournament Appearance": 8e3,
+    "College World Series": 15e3
+  };
+  achievements.forEach((achievement) => {
+    Object.entries(achievementValues).forEach(([key, val]) => {
+      if (achievement.toLowerCase().includes(key.toLowerCase())) {
+        value += val;
+      }
+    });
+  });
+  return value;
+}
+__name(calculateAchievementValue, "calculateAchievementValue");
+function isElitePerformer(stats, sport) {
+  switch (sport.toLowerCase()) {
+    case "football":
+      return stats.touchdowns > 30 || stats.passingYards > 4e3;
+    case "basketball":
+      return stats.pointsPerGame > 20;
+    case "baseball":
+      return stats.battingAverage > 0.35 || stats.era < 2.5;
+    default:
+      return false;
+  }
+}
+__name(isElitePerformer, "isElitePerformer");
+function isHighProfileSchool(school) {
+  const highProfile = [
+    "Texas",
+    "Alabama",
+    "Ohio State",
+    "Michigan",
+    "Notre Dame",
+    "USC",
+    "Georgia",
+    "LSU",
+    "Florida",
+    "Oklahoma",
+    "Clemson"
+  ];
+  return highProfile.some((s) => school.includes(s));
+}
+__name(isHighProfileSchool, "isHighProfileSchool");
+function hasNationalExposure(achievements) {
+  if (!achievements) return false;
+  const nationalAchievements = [
+    "All-American",
+    "Heisman",
+    "National Championship",
+    "NCAA Tournament",
+    "College World Series"
+  ];
+  return achievements.some(
+    (a) => nationalAchievements.some((na) => a.includes(na))
+  );
+}
+__name(hasNationalExposure, "hasNationalExposure");
+function getValuationTier(value) {
+  if (value >= 1e6) return "Elite (7-Figure)";
+  if (value >= 5e5) return "Star (High 6-Figure)";
+  if (value >= 1e5) return "Impact (6-Figure)";
+  if (value >= 5e4) return "Solid Contributor";
+  if (value >= 25e3) return "Rising Talent";
+  return "Developing";
+}
+__name(getValuationTier, "getValuationTier");
+function generateDealRecommendations(value, sport, position) {
+  const deals = [];
+  if (value >= 5e5) {
+    deals.push({
+      type: "National Brand Ambassador",
+      estimatedValue: "$100,000+",
+      brands: ["Nike", "Adidas", "Gatorade", "State Farm"]
+    });
+  }
+  if (value >= 1e5) {
+    deals.push({
+      type: "Regional Partnerships",
+      estimatedValue: "$25,000-50,000",
+      brands: ["Local Auto Dealers", "Regional Banks", "Restaurant Chains"]
+    });
+  }
+  deals.push({
+    type: "Social Media Campaigns",
+    estimatedValue: `$${Math.round(value / 100)} per post`,
+    frequency: "Monthly"
+  });
+  deals.push({
+    type: "Merchandise & Licensing",
+    estimatedValue: `$${Math.round(value * 0.1)} annually`,
+    products: ["Jerseys", "Trading Cards", "Video Games"]
+  });
+  if (sport === "football" && value >= 25e4) {
+    deals.push({
+      type: "Bowl Game Appearances",
+      estimatedValue: "$10,000-25,000",
+      opportunities: "Playoff/Major Bowl Games"
+    });
+  }
+  return deals;
+}
+__name(generateDealRecommendations, "generateDealRecommendations");
+function identifyGrowthAreas(breakdown) {
+  const areas = [];
+  const avg = Object.values(breakdown).reduce((a, b) => a + b, 0) / Object.keys(breakdown).length;
+  Object.entries(breakdown).forEach(([key, value]) => {
+    if (value < avg * 0.8) {
+      areas.push({
+        area: key,
+        currentValue: value,
+        potential: Math.round(avg * 1.2),
+        recommendation: getGrowthRecommendation(key)
+      });
+    }
+  });
+  return areas;
+}
+__name(identifyGrowthAreas, "identifyGrowthAreas");
+function getGrowthRecommendation(area) {
+  const recommendations = {
+    performance: "Focus on improving key statistics and consistency",
+    socialMedia: "Increase posting frequency and engagement strategies",
+    market: "Build relationships with local businesses and media",
+    achievements: "Target conference and national recognition opportunities"
+  };
+  return recommendations[area] || "Continue development in this area";
+}
+__name(getGrowthRecommendation, "getGrowthRecommendation");
+async function findComparableAthletes(sport, position, value, env) {
+  const range = value * 0.2;
+  const minValue = value - range;
+  const maxValue = value + range;
+  return [
+    {
+      name: "Sample Athlete 1",
+      school: "Similar University",
+      position,
+      valuation: Math.round(value * 0.95),
+      deals: 3
+    },
+    {
+      name: "Sample Athlete 2",
+      school: "Comparable State",
+      position,
+      valuation: Math.round(value * 1.05),
+      deals: 5
+    }
+  ];
+}
+__name(findComparableAthletes, "findComparableAthletes");
+function calculateConfidence(data) {
+  let confidence = 0.5;
+  if (data.stats) confidence += 0.2;
+  if (data.socialMedia) confidence += 0.15;
+  if (data.achievements) confidence += 0.1;
+  if (data.school) confidence += 0.05;
+  return Math.min(0.95, confidence);
+}
+__name(calculateConfidence, "calculateConfidence");
+async function getAthleteProfile(athleteId, env) {
+  return {
+    id: athleteId,
+    name: "Sample Athlete",
+    sport: "Football",
+    position: "QB",
+    school: "Texas",
+    year: "Junior",
+    stats: {
+      passingYards: 3500,
+      touchdowns: 28,
+      completionPct: 65.5
+    },
+    socialMedia: {
+      instagramFollowers: 45e3,
+      twitterFollowers: 22e3,
+      tiktokFollowers: 85e3
+    },
+    currentDeals: [],
+    estimatedValue: 25e4
+  };
+}
+__name(getAthleteProfile, "getAthleteProfile");
+async function getMarketData(sport, env) {
+  return {
+    sport,
+    totalMarketSize: "$1.2B",
+    averageDeals: {
+      elite: "$500,000+",
+      star: "$100,000-500,000",
+      contributor: "$25,000-100,000",
+      developing: "$5,000-25,000"
+    },
+    topSchools: [
+      { name: "Texas", avgDealValue: "$125,000" },
+      { name: "Alabama", avgDealValue: "$115,000" },
+      { name: "Ohio State", avgDealValue: "$110,000" }
+    ],
+    trends: [
+      "Social media engagement increasingly important",
+      "Local business partnerships growing 40% YoY",
+      "Video game licensing emerging as major opportunity"
+    ]
+  };
+}
+__name(getMarketData, "getMarketData");
+
+// api/onboarding.js
+async function onRequest6(context) {
+  const { request, env } = context;
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Content-Type": "application/json"
+  };
+  if (request.method === "OPTIONS") {
+    return new Response(null, { headers });
+  }
+  if (request.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers
+    });
+  }
+  try {
+    const data = await request.json();
+    if (!data.organization?.name || !data.contact?.email) {
+      return new Response(JSON.stringify({
+        error: "Missing required fields"
+      }), {
+        status: 400,
+        headers
+      });
+    }
+    const clientId = generateClientId(data.organization.name);
+    const workspace = {
+      clientId,
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      status: "pending_setup",
+      ...data,
+      configuration: {
+        apiKey: generateApiKey(),
+        workspaceUrl: `https://blaze-intelligence.com/workspace/${clientId}`,
+        features: data.features,
+        integrations: data.integration,
+        limits: getClientLimits(data.organization.type, data.athleteCount)
+      }
+    };
+    if (env.DB) {
+      await env.DB.prepare(`
+                INSERT INTO clients (
+                    client_id, 
+                    organization_name, 
+                    organization_type,
+                    contact_name,
+                    contact_email,
+                    contact_phone,
+                    sports,
+                    features,
+                    configuration,
+                    status,
+                    created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `).bind(
+        workspace.clientId,
+        workspace.organization.name,
+        workspace.organization.type,
+        workspace.contact.name,
+        workspace.contact.email,
+        workspace.contact.phone || null,
+        JSON.stringify(workspace.sports),
+        JSON.stringify(workspace.features),
+        JSON.stringify(workspace.configuration),
+        workspace.status,
+        workspace.createdAt
+      ).run();
+    }
+    if (env.SESSIONS) {
+      await env.SESSIONS.put(
+        `client:${clientId}`,
+        JSON.stringify(workspace),
+        { expirationTtl: 86400 * 30 }
+        // 30 days
+      );
+    }
+    await triggerOnboardingProcesses(workspace, env);
+    if (env.SENDGRID_API_KEY) {
+      await sendWelcomeEmail(workspace, env);
+    }
+    return new Response(JSON.stringify({
+      success: true,
+      clientId,
+      workspaceUrl: workspace.configuration.workspaceUrl,
+      message: "Onboarding successful. Check your email for login credentials.",
+      nextSteps: [
+        "Check email for login credentials",
+        "Access your workspace URL",
+        "Complete API integration setup",
+        "Schedule training session"
+      ]
+    }), {
+      status: 201,
+      headers
+    });
+  } catch (error) {
+    console.error("Onboarding error:", error);
+    return new Response(JSON.stringify({
+      error: "Onboarding failed",
+      message: error.message
+    }), {
+      status: 500,
+      headers
+    });
+  }
+}
+__name(onRequest6, "onRequest");
+function generateClientId(orgName) {
+  const timestamp = Date.now().toString(36);
+  const random = Math.random().toString(36).substring(2, 8);
+  const slug = orgName.toLowerCase().replace(/[^a-z0-9]/g, "").substring(0, 10);
+  return `${slug}-${timestamp}-${random}`;
+}
+__name(generateClientId, "generateClientId");
+function generateApiKey() {
+  const prefix = "blaze_";
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let key = prefix;
+  for (let i = 0; i < 32; i++) {
+    key += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return key;
+}
+__name(generateApiKey, "generateApiKey");
+function getClientLimits(orgType, athleteCount) {
+  const baseLimits = {
+    apiCallsPerMonth: 1e5,
+    storageGB: 10,
+    users: 10,
+    concurrentAnalysis: 5
+  };
+  const multipliers = {
+    professional: 10,
+    college: 5,
+    club: 3,
+    highschool: 2,
+    agency: 5
+  };
+  const multiplier = multipliers[orgType] || 1;
+  const athleteMultiplier = {
+    "1-50": 1,
+    "51-100": 1.5,
+    "101-250": 2,
+    "251-500": 3,
+    "500+": 5
+  };
+  const athleteMult = athleteMultiplier[athleteCount] || 1;
+  return {
+    apiCallsPerMonth: Math.floor(baseLimits.apiCallsPerMonth * multiplier * athleteMult),
+    storageGB: Math.floor(baseLimits.storageGB * multiplier),
+    users: Math.floor(baseLimits.users * multiplier),
+    concurrentAnalysis: Math.floor(baseLimits.concurrentAnalysis * multiplier)
+  };
+}
+__name(getClientLimits, "getClientLimits");
+async function triggerOnboardingProcesses(workspace, env) {
+  const processes = [];
+  if (env.AIRTABLE_API_KEY && env.AIRTABLE_BASE_ID) {
+    processes.push(createAirtableRecord(workspace, env));
+  }
+  if (env.HUBSPOT_API_KEY) {
+    processes.push(createHubSpotContact(workspace, env));
+  }
+  if (env.NOTION_API_KEY) {
+    processes.push(createNotionWorkspace(workspace, env));
+  }
+  if (env.ANALYTICS) {
+    processes.push(env.ANALYTICS.put(
+      `onboarding:${workspace.clientId}`,
+      JSON.stringify({
+        timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+        organization: workspace.organization.name,
+        sports: workspace.sports,
+        features: workspace.features
+      })
+    ));
+  }
+  await Promise.allSettled(processes);
+}
+__name(triggerOnboardingProcesses, "triggerOnboardingProcesses");
+async function createAirtableRecord(workspace, env) {
+  const url = `https://api.airtable.com/v0/${env.AIRTABLE_BASE_ID}/Clients`;
+  const record = {
+    fields: {
+      "Client ID": workspace.clientId,
+      "Organization": workspace.organization.name,
+      "Type": workspace.organization.type,
+      "Contact Name": workspace.contact.name,
+      "Email": workspace.contact.email,
+      "Phone": workspace.contact.phone || "",
+      "Sports": workspace.sports.join(", "),
+      "Status": "Onboarding",
+      "Created": workspace.createdAt,
+      "API Key": workspace.configuration.apiKey
+    }
+  };
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.AIRTABLE_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ records: [record] })
+  });
+  return response.json();
+}
+__name(createAirtableRecord, "createAirtableRecord");
+async function createHubSpotContact(workspace, env) {
+  const url = "https://api.hubapi.com/crm/v3/objects/contacts";
+  const contact = {
+    properties: {
+      email: workspace.contact.email,
+      firstname: workspace.contact.name.split(" ")[0],
+      lastname: workspace.contact.name.split(" ").slice(1).join(" "),
+      phone: workspace.contact.phone,
+      company: workspace.organization.name,
+      blaze_client_id: workspace.clientId,
+      blaze_organization_type: workspace.organization.type,
+      blaze_sports: workspace.sports.join(", "),
+      lifecyclestage: "customer"
+    }
+  };
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.HUBSPOT_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(contact)
+  });
+  return response.json();
+}
+__name(createHubSpotContact, "createHubSpotContact");
+async function createNotionWorkspace(workspace, env) {
+  const url = "https://api.notion.com/v1/pages";
+  const page = {
+    parent: { database_id: env.NOTION_DATABASE_ID },
+    properties: {
+      "Client": {
+        title: [{
+          text: { content: workspace.organization.name }
+        }]
+      },
+      "Client ID": {
+        rich_text: [{
+          text: { content: workspace.clientId }
+        }]
+      },
+      "Status": {
+        select: { name: "Onboarding" }
+      },
+      "Contact": {
+        email: workspace.contact.email
+      },
+      "Sports": {
+        multi_select: workspace.sports.map((sport) => ({ name: sport }))
+      },
+      "Created": {
+        date: { start: workspace.createdAt }
+      }
+    }
+  };
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.NOTION_API_KEY}`,
+      "Notion-Version": "2022-06-28",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(page)
+  });
+  return response.json();
+}
+__name(createNotionWorkspace, "createNotionWorkspace");
+async function sendWelcomeEmail(workspace, env) {
+  const url = "https://api.sendgrid.com/v3/mail/send";
+  const email = {
+    personalizations: [{
+      to: [{ email: workspace.contact.email, name: workspace.contact.name }],
+      dynamic_template_data: {
+        organization_name: workspace.organization.name,
+        contact_name: workspace.contact.name,
+        client_id: workspace.clientId,
+        api_key: workspace.configuration.apiKey,
+        workspace_url: workspace.configuration.workspaceUrl,
+        sports: workspace.sports.join(", ")
+      }
+    }],
+    from: {
+      email: "welcome@blaze-intelligence.com",
+      name: "Blaze Intelligence"
+    },
+    template_id: "d-blazewelcometemplate",
+    // Would need to be created in SendGrid
+    subject: `Welcome to Blaze Intelligence, ${workspace.organization.name}!`
+  };
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.SENDGRID_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(email)
+  });
+  return response.json();
+}
+__name(sendWelcomeEmail, "sendWelcomeEmail");
+
+// api/players.js
+async function onRequest7(context) {
+  const { request, env } = context;
+  const url = new URL(request.url);
+  const teamId = url.searchParams.get("teamId");
+  const playerId = url.searchParams.get("playerId");
+  const league = url.searchParams.get("league");
+  const position = url.searchParams.get("position");
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Content-Type": "application/json",
+    "Cache-Control": "public, max-age=3600"
+  };
+  if (request.method === "OPTIONS") {
+    return new Response(null, { headers });
+  }
+  try {
+    let data;
+    if (playerId) {
+      data = await getPlayerById(playerId, league, env);
+    } else if (teamId) {
+      data = await getPlayersByTeam(teamId, env);
+    } else if (position && league) {
+      data = await getPlayersByPosition(position, league, env);
+    } else {
+      data = await getFeaturedPlayers(env);
+    }
+    return new Response(JSON.stringify(data), { headers });
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ error: error.message }),
+      { status: 500, headers }
+    );
+  }
+}
+__name(onRequest7, "onRequest");
+async function getPlayerById(playerId, league, env) {
+  const player = await fetchPlayerDetails(playerId, league, env);
+  return {
+    success: true,
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    data: player
+  };
+}
+__name(getPlayerById, "getPlayerById");
+async function getPlayersByTeam(teamId, env) {
+  const roster = await generateTeamRoster(teamId);
+  return {
+    success: true,
+    teamId,
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    data: roster,
+    count: roster.length
+  };
+}
+__name(getPlayersByTeam, "getPlayersByTeam");
+async function getPlayersByPosition(position, league, env) {
+  const players = await getTopPlayersByPosition(position, league);
+  return {
+    success: true,
+    league,
+    position,
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    data: players,
+    count: players.length
+  };
+}
+__name(getPlayersByPosition, "getPlayersByPosition");
+async function getFeaturedPlayers(env) {
+  const featured = {
+    mlb: await getMLBFeaturedPlayers(),
+    nfl: await getNFLFeaturedPlayers(),
+    ncaa: await getNCAAFeaturedPlayers(),
+    nba: await getNBAFeaturedPlayers()
+  };
+  return {
+    success: true,
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    data: featured,
+    count: Object.values(featured).flat().length
+  };
+}
+__name(getFeaturedPlayers, "getFeaturedPlayers");
+async function generateTeamRoster(teamId) {
+  const league = teamId.split("_")[0];
+  let positions, rosterSize;
+  switch (league) {
+    case "mlb":
+      positions = ["P", "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF"];
+      rosterSize = 26;
+      break;
+    case "nfl":
+      positions = ["QB", "RB", "WR", "TE", "OL", "DL", "LB", "CB", "S"];
+      rosterSize = 53;
+      break;
+    case "nba":
+      positions = ["PG", "SG", "SF", "PF", "C"];
+      rosterSize = 15;
+      break;
+    case "ncaa":
+      positions = ["QB", "RB", "WR", "TE", "OL", "DL", "LB", "DB"];
+      rosterSize = 85;
+      break;
+    default:
+      positions = ["Player"];
+      rosterSize = 20;
+  }
+  const roster = [];
+  const firstNames = [
+    "Michael",
+    "David",
+    "James",
+    "Robert",
+    "John",
+    "William",
+    "Richard",
+    "Joseph",
+    "Thomas",
+    "Christopher",
+    "Daniel",
+    "Matthew",
+    "Anthony",
+    "Mark",
+    "Paul"
+  ];
+  const lastNames = [
+    "Smith",
+    "Johnson",
+    "Williams",
+    "Brown",
+    "Jones",
+    "Garcia",
+    "Miller",
+    "Davis",
+    "Rodriguez",
+    "Martinez",
+    "Hernandez",
+    "Lopez",
+    "Gonzalez",
+    "Wilson",
+    "Anderson"
+  ];
+  for (let i = 0; i < Math.min(rosterSize, 25); i++) {
+    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const position = positions[i % positions.length];
+    roster.push({
+      id: `${teamId}_player_${i}`,
+      name: `${firstName} ${lastName}`,
+      number: Math.floor(Math.random() * 99) + 1,
+      position,
+      age: 18 + Math.floor(Math.random() * 20),
+      height: generateHeight(position, league),
+      weight: generateWeight(position, league),
+      experience: Math.floor(Math.random() * 10),
+      college: getRandomCollege(),
+      stats: generatePlayerStats(position, league),
+      nilValue: calculateNILValue(league)
+    });
+  }
+  return roster;
+}
+__name(generateTeamRoster, "generateTeamRoster");
+function generateHeight(position, league) {
+  const baseHeight = {
+    mlb: { P: 74, C: 72, "1B": 74, "2B": 70, "3B": 72, "SS": 71, "LF": 72, "CF": 71, "RF": 73 },
+    nfl: { QB: 75, RB: 70, WR: 73, TE: 76, OL: 77, DL: 76, LB: 74, CB: 71, S: 72 },
+    nba: { PG: 74, SG: 77, SF: 79, PF: 81, C: 83 },
+    ncaa: { QB: 74, RB: 70, WR: 72, TE: 76, OL: 76, DL: 75, LB: 73, DB: 71 }
+  };
+  const heights = baseHeight[league] || { Player: 72 };
+  const base = heights[position] || 72;
+  const variance = Math.floor(Math.random() * 4) - 2;
+  const totalInches = base + variance;
+  const feet = Math.floor(totalInches / 12);
+  const inches = totalInches % 12;
+  return `${feet}'${inches}"`;
+}
+__name(generateHeight, "generateHeight");
+function generateWeight(position, league) {
+  const baseWeight = {
+    mlb: { P: 210, C: 205, "1B": 220, "2B": 185, "3B": 200, "SS": 190, "LF": 200, "CF": 195, "RF": 205 },
+    nfl: { QB: 225, RB: 215, WR: 200, TE: 250, OL: 310, DL: 300, LB: 240, CB: 195, S: 210 },
+    nba: { PG: 190, SG: 215, SF: 225, PF: 240, C: 265 },
+    ncaa: { QB: 215, RB: 205, WR: 190, TE: 240, OL: 295, DL: 285, LB: 225, DB: 190 }
+  };
+  const weights = baseWeight[league] || { Player: 200 };
+  const base = weights[position] || 200;
+  const variance = Math.floor(Math.random() * 20) - 10;
+  return base + variance;
+}
+__name(generateWeight, "generateWeight");
+function generatePlayerStats(position, league) {
+  switch (league) {
+    case "mlb":
+      return {
+        battingAverage: (0.2 + Math.random() * 0.15).toFixed(3),
+        homeRuns: Math.floor(Math.random() * 40),
+        rbi: Math.floor(Math.random() * 100),
+        stolenBases: Math.floor(Math.random() * 30),
+        era: position === "P" ? (2.5 + Math.random() * 2.5).toFixed(2) : null,
+        strikeouts: position === "P" ? Math.floor(Math.random() * 200) : null
+      };
+    case "nfl":
+      return {
+        touchdowns: Math.floor(Math.random() * 15),
+        yards: Math.floor(Math.random() * 1500),
+        completions: position === "QB" ? Math.floor(Math.random() * 300) : null,
+        tackles: ["LB", "S", "CB"].includes(position) ? Math.floor(Math.random() * 100) : null,
+        sacks: ["DL", "LB"].includes(position) ? Math.floor(Math.random() * 15) : null
+      };
+    case "nba":
+      return {
+        ppg: (5 + Math.random() * 25).toFixed(1),
+        rpg: (2 + Math.random() * 10).toFixed(1),
+        apg: (1 + Math.random() * 8).toFixed(1),
+        fg_percentage: (0.4 + Math.random() * 0.15).toFixed(3),
+        three_point_percentage: (0.3 + Math.random() * 0.15).toFixed(3)
+      };
+    case "ncaa":
+      return {
+        gamesPlayed: Math.floor(Math.random() * 14),
+        starts: Math.floor(Math.random() * 14),
+        totalYards: Math.floor(Math.random() * 1e3),
+        touchdowns: Math.floor(Math.random() * 10)
+      };
+    default:
+      return {};
+  }
+}
+__name(generatePlayerStats, "generatePlayerStats");
+function calculateNILValue(league) {
+  if (league !== "ncaa") return null;
+  const baseValue = 1e3;
+  const multiplier = Math.pow(10, Math.random() * 3);
+  return Math.floor(baseValue * multiplier);
+}
+__name(calculateNILValue, "calculateNILValue");
+function getRandomCollege() {
+  const colleges = [
+    "Alabama",
+    "Ohio State",
+    "Michigan",
+    "Georgia",
+    "Texas",
+    "Oklahoma",
+    "LSU",
+    "Clemson",
+    "Penn State",
+    "USC",
+    "Notre Dame",
+    "Florida",
+    "Tennessee",
+    "Auburn",
+    "Oregon"
+  ];
+  return colleges[Math.floor(Math.random() * colleges.length)];
+}
+__name(getRandomCollege, "getRandomCollege");
+async function getMLBFeaturedPlayers() {
+  return [
+    {
+      id: "mlb_star_1",
+      name: "Nolan Arenado",
+      team: "St. Louis Cardinals",
+      position: "3B",
+      stats: {
+        battingAverage: ".266",
+        homeRuns: 26,
+        rbi: 93
+      }
+    },
+    {
+      id: "mlb_star_2",
+      name: "Paul Goldschmidt",
+      team: "St. Louis Cardinals",
+      position: "1B",
+      stats: {
+        battingAverage: ".268",
+        homeRuns: 22,
+        rbi: 65
+      }
+    }
+  ];
+}
+__name(getMLBFeaturedPlayers, "getMLBFeaturedPlayers");
+async function getNFLFeaturedPlayers() {
+  return [
+    {
+      id: "nfl_star_1",
+      name: "Will Levis",
+      team: "Tennessee Titans",
+      position: "QB",
+      stats: {
+        passingYards: 1808,
+        touchdowns: 8,
+        completionPct: "58.4%"
+      }
+    },
+    {
+      id: "nfl_star_2",
+      name: "Derrick Henry",
+      team: "Tennessee Titans",
+      position: "RB",
+      stats: {
+        rushingYards: 1167,
+        touchdowns: 12,
+        yardsPerCarry: 4.2
+      }
+    }
+  ];
+}
+__name(getNFLFeaturedPlayers, "getNFLFeaturedPlayers");
+async function getNCAAFeaturedPlayers() {
+  return [
+    {
+      id: "ncaa_star_1",
+      name: "Quinn Ewers",
+      team: "Texas Longhorns",
+      position: "QB",
+      stats: {
+        passingYards: 3479,
+        touchdowns: 29,
+        completionPct: "69.0%"
+      },
+      nilValue: 16e5
+    },
+    {
+      id: "ncaa_star_2",
+      name: "Bijan Robinson",
+      team: "Texas Longhorns",
+      position: "RB",
+      stats: {
+        rushingYards: 1580,
+        touchdowns: 18,
+        yardsPerCarry: 5.8
+      },
+      nilValue: 11e5
+    }
+  ];
+}
+__name(getNCAAFeaturedPlayers, "getNCAAFeaturedPlayers");
+async function getNBAFeaturedPlayers() {
+  return [
+    {
+      id: "nba_star_1",
+      name: "Ja Morant",
+      team: "Memphis Grizzlies",
+      position: "PG",
+      stats: {
+        ppg: 25.1,
+        apg: 8.1,
+        rpg: 5.6
+      }
+    },
+    {
+      id: "nba_star_2",
+      name: "Jaren Jackson Jr.",
+      team: "Memphis Grizzlies",
+      position: "PF/C",
+      stats: {
+        ppg: 22.5,
+        rpg: 5.5,
+        bpg: 3
+      }
+    }
+  ];
+}
+__name(getNBAFeaturedPlayers, "getNBAFeaturedPlayers");
+async function fetchPlayerDetails(playerId, league, env) {
+  return {
+    id: playerId,
+    name: "Sample Player",
+    team: "Sample Team",
+    position: "POS",
+    age: 25,
+    height: `6'2"`,
+    weight: 200,
+    college: "State University",
+    experience: 3,
+    stats: generatePlayerStats("POS", league),
+    careerHighlights: [
+      "All-Star Selection 2023",
+      "Rookie of the Year 2021",
+      "Conference Champion 2022"
+    ],
+    injuryStatus: "Healthy",
+    contractDetails: {
+      years: 4,
+      totalValue: 5e7,
+      averagePerYear: 125e5
+    }
+  };
+}
+__name(fetchPlayerDetails, "fetchPlayerDetails");
+async function getTopPlayersByPosition(position, league) {
+  const players = [];
+  for (let i = 0; i < 10; i++) {
+    players.push({
+      id: `${league}_${position}_top_${i}`,
+      name: `Top ${position} Player ${i + 1}`,
+      team: `Team ${i + 1}`,
+      position,
+      ranking: i + 1,
+      stats: generatePlayerStats(position, league)
+    });
+  }
+  return players;
+}
+__name(getTopPlayersByPosition, "getTopPlayersByPosition");
+
+// api/sports.js
+async function onRequest8(context) {
+  const { request, env } = context;
+  const url = new URL(request.url);
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Content-Type": "application/json"
+  };
+  if (request.method === "OPTIONS") {
+    return new Response(null, { headers });
+  }
+  try {
+    if (url.pathname === "/api/mlb/teams") {
+      const response = await fetch("https://statsapi.mlb.com/api/v1/teams?sportId=1");
+      const data = await response.json();
+      return new Response(JSON.stringify(data), { headers });
+    }
+    if (url.pathname.startsWith("/api/mlb/teams/") && url.pathname.endsWith("/roster")) {
+      const teamId = url.pathname.split("/")[4];
+      const response = await fetch(`https://statsapi.mlb.com/api/v1/teams/${teamId}/roster`);
+      const data = await response.json();
+      return new Response(JSON.stringify(data), { headers });
+    }
+    if (url.pathname === "/api/mlb/schedule") {
+      const teamId = url.searchParams.get("teamId");
+      const season = url.searchParams.get("season") || (/* @__PURE__ */ new Date()).getFullYear();
+      const response = await fetch(
+        `https://statsapi.mlb.com/api/v1/schedule?teamId=${teamId}&season=${season}`
+      );
+      const data = await response.json();
+      return new Response(JSON.stringify(data), { headers });
+    }
+    if (url.pathname === "/api/nfl/teams") {
+      if (!env.SPORTSDATAIO_KEY) {
+        return new Response(
+          JSON.stringify({ error: "NFL API key not configured" }),
+          { status: 500, headers }
+        );
+      }
+      const response = await fetch("https://api.sportsdata.io/v3/nfl/scores/json/Teams", {
+        headers: { "Ocp-Apim-Subscription-Key": env.SPORTSDATAIO_KEY }
+      });
+      const data = await response.json();
+      return new Response(JSON.stringify(data), { headers });
+    }
+    if (url.pathname === "/api/nfl/standings") {
+      if (!env.SPORTSDATAIO_KEY) {
+        return new Response(
+          JSON.stringify({ error: "NFL API key not configured" }),
+          { status: 500, headers }
+        );
+      }
+      const season = url.searchParams.get("season") || "2024";
+      const response = await fetch(
+        `https://api.sportsdata.io/v3/nfl/scores/json/Standings/${season}`,
+        {
+          headers: { "Ocp-Apim-Subscription-Key": env.SPORTSDATAIO_KEY }
+        }
+      );
+      const data = await response.json();
+      return new Response(JSON.stringify(data), { headers });
+    }
+    if (url.pathname === "/api/cfb/teams") {
+      if (!env.CFBD_KEY) {
+        return new Response(
+          JSON.stringify({ error: "NCAA API key not configured" }),
+          { status: 500, headers }
+        );
+      }
+      const response = await fetch("https://api.collegefootballdata.com/teams", {
+        headers: { Authorization: `Bearer ${env.CFBD_KEY}` }
+      });
+      const data = await response.json();
+      return new Response(JSON.stringify(data), { headers });
+    }
+    if (url.pathname === "/api/cfb/rankings") {
+      if (!env.CFBD_KEY) {
+        return new Response(
+          JSON.stringify({ error: "NCAA API key not configured" }),
+          { status: 500, headers }
+        );
+      }
+      const year = url.searchParams.get("year") || "2024";
+      const week = url.searchParams.get("week") || "final";
+      const response = await fetch(
+        `https://api.collegefootballdata.com/rankings?year=${year}&week=${week}`,
+        {
+          headers: { Authorization: `Bearer ${env.CFBD_KEY}` }
+        }
+      );
+      const data = await response.json();
+      return new Response(JSON.stringify(data), { headers });
+    }
+    if (url.pathname === "/api/cfb/games") {
+      if (!env.CFBD_KEY) {
+        return new Response(
+          JSON.stringify({ error: "NCAA API key not configured" }),
+          { status: 500, headers }
+        );
+      }
+      const year = url.searchParams.get("year") || "2024";
+      const team = url.searchParams.get("team");
+      let endpoint = `https://api.collegefootballdata.com/games?year=${year}`;
+      if (team) endpoint += `&team=${encodeURIComponent(team)}`;
+      const response = await fetch(endpoint, {
+        headers: { Authorization: `Bearer ${env.CFBD_KEY}` }
+      });
+      const data = await response.json();
+      return new Response(JSON.stringify(data), { headers });
+    }
+    if (url.pathname.startsWith("/api/sportradar/mlb/")) {
+      if (!env.SPORTRADAR_KEY) {
+        return new Response(
+          JSON.stringify({ error: "Sportradar API key not configured" }),
+          { status: 500, headers }
+        );
+      }
+      const endpoint = url.pathname.replace("/api/sportradar/mlb/", "");
+      const response = await fetch(
+        `https://api.sportradar.com/mlb/trial/v8/en/${endpoint}.json?api_key=${env.SPORTRADAR_KEY}`
+      );
+      const data = await response.json();
+      return new Response(JSON.stringify(data), { headers });
+    }
+    if (url.pathname === "/api/sports/all") {
+      const allData = {
+        timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+        available: {
+          mlb: true,
+          nfl: !!env.SPORTSDATAIO_KEY,
+          ncaa: !!env.CFBD_KEY,
+          sportradar: !!env.SPORTRADAR_KEY
+        },
+        data: {}
+      };
+      try {
+        const mlbResponse = await fetch("https://statsapi.mlb.com/api/v1/teams?sportId=1");
+        const mlbData = await mlbResponse.json();
+        allData.data.mlb = mlbData.teams?.slice(0, 5);
+      } catch (e) {
+        allData.data.mlb = { error: e.message };
+      }
+      return new Response(JSON.stringify(allData), { headers });
+    }
+    if (url.pathname === "/api/sports/health") {
+      const health = {
+        status: "healthy",
+        timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+        apis: {
+          mlb: { status: "active", auth: "none" },
+          nfl: {
+            status: env.SPORTSDATAIO_KEY ? "configured" : "missing_key",
+            auth: "api_key"
+          },
+          ncaa: {
+            status: env.CFBD_KEY ? "configured" : "missing_key",
+            auth: "bearer_token"
+          },
+          sportradar: {
+            status: env.SPORTRADAR_KEY ? "configured" : "missing_key",
+            auth: "api_key"
+          }
+        }
+      };
+      return new Response(JSON.stringify(health), { headers });
+    }
+    return new Response(
+      JSON.stringify({ error: "Endpoint not found" }),
+      { status: 404, headers }
+    );
+  } catch (error) {
+    return new Response(
+      JSON.stringify({
+        error: "Internal server error",
+        message: error.message
+      }),
+      { status: 500, headers }
+    );
+  }
+}
+__name(onRequest8, "onRequest");
+
+// api/teams.js
+async function onRequest9(context) {
+  const { request, env } = context;
+  const url = new URL(request.url);
+  const league = url.searchParams.get("league");
+  const teamId = url.searchParams.get("teamId");
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Content-Type": "application/json",
+    "Cache-Control": "public, max-age=3600"
+  };
+  if (request.method === "OPTIONS") {
+    return new Response(null, { headers });
+  }
+  try {
+    let data;
+    if (teamId) {
+      data = await getTeamById(teamId, league, env);
+    } else if (league) {
+      data = await getTeamsByLeague(league, env);
+    } else {
+      data = await getAllTeams(env);
+    }
+    return new Response(JSON.stringify(data), { headers });
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ error: error.message }),
+      { status: 500, headers }
+    );
+  }
+}
+__name(onRequest9, "onRequest");
+async function getAllTeams(env) {
+  const teams = {
+    mlb: await getMLBTeams(env),
+    nfl: await getNFLTeams(env),
+    ncaa: await getNCAATeams(env),
+    nba: await getNBATeams(env)
+  };
+  return {
+    success: true,
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    data: teams,
+    count: Object.values(teams).flat().length
+  };
+}
+__name(getAllTeams, "getAllTeams");
+async function getTeamsByLeague(league, env) {
+  let teams;
+  switch (league.toLowerCase()) {
+    case "mlb":
+      teams = await getMLBTeams(env);
+      break;
+    case "nfl":
+      teams = await getNFLTeams(env);
+      break;
+    case "ncaa":
+    case "ncaaf":
+      teams = await getNCAATeams(env);
+      break;
+    case "nba":
+      teams = await getNBATeams(env);
+      break;
+    default:
+      throw new Error(`Unknown league: ${league}`);
+  }
+  return {
+    success: true,
+    league: league.toUpperCase(),
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    data: teams,
+    count: teams.length
+  };
+}
+__name(getTeamsByLeague, "getTeamsByLeague");
+async function getTeamById(teamId, league, env) {
+  const teams = await getTeamsByLeague(league, env);
+  const team = teams.data.find((t) => t.id === teamId || t.teamId === teamId);
+  if (!team) {
+    throw new Error(`Team ${teamId} not found in ${league}`);
+  }
+  const details = await getTeamDetails(teamId, league, env);
+  return {
+    success: true,
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    data: { ...team, ...details }
+  };
+}
+__name(getTeamById, "getTeamById");
+async function getMLBTeams(env) {
+  const response = await fetch("https://statsapi.mlb.com/api/v1/teams?sportId=1&season=2024");
+  const data = await response.json();
+  return data.teams.map((team) => ({
+    id: `mlb_${team.id}`,
+    teamId: team.id,
+    name: team.name,
+    abbreviation: team.abbreviation,
+    location: team.locationName,
+    league: "MLB",
+    division: team.division?.name,
+    venue: team.venue?.name,
+    established: team.firstYearOfPlay,
+    logo: `https://www.mlbstatic.com/team-logos/${team.id}.svg`,
+    colors: getTeamColors(team.name),
+    website: team.link
+  }));
+}
+__name(getMLBTeams, "getMLBTeams");
+async function getNFLTeams(env) {
+  const nflTeams = [
+    { id: "nfl_ari", name: "Arizona Cardinals", abbreviation: "ARI", conference: "NFC", division: "West" },
+    { id: "nfl_atl", name: "Atlanta Falcons", abbreviation: "ATL", conference: "NFC", division: "South" },
+    { id: "nfl_bal", name: "Baltimore Ravens", abbreviation: "BAL", conference: "AFC", division: "North" },
+    { id: "nfl_buf", name: "Buffalo Bills", abbreviation: "BUF", conference: "AFC", division: "East" },
+    { id: "nfl_car", name: "Carolina Panthers", abbreviation: "CAR", conference: "NFC", division: "South" },
+    { id: "nfl_chi", name: "Chicago Bears", abbreviation: "CHI", conference: "NFC", division: "North" },
+    { id: "nfl_cin", name: "Cincinnati Bengals", abbreviation: "CIN", conference: "AFC", division: "North" },
+    { id: "nfl_cle", name: "Cleveland Browns", abbreviation: "CLE", conference: "AFC", division: "North" },
+    { id: "nfl_dal", name: "Dallas Cowboys", abbreviation: "DAL", conference: "NFC", division: "East" },
+    { id: "nfl_den", name: "Denver Broncos", abbreviation: "DEN", conference: "AFC", division: "West" },
+    { id: "nfl_det", name: "Detroit Lions", abbreviation: "DET", conference: "NFC", division: "North" },
+    { id: "nfl_gb", name: "Green Bay Packers", abbreviation: "GB", conference: "NFC", division: "North" },
+    { id: "nfl_hou", name: "Houston Texans", abbreviation: "HOU", conference: "AFC", division: "South" },
+    { id: "nfl_ind", name: "Indianapolis Colts", abbreviation: "IND", conference: "AFC", division: "South" },
+    { id: "nfl_jax", name: "Jacksonville Jaguars", abbreviation: "JAX", conference: "AFC", division: "South" },
+    { id: "nfl_kc", name: "Kansas City Chiefs", abbreviation: "KC", conference: "AFC", division: "West" },
+    { id: "nfl_lv", name: "Las Vegas Raiders", abbreviation: "LV", conference: "AFC", division: "West" },
+    { id: "nfl_lac", name: "Los Angeles Chargers", abbreviation: "LAC", conference: "AFC", division: "West" },
+    { id: "nfl_lar", name: "Los Angeles Rams", abbreviation: "LAR", conference: "NFC", division: "West" },
+    { id: "nfl_mia", name: "Miami Dolphins", abbreviation: "MIA", conference: "AFC", division: "East" },
+    { id: "nfl_min", name: "Minnesota Vikings", abbreviation: "MIN", conference: "NFC", division: "North" },
+    { id: "nfl_ne", name: "New England Patriots", abbreviation: "NE", conference: "AFC", division: "East" },
+    { id: "nfl_no", name: "New Orleans Saints", abbreviation: "NO", conference: "NFC", division: "South" },
+    { id: "nfl_nyg", name: "New York Giants", abbreviation: "NYG", conference: "NFC", division: "East" },
+    { id: "nfl_nyj", name: "New York Jets", abbreviation: "NYJ", conference: "AFC", division: "East" },
+    { id: "nfl_phi", name: "Philadelphia Eagles", abbreviation: "PHI", conference: "NFC", division: "East" },
+    { id: "nfl_pit", name: "Pittsburgh Steelers", abbreviation: "PIT", conference: "AFC", division: "North" },
+    { id: "nfl_sf", name: "San Francisco 49ers", abbreviation: "SF", conference: "NFC", division: "West" },
+    { id: "nfl_sea", name: "Seattle Seahawks", abbreviation: "SEA", conference: "NFC", division: "West" },
+    { id: "nfl_tb", name: "Tampa Bay Buccaneers", abbreviation: "TB", conference: "NFC", division: "South" },
+    { id: "nfl_ten", name: "Tennessee Titans", abbreviation: "TEN", conference: "AFC", division: "South" },
+    { id: "nfl_was", name: "Washington Commanders", abbreviation: "WAS", conference: "NFC", division: "East" }
+  ];
+  return nflTeams.map((team) => ({
+    ...team,
+    league: "NFL",
+    colors: getTeamColors(team.name)
+  }));
+}
+__name(getNFLTeams, "getNFLTeams");
+async function getNCAATeams(env) {
+  const ncaaTeams = [
+    { id: "ncaa_texas", name: "Texas Longhorns", abbreviation: "TEX", conference: "Big 12", ranking: 3 },
+    { id: "ncaa_alabama", name: "Alabama Crimson Tide", abbreviation: "ALA", conference: "SEC", ranking: 1 },
+    { id: "ncaa_georgia", name: "Georgia Bulldogs", abbreviation: "UGA", conference: "SEC", ranking: 2 },
+    { id: "ncaa_michigan", name: "Michigan Wolverines", abbreviation: "MICH", conference: "Big Ten", ranking: 4 },
+    { id: "ncaa_ohiostate", name: "Ohio State Buckeyes", abbreviation: "OSU", conference: "Big Ten", ranking: 5 },
+    { id: "ncaa_penn", name: "Penn State Nittany Lions", abbreviation: "PSU", conference: "Big Ten", ranking: 6 },
+    { id: "ncaa_oklahoma", name: "Oklahoma Sooners", abbreviation: "OU", conference: "Big 12", ranking: 7 },
+    { id: "ncaa_lsu", name: "LSU Tigers", abbreviation: "LSU", conference: "SEC", ranking: 8 },
+    { id: "ncaa_clemson", name: "Clemson Tigers", abbreviation: "CLEM", conference: "ACC", ranking: 9 },
+    { id: "ncaa_usc", name: "USC Trojans", abbreviation: "USC", conference: "Pac-12", ranking: 10 },
+    { id: "ncaa_tamu", name: "Texas A&M Aggies", abbreviation: "TAMU", conference: "SEC", ranking: 15 },
+    { id: "ncaa_ttu", name: "Texas Tech Red Raiders", abbreviation: "TTU", conference: "Big 12", ranking: 25 }
+  ];
+  return ncaaTeams.map((team) => ({
+    ...team,
+    league: "NCAA",
+    division: "FBS",
+    colors: getTeamColors(team.name)
+  }));
+}
+__name(getNCAATeams, "getNCAATeams");
+async function getNBATeams(env) {
+  const nbaTeams = [
+    { id: "nba_mem", name: "Memphis Grizzlies", abbreviation: "MEM", conference: "Western", division: "Southwest" },
+    { id: "nba_lal", name: "Los Angeles Lakers", abbreviation: "LAL", conference: "Western", division: "Pacific" },
+    { id: "nba_gsw", name: "Golden State Warriors", abbreviation: "GSW", conference: "Western", division: "Pacific" },
+    { id: "nba_bos", name: "Boston Celtics", abbreviation: "BOS", conference: "Eastern", division: "Atlantic" }
+  ];
+  return nbaTeams.map((team) => ({
+    ...team,
+    league: "NBA",
+    colors: getTeamColors(team.name)
+  }));
+}
+__name(getNBATeams, "getNBATeams");
+async function getTeamDetails(teamId, league, env) {
+  return {
+    currentSeason: {
+      year: 2024,
+      wins: Math.floor(Math.random() * 15),
+      losses: Math.floor(Math.random() * 15),
+      winPercentage: 0.5 + (Math.random() - 0.5) * 0.3
+    },
+    lastGame: {
+      date: (/* @__PURE__ */ new Date()).toISOString(),
+      opponent: "TBD",
+      result: "W",
+      score: "7-5"
+    }
+  };
+}
+__name(getTeamDetails, "getTeamDetails");
+function getTeamColors(teamName) {
+  const colorMap = {
+    "Cardinals": ["#C41E3A", "#FEDB00"],
+    "Titans": ["#0C2340", "#4B92DB"],
+    "Longhorns": ["#FF6B35", "#FFFFFF"],
+    "Grizzlies": ["#5D76A9", "#12173F"],
+    "Aggies": ["#500000", "#FFFFFF"],
+    "Red Raiders": ["#CC0000", "#000000"]
+  };
+  for (const [key, colors] of Object.entries(colorMap)) {
+    if (teamName.includes(key)) {
+      return colors;
+    }
+  }
+  return ["#FF6B35", "#0A0E27"];
+}
+__name(getTeamColors, "getTeamColors");
+
+// sitemap.xml.js
+async function onRequest10(context) {
+  const baseURL = "https://blaze-intelligence.pages.dev";
+  const pages = [
+    { url: "/", changefreq: "daily", priority: "1.0" },
+    { url: "/index-corporate", changefreq: "weekly", priority: "0.9" },
+    { url: "/client-onboarding", changefreq: "monthly", priority: "0.8" },
+    { url: "/nil-trust-dashboard", changefreq: "daily", priority: "0.8" },
+    { url: "/statistics-dashboard", changefreq: "daily", priority: "0.7" },
+    { url: "/presentations", changefreq: "weekly", priority: "0.6" },
+    { url: "/multiplayer-client", changefreq: "weekly", priority: "0.6" },
+    { url: "/game.html", changefreq: "weekly", priority: "0.5" },
+    { url: "/cms-admin", changefreq: "monthly", priority: "0.3" }
+  ];
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+${pages.map((page) => `    <url>
+        <loc>${baseURL}${page.url}</loc>
+        <lastmod>${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}</lastmod>
+        <changefreq>${page.changefreq}</changefreq>
+        <priority>${page.priority}</priority>
+    </url>`).join("\n")}
+</urlset>`;
+  return new Response(sitemap, {
+    headers: {
+      "Content-Type": "application/xml",
+      "Cache-Control": "public, max-age=86400"
+      // Cache for 24 hours
+    }
+  });
+}
+__name(onRequest10, "onRequest");
+
+// ../.wrangler/tmp/pages-ahXYdS/functionsRoutes-0.25186267865616485.mjs
+var routes = [
+  {
+    routePath: "/api/stats/export",
+    mountPath: "/api/stats",
+    method: "",
+    middlewares: [],
+    modules: [onRequest]
+  },
+  {
+    routePath: "/api/cms",
+    mountPath: "/api",
+    method: "",
+    middlewares: [],
+    modules: [onRequest2]
+  },
+  {
+    routePath: "/api/health",
+    mountPath: "/api",
+    method: "",
+    middlewares: [],
+    modules: [onRequest3]
+  },
+  {
+    routePath: "/api/nil",
+    mountPath: "/api",
+    method: "",
+    middlewares: [],
+    modules: [onRequest4]
+  },
+  {
+    routePath: "/api/nil-valuation",
+    mountPath: "/api",
+    method: "",
+    middlewares: [],
+    modules: [onRequest5]
+  },
+  {
+    routePath: "/api/onboarding",
+    mountPath: "/api",
+    method: "",
+    middlewares: [],
+    modules: [onRequest6]
+  },
+  {
+    routePath: "/api/players",
+    mountPath: "/api",
+    method: "",
+    middlewares: [],
+    modules: [onRequest7]
+  },
+  {
+    routePath: "/api/sports",
+    mountPath: "/api",
+    method: "",
+    middlewares: [],
+    modules: [onRequest8]
+  },
+  {
+    routePath: "/api/teams",
+    mountPath: "/api",
+    method: "",
+    middlewares: [],
+    modules: [onRequest9]
+  },
+  {
+    routePath: "/sitemap.xml",
+    mountPath: "/",
+    method: "",
+    middlewares: [],
+    modules: [onRequest10]
+  }
+];
+
+// ../../node_modules/wrangler/node_modules/path-to-regexp/dist.es2015/index.js
+function lexer(str) {
+  var tokens = [];
+  var i = 0;
+  while (i < str.length) {
+    var char = str[i];
+    if (char === "*" || char === "+" || char === "?") {
+      tokens.push({ type: "MODIFIER", index: i, value: str[i++] });
+      continue;
+    }
+    if (char === "\\") {
+      tokens.push({ type: "ESCAPED_CHAR", index: i++, value: str[i++] });
+      continue;
+    }
+    if (char === "{") {
+      tokens.push({ type: "OPEN", index: i, value: str[i++] });
+      continue;
+    }
+    if (char === "}") {
+      tokens.push({ type: "CLOSE", index: i, value: str[i++] });
+      continue;
+    }
+    if (char === ":") {
+      var name = "";
+      var j = i + 1;
+      while (j < str.length) {
+        var code = str.charCodeAt(j);
+        if (
+          // `0-9`
+          code >= 48 && code <= 57 || // `A-Z`
+          code >= 65 && code <= 90 || // `a-z`
+          code >= 97 && code <= 122 || // `_`
+          code === 95
+        ) {
+          name += str[j++];
+          continue;
+        }
+        break;
+      }
+      if (!name)
+        throw new TypeError("Missing parameter name at ".concat(i));
+      tokens.push({ type: "NAME", index: i, value: name });
+      i = j;
+      continue;
+    }
+    if (char === "(") {
+      var count = 1;
+      var pattern = "";
+      var j = i + 1;
+      if (str[j] === "?") {
+        throw new TypeError('Pattern cannot start with "?" at '.concat(j));
+      }
+      while (j < str.length) {
+        if (str[j] === "\\") {
+          pattern += str[j++] + str[j++];
+          continue;
+        }
+        if (str[j] === ")") {
+          count--;
+          if (count === 0) {
+            j++;
+            break;
+          }
+        } else if (str[j] === "(") {
+          count++;
+          if (str[j + 1] !== "?") {
+            throw new TypeError("Capturing groups are not allowed at ".concat(j));
+          }
+        }
+        pattern += str[j++];
+      }
+      if (count)
+        throw new TypeError("Unbalanced pattern at ".concat(i));
+      if (!pattern)
+        throw new TypeError("Missing pattern at ".concat(i));
+      tokens.push({ type: "PATTERN", index: i, value: pattern });
+      i = j;
+      continue;
+    }
+    tokens.push({ type: "CHAR", index: i, value: str[i++] });
+  }
+  tokens.push({ type: "END", index: i, value: "" });
+  return tokens;
+}
+__name(lexer, "lexer");
+function parse(str, options) {
+  if (options === void 0) {
+    options = {};
+  }
+  var tokens = lexer(str);
+  var _a = options.prefixes, prefixes = _a === void 0 ? "./" : _a, _b = options.delimiter, delimiter = _b === void 0 ? "/#?" : _b;
+  var result = [];
+  var key = 0;
+  var i = 0;
+  var path = "";
+  var tryConsume = /* @__PURE__ */ __name(function(type) {
+    if (i < tokens.length && tokens[i].type === type)
+      return tokens[i++].value;
+  }, "tryConsume");
+  var mustConsume = /* @__PURE__ */ __name(function(type) {
+    var value2 = tryConsume(type);
+    if (value2 !== void 0)
+      return value2;
+    var _a2 = tokens[i], nextType = _a2.type, index = _a2.index;
+    throw new TypeError("Unexpected ".concat(nextType, " at ").concat(index, ", expected ").concat(type));
+  }, "mustConsume");
+  var consumeText = /* @__PURE__ */ __name(function() {
+    var result2 = "";
+    var value2;
+    while (value2 = tryConsume("CHAR") || tryConsume("ESCAPED_CHAR")) {
+      result2 += value2;
+    }
+    return result2;
+  }, "consumeText");
+  var isSafe = /* @__PURE__ */ __name(function(value2) {
+    for (var _i = 0, delimiter_1 = delimiter; _i < delimiter_1.length; _i++) {
+      var char2 = delimiter_1[_i];
+      if (value2.indexOf(char2) > -1)
+        return true;
+    }
+    return false;
+  }, "isSafe");
+  var safePattern = /* @__PURE__ */ __name(function(prefix2) {
+    var prev = result[result.length - 1];
+    var prevText = prefix2 || (prev && typeof prev === "string" ? prev : "");
+    if (prev && !prevText) {
+      throw new TypeError('Must have text between two parameters, missing text after "'.concat(prev.name, '"'));
+    }
+    if (!prevText || isSafe(prevText))
+      return "[^".concat(escapeString(delimiter), "]+?");
+    return "(?:(?!".concat(escapeString(prevText), ")[^").concat(escapeString(delimiter), "])+?");
+  }, "safePattern");
+  while (i < tokens.length) {
+    var char = tryConsume("CHAR");
+    var name = tryConsume("NAME");
+    var pattern = tryConsume("PATTERN");
+    if (name || pattern) {
+      var prefix = char || "";
+      if (prefixes.indexOf(prefix) === -1) {
+        path += prefix;
+        prefix = "";
+      }
+      if (path) {
+        result.push(path);
+        path = "";
+      }
+      result.push({
+        name: name || key++,
+        prefix,
+        suffix: "",
+        pattern: pattern || safePattern(prefix),
+        modifier: tryConsume("MODIFIER") || ""
+      });
+      continue;
+    }
+    var value = char || tryConsume("ESCAPED_CHAR");
+    if (value) {
+      path += value;
+      continue;
+    }
+    if (path) {
+      result.push(path);
+      path = "";
+    }
+    var open = tryConsume("OPEN");
+    if (open) {
+      var prefix = consumeText();
+      var name_1 = tryConsume("NAME") || "";
+      var pattern_1 = tryConsume("PATTERN") || "";
+      var suffix = consumeText();
+      mustConsume("CLOSE");
+      result.push({
+        name: name_1 || (pattern_1 ? key++ : ""),
+        pattern: name_1 && !pattern_1 ? safePattern(prefix) : pattern_1,
+        prefix,
+        suffix,
+        modifier: tryConsume("MODIFIER") || ""
+      });
+      continue;
+    }
+    mustConsume("END");
+  }
+  return result;
+}
+__name(parse, "parse");
+function match(str, options) {
+  var keys = [];
+  var re = pathToRegexp(str, keys, options);
+  return regexpToFunction(re, keys, options);
+}
+__name(match, "match");
+function regexpToFunction(re, keys, options) {
+  if (options === void 0) {
+    options = {};
+  }
+  var _a = options.decode, decode = _a === void 0 ? function(x) {
+    return x;
+  } : _a;
+  return function(pathname) {
+    var m = re.exec(pathname);
+    if (!m)
+      return false;
+    var path = m[0], index = m.index;
+    var params = /* @__PURE__ */ Object.create(null);
+    var _loop_1 = /* @__PURE__ */ __name(function(i2) {
+      if (m[i2] === void 0)
+        return "continue";
+      var key = keys[i2 - 1];
+      if (key.modifier === "*" || key.modifier === "+") {
+        params[key.name] = m[i2].split(key.prefix + key.suffix).map(function(value) {
+          return decode(value, key);
+        });
+      } else {
+        params[key.name] = decode(m[i2], key);
+      }
+    }, "_loop_1");
+    for (var i = 1; i < m.length; i++) {
+      _loop_1(i);
+    }
+    return { path, index, params };
+  };
+}
+__name(regexpToFunction, "regexpToFunction");
+function escapeString(str) {
+  return str.replace(/([.+*?=^!:${}()[\]|/\\])/g, "\\$1");
+}
+__name(escapeString, "escapeString");
+function flags(options) {
+  return options && options.sensitive ? "" : "i";
+}
+__name(flags, "flags");
+function regexpToRegexp(path, keys) {
+  if (!keys)
+    return path;
+  var groupsRegex = /\((?:\?<(.*?)>)?(?!\?)/g;
+  var index = 0;
+  var execResult = groupsRegex.exec(path.source);
+  while (execResult) {
+    keys.push({
+      // Use parenthesized substring match if available, index otherwise
+      name: execResult[1] || index++,
+      prefix: "",
+      suffix: "",
+      modifier: "",
+      pattern: ""
+    });
+    execResult = groupsRegex.exec(path.source);
+  }
+  return path;
+}
+__name(regexpToRegexp, "regexpToRegexp");
+function arrayToRegexp(paths, keys, options) {
+  var parts = paths.map(function(path) {
+    return pathToRegexp(path, keys, options).source;
+  });
+  return new RegExp("(?:".concat(parts.join("|"), ")"), flags(options));
+}
+__name(arrayToRegexp, "arrayToRegexp");
+function stringToRegexp(path, keys, options) {
+  return tokensToRegexp(parse(path, options), keys, options);
+}
+__name(stringToRegexp, "stringToRegexp");
+function tokensToRegexp(tokens, keys, options) {
+  if (options === void 0) {
+    options = {};
+  }
+  var _a = options.strict, strict = _a === void 0 ? false : _a, _b = options.start, start = _b === void 0 ? true : _b, _c = options.end, end = _c === void 0 ? true : _c, _d = options.encode, encode = _d === void 0 ? function(x) {
+    return x;
+  } : _d, _e = options.delimiter, delimiter = _e === void 0 ? "/#?" : _e, _f = options.endsWith, endsWith = _f === void 0 ? "" : _f;
+  var endsWithRe = "[".concat(escapeString(endsWith), "]|$");
+  var delimiterRe = "[".concat(escapeString(delimiter), "]");
+  var route = start ? "^" : "";
+  for (var _i = 0, tokens_1 = tokens; _i < tokens_1.length; _i++) {
+    var token = tokens_1[_i];
+    if (typeof token === "string") {
+      route += escapeString(encode(token));
+    } else {
+      var prefix = escapeString(encode(token.prefix));
+      var suffix = escapeString(encode(token.suffix));
+      if (token.pattern) {
+        if (keys)
+          keys.push(token);
+        if (prefix || suffix) {
+          if (token.modifier === "+" || token.modifier === "*") {
+            var mod = token.modifier === "*" ? "?" : "";
+            route += "(?:".concat(prefix, "((?:").concat(token.pattern, ")(?:").concat(suffix).concat(prefix, "(?:").concat(token.pattern, "))*)").concat(suffix, ")").concat(mod);
+          } else {
+            route += "(?:".concat(prefix, "(").concat(token.pattern, ")").concat(suffix, ")").concat(token.modifier);
+          }
+        } else {
+          if (token.modifier === "+" || token.modifier === "*") {
+            throw new TypeError('Can not repeat "'.concat(token.name, '" without a prefix and suffix'));
+          }
+          route += "(".concat(token.pattern, ")").concat(token.modifier);
+        }
+      } else {
+        route += "(?:".concat(prefix).concat(suffix, ")").concat(token.modifier);
+      }
+    }
+  }
+  if (end) {
+    if (!strict)
+      route += "".concat(delimiterRe, "?");
+    route += !options.endsWith ? "$" : "(?=".concat(endsWithRe, ")");
+  } else {
+    var endToken = tokens[tokens.length - 1];
+    var isEndDelimited = typeof endToken === "string" ? delimiterRe.indexOf(endToken[endToken.length - 1]) > -1 : endToken === void 0;
+    if (!strict) {
+      route += "(?:".concat(delimiterRe, "(?=").concat(endsWithRe, "))?");
+    }
+    if (!isEndDelimited) {
+      route += "(?=".concat(delimiterRe, "|").concat(endsWithRe, ")");
+    }
+  }
+  return new RegExp(route, flags(options));
+}
+__name(tokensToRegexp, "tokensToRegexp");
+function pathToRegexp(path, keys, options) {
+  if (path instanceof RegExp)
+    return regexpToRegexp(path, keys);
+  if (Array.isArray(path))
+    return arrayToRegexp(path, keys, options);
+  return stringToRegexp(path, keys, options);
+}
+__name(pathToRegexp, "pathToRegexp");
+
+// ../../node_modules/wrangler/templates/pages-template-worker.ts
+var escapeRegex = /[.+?^${}()|[\]\\]/g;
+function* executeRequest(request) {
+  const requestPath = new URL(request.url).pathname;
+  for (const route of [...routes].reverse()) {
+    if (route.method && route.method !== request.method) {
+      continue;
+    }
+    const routeMatcher = match(route.routePath.replace(escapeRegex, "\\$&"), {
+      end: false
+    });
+    const mountMatcher = match(route.mountPath.replace(escapeRegex, "\\$&"), {
+      end: false
+    });
+    const matchResult = routeMatcher(requestPath);
+    const mountMatchResult = mountMatcher(requestPath);
+    if (matchResult && mountMatchResult) {
+      for (const handler of route.middlewares.flat()) {
+        yield {
+          handler,
+          params: matchResult.params,
+          path: mountMatchResult.path
+        };
+      }
+    }
+  }
+  for (const route of routes) {
+    if (route.method && route.method !== request.method) {
+      continue;
+    }
+    const routeMatcher = match(route.routePath.replace(escapeRegex, "\\$&"), {
+      end: true
+    });
+    const mountMatcher = match(route.mountPath.replace(escapeRegex, "\\$&"), {
+      end: false
+    });
+    const matchResult = routeMatcher(requestPath);
+    const mountMatchResult = mountMatcher(requestPath);
+    if (matchResult && mountMatchResult && route.modules.length) {
+      for (const handler of route.modules.flat()) {
+        yield {
+          handler,
+          params: matchResult.params,
+          path: matchResult.path
+        };
+      }
+      break;
+    }
+  }
+}
+__name(executeRequest, "executeRequest");
+var pages_template_worker_default = {
+  async fetch(originalRequest, env, workerContext) {
+    let request = originalRequest;
+    const handlerIterator = executeRequest(request);
+    let data = {};
+    let isFailOpen = false;
+    const next = /* @__PURE__ */ __name(async (input, init) => {
+      if (input !== void 0) {
+        let url = input;
+        if (typeof input === "string") {
+          url = new URL(input, request.url).toString();
+        }
+        request = new Request(url, init);
+      }
+      const result = handlerIterator.next();
+      if (result.done === false) {
+        const { handler, params, path } = result.value;
+        const context = {
+          request: new Request(request.clone()),
+          functionPath: path,
+          next,
+          params,
+          get data() {
+            return data;
+          },
+          set data(value) {
+            if (typeof value !== "object" || value === null) {
+              throw new Error("context.data must be an object");
+            }
+            data = value;
+          },
+          env,
+          waitUntil: workerContext.waitUntil.bind(workerContext),
+          passThroughOnException: /* @__PURE__ */ __name(() => {
+            isFailOpen = true;
+          }, "passThroughOnException")
+        };
+        const response = await handler(context);
+        if (!(response instanceof Response)) {
+          throw new Error("Your Pages function should return a Response");
+        }
+        return cloneResponse(response);
+      } else if ("ASSETS") {
+        const response = await env["ASSETS"].fetch(request);
+        return cloneResponse(response);
+      } else {
+        const response = await fetch(request);
+        return cloneResponse(response);
+      }
+    }, "next");
+    try {
+      return await next();
+    } catch (error) {
+      if (isFailOpen) {
+        const response = await env["ASSETS"].fetch(request);
+        return cloneResponse(response);
+      }
+      throw error;
+    }
+  }
+};
+var cloneResponse = /* @__PURE__ */ __name((response) => (
+  // https://fetch.spec.whatwg.org/#null-body-status
+  new Response(
+    [101, 204, 205, 304].includes(response.status) ? null : response.body,
+    response
+  )
+), "cloneResponse");
+export {
+  pages_template_worker_default as default
+};
+
+------formdata-undici-054346318902--

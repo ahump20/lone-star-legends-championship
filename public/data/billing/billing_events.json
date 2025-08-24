@@ -1,0 +1,64 @@
+{
+  "updated_at": "2025-08-24T15:38:49.234952",
+  "total_events": 4,
+  "events": [
+    {
+      "event_id": "5c06317c-d7be-4afc-aacf-82a3291e0083",
+      "client_id": "39bb3bfe-3eb0-43f6-9b37-251793ba3c7e",
+      "subscription_id": "1ae32939-fb7a-4c15-9912-51c1085460ea",
+      "event_type": "subscription_created",
+      "amount": 597.0,
+      "status": "trial",
+      "description": "Subscription created for Championship Analysis",
+      "created_at": "2025-08-24T15:30:39.784030",
+      "metadata": {
+        "plan_id": "professional",
+        "billing_cycle": "monthly"
+      }
+    },
+    {
+      "event_id": "9c56d443-5c05-412d-9752-8e4803106bf9",
+      "client_id": "39bb3bfe-3eb0-43f6-9b37-251793ba3c7e",
+      "subscription_id": "1ae32939-fb7a-4c15-9912-51c1085460ea",
+      "event_type": "subscription_upgraded",
+      "amount": 1003.3333333333334,
+      "status": "completed",
+      "description": "Upgraded from Championship Analysis to Champion Development",
+      "created_at": "2025-08-24T15:30:39.824882",
+      "metadata": {
+        "old_plan": "professional",
+        "new_plan": "elite",
+        "proration": 1003.3333333333334
+      }
+    },
+    {
+      "event_id": "da708124-0de7-488e-9e04-5cd81252d88f",
+      "client_id": "e6e64394-0eec-49d7-b762-1678afa87fd0",
+      "subscription_id": "4c7c0298-11af-4167-be98-79b0160438d2",
+      "event_type": "subscription_created",
+      "amount": 597.0,
+      "status": "trial",
+      "description": "Subscription created for Championship Analysis",
+      "created_at": "2025-08-24T15:38:48.723460",
+      "metadata": {
+        "plan_id": "professional",
+        "billing_cycle": "monthly"
+      }
+    },
+    {
+      "event_id": "ff50ba37-e1ba-43dc-baf3-16c0616d6042",
+      "client_id": "e6e64394-0eec-49d7-b762-1678afa87fd0",
+      "subscription_id": "4c7c0298-11af-4167-be98-79b0160438d2",
+      "event_type": "subscription_upgraded",
+      "amount": 1003.3333333333334,
+      "status": "completed",
+      "description": "Upgraded from Championship Analysis to Champion Development",
+      "created_at": "2025-08-24T15:38:48.729487",
+      "metadata": {
+        "old_plan": "professional",
+        "new_plan": "elite",
+        "proration": 1003.3333333333334
+      }
+    }
+  ]
+}

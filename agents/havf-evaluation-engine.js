@@ -516,14 +516,14 @@ class HAVFEvaluationEngine {
 }
 
 // Export for use in agents
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = HAVFEvaluationEngine;
-} else if (typeof window !== 'undefined') {
+export default HAVFEvaluationEngine;
+
+if (typeof window !== 'undefined') {
     window.HAVFEvaluationEngine = HAVFEvaluationEngine;
 }
 
 // Test if run directly
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
     const engine = new HAVFEvaluationEngine();
     const results = engine.validateWithKnownExamples();
     

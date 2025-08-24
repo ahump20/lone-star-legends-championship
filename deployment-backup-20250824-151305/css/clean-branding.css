@@ -1,0 +1,156 @@
+/**
+ * Clean Branding for Blaze Intelligence
+ * No image files, just pure CSS and emojis
+ */
+
+.blaze-logo-clean {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+    transition: all 0.3s ease;
+}
+
+.blaze-logo-clean:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+.blaze-text-logo {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.blaze-header-clean {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.blaze-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 107, 53, 0.1);
+    border: 1px solid var(--blaze-orange);
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.blaze-badge-icon {
+    font-size: 1.2rem;
+}
+
+/* Clean Banner Replacement */
+.blaze-banner-clean {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(255, 215, 0, 0.08));
+    border-radius: 16px;
+    border: 2px solid var(--blaze-orange);
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+}
+
+.blaze-banner-title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-heading);
+}
+
+.blaze-banner-subtitle {
+    color: var(--blaze-orange);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Clean Navigation Logo */
+.nav-logo-clean {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.nav-logo-clean:hover {
+    transform: rotate(-5deg) scale(1.1);
+}
+
+/* Remove any image-based logos */
+img[src*="blaze-logo"],
+img[src*="blaze-circular"],
+img[src*="blaze-vertical"],
+img[src*="blaze-banner"] {
+    display: none !important;
+}
+
+/* Override any background images with logos */
+[style*="blaze-logo"],
+[style*="blaze-circular"],
+[style*="blaze-vertical"],
+[style*="blaze-banner"] {
+    background-image: none !important;
+}
+
+/* Clean Loading Animation */
+.blaze-loading {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.7);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 0 0 0 20px rgba(255, 107, 53, 0);
+    }
+}
+
+/* Clean Icon Set */
+.blaze-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background: rgba(255, 107, 53, 0.1);
+    border-radius: 6px;
+    font-size: 1.2rem;
+}
+
+/* Ensure consistent styling */
+.blaze-branding {
+    --logo-size: 60px;
+    --logo-size-small: 40px;
+    --logo-radius: 12px;
+    --logo-radius-small: 8px;
+}

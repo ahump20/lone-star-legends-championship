@@ -1,0 +1,32 @@
+{
+  "session_id": "live_demo_001",
+  "sport": "baseball",
+  "analysis_type": "pitching",
+  "frames_processed": 20,
+  "real_time_feedback": [
+    {
+      "type": "encouragement",
+      "urgency": "normal",
+      "message": "\ud83c\udf1f Excellent form! Keep it up!",
+      "timestamp": 1756067911.778086
+    },
+    {
+      "type": "encouragement",
+      "urgency": "normal",
+      "message": "\ud83c\udf1f Excellent form! Keep it up!",
+      "timestamp": 1756067912.184118
+    },
+    {
+      "type": "encouragement",
+      "urgency": "normal",
+      "message": "\ud83c\udf1f Excellent form! Keep it up!",
+      "timestamp": 1756067912.285129
+    },
+    {
+      "type": "encouragement",
+      "urgency": "normal",
+      "message": "\ud83c\udf1f Excellent form! Keep it up!",
+      "timestamp": 1756067913.093554
+    }
+  ]
+}

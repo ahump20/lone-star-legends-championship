@@ -1,0 +1,165 @@
+{
+  "timestamp": "2025-08-24T14:29:50.903666",
+  "total_players_analyzed": 20,
+  "sentiment_summary": {
+    "high_nil_potential": [
+      {
+        "name": "José Fermin",
+        "marketability_score": 0.831,
+        "league": "MLB"
+      },
+      {
+        "name": "Mike Trout",
+        "marketability_score": 0.773,
+        "league": "MLB"
+      },
+      {
+        "name": "Logan O'Hoppe",
+        "marketability_score": 0.767,
+        "league": "MLB"
+      },
+      {
+        "name": "Reid Detmers",
+        "marketability_score": 0.766,
+        "league": "MLB"
+      },
+      {
+        "name": "Bryce Teodosio",
+        "marketability_score": 0.762,
+        "league": "MLB"
+      },
+      {
+        "name": "Luis Rengifo",
+        "marketability_score": 0.749,
+        "league": "MLB"
+      },
+      {
+        "name": "Robert Stephenson",
+        "marketability_score": 0.749,
+        "league": "MLB"
+      },
+      {
+        "name": "Jo Adell",
+        "marketability_score": 0.748,
+        "league": "MLB"
+      },
+      {
+        "name": "Luis García",
+        "marketability_score": 0.732,
+        "league": "MLB"
+      },
+      {
+        "name": "Ryan Zeferjahn",
+        "marketability_score": 0.732,
+        "league": "MLB"
+      },
+      {
+        "name": "Brock Burke",
+        "marketability_score": 0.723,
+        "league": "MLB"
+      },
+      {
+        "name": "Andrew Chafin",
+        "marketability_score": 0.721,
+        "league": "MLB"
+      },
+      {
+        "name": "Niko Kavadas",
+        "marketability_score": 0.719,
+        "league": "MLB"
+      },
+      {
+        "name": "Nolan Schanuel",
+        "marketability_score": 0.716,
+        "league": "MLB"
+      },
+      {
+        "name": "José Soriano",
+        "marketability_score": 0.708,
+        "league": "MLB"
+      }
+    ],
+    "risk_cases": [],
+    "top_marketability": [
+      {
+        "name": "José Fermin",
+        "marketability_score": 0.831,
+        "league": "MLB"
+      },
+      {
+        "name": "Mike Trout",
+        "marketability_score": 0.773,
+        "league": "MLB"
+      },
+      {
+        "name": "Logan O'Hoppe",
+        "marketability_score": 0.767,
+        "league": "MLB"
+      },
+      {
+        "name": "Reid Detmers",
+        "marketability_score": 0.766,
+        "league": "MLB"
+      },
+      {
+        "name": "Bryce Teodosio",
+        "marketability_score": 0.762,
+        "league": "MLB"
+      },
+      {
+        "name": "Luis Rengifo",
+        "marketability_score": 0.749,
+        "league": "MLB"
+      },
+      {
+        "name": "Robert Stephenson",
+        "marketability_score": 0.749,
+        "league": "MLB"
+      },
+      {
+        "name": "Jo Adell",
+        "marketability_score": 0.748,
+        "league": "MLB"
+      },
+      {
+        "name": "Luis García",
+        "marketability_score": 0.732,
+        "league": "MLB"
+      },
+      {
+        "name": "Ryan Zeferjahn",
+        "marketability_score": 0.732,
+        "league": "MLB"
+      }
+    ]
+  },
+  "league_sentiment_averages": {
+    "MLB": -0.033
+  },
+  "player_analyses": [
+    {
+      "player_id": 605177,
+      "player_name": "Andrew Chafin",
+      "analyzed_at": "2025-08-24T14:29:50.903757",
+      "analysis_period": "30_days",
+      "overall_sentiment_score": -0.189,
+      "nil_trust_factors": {
+        "marketability_score": 0.721,
+        "brand_partnership_potential": "High",
+        "audience_demographics": {
+          "primary_age_group": "18-24",
+          "gender_split": {
+            "male": 0.5,
+            "female": 0.57
+          },
+          "geographic_concentration": {
+            "local_market": 0.55,
+            "national": 0.34,
+            "international": 0.15
+          },
+          "engagement_quality": "High"
+        },
+        "content_consistency": 0.623,
+        "controversy_risk": "Medium",
+        "nil_mention_sentiment": -0.029,
+        "endorsement_readiness": 
