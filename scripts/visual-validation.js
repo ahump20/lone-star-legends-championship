@@ -4,7 +4,7 @@
  * Visual validation - Test CSS framework loading and styling
  */
 
-const PROD_URL = 'https://86d8a9f9.blaze-intelligence-lsl.pages.dev';
+const PROD_URL = 'https://e6b0d1ec.blaze-intelligence-lsl.pages.dev';
 
 async function validatePage() {
     try {
