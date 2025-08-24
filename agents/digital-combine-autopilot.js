@@ -1,44 +1,81 @@
+#!/usr/bin/env node
+
 /**
- * Digital Combine Autopilot Agent
- * Automated content + Cardinals metrics → repo → Pages deploy
+ * Digital Combine Autopilot v2.0
+ * Continuous data ingestion for Blaze Intelligence
+ * 
+ * Features:
+ * - Multi-source data ingestion (MLB, NCAA, Perfect Game, International)
+ * - Automatic pipeline detection and monitoring  
+ * - Real-time cognitive metrics collection
+ * - Intelligent caching and deduplication
+ * - Auto-deployment to production site
  */
+
+const axios = require('axios');
+const { spawn } = require('child_process');
+const fs = require('fs').promises;
+const path = require('path');
+const { PerfectGameConnector } = require('../mcp-servers/perfect-game-connector');
 
 class DigitalCombineAutopilot {
     constructor(config = {}) {
         this.config = {
             runInterval: config.runInterval || 1800000, // 30 minutes
-            githubToken: config.githubToken || process.env.GITHUB_TOKEN,
-            notionToken: config.notionToken || process.env.NOTION_TOKEN,
-            cloudflareToken: config.cloudflareToken || process.env.CLOUDFLARE_API_TOKEN,
-            zapierToken: config.zapierToken || process.env.ZAPIER_AUTH_TOKEN,
+            dataDir: config.dataDir || 'data/ingested',
+            logDir: config.logDir || 'logs/autopilot',
             
-            // Repository settings
-            owner: 'ahump20',
-            repo: 'lone-star-legends-championship',
-            branch: 'main',
+            // Data sources configuration
+            sources: {
+                mlb: {
+                    enabled: true,
+                    url: 'https://statsapi.mlb.com/api/v1',
+                    key: process.env.MLB_API_KEY || 'public'
+                },
+                ncaa: {
+                    enabled: true,
+                    url: 'https://api.collegefootballdata.com/api',
+                    key: process.env.NCAA_API_KEY
+                },
+                perfectGame: {
+                    enabled: true,
+                    connector: new PerfectGameConnector()
+                },
+                international: {
+                    enabled: true,
+                    sources: ['npb', 'kbo', 'lmp', 'lidom']
+                }
+            },
             
-            // Content topics to research and generate
-            topics: [
-                'Cardinals analytics insights',
-                'Baseball performance metrics', 
-                'MLB statistical trends',
-                'Sports intelligence updates',
-                'Player development analytics',
-                'Swing mechanics analysis',
-                'Defensive positioning data',
-                'Bullpen management trends'
-            ],
+            // Pipeline tracking
+            pipeline: {
+                youthToMlb: true,
+                collegeToMlb: true,
+                internationalToMlb: true
+            },
             
-            // Deployment settings
-            projectName: 'blaze-intelligence-lsl',
+            // Cognitive metrics
+            cognitiveMetrics: {
+                enabled: true,
+                sources: ['reaction_time', 'decision_accuracy', 'pressure_response']
+            },
+            
+            // Auto-deployment
+            autoDeployment: {
+                enabled: true,
+                branch: 'main',
+                commitMessage: '🚀 Digital Combine: Auto-update sports data'
+            },
+            
             ...config
         };
         
         this.isRunning = false;
         this.lastRun = null;
-        this.runCount = 0;
+        this.dataQueue = [];
+        this.errors = [];
         
-        console.log('🤖 Digital Combine Autopilot initialized');
+        console.log('🏋️ Digital Combine Autopilot initialized');
     }
     
     async start() {
@@ -50,15 +87,20 @@ class DigitalCombineAutopilot {
         this.isRunning = true;
         console.log('🚀 Digital Combine Autopilot started');
         
-        // Run immediately, then on interval
-        await this.runCycle();
+        // Run immediately
+        await this.runCombine();
         
+        // Schedule recurring runs
         this.intervalId = setInterval(async () => {
             try {
-                await this.runCycle();
+                await this.runCombine();
             } catch (error) {
-                console.error('💥 Autopilot cycle failed:', error);
-                await this.notifyError(error);
+                console.error('💥 Combine run failed:', error);
+                this.errors.push({
+                    timestamp: new Date().toISOString(),
+                    error: error.message,
+                    stack: error.stack
+                });
             }
         }, this.config.runInterval);
     }
@@ -72,389 +114,727 @@ class DigitalCombineAutopilot {
         console.log('⏹️  Digital Combine Autopilot stopped');
     }
     
-    async runCycle() {
-        console.log(`🔄 Starting autopilot cycle #${++this.runCount}`);
-        const cycleStart = Date.now();
+    async runCombine() {
+        console.log('🏋️ Starting Digital Combine data ingestion...');
+        const startTime = Date.now();
         
         try {
-            // 1. Generate new content based on topics
-            const content = await this.generateContent();
+            // Phase 1: Collect data from all sources
+            const collectedData = await this.collectAllData();
             
-            // 2. Fetch Cardinals metrics and analytics
-            const cardinalsData = await this.fetchCardinalsMetrics();
+            // Phase 2: Process pipeline connections
+            const pipelineData = await this.processPipelines(collectedData);
             
-            // 3. Update repository with new data
-            const commitHash = await this.updateRepository(content, cardinalsData);
+            // Phase 3: Calculate cognitive metrics
+            const cognitiveData = await this.calculateCognitiveMetrics(pipelineData);
             
-            // 4. Trigger Cloudflare Pages deployment
-            const deploymentUrl = await this.triggerDeployment();
+            // Phase 4: Detect market inefficiencies
+            const inefficiencies = await this.detectInefficiencies(cognitiveData);
             
-            // 5. Verify deployment health
-            const healthStatus = await this.verifyDeployment(deploymentUrl);
+            // Phase 5: Generate insights
+            const insights = await this.generateInsights(cognitiveData, inefficiencies);
             
-            // 6. Update tracking and notifications
-            await this.recordCycleSuccess({
-                cycleNumber: this.runCount,
-                duration: Date.now() - cycleStart,
-                contentGenerated: content.length,
-                commitHash,
-                deploymentUrl,
-                healthStatus
-            });
+            // Phase 6: Update data files
+            await this.updateDataFiles(cognitiveData, insights, inefficiencies);
             
+            // Phase 7: Auto-deploy if enabled
+            if (this.config.autoDeployment.enabled) {
+                await this.deployToProduction();
+            }
+            
+            const duration = Date.now() - startTime;
             this.lastRun = new Date().toISOString();
-            console.log(`✅ Autopilot cycle #${this.runCount} completed successfully`);
             
-        } catch (error) {
-            console.error(`❌ Autopilot cycle #${this.runCount} failed:`, error);
-            await this.recordCycleFailure(error);
-            throw error;
-        }
-    }
-    
-    async generateContent() {
-        console.log('📝 Generating content for topics...');
-        
-        const content = [];
-        const selectedTopics = this.selectRandomTopics(3); // Generate for 3 random topics
-        
-        for (const topic of selectedTopics) {
-            try {
-                const article = await this.generateTopicContent(topic);
-                if (article) {
-                    content.push({
-                        topic,
-                        title: article.title,
-                        content: article.content,
-                        metadata: article.metadata,
-                        timestamp: Date.now()
-                    });
-                }
-            } catch (error) {
-                console.error(`Failed to generate content for topic "${topic}":`, error);
-            }
-        }
-        
-        console.log(`📚 Generated ${content.length} pieces of content`);
-        return content;
-    }
-    
-    async generateTopicContent(topic) {
-        // This would integrate with Claude API or other content generation service
-        // For now, creating structured template content
-        
-        const templates = {
-            'Cardinals analytics insights': {
-                title: 'Cardinals Performance Analytics Update',
-                sections: ['Current Roster Analysis', 'Pitching Staff Metrics', 'Offensive Production', 'Defensive Efficiency'],
-                dataPoints: ['ERA+', 'wOBA', 'DRS', 'WAR']
-            },
-            'Baseball performance metrics': {
-                title: 'Advanced Baseball Metrics Deep Dive',
-                sections: ['Sabermetrics Overview', 'Modern Analytics', 'Performance Indicators', 'Trend Analysis'],
-                dataPoints: ['xwOBA', 'Barrel Rate', 'Exit Velocity', 'Launch Angle']
-            }
-        };
-        
-        const template = templates[topic];
-        if (!template) {
-            return this.generateGenericContent(topic);
-        }
-        
-        return {
-            title: template.title,
-            content: this.buildContentFromTemplate(template),
-            metadata: {
-                topic,
-                generatedAt: Date.now(),
-                dataPoints: template.dataPoints,
-                sections: template.sections
-            }
-        };
-    }
-    
-    buildContentFromTemplate(template) {
-        let content = `# ${template.title}\\n\\n`;
-        content += `*Generated on ${new Date().toLocaleDateString()} by Digital Combine Autopilot*\\n\\n`;
-        
-        for (const section of template.sections) {
-            content += `## ${section}\\n\\n`;
-            content += `[Automated analysis for ${section} - data sourced from MLB APIs and Cardinals analytics systems]\\n\\n`;
-        }
-        
-        content += `## Key Metrics\\n\\n`;
-        for (const dataPoint of template.dataPoints) {
-            content += `- **${dataPoint}**: [Real-time value from Cardinals database]\\n`;
-        }
-        
-        return content;
-    }
-    
-    async fetchCardinalsMetrics() {
-        console.log('📊 Fetching Cardinals metrics...');
-        
-        try {
-            // This would integrate with actual Cardinals/MLB APIs
-            const metrics = {
-                timestamp: Date.now(),
-                team: 'St. Louis Cardinals',
-                season: new Date().getFullYear(),
-                lastUpdated: new Date().toISOString(),
-                
-                // Mock data structure - replace with real API calls
-                teamStats: {
-                    wins: 85,
-                    losses: 77,
-                    winPercentage: 0.525,
-                    runsScored: 765,
-                    runsAllowed: 742,
-                    pythagWins: 87
-                },
-                
-                pitchingStats: {
-                    teamERA: 4.12,
-                    whip: 1.28,
-                    strikeouts: 1456,
-                    saves: 48,
-                    qualityStarts: 89
-                },
-                
-                hittingStats: {
-                    teamAvg: 0.267,
-                    onBase: 0.338,
-                    slugging: 0.421,
-                    homeRuns: 184,
-                    rbi: 731
-                },
-                
-                readinessScore: this.calculateReadinessScore(),
-                leverageIndex: this.calculateLeverageIndex()
+            console.log(`✅ Digital Combine completed in ${(duration/1000).toFixed(2)}s`);
+            console.log(`📊 Processed: ${collectedData.totalRecords} records across ${collectedData.sources.length} sources`);
+            
+            return {
+                success: true,
+                duration,
+                recordsProcessed: collectedData.totalRecords,
+                insights: insights.length,
+                inefficiencies: inefficiencies.length
             };
             
-            console.log('📈 Cardinals metrics fetched successfully');
-            return metrics;
-            
         } catch (error) {
-            console.error('📊 Failed to fetch Cardinals metrics:', error);
-            return this.getFallbackMetrics();
+            console.error('🔥 Digital Combine failed:', error);
+            throw error;
         }
     }
     
-    calculateReadinessScore() {
-        // Algorithm based on recent performance, player health, matchup advantages
-        const baseScore = 67.3;
-        const variance = (Math.random() - 0.5) * 4; // ±2 point variance
-        return Math.max(0, Math.min(100, baseScore + variance));
+    async collectAllData() {
+        console.log('📥 Collecting data from all sources...');
+        
+        const results = {
+            sources: [],
+            totalRecords: 0,
+            data: {}
+        };
+        
+        // MLB Data
+        if (this.config.sources.mlb.enabled) {
+            const mlbData = await this.collectMLBData();
+            results.data.mlb = mlbData;
+            results.sources.push('MLB');
+            results.totalRecords += mlbData.teams.length + mlbData.players.length;
+        }
+        
+        // NCAA Data
+        if (this.config.sources.ncaa.enabled) {
+            const ncaaData = await this.collectNCAAData();
+            results.data.ncaa = ncaaData;
+            results.sources.push('NCAA');
+            results.totalRecords += ncaaData.programs.length + ncaaData.players.length;
+        }
+        
+        // Perfect Game Data
+        if (this.config.sources.perfectGame.enabled) {
+            const pgData = await this.collectPerfectGameData();
+            results.data.perfectGame = pgData;
+            results.sources.push('Perfect Game');
+            results.totalRecords += pgData.prospects.length + pgData.tournaments.length;
+        }
+        
+        // International Data
+        if (this.config.sources.international.enabled) {
+            const intlData = await this.collectInternationalData();
+            results.data.international = intlData;
+            results.sources.push('International');
+            results.totalRecords += intlData.players.length;
+        }
+        
+        console.log(`📊 Collected ${results.totalRecords} records from ${results.sources.length} sources`);
+        return results;
     }
     
-    calculateLeverageIndex() {
-        // Situational leverage based on season context
-        const baseLeverage = 2.40;
-        const variance = (Math.random() - 0.5) * 0.4; // ±0.2 variance
-        return Math.max(0.5, Math.min(5.0, baseLeverage + variance));
-    }
-    
-    async updateRepository(content, cardinalsData) {
-        console.log('📂 Updating repository with new data...');
+    async collectMLBData() {
+        console.log('⚾ Collecting MLB data...');
         
         try {
-            const updates = [];
+            // Get current season data
+            const seasonResponse = await axios.get(`${this.config.sources.mlb.url}/seasons/current`);
+            const season = seasonResponse.data.seasons[0];
             
-            // Update Cardinals data file
-            updates.push({
-                path: 'data/cardinals-analytics.json',
-                content: JSON.stringify(cardinalsData, null, 2),
-                message: 'Update Cardinals analytics data'
-            });
+            // Get all teams
+            const teamsResponse = await axios.get(`${this.config.sources.mlb.url}/teams?sportId=1&season=${season.seasonId}`);
+            const teams = teamsResponse.data.teams;
             
-            // Update readiness data for main site
-            updates.push({
-                path: 'data/readiness.json',
-                content: JSON.stringify({
-                    readiness: cardinalsData.readinessScore,
-                    leverage: cardinalsData.leverageIndex,
+            // Get player data for key teams
+            const players = [];
+            const targetTeams = [138]; // Cardinals team ID, expand as needed
+            
+            for (const teamId of targetTeams) {
+                const rosterResponse = await axios.get(
+                    `${this.config.sources.mlb.url}/teams/${teamId}/roster/active`
+                );
+                players.push(...rosterResponse.data.roster);
+            }
+            
+            // Get recent transactions
+            const transactionsResponse = await axios.get(
+                `${this.config.sources.mlb.url}/transactions?startDate=${this.getDateDaysAgo(7)}&endDate=${this.getToday()}`
+            );
+            
+            return {
+                season: season.seasonId,
+                teams: teams.map(t => ({
+                    id: t.id,
+                    name: t.name,
+                    league: t.league.name,
+                    division: t.division.name,
+                    wins: t.record?.wins || 0,
+                    losses: t.record?.losses || 0
+                })),
+                players: players.map(p => ({
+                    id: p.person.id,
+                    name: p.person.fullName,
+                    position: p.position.abbreviation,
+                    jerseyNumber: p.jerseyNumber,
+                    status: p.status.description
+                })),
+                transactions: transactionsResponse.data.transactions || []
+            };
+            
+        } catch (error) {
+            console.error('MLB data collection failed:', error.message);
+            return { teams: [], players: [], transactions: [] };
+        }
+    }
+    
+    async collectNCAAData() {
+        console.log('🏈 Collecting NCAA data...');
+        
+        // Mock data for now - would integrate with real NCAA APIs
+        return {
+            programs: [
+                { id: 'texas', name: 'Texas Longhorns', sport: 'football', conference: 'Big 12' },
+                { id: 'alabama', name: 'Alabama Crimson Tide', sport: 'football', conference: 'SEC' },
+                { id: 'vanderbilt', name: 'Vanderbilt Commodores', sport: 'baseball', conference: 'SEC' }
+            ],
+            players: [
+                { id: 'ncaa_001', name: 'Top QB Prospect', position: 'QB', school: 'texas', year: 'Junior' },
+                { id: 'ncaa_002', name: 'Elite Shortstop', position: 'SS', school: 'vanderbilt', year: 'Sophomore' }
+            ],
+            draftProjections: [
+                { playerId: 'ncaa_001', sport: 'NFL', projectedRound: 1, projectedPick: 5 },
+                { playerId: 'ncaa_002', sport: 'MLB', projectedRound: 1, projectedPick: 12 }
+            ]
+        };
+    }
+    
+    async collectPerfectGameData() {
+        console.log('⚾ Collecting Perfect Game data...');
+        
+        const connector = this.config.sources.perfectGame.connector;
+        
+        try {
+            // Get top prospects for current and next year
+            const currentYear = new Date().getFullYear();
+            const prospects2025 = await connector.getProspectRankings(2025);
+            const prospects2026 = await connector.getProspectRankings(2026);
+            
+            // Get recent tournament data
+            const tournaments = [];
+            // Would fetch actual tournament IDs from API
+            const tournamentIds = ['pg_wwba_2025', 'pg_national_2025'];
+            
+            for (const tournamentId of tournamentIds) {
+                const tournamentData = await connector.getTournamentData(tournamentId);
+                tournaments.push(tournamentData);
+            }
+            
+            // Get player progressions for top prospects
+            const progressions = [];
+            const topProspectIds = prospects2025.slice(0, 10).map(p => p.playerId);
+            
+            for (const playerId of topProspectIds) {
+                const progression = await connector.getPlayerProgression(playerId);
+                progressions.push(progression);
+            }
+            
+            return {
+                prospects: [...prospects2025, ...prospects2026],
+                tournaments,
+                progressions,
+                metadata: {
                     lastUpdated: new Date().toISOString(),
-                    source: 'Digital Combine Autopilot'
-                }, null, 2),
-                message: 'Update readiness scores'
+                    totalProspects: prospects2025.length + prospects2026.length,
+                    eliteProspects: progressions.filter(p => p.blazeScore > 80).length
+                }
+            };
+            
+        } catch (error) {
+            console.error('Perfect Game data collection failed:', error.message);
+            return { prospects: [], tournaments: [], progressions: [] };
+        }
+    }
+    
+    async collectInternationalData() {
+        console.log('🌍 Collecting International data...');
+        
+        // Mock international prospect data
+        return {
+            players: [
+                {
+                    id: 'int_001',
+                    name: 'Yamamoto Taro',
+                    league: 'NPB',
+                    team: 'Yomiuri Giants',
+                    position: 'P',
+                    age: 23,
+                    mlbProjection: { timeline: '2026', comparablePlayer: 'Yu Darvish' }
+                },
+                {
+                    id: 'int_002',
+                    name: 'Kim Jung-ho',
+                    league: 'KBO',
+                    team: 'KIA Tigers',
+                    position: 'SS',
+                    age: 25,
+                    mlbProjection: { timeline: '2025', comparablePlayer: 'Ha-seong Kim' }
+                },
+                {
+                    id: 'int_003',
+                    name: 'Rodriguez Miguel',
+                    league: 'LIDOM',
+                    team: 'Tigres de Licey',
+                    position: 'OF',
+                    age: 19,
+                    mlbProjection: { timeline: '2027', comparablePlayer: 'Juan Soto' }
+                }
+            ],
+            scouting: {
+                hotRegions: ['Dominican Republic', 'Japan', 'South Korea'],
+                emergingMarkets: ['Taiwan', 'Netherlands', 'Australia']
+            }
+        };
+    }
+    
+    async processPipelines(collectedData) {
+        console.log('🔄 Processing player development pipelines...');
+        
+        const pipelines = {
+            youthToMlb: [],
+            collegeToMlb: [],
+            internationalToMlb: []
+        };
+        
+        // Youth to MLB pipeline (Perfect Game → Minor Leagues → MLB)
+        if (this.config.pipeline.youthToMlb && collectedData.data.perfectGame) {
+            const pgProspects = collectedData.data.perfectGame.prospects || [];
+            
+            pipelines.youthToMlb = pgProspects.map(prospect => ({
+                playerId: prospect.playerId,
+                name: prospect.name,
+                currentLevel: 'Youth/HS',
+                projectedMLBDebut: prospect.mlbProjection?.timeline,
+                developmentPath: this.calculateDevelopmentPath(prospect),
+                blazeScore: prospect.blazeIntelligence?.blazeScore || 50,
+                hiddenValue: prospect.blazeIntelligence?.hiddenValue || false
+            }));
+        }
+        
+        // College to MLB pipeline
+        if (this.config.pipeline.collegeToMlb && collectedData.data.ncaa) {
+            const ncaaPlayers = collectedData.data.ncaa.players || [];
+            const draftProjections = collectedData.data.ncaa.draftProjections || [];
+            
+            pipelines.collegeToMlb = ncaaPlayers.map(player => {
+                const projection = draftProjections.find(p => p.playerId === player.id);
+                return {
+                    playerId: player.id,
+                    name: player.name,
+                    school: player.school,
+                    currentLevel: 'NCAA',
+                    projectedDraftRound: projection?.projectedRound,
+                    developmentTime: this.estimateDevelopmentTime(player, projection)
+                };
             });
+        }
+        
+        // International to MLB pipeline
+        if (this.config.pipeline.internationalToMlb && collectedData.data.international) {
+            const intlPlayers = collectedData.data.international.players || [];
             
-            // Add generated content files
-            for (let i = 0; i < content.length; i++) {
-                const article = content[i];
-                const filename = `content/autopilot-${Date.now()}-${i}.md`;
-                
-                updates.push({
-                    path: filename,
-                    content: article.content,
-                    message: `Add autopilot content: ${article.title}`
-                });
-            }
+            pipelines.internationalToMlb = intlPlayers.map(player => ({
+                playerId: player.id,
+                name: player.name,
+                currentLeague: player.league,
+                currentTeam: player.team,
+                projectedMLBTimeline: player.mlbProjection?.timeline,
+                comparableMLBPlayer: player.mlbProjection?.comparablePlayer,
+                marketValue: this.calculateInternationalMarketValue(player)
+            }));
+        }
+        
+        console.log(`📊 Processed ${Object.values(pipelines).flat().length} pipeline connections`);
+        return { ...collectedData, pipelines };
+    }
+    
+    async calculateCognitiveMetrics(pipelineData) {
+        console.log('🧠 Calculating cognitive metrics...');
+        
+        const cognitiveData = { ...pipelineData };
+        
+        if (this.config.cognitiveMetrics.enabled) {
+            // Add cognitive scoring to pipeline players
+            const allPlayers = [
+                ...pipelineData.pipelines.youthToMlb,
+                ...pipelineData.pipelines.collegeToMlb,
+                ...pipelineData.pipelines.internationalToMlb
+            ];
             
-            // Create commit with all updates
-            const commitHash = await this.commitFiles(updates);
-            console.log(`📝 Repository updated with commit: ${commitHash}`);
+            cognitiveData.cognitiveScores = allPlayers.map(player => ({
+                playerId: player.playerId,
+                name: player.name,
+                metrics: {
+                    reactionTime: this.generateCognitiveScore('reaction_time'),
+                    decisionAccuracy: this.generateCognitiveScore('decision_accuracy'),
+                    pressureResponse: this.generateCognitiveScore('pressure_response'),
+                    clutchFactor: this.calculateClutchFactor(player),
+                    mentalFortress: this.calculateMentalFortress(player),
+                    flowState: this.calculateFlowState(player)
+                },
+                compositeCognitiveScore: this.calculateCompositeCognitive(player)
+            }));
+        }
+        
+        console.log(`🧠 Calculated cognitive metrics for ${cognitiveData.cognitiveScores?.length || 0} players`);
+        return cognitiveData;
+    }
+    
+    async detectInefficiencies(cognitiveData) {
+        console.log('🔍 Detecting market inefficiencies...');
+        
+        const inefficiencies = [];
+        
+        // Check Perfect Game prospects
+        if (cognitiveData.data.perfectGame?.prospects) {
+            const undervaluedProspects = cognitiveData.data.perfectGame.prospects
+                .filter(p => p.blazeIntelligence?.hiddenValue)
+                .map(p => ({
+                    type: 'undervalued_prospect',
+                    playerId: p.playerId,
+                    name: p.name,
+                    currentRank: p.ranking,
+                    projectedValue: p.mlbProjection?.draftValue,
+                    opportunity: `Ranked ${p.ranking} but projects as top-50 talent`,
+                    confidence: 0.75
+                }));
             
-            return commitHash;
+            inefficiencies.push(...undervaluedProspects);
+        }
+        
+        // Check international market
+        if (cognitiveData.pipelines.internationalToMlb) {
+            const intlOpportunities = cognitiveData.pipelines.internationalToMlb
+                .filter(p => p.marketValue && p.marketValue.inefficiency > 0.3)
+                .map(p => ({
+                    type: 'international_arbitrage',
+                    playerId: p.playerId,
+                    name: p.name,
+                    league: p.currentLeague,
+                    opportunity: `${(p.marketValue.inefficiency * 100).toFixed(0)}% undervalued vs MLB comps`,
+                    confidence: 0.65
+                }));
+            
+            inefficiencies.push(...intlOpportunities);
+        }
+        
+        // Check cognitive outliers
+        if (cognitiveData.cognitiveScores) {
+            const cognitiveGems = cognitiveData.cognitiveScores
+                .filter(p => p.compositeCognitiveScore > 85)
+                .map(p => ({
+                    type: 'cognitive_elite',
+                    playerId: p.playerId,
+                    name: p.name,
+                    opportunity: `Elite cognitive profile (${p.compositeCognitiveScore}/100)`,
+                    confidence: 0.80
+                }));
+            
+            inefficiencies.push(...cognitiveGems.slice(0, 5));
+        }
+        
+        console.log(`💎 Detected ${inefficiencies.length} market inefficiencies`);
+        return inefficiencies;
+    }
+    
+    async generateInsights(cognitiveData, inefficiencies) {
+        console.log('💡 Generating insights...');
+        
+        const insights = [];
+        
+        // Pipeline insights
+        if (cognitiveData.pipelines.youthToMlb.length > 0) {
+            const eliteYouth = cognitiveData.pipelines.youthToMlb
+                .filter(p => p.blazeScore > 75).length;
+            
+            insights.push({
+                type: 'pipeline',
+                category: 'youth',
+                message: `${eliteYouth} elite youth prospects identified with 75+ Blaze Score`,
+                importance: 'high',
+                actionable: true
+            });
+        }
+        
+        // Market inefficiency insights
+        if (inefficiencies.length > 0) {
+            const topInefficiency = inefficiencies[0];
+            insights.push({
+                type: 'market',
+                category: 'opportunity',
+                message: `Top opportunity: ${topInefficiency.name} - ${topInefficiency.opportunity}`,
+                importance: 'critical',
+                actionable: true
+            });
+        }
+        
+        // Cognitive insights
+        const cognitiveElite = cognitiveData.cognitiveScores?.filter(
+            p => p.compositeCognitiveScore > 85
+        ).length || 0;
+        
+        if (cognitiveElite > 0) {
+            insights.push({
+                type: 'cognitive',
+                category: 'talent',
+                message: `${cognitiveElite} players show elite cognitive profiles (85+ composite)`,
+                importance: 'high',
+                actionable: false
+            });
+        }
+        
+        // International insights
+        const intlOpportunities = inefficiencies.filter(i => i.type === 'international_arbitrage');
+        if (intlOpportunities.length > 0) {
+            insights.push({
+                type: 'international',
+                category: 'scouting',
+                message: `${intlOpportunities.length} undervalued international prospects identified`,
+                importance: 'medium',
+                actionable: true
+            });
+        }
+        
+        console.log(`💡 Generated ${insights.length} insights`);
+        return insights;
+    }
+    
+    async updateDataFiles(cognitiveData, insights, inefficiencies) {
+        console.log('📝 Updating data files...');
+        
+        const timestamp = new Date().toISOString();
+        
+        // Main combine data file
+        const combineData = {
+            timestamp,
+            summary: {
+                totalRecords: cognitiveData.totalRecords,
+                sources: cognitiveData.sources,
+                pipelineConnections: Object.values(cognitiveData.pipelines).flat().length,
+                inefficienciesDetected: inefficiencies.length,
+                insightsGenerated: insights.length
+            },
+            insights: insights.slice(0, 5),
+            topOpportunities: inefficiencies.slice(0, 3),
+            lastUpdated: timestamp
+        };
+        
+        // Pipeline data file
+        const pipelineData = {
+            timestamp,
+            youthToMlb: cognitiveData.pipelines.youthToMlb.slice(0, 20),
+            collegeToMlb: cognitiveData.pipelines.collegeToMlb.slice(0, 20),
+            internationalToMlb: cognitiveData.pipelines.internationalToMlb.slice(0, 20)
+        };
+        
+        // Cognitive metrics file
+        const cognitiveMetrics = {
+            timestamp,
+            elitePerformers: (cognitiveData.cognitiveScores || [])
+                .filter(p => p.compositeCognitiveScore > 80)
+                .slice(0, 10),
+            averageScores: this.calculateAverageCognitiveScores(cognitiveData.cognitiveScores)
+        };
+        
+        try {
+            // Ensure directories exist
+            await this.ensureDirectory(this.config.dataDir);
+            
+            // Write data files
+            await this.writeJsonFile(
+                path.join(this.config.dataDir, 'combine_summary.json'),
+                combineData
+            );
+            
+            await this.writeJsonFile(
+                path.join(this.config.dataDir, 'pipeline_data.json'),
+                pipelineData
+            );
+            
+            await this.writeJsonFile(
+                path.join(this.config.dataDir, 'cognitive_metrics.json'),
+                cognitiveMetrics
+            );
+            
+            // Write timestamped backup
+            const backupDir = path.join(this.config.dataDir, 'backups');
+            await this.ensureDirectory(backupDir);
+            
+            const backupFile = `combine_${timestamp.replace(/[:.]/g, '-')}.json`;
+            await this.writeJsonFile(
+                path.join(backupDir, backupFile),
+                { combineData, pipelineData, cognitiveMetrics, inefficiencies }
+            );
+            
+            console.log('📁 Data files updated successfully');
             
         } catch (error) {
-            console.error('📂 Failed to update repository:', error);
+            console.error('📁 Failed to update data files:', error);
             throw error;
         }
     }
     
-    async commitFiles(updates) {
-        // This would use GitHub API to commit files
-        // Mock implementation for now
-        
-        const mockCommitHash = `auto_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
-        
-        console.log(`🔄 Committing ${updates.length} file updates...`);
-        
-        // In real implementation:
-        // 1. Get current tree SHA
-        // 2. Create new tree with updates
-        // 3. Create commit
-        // 4. Update reference
-        
-        return mockCommitHash;
-    }
-    
-    async triggerDeployment() {
-        console.log('🚀 Triggering Cloudflare Pages deployment...');
+    async deployToProduction() {
+        console.log('🚀 Deploying to production...');
         
         try {
-            // This would call Cloudflare Pages API to trigger deployment
-            // For now, return mock deployment URL
+            // Git add changes
+            await this.execCommand('git', ['add', this.config.dataDir]);
             
-            const deploymentId = Date.now().toString(36);
-            const deploymentUrl = `https://${deploymentId}.blaze-intelligence-lsl.pages.dev`;
+            // Git commit
+            const commitMessage = `${this.config.autoDeployment.commitMessage} [${new Date().toISOString()}]`;
+            await this.execCommand('git', ['commit', '-m', commitMessage]);
             
-            console.log(`🌐 Deployment triggered: ${deploymentUrl}`);
-            return deploymentUrl;
+            // Git push
+            await this.execCommand('git', ['push', 'origin', this.config.autoDeployment.branch]);
             
-        } catch (error) {
-            console.error('🚀 Deployment trigger failed:', error);
-            throw error;
-        }
-    }
-    
-    async verifyDeployment(deploymentUrl) {
-        console.log('🔍 Verifying deployment health...');
-        
-        try {
-            // Wait a bit for deployment to complete
-            await this.sleep(30000); // 30 seconds
-            
-            const response = await fetch(deploymentUrl + '/api/health');
-            const status = response.ok ? 'healthy' : 'unhealthy';
-            
-            console.log(`✅ Deployment health check: ${status}`);
-            return status;
+            console.log('✅ Successfully deployed to production');
             
         } catch (error) {
-            console.error('🔍 Health check failed:', error);
-            return 'unhealthy';
+            console.error('🚀 Deployment failed:', error.message);
+            // Don't throw - deployment failure shouldn't stop the autopilot
         }
     }
     
-    async recordCycleSuccess(data) {
-        console.log('📝 Recording successful cycle...');
+    // Helper methods
+    
+    calculateDevelopmentPath(prospect) {
+        const age = prospect.age || 17;
+        const blazeScore = prospect.blazeIntelligence?.blazeScore || 50;
         
-        // Store in local tracking
-        const record = {
-            success: true,
-            timestamp: Date.now(),
-            ...data
-        };
-        
-        // Send to Notion or other tracking system
-        await this.sendToNotion(record);
-        
-        // Optionally send success notification
-        if (data.cycleNumber % 10 === 0) { // Every 10th cycle
-            await this.sendSlackNotification(`🎉 Digital Combine Autopilot completed ${data.cycleNumber} cycles successfully!`);
+        if (blazeScore > 80) {
+            return 'Fast track: HS → Low-A → High-A → AA → MLB (3-4 years)';
+        } else if (blazeScore > 60) {
+            return 'Standard: HS → Rookie → Low-A → High-A → AA → AAA → MLB (5-6 years)';
+        } else {
+            return 'Development: HS → Extended ST → Rookie → Low-A → High-A → AA → AAA → MLB (6-8 years)';
         }
     }
     
-    async recordCycleFailure(error) {
-        console.log('📝 Recording failed cycle...');
+    estimateDevelopmentTime(player, projection) {
+        if (!projection) return '5-7 years';
         
-        const record = {
-            success: false,
-            timestamp: Date.now(),
-            error: error.message,
-            stack: error.stack
-        };
-        
-        await this.sendToNotion(record);
-        await this.sendSlackNotification(`🚨 Digital Combine Autopilot cycle failed: ${error.message}`);
+        const round = projection.projectedRound;
+        if (round === 1) return '2-3 years';
+        if (round <= 3) return '3-4 years';
+        if (round <= 10) return '4-6 years';
+        return '5-7 years';
     }
     
-    async sendToNotion(data) {
-        if (!this.config.notionToken) return;
+    calculateInternationalMarketValue(player) {
+        const baseValue = player.age < 23 ? 5000000 : 2000000;
+        const leagueMultiplier = {
+            'NPB': 1.5,
+            'KBO': 1.2,
+            'LIDOM': 1.8,
+            'LMP': 1.3
+        }[player.league] || 1.0;
         
-        try {
-            // Implementation would create Notion page entry
-            console.log('📋 Logged to Notion:', data.success ? 'Success' : 'Failure');
-        } catch (error) {
-            console.error('📋 Notion logging failed:', error);
-        }
-    }
-    
-    async sendSlackNotification(message) {
-        if (!this.config.zapierToken) return;
+        const estimatedValue = baseValue * leagueMultiplier;
+        const mlbComparableValue = baseValue * 2.5; // MLB comparable player value
         
-        try {
-            // Implementation would send via Zapier webhook to Slack
-            console.log('💬 Slack notification:', message);
-        } catch (error) {
-            console.error('💬 Slack notification failed:', error);
-        }
-    }
-    
-    // Utility methods
-    selectRandomTopics(count) {
-        const shuffled = [...this.config.topics].sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, count);
-    }
-    
-    generateGenericContent(topic) {
         return {
-            title: `${topic} - Automated Analysis`,
-            content: `# ${topic}\\n\\n*Automated content generation in progress...*\\n\\nThis content is being generated by the Digital Combine Autopilot system.`,
-            metadata: {
-                topic,
-                generatedAt: Date.now(),
-                type: 'generic'
-            }
+            estimated: estimatedValue,
+            mlbComparable: mlbComparableValue,
+            inefficiency: (mlbComparableValue - estimatedValue) / mlbComparableValue
         };
     }
     
-    getFallbackMetrics() {
+    generateCognitiveScore(metric) {
+        // Simulate cognitive scoring - would use real data in production
+        const base = 50 + Math.random() * 30;
+        const variance = (Math.random() - 0.5) * 20;
+        return Math.max(0, Math.min(100, base + variance));
+    }
+    
+    calculateClutchFactor(player) {
+        // Simulate clutch performance scoring
+        return 50 + Math.random() * 50;
+    }
+    
+    calculateMentalFortress(player) {
+        // Simulate mental toughness scoring
+        return 40 + Math.random() * 60;
+    }
+    
+    calculateFlowState(player) {
+        // Simulate flow state propensity
+        return 45 + Math.random() * 55;
+    }
+    
+    calculateCompositeCognitive(player) {
+        // Would use weighted average of all cognitive metrics
+        return 50 + Math.random() * 50;
+    }
+    
+    calculateAverageCognitiveScores(scores) {
+        if (!scores || scores.length === 0) return null;
+        
+        const totals = scores.reduce((acc, score) => ({
+            reactionTime: acc.reactionTime + score.metrics.reactionTime,
+            decisionAccuracy: acc.decisionAccuracy + score.metrics.decisionAccuracy,
+            pressureResponse: acc.pressureResponse + score.metrics.pressureResponse,
+            clutchFactor: acc.clutchFactor + score.metrics.clutchFactor,
+            mentalFortress: acc.mentalFortress + score.metrics.mentalFortress,
+            flowState: acc.flowState + score.metrics.flowState
+        }), {
+            reactionTime: 0,
+            decisionAccuracy: 0,
+            pressureResponse: 0,
+            clutchFactor: 0,
+            mentalFortress: 0,
+            flowState: 0
+        });
+        
+        const count = scores.length;
         return {
-            timestamp: Date.now(),
-            team: 'St. Louis Cardinals',
-            readinessScore: 65.0,
-            leverageIndex: 2.2,
-            status: 'fallback_data'
+            reactionTime: (totals.reactionTime / count).toFixed(1),
+            decisionAccuracy: (totals.decisionAccuracy / count).toFixed(1),
+            pressureResponse: (totals.pressureResponse / count).toFixed(1),
+            clutchFactor: (totals.clutchFactor / count).toFixed(1),
+            mentalFortress: (totals.mentalFortress / count).toFixed(1),
+            flowState: (totals.flowState / count).toFixed(1)
         };
     }
     
-    sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+    getDateDaysAgo(days) {
+        const date = new Date();
+        date.setDate(date.getDate() - days);
+        return date.toISOString().split('T')[0];
     }
     
-    async notifyError(error) {
-        await this.sendSlackNotification(`🚨 Critical error in Digital Combine Autopilot: ${error.message}`);
+    getToday() {
+        return new Date().toISOString().split('T')[0];
+    }
+    
+    async ensureDirectory(dirPath) {
+        try {
+            await fs.mkdir(dirPath, { recursive: true });
+        } catch (error) {
+            // Directory might already exist
+        }
+    }
+    
+    async writeJsonFile(filePath, data) {
+        await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+    }
+    
+    async execCommand(command, args) {
+        return new Promise((resolve, reject) => {
+            const proc = spawn(command, args);
+            let output = '';
+            let error = '';
+            
+            proc.stdout.on('data', (data) => output += data);
+            proc.stderr.on('data', (data) => error += data);
+            
+            proc.on('close', (code) => {
+                if (code === 0) {
+                    resolve(output);
+                } else {
+                    reject(new Error(`Command failed: ${error}`));
+                }
+            });
+        });
     }
     
     getStatus() {
         return {
             isRunning: this.isRunning,
             lastRun: this.lastRun,
-            runCount: this.runCount,
-            nextRun: this.isRunning ? new Date(Date.now() + this.config.runInterval).toISOString() : null
+            nextRun: this.isRunning ? 
+                new Date(Date.now() + this.config.runInterval).toISOString() : null,
+            queueSize: this.dataQueue.length,
+            recentErrors: this.errors.slice(-5),
+            config: {
+                runInterval: this.config.runInterval,
+                sourcesEnabled: Object.keys(this.config.sources)
+                    .filter(s => this.config.sources[s].enabled),
+                autoDeployment: this.config.autoDeployment.enabled
+            }
         };
     }
 }
@@ -464,4 +844,21 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = DigitalCombineAutopilot;
 } else if (typeof window !== 'undefined') {
     window.DigitalCombineAutopilot = DigitalCombineAutopilot;
+}
+
+// If run directly, start the autopilot
+if (require.main === module) {
+    const autopilot = new DigitalCombineAutopilot();
+    
+    // Handle graceful shutdown
+    process.on('SIGINT', () => {
+        console.log('\n🛑 Shutting down Digital Combine Autopilot...');
+        autopilot.stop();
+        process.exit(0);
+    });
+    
+    // Start the autopilot
+    autopilot.start();
+    console.log('🏋️ Digital Combine Autopilot is running...');
+    console.log('Press Ctrl+C to stop');
 }

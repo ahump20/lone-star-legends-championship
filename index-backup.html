@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Blaze Intelligence OS — Championship Sports Analytics</title>
+    <meta name="description" content="Advanced sports analytics platform focusing on MLB, NCAA football & baseball, NFL, NBA, and elite youth/international baseball development">
+    <meta name="keywords" content="sports analytics, MLB analytics, NCAA football, Perfect Game baseball, Austin Humphrey">
+    
+    <!-- External Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary: #BF5700;
+            --primary-light: #FF7A00;
+            --primary-dark: #8B3D00;
+            --accent: #FFB81C;
+            --dark: #0A0A0F;
+            --darker: #050507;
+            --light: #F8F9FA;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glow: rgba(191, 87, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Three.js Background */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 30px var(--glow);
+        }
+
+        .header p {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px var(--glow);
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-box, .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--glass-border);
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            color: var(--light);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus, .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .search-box {
+            min-width: 300px;
+        }
+
+        .filter-select {
+            min-width: 200px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: var(--primary);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'Orbitron', monospace;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            height: 400px;
+        }
+
+        .chart-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        /* Teams Grid */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .team-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .team-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            border-color: var(--primary);
+        }
+
+        .team-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .team-info {
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .team-info > div {
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+
+        .team-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 3rem;
+        }
+
+        .founder-attribution {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box, .filter-select {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                min-width: auto;
+            }
+
+            .teams-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+        }
+
+        .spinner {
+            color: var(--primary);
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    
+    <header class="header">
+        <h1>🔥 Blaze Intelligence OS</h1>
+        <p>Championship Sports Analytics — MLB • NCAA • NFL • NBA • Elite Youth Baseball</p>
+    </header>
+
+    <div id="dashboard-root"></div>
+
+    <footer class="footer">
+        <div class="founder-attribution">
+            <strong>Founded & Developed by Austin Humphrey</strong><br>
+            Strategic Sports Intelligence & Analytics Consulting
+        </div>
+        <div class="contact-info">
+            📧 ahump20@outlook.com • 📱 (210) 273-5538<br>
+            🏠 8319 Monument Oak, Boerne, TX 78015
+        </div>
+    </footer>
+
+    <script>
+        // Sports Data - Focused on MLB, NFL, NBA, NCAA Football & Baseball, High School Football, Perfect Game Youth, and International Baseball
+        const SPORTS_DATA = [
+    // MLB Teams (all 30 teams)
+    {"Team":"Baltimore Orioles","League/Sport":"MLB","Division/Conference":"AL East","Founded":1901,"Titles":3,"Notes":"Won World Series in 1966, 1970, 1983"},
+            {"Team":"Boston Red Sox","League/Sport":"MLB","Division/Conference":"AL East","Founded":1901,"Titles":9,"Notes":"Won World Series in 1903, 1912, 1915, 1916, 1918, 2004, 2007, 2013, 2018"},
+            {"Team":"New York Yankees","League/Sport":"MLB","Division/Conference":"AL East","Founded":1901,"Titles":27,"Notes":"Most successful MLB franchise with 27 World Series championships"},
+            {"Team":"Tampa Bay Rays","League/Sport":"MLB","Division/Conference":"AL East","Founded":1998,"Titles":0,"Notes":"Never won a World Series"},
+            {"Team":"Toronto Blue Jays","League/Sport":"MLB","Division/Conference":"AL East","Founded":1977,"Titles":2,"Notes":"Won World Series in 1992, 1993"},
+            {"Team":"Chicago White Sox","League/Sport":"MLB","Division/Conference":"AL Central","Founded":1901,"Titles":3,"Notes":"Won World Series in 1906, 1917, 2005"},
+            {"Team":"Cleveland Guardians","League/Sport":"MLB","Division/Conference":"AL Central","Founded":1901,"Titles":2,"Notes":"Won World Series in 1920, 1948; known as Indians until 2021"},
+            {"Team":"Detroit Tigers","League/Sport":"MLB","Division/Conference":"AL Central","Founded":1901,"Titles":4,"Notes":"Won World Series in 1935, 1945, 1968, 1984"},
+            {"Team":"Kansas City Royals","League/Sport":"MLB","Division/Conference":"AL Central","Founded":1969,"Titles":2,"Notes":"Won World Series in 1985, 2015"},
+            {"Team":"Minnesota Twins","League/Sport":"MLB","Division/Conference":"AL Central","Founded":1901,"Titles":3,"Notes":"Won World Series in 1924 (as Senators), 1987, 1991"},
+            {"Team":"Houston Astros","League/Sport":"MLB","Division/Conference":"AL West","Founded":1962,"Titles":2,"Notes":"Won World Series in 2017, 2022; moved from NL to AL in 2013"},
+            {"Team":"Los Angeles Angels","League/Sport":"MLB","Division/Conference":"AL West","Founded":1961,"Titles":1,"Notes":"Won World Series in 2002"},
+            {"Team":"Oakland Athletics","League/Sport":"MLB","Division/Conference":"AL West","Founded":1901,"Titles":9,"Notes":"Won World Series in 1910, 1911, 1913 (as A's), 1929, 1930 (as A's), 1972, 1973, 1974, 1989"},
+            {"Team":"Seattle Mariners","League/Sport":"MLB","Division/Conference":"AL West","Founded":1977,"Titles":0,"Notes":"Never won a World Series"},
+            {"Team":"Texas Rangers","League/Sport":"MLB","Division/Conference":"AL West","Founded":1961,"Titles":1,"Notes":"Won World Series in 2023; moved from Washington in 1972"},
+            {"Team":"Arizona Diamondbacks","League/Sport":"MLB","Division/Conference":"NL West","Founded":1998,"Titles":1,"Notes":"Won World Series in 2001"},
+            {"Team":"Colorado Rockies","League/Sport":"MLB","Division/Conference":"NL West","Founded":1993,"Titles":0,"Notes":"Never won a World Series"},
+            {"Team":"Los Angeles Dodgers","League/Sport":"MLB","Division/Conference":"NL West","Founded":1883,"Titles":7,"Notes":"Won World Series in 1955, 1959, 1963, 1965, 1981, 1988, 2020"},
+            {"Team":"San Diego Padres","League/Sport":"MLB","Division/Conference":"NL West","Founded":1969,"Titles":0,"Notes":"Never won a World Series"},
+            {"Team":"San Francisco Giants","League/Sport":"MLB","Division/Conference":"NL West","Founded":1883,"Titles":8,"Notes":"Won World Series in 1905, 1921, 1922, 1933, 1954 (as NY Giants), 2010, 2012, 2014"},
+            {"Team":"Atlanta Braves","League/Sport":"MLB","Division/Conference":"NL East","Founded":1871,"Titles":4,"Notes":"Won World Series in 1914 (Boston), 1957 (Milwaukee), 1995, 2021"},
+            {"Team":"Miami Marlins","League/Sport":"MLB","Division/Conference":"NL East","Founded":1993,"Titles":2,"Notes":"Won World Series in 1997, 2003"},
+            {"Team":"New York Mets","League/Sport":"MLB","Division/Conference":"NL East","Founded":1962,"Titles":2,"Notes":"Won World Series in 1969, 1986"},
+            {"Team":"Philadelphia Phillies","League/Sport":"MLB","Division/Conference":"NL East","Founded":1883,"Titles":2,"Notes":"Won World Series in 1980, 2008"},
+            {"Team":"Washington Nationals","League/Sport":"MLB","Division/Conference":"NL East","Founded":1969,"Titles":1,"Notes":"Won World Series in 2019; moved from Montreal in 2005"},
+            {"Team":"Chicago Cubs","League/Sport":"MLB","Division/Conference":"NL Central","Founded":1876,"Titles":3,"Notes":"Won World Series in 1907, 1908, 2016"},
+            {"Team":"Cincinnati Reds","League/Sport":"MLB","Division/Conference":"NL Central","Founded":1881,"Titles":5,"Notes":"Won World Series in 1919, 1940, 1975, 1976, 1990"},
+            {"Team":"Milwaukee Brewers","League/Sport":"MLB","Division/Conference":"NL Central","Founded":1969,"Titles":0,"Notes":"Never won a World Series; moved from AL to NL in 1998"},
+            {"Team":"Pittsburgh Pirates","League/Sport":"MLB","Division/Conference":"NL Central","Founded":1881,"Titles":5,"Notes":"Won World Series in 1909, 1925, 1960, 1971, 1979"},
+            {"Team":"St. Louis Cardinals","League/Sport":"MLB","Division/Conference":"NL Central","Founded":1882,"Titles":11,"Notes":"Second-most World Series championships; won in 1926, 1931, 1934, 1942, 1944, 1946, 1964, 1967, 1982, 2006, 2011"},
+            
+            // NFL Teams
+            {"Team":"Arizona Cardinals","League/Sport":"NFL","Division/Conference":"NFC West","Founded":1898,"Titles":2,"Notes":"Won NFL Championships in 1925, 1947; oldest continuously run professional football franchise"},
+            {"Team":"Atlanta Falcons","League/Sport":"NFL","Division/Conference":"NFC South","Founded":1966,"Titles":0,"Notes":"Never won a Super Bowl"},
+            {"Team":"Baltimore Ravens","League/Sport":"NFL","Division/Conference":"AFC North","Founded":1996,"Titles":2,"Notes":"Won Super Bowls in 2000, 2012"},
+            {"Team":"Buffalo Bills","League/Sport":"NFL","Division/Conference":"AFC East","Founded":1960,"Titles":2,"Notes":"Won AFL Championships in 1964, 1965; never won a Super Bowl"},
+            {"Team":"Carolina Panthers","League/Sport":"NFL","Division/Conference":"NFC South","Founded":1995,"Titles":0,"Notes":"Never won a Super Bowl"},
+            {"Team":"Chicago Bears","League/Sport":"NFL","Division/Conference":"NFC North","Founded":1920,"Titles":9,"Notes":"Won NFL Championships in 1921, 1932, 1933, 1940, 1941, 1946, 1963; Super Bowl XX in 1985"},
+            {"Team":"Cincinnati Bengals","League/Sport":"NFL","Division/Conference":"AFC North","Founded":1968,"Titles":0,"Notes":"Never won a Super Bowl"},
+            {"Team":"Cleveland Browns","League/Sport":"NFL","Division/Conference":"AFC North","Founded":1946,"Titles":4,"Notes":"Won NFL Championships in 1950, 1954, 1955, 1964; never won a Super Bowl"},
+            {"Team":"Dallas Cowboys","League/Sport":"NFL","Division/Conference":"NFC East","Founded":1960,"Titles":5,"Notes":"Won Super Bowls VI, XII, XXVII, XXVIII, XXX"},
+            {"Team":"Denver Broncos","League/Sport":"NFL","Division/Conference":"AFC West","Founded":1960,"Titles":3,"Notes":"Won Super Bowls XXXII, XXXIII, 50"},
+            {"Team":"Detroit Lions","League/Sport":"NFL","Division/Conference":"NFC North","Founded":1930,"Titles":4,"Notes":"Won NFL Championships in 1935, 1952, 1953, 1957; never won a Super Bowl"},
+            {"Team":"Green Bay Packers","League/Sport":"NFL","Division/Conference":"NFC North","Founded":1919,"Titles":13,"Notes":"Won NFL Championships in 1929, 1930, 1931, 1936, 1939, 1944, 1961, 1962, 1965; Super Bowls I, II, XXXI, XLV"},
+            {"Team":"Houston Texans","League/Sport":"NFL","Division/Conference":"AFC South","Founded":2002,"Titles":0,"Notes":"Never won a Super Bowl; newest NFL franchise"},
+            {"Team":"Indianapolis Colts","League/Sport":"NFL","Division/Conference":"AFC South","Founded":1953,"Titles":4,"Notes":"Won NFL Championships in 1958, 1959 (as Baltimore); Super Bowls V (as Baltimore), XLI"},
+            {"Team":"Jacksonville Jaguars","League/Sport":"NFL","Division/Conference":"AFC South","Founded":1995,"Titles":0,"Notes":"Never won a Super Bowl"},
+            {"Team":"Kansas City Chiefs","League/Sport":"NFL","Division/Conference":"AFC West","Founded":1960,"Titles":4,"Notes":"Won AFL Championship in 1962, 1966, 1969; Super Bowls IV, LIV, LVII, LVIII"},
+            {"Team":"Las Vegas Raiders","League/Sport":"NFL","Division/Conference":"AFC West","Founded":1960,"Titles":3,"Notes":"Won Super Bowls XI, XV, XVIII; moved to Las Vegas in 2020"},
+            {"Team":"Los Angeles Chargers","League/Sport":"NFL","Division/Conference":"AFC West","Founded":1960,"Titles":1,"Notes":"Won AFL Championship in 1963; never won a Super Bowl"},
+            {"Team":"Los Angeles Rams","League/Sport":"NFL","Division/Conference":"NFC West","Founded":1936,"Titles":3,"Notes":"Won NFL Championship in 1945, 1951; Super Bowl LVI in 2021"},
+            {"Team":"Miami Dolphins","League/Sport":"NFL","Division/Conference":"AFC East","Founded":1966,"Titles":2,"Notes":"Won Super Bowls VII, VIII; perfect season in 1972"},
+            {"Team":"Minnesota Vikings","League/Sport":"NFL","Division/Conference":"NFC North","Founded":1961,"Titles":1,"Notes":"Won NFL Championship in 1969; never won a Super Bowl"},
+            {"Team":"New England Patriots","League/Sport":"NFL","Division/Conference":"AFC East","Founded":1960,"Titles":6,"Notes":"Won Super Bowls XXXVI, XXXVIII, XXXIX, XLIX, LI, LIII"},
+            {"Team":"New Orleans Saints","League/Sport":"NFL","Division/Conference":"NFC South","Founded":1967,"Titles":1,"Notes":"Won Super Bowl XLIV"},
+            {"Team":"New York Giants","League/Sport":"NFL","Division/Conference":"NFC East","Founded":1925,"Titles":8,"Notes":"Won NFL Championships in 1927, 1934, 1938, 1956; Super Bowls XXI, XXV, XLII, XLVI"},
+            {"Team":"New York Jets","League/Sport":"NFL","Division/Conference":"AFC East","Founded":1960,"Titles":1,"Notes":"Won Super Bowl III"},
+            {"Team":"Philadelphia Eagles","League/Sport":"NFL","Division/Conference":"NFC East","Founded":1933,"Titles":4,"Notes":"Won NFL Championships in 1948, 1949, 1960; Super Bowl LII"},
+            {"Team":"Pittsburgh Steelers","League/Sport":"NFL","Division/Conference":"AFC North","Founded":1933,"Titles":6,"Notes":"Won Super Bowls IX, X, XIII, XIV, XL, XLIII"},
+            {"Team":"San Francisco 49ers","League/Sport":"NFL","Division/Conference":"NFC West","Founded":1946,"Titles":5,"Notes":"Won Super Bowls XVI, XIX, XXIII, XXIV, XXIX"},
+            {"Team":"Seattle Seahawks","League/Sport":"NFL","Division/Conference":"NFC West","Founded":1976,"Titles":1,"Notes":"Won Super Bowl XLVIII"},
+            {"Team":"Tampa Bay Buccaneers","League/Sport":"NFL","Division/Conference":"NFC South","Founded":1976,"Titles":2,"Notes":"Won Super Bowls XXXVII, LV"},
+            {"Team":"Tennessee Titans","League/Sport":"NFL","Division/Conference":"AFC South","Founded":1960,"Titles":2,"Notes":"Won AFL Championships in 1960, 1961 (as Oilers); never won a Super Bowl"},
+            {"Team":"Washington Commanders","League/Sport":"NFL","Division/Conference":"NFC East","Founded":1932,"Titles":5,"Notes":"Won NFL Championships in 1937, 1942; Super Bowls XVII, XXII, XXVI"},
+            
+            // NBA Teams
+            {"Team":"Boston Celtics","League/Sport":"NBA","Division/Conference":"Atlantic","Founded":1946,"Titles":18,"Notes":"Most NBA championships; won in 1957, 1959-1966, 1968, 1969, 1974, 1976, 1981, 1984, 1986, 2008, 2024"},
+            {"Team":"Brooklyn Nets","League/Sport":"NBA","Division/Conference":"Atlantic","Founded":1967,"Titles":2,"Notes":"Won ABA championships in 1974, 1976; never won NBA championship"},
+            {"Team":"New York Knicks","League/Sport":"NBA","Division/Conference":"Atlantic","Founded":1946,"Titles":2,"Notes":"Won NBA championships in 1970, 1973"},
+            {"Team":"Philadelphia 76ers","League/Sport":"NBA","Division/Conference":"Atlantic","Founded":1949,"Titles":3,"Notes":"Won NBA championships in 1955 (as Syracuse Nationals), 1967, 1983"},
+            {"Team":"Toronto Raptors","League/Sport":"NBA","Division/Conference":"Atlantic","Founded":1995,"Titles":1,"Notes":"Won NBA championship in 2019"},
+            {"Team":"Chicago Bulls","League/Sport":"NBA","Division/Conference":"Central","Founded":1966,"Titles":6,"Notes":"Won NBA championships in 1991, 1992, 1993, 1996, 1997, 1998"},
+            {"Team":"Cleveland Cavaliers","League/Sport":"NBA","Division/Conference":"Central","Founded":1970,"Titles":1,"Notes":"Won NBA championship in 2016"},
+            {"Team":"Detroit Pistons","League/Sport":"NBA","Division/Conference":"Central","Founded":1941,"Titles":3,"Notes":"Won NBA championships in 1989, 1990, 2004"},
+            {"Team":"Indiana Pacers","League/Sport":"NBA","Division/Conference":"Central","Founded":1967,"Titles":3,"Notes":"Won ABA championships in 1970, 1972, 1973; never won NBA championship"},
+            {"Team":"Milwaukee Bucks","League/Sport":"NBA","Division/Conference":"Central","Founded":1968,"Titles":2,"Notes":"Won NBA championships in 1971, 2021"},
+            {"Team":"Atlanta Hawks","League/Sport":"NBA","Division/Conference":"Southeast","Founded":1946,"Titles":1,"Notes":"Won NBA championship in 1958 (as St. Louis Hawks)"},
+            {"Team":"Charlotte Hornets","League/Sport":"NBA","Division/Conference":"Southeast","Founded":1988,"Titles":0,"Notes":"Never won NBA championship"},
+            {"Team":"Miami Heat","League/Sport":"NBA","Division/Conference":"Southeast","Founded":1988,"Titles":3,"Notes":"Won NBA championships in 2006, 2012, 2013"},
+            {"Team":"Orlando Magic","League/Sport":"NBA","Division/Conference":"Southeast","Founded":1989,"Titles":0,"Notes":"Never won NBA championship"},
+            {"Team":"Washington Wizards","League/Sport":"NBA","Division/Conference":"Southeast","Founded":1961,"Titles":1,"Notes":"Won NBA championship in 1978 (as Washington Bullets)"},
+            {"Team":"Denver Nuggets","League/Sport":"NBA","Division/Conference":"Northwest","Founded":1967,"Titles":1,"Notes":"Won NBA championship in 2023"},
+            {"Team":"Minnesota Timberwolves","League/Sport":"NBA","Division/Conference":"Northwest","Founded":1989,"Titles":0,"Notes":"Never won NBA championship"},
+            {"Team":"Oklahoma City Thunder","League/Sport":"NBA","Division/Conference":"Northwest","Founded":1967,"Titles":1,"Notes":"Won NBA championship in 1979 (as Seattle SuperSonics)"},
+            {"Team":"Portland Trail Blazers","League/Sport":"NBA","Division/Conference":"Northwest","Founded":1970,"Titles":1,"Notes":"Won NBA championship in 1977"},
+            {"Team":"Utah Jazz","League/Sport":"NBA","Division/Conference":"Northwest","Founded":1974,"Titles":0,"Notes":"Never won NBA championship"},
+            {"Team":"Golden State Warriors","League/Sport":"NBA","Division/Conference":"Pacific","Founded":1946,"Titles":7,"Notes":"Won NBA championships in 1947, 1956, 1975, 2015, 2017, 2018, 2022"},
+            {"Team":"Los Angeles Clippers","League/Sport":"NBA","Division/Conference":"Pacific","Founded":1970,"Titles":0,"Notes":"Never won NBA championship"},
+            {"Team":"Los Angeles Lakers","League/Sport":"NBA","Division/Conference":"Pacific","Founded":1947,"Titles":17,"Notes":"Won NBA championships in 1949, 1950, 1952, 1953, 1954 (Minneapolis), 1972, 1980, 1982, 1985, 1987, 1988, 2000, 2001, 2002, 2009, 2010, 2020"},
+            {"Team":"Phoenix Suns","League/Sport":"NBA","Division/Conference":"Pacific","Founded":1968,"Titles":0,"Notes":"Never won NBA championship"},
+            {"Team":"Sacramento Kings","League/Sport":"NBA","Division/Conference":"Pacific","Founded":1945,"Titles":1,"Notes":"Won NBA championship in 1951 (as Rochester Royals)"},
+            {"Team":"Dallas Mavericks","League/Sport":"NBA","Division/Conference":"Southwest","Founded":1980,"Titles":1,"Notes":"Won NBA championship in 2011"},
+            {"Team":"Houston Rockets","League/Sport":"NBA","Division/Conference":"Southwest","Founded":1967,"Titles":2,"Notes":"Won NBA championships in 1994, 1995"},
+            {"Team":"Memphis Grizzlies","League/Sport":"NBA","Division/Conference":"Southwest","Founded":1995,"Titles":0,"Notes":"Never won NBA championship; moved from Vancouver in 2001"},
+            {"Team":"New Orleans Pelicans","League/Sport":"NBA","Division/Conference":"Southwest","Founded":1988,"Titles":0,"Notes":"Never won NBA championship; known as Hornets 2002-2013"},
+            {"Team":"San Antonio Spurs","League/Sport":"NBA","Division/Conference":"Southwest","Founded":1967,"Titles":5,"Notes":"Won NBA championships in 1999, 2003, 2005, 2007, 2014"},
+            
+            // NCAA Football Programs
+            {"Team":"Alabama Crimson Tide","League/Sport":"NCAA Football","Division/Conference":"SEC","Founded":1892,"Titles":18,"Notes":"Most claimed national championships in modern era"},
+            {"Team":"Georgia Bulldogs","League/Sport":"NCAA Football","Division/Conference":"SEC","Founded":1892,"Titles":4,"Notes":"Won national championships in 1942, 1980, 2021, 2022"},
+            {"Team":"Texas Longhorns","League/Sport":"NCAA Football","Division/Conference":"SEC","Founded":1893,"Titles":4,"Notes":"Won national championships in 1963, 1969, 1970, 2005"},
+            {"Team":"Ohio State Buckeyes","League/Sport":"NCAA Football","Division/Conference":"Big Ten","Founded":1890,"Titles":8,"Notes":"Won national championships most recently in 2014"},
+            {"Team":"Michigan Wolverines","League/Sport":"NCAA Football","Division/Conference":"Big Ten","Founded":1879,"Titles":11,"Notes":"Won national championship in 2023"},
+            {"Team":"Notre Dame Fighting Irish","League/Sport":"NCAA Football","Division/Conference":"Independent","Founded":1887,"Titles":11,"Notes":"Independent program with rich championship tradition"},
+            {"Team":"USC Trojans","League/Sport":"NCAA Football","Division/Conference":"Big Ten","Founded":1888,"Titles":11,"Notes":"Dominant program in college football history"},
+            {"Team":"Oklahoma Sooners","League/Sport":"NCAA Football","Division/Conference":"SEC","Founded":1895,"Titles":7,"Notes":"Strong tradition in college football"},
+            {"Team":"Clemson Tigers","League/Sport":"NCAA Football","Division/Conference":"ACC","Founded":1896,"Titles":3,"Notes":"Won national championships in 1981, 2016, 2018"},
+            {"Team":"LSU Tigers","League/Sport":"NCAA Football","Division/Conference":"SEC","Founded":1893,"Titles":4,"Notes":"Won national championships in 1958, 2003, 2007, 2019"},
+            
+            // NCAA Baseball Programs
+            {"Team":"Texas Longhorns Baseball","League/Sport":"NCAA Baseball","Division/Conference":"SEC","Founded":1895,"Titles":6,"Notes":"Won College World Series in 1949, 1950, 1975, 1983, 2002, 2005"},
+            {"Team":"USC Trojans Baseball","League/Sport":"NCAA Baseball","Division/Conference":"Big Ten","Founded":1888,"Titles":12,"Notes":"Most College World Series championships"},
+            {"Team":"LSU Tigers Baseball","League/Sport":"NCAA Baseball","Division/Conference":"SEC","Founded":1893,"Titles":6,"Notes":"Strong SEC baseball program with multiple championships"},
+            {"Team":"Stanford Cardinal Baseball","League/Sport":"NCAA Baseball","Division/Conference":"Pac-12","Founded":1892,"Titles":2,"Notes":"Won College World Series in 1987, 1988"},
+            {"Team":"Vanderbilt Commodores Baseball","League/Sport":"NCAA Baseball","Division/Conference":"SEC","Founded":1886,"Titles":2,"Notes":"Won College World Series in 2014, 2019"},
+            {"Team":"Florida Gators Baseball","League/Sport":"NCAA Baseball","Division/Conference":"SEC","Founded":1912,"Titles":1,"Notes":"Won College World Series in 2017"},
+            {"Team":"Miami Hurricanes Baseball","League/Sport":"NCAA Baseball","Division/Conference":"ACC","Founded":1940,"Titles":4,"Notes":"Won College World Series in 1982, 1985, 1999, 2001"},
+            {"Team":"Arizona State Sun Devils Baseball","League/Sport":"NCAA Baseball","Division/Conference":"Big 12","Founded":1896,"Titles":5,"Notes":"Strong Pac-12 baseball tradition"},
+            {"Team":"Oklahoma State Cowboys Baseball","League/Sport":"NCAA Baseball","Division/Conference":"Big 12","Founded":1901,"Titles":1,"Notes":"Won College World Series in 1959"},
+            {"Team":"Arkansas Razorbacks Baseball","League/Sport":"NCAA Baseball","Division/Conference":"SEC","Founded":1897,"Titles":1,"Notes":"Won College World Series in 2012"},
+            
+            // Perfect Game Top High School Programs
+            {"Team":"IMG Academy (FL)","League/Sport":"High School Baseball","Division/Conference":"National","Founded":1993,"Titles":0,"Notes":"Elite national prep baseball academy"},
+            {"Team":"Boras Classic All-Stars","League/Sport":"Perfect Game Select","Division/Conference":"National","Founded":2010,"Titles":0,"Notes":"Top Perfect Game showcase team"},
+            {"Team":"East Cobb Astros","League/Sport":"Perfect Game Select","Division/Conference":"Southeast","Founded":1999,"Titles":0,"Notes":"Premier Georgia-based travel baseball organization"},
+            {"Team":"Dirtbags Baseball","League/Sport":"Perfect Game Select","Division/Conference":"West","Founded":2006,"Titles":0,"Notes":"California elite travel baseball program"},
+            {"Team":"Dallas Mustangs","League/Sport":"Perfect Game Select","Division/Conference":"Southwest","Founded":2001,"Titles":0,"Notes":"Texas premier travel baseball organization"},
+            {"Team":"Canes Baseball","League/Sport":"Perfect Game Select","Division/Conference":"Southeast","Founded":2003,"Titles":0,"Notes":"Florida-based elite travel baseball program"},
+            {"Team":"Marucci Elite Texas","League/Sport":"Perfect Game Select","Division/Conference":"Southwest","Founded":2012,"Titles":0,"Notes":"Texas showcase team affiliated with Marucci"},
+            {"Team":"5 Star National","League/Sport":"Perfect Game Select","Division/Conference":"National","Founded":2008,"Titles":0,"Notes":"National elite travel baseball program"},
+            {"Team":"Banditos Baseball","League/Sport":"Perfect Game Select","Division/Conference":"Southwest","Founded":2004,"Titles":0,"Notes":"Texas-based premier travel baseball organization"},
+            {"Team":"Team Elite","League/Sport":"Perfect Game Select","Division/Conference":"Southeast","Founded":2009,"Titles":0,"Notes":"Elite travel baseball program"},
+            
+            // High School Football Programs
+            {"Team":"De La Salle Spartans (CA)","League/Sport":"High School Football","Division/Conference":"NCS","Founded":1965,"Titles":23,"Notes":"National powerhouse with 151-game winning streak"},
+            {"Team":"St. John Bosco Braves (CA)","League/Sport":"High School Football","Division/Conference":"CIF-SS","Founded":1940,"Titles":6,"Notes":"California elite football program"},
+            {"Team":"Mater Dei Monarchs (CA)","League/Sport":"High School Football","Division/Conference":"CIF-SS","Founded":1950,"Titles":11,"Notes":"National championship program"},
+            {"Team":"Allen Eagles (TX)","League/Sport":"High School Football","Division/Conference":"UIL 6A","Founded":1957,"Titles":4,"Notes":"Texas powerhouse with massive stadium"},
+            {"Team":"Katy Tigers (TX)","League/Sport":"High School Football","Division/Conference":"UIL 6A","Founded":1898,"Titles":8,"Notes":"Dominant Texas football tradition"},
+            {"Team":"North Shore Mustangs (TX)","League/Sport":"High School Football","Division/Conference":"UIL 6A","Founded":1926,"Titles":3,"Notes":"Houston-area football powerhouse"},
+            {"Team":"Westlake Chaparrals (TX)","League/Sport":"High School Football","Division/Conference":"UIL 6A","Founded":1969,"Titles":1,"Notes":"Austin-area elite program"},
+            {"Team":"Cedar Hill Longhorns (TX)","League/Sport":"High School Football","Division/Conference":"UIL 6A","Founded":1925,"Titles":2,"Notes":"Dallas-area championship program"},
+            {"Team":"Lake Travis Cavaliers (TX)","League/Sport":"High School Football","Division/Conference":"UIL 6A","Founded":1981,"Titles":8,"Notes":"Austin-area dynasty program"},
+            {"Team":"Duncanville Panthers (TX)","League/Sport":"High School Football","Division/Conference":"UIL 6A","Founded":1922,"Titles":5,"Notes":"Dallas-area football powerhouse"},
+            
+            // International Baseball Prospects Pipeline
+            {"Team":"Academia Beisbol Venezuela","League/Sport":"International Baseball","Division/Conference":"Venezuela","Founded":1990,"Titles":0,"Notes":"Top Venezuelan baseball academy developing MLB prospects"},
+            {"Team":"Escuela de Beisbol Los Leones (DR)","League/Sport":"International Baseball","Division/Conference":"Dominican Republic","Founded":1985,"Titles":0,"Notes":"Dominican Republic MLB prospect development academy"},
+            {"Team":"Kia Tigers Academy","League/Sport":"KBO Academy","Division/Conference":"South Korea","Founded":1982,"Titles":0,"Notes":"South Korean professional baseball development system"},
+            {"Team":"Nippon Ham Fighters Academy","League/Sport":"NPB Academy","Division/Conference":"Japan","Founded":1946,"Titles":0,"Notes":"Japanese professional baseball development program"},
+            {"Team":"Yomiuri Giants Academy","League/Sport":"NPB Academy","Division/Conference":"Japan","Founded":1934,"Titles":0,"Notes":"Japan's premier professional baseball organization"},
+            {"Team":"Doosan Bears Academy","League/Sport":"KBO Academy","Division/Conference":"South Korea","Founded":1982,"Titles":0,"Notes":"South Korean professional baseball development"},
+            {"Team":"Academia de Beisbol Cuba","League/Sport":"International Baseball","Division/Conference":"Cuba","Founded":1961,"Titles":0,"Notes":"Cuban national baseball development program"},
+            {"Team":"Estrellas del Caribe (PR)","League/Sport":"International Baseball","Division/Conference":"Puerto Rico","Founded":1938,"Titles":0,"Notes":"Puerto Rican professional baseball development"},
+            {"Team":"Tiburones de La Guaira (VZ)","League/Sport":"International Baseball","Division/Conference":"Venezuela","Founded":1962,"Titles":0,"Notes":"Venezuelan professional baseball organization"},
+    {"Team":"LG Twins","League/Sport":"KBO","Division/Conference":"Korean Baseball","Founded":1982,"Titles":2,"Notes":"Seoul rival to Doosan Bears"}
+];
+
+        // Three.js Scene Setup
+        let scene, camera, renderer, particles;
+
+        function initThree() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Create particle system with championship geometry
+            const particleCount = 8000;
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+
+            // Texas Longhorns colors
+            const color1 = new THREE.Color(0xBF5700); // Primary
+            const color2 = new THREE.Color(0xFF7A00); // Primary Light
+            const color3 = new THREE.Color(0xFFB81C); // Accent
+
+            for (let i = 0; i < particleCount; i++) {
+                // Championship formation - creates spherical clusters with trailing effects
+                const i3 = i * 3;
+                const radius = Math.random() * 2000 + 500;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(Math.random() * 2 - 1);
+                
+                positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
+                positions[i3 + 1] = radius * Math.cos(phi);
+                positions[i3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
+
+                // Color assignment
+                const colorChoice = Math.random();
+                let color;
+                if (colorChoice < 0.4) color = color1;
+                else if (colorChoice < 0.7) color = color2;
+                else color = color3;
+
+                colors[i3] = color.r;
+                colors[i3 + 1] = color.g;
+                colors[i3 + 2] = color.b;
+            }
+
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 3,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            camera.position.z = 1000;
+
+            // Mouse interaction
+            document.addEventListener('mousemove', onMouseMove);
+        }
+
+        function onMouseMove(event) {
+            if (particles) {
+                const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                
+                particles.rotation.x = mouseY * 0.05;
+                particles.rotation.y = mouseX * 0.05;
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (particles) {
+                particles.rotation.x += 0.001;
+                particles.rotation.y += 0.002;
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.addEventListener('resize', onWindowResize);
+
+        // Dashboard Component
+        function Dashboard() {
+            const [teams, setTeams] = React.useState([]);
+            const [analyticsData, setAnalyticsData] = React.useState(null);
+            const [loading, setLoading] = React.useState(true);
+            const [selectedLeague, setSelectedLeague] = React.useState('all');
+            const [searchTerm, setSearchTerm] = React.useState('');
+
+            React.useEffect(() => {
+                // Simulate API loading
+                setTimeout(() => {
+                    const enhancedTeams = SPORTS_DATA.map((team, index) => {
+                        const teamId = `${team['League/Sport'].toLowerCase()}_${team.Team.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+                        
+                        // Generate realistic analytics based on team data
+                        const competitiveIndex = Math.round(50 + (team.Titles || 0) * 8 + Math.random() * 40);
+                        const legacyScore = Math.round(20 + (team.Founded ? (2024 - team.Founded) / 5 : 50) + (team.Titles || 0) * 5);
+                        const marketValue = Math.round((800 + Math.random() * 4200) * 1000000);
+                        
+                        return {
+                            ...team,
+                            teamId,
+                            analytics: {
+                                competitiveIndex,
+                                legacyScore,
+                                marketValue,
+                                championshipProbability: Math.round(5 + Math.random() * 25),
+                                fanEngagement: Math.round(60 + Math.random() * 35),
+                                performanceHistory: {
+                                    years: Array.from({length: 11}, (_, i) => 2005 + i * 2),
+                                    performance: Array.from({length: 11}, () => Math.round(30 + Math.random() * 40))
+                                }
+                            }
+                        };
+                    });
+
+                    const analyticsData = {
+                        totalTeams: enhancedTeams.length,
+                        totalTitles: enhancedTeams.reduce((sum, team) => sum + (team.Titles || 0), 0),
+                        totalLeagues: [...new Set(enhancedTeams.map(team => team['League/Sport']))].length,
+                        leagueBreakdown: [...new Set(enhancedTeams.map(team => team['League/Sport']))].map(league => {
+                            const leagueTeams = enhancedTeams.filter(team => team['League/Sport'] === league);
+                            return {
+                                league,
+                                teamCount: leagueTeams.length,
+                                totalTitles: leagueTeams.reduce((sum, team) => sum + (team.Titles || 0), 0),
+                                avgAge: leagueTeams.length > 0 ? 
+                                    Math.round(leagueTeams.reduce((sum, team) => sum + (team.Founded ? 2024 - team.Founded : 0), 0) / leagueTeams.length) 
+                                    : null
+                            };
+                        }).sort((a, b) => b.teamCount - a.teamCount)
+                    };
+
+                    setTeams(enhancedTeams);
+                    setAnalyticsData(analyticsData);
+                    setLoading(false);
+                }, 1500);
+            }, []);
+
+            const filteredTeams = React.useMemo(() => {
+                return teams.filter(team => {
+                    const matchesLeague = selectedLeague === 'all' || team['League/Sport'] === selectedLeague;
+                    const matchesSearch = team.Team.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                        team['League/Sport'].toLowerCase().includes(searchTerm.toLowerCase());
+                    return matchesLeague && matchesSearch;
+                });
+            }, [teams, selectedLeague, searchTerm]);
+
+            const leagues = React.useMemo(() => {
+                return [...new Set(teams.map(team => team['League/Sport']))];
+            }, [teams]);
+
+            React.useEffect(() => {
+                if (analyticsData && !loading) {
+                    // League Distribution Chart
+                    const ctx1 = document.getElementById('leagueChart');
+                    if (ctx1) {
+                        new Chart(ctx1, {
+                            type: 'doughnut',
+                            data: {
+                                labels: analyticsData.leagueBreakdown.slice(0, 8).map(l => l.league),
+                                datasets: [{
+                                    data: analyticsData.leagueBreakdown.slice(0, 8).map(l => l.teamCount),
+                                    backgroundColor: [
+                                        '#BF5700', '#FF7A00', '#FFB81C', '#FF6B35',
+                                        '#D2691E', '#CD853F', '#F4A460', '#DEB887'
+                                    ],
+                                    borderWidth: 2,
+                                    borderColor: '#0A0A0F'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom',
+                                        labels: { color: '#F8F9FA' }
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    // Performance Scatter Plot  
+                    const ctx2 = document.getElementById('performanceChart');
+                    if (ctx2) {
+                        const scatterData = filteredTeams.slice(0, 50).map(team => ({
+                            x: team.analytics.competitiveIndex,
+                            y: team.analytics.legacyScore,
+                            team: team.Team
+                        }));
+
+                        new Chart(ctx2, {
+                            type: 'scatter',
+                            data: {
+                                datasets: [{
+                                    label: 'Team Performance Matrix',
+                                    data: scatterData,
+                                    backgroundColor: '#BF5700',
+                                    borderColor: '#FF7A00',
+                                    borderWidth: 2,
+                                    pointRadius: 8,
+                                    pointHoverRadius: 12
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { labels: { color: '#F8F9FA' } },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(context) {
+                                                return `${context.raw.team}: (${context.parsed.x}, ${context.parsed.y})`;
+                                            }
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    x: { 
+                                        title: { display: true, text: 'Competitive Index', color: '#F8F9FA' },
+                                        ticks: { color: '#F8F9FA' },
+                                        grid: { color: 'rgba(248, 249, 250, 0.1)' }
+                                    },
+                                    y: { 
+                                        title: { display: true, text: 'Legacy Score', color: '#F8F9FA' },
+                                        ticks: { color: '#F8F9FA' },
+                                        grid: { color: 'rgba(248, 249, 250, 0.1)' }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }, [analyticsData, filteredTeams, loading]);
+
+            if (loading) {
+                return React.createElement('div', { className: 'dashboard' },
+                    React.createElement('div', { className: 'loading' },
+                        React.createElement('i', { className: 'fas fa-spinner fa-spin spinner', style: { fontSize: '3rem' } }),
+                        React.createElement('p', { style: { marginTop: '1rem', fontSize: '1.2rem' } }, 'Initializing Championship Intelligence Engine...')
+                    )
+                );
+            }
+
+            return React.createElement('div', { className: 'dashboard', id: 'dashboard' },
+                React.createElement('div', { className: 'dashboard-header' },
+                    React.createElement('h2', { className: 'dashboard-title' }, 'Championship Analytics Dashboard'),
+                    React.createElement('p', { style: { opacity: 0.8, fontSize: '1.1rem' } }, 
+                        `${analyticsData?.totalTeams || 0} teams • ${analyticsData?.totalLeagues || 0} leagues • Real-time intelligence`)
+                ),
+
+                React.createElement('div', { className: 'controls' },
+                    React.createElement('input', {
+                        type: 'text',
+                        className: 'search-box',
+                        placeholder: 'Search teams...',
+                        value: searchTerm,
+                        onChange: (e) => setSearchTerm(e.target.value)
+                    }),
+                    React.createElement('select', {
+                        className: 'filter-select',
+                        value: selectedLeague,
+                        onChange: (e) => setSelectedLeague(e.target.value)
+                    },
+                        React.createElement('option', { value: 'all' }, 'All Leagues'),
+                        leagues.map(league => 
+                            React.createElement('option', { key: league, value: league }, league)
+                        )
+                    )
+                ),
+
+                React.createElement('div', { className: 'stats-grid' },
+                    React.createElement('div', { className: 'stat-card' },
+                        React.createElement('div', { className: 'stat-value' }, analyticsData?.totalTeams || 0),
+                        React.createElement('div', { className: 'stat-label' }, 'Total Teams')
+                    ),
+                    React.createElement('div', { className: 'stat-card' },
+                        React.createElement('div', { className: 'stat-value' }, analyticsData?.totalTitles || 0),
+                        React.createElement('div', { className: 'stat-label' }, 'Championships')
+                    ),
+                    React.createElement('div', { className: 'stat-card' },
+                        React.createElement('div', { className: 'stat-value' }, analyticsData?.totalLeagues || 0),
+                        React.createElement('div', { className: 'stat-label' }, 'Leagues')
+                    ),
+                    React.createElement('div', { className: 'stat-card' },
+                        React.createElement('div', { className: 'stat-value' }, filteredTeams.length),
+                        React.createElement('div', { className: 'stat-label' }, 'Filtered Results')
+                    )
+                ),
+
+                React.createElement('div', { className: 'charts-section' },
+                    React.createElement('div', { className: 'chart-container' },
+                        React.createElement('div', { className: 'chart-title' }, 'League Distribution Analysis'),
+                        React.createElement('canvas', { id: 'leagueChart' })
+                    ),
+                    React.createElement('div', { className: 'chart-container' },
+                        React.createElement('div', { className: 'chart-title' }, 'Competitive Performance Matrix'),
+                        React.createElement('canvas', { id: 'performanceChart' })
+                    )
+                ),
+
+                React.createElement('div', { className: 'teams-grid' },
+                    filteredTeams.length === 0 ?
+                        React.createElement('div', { 
+                            style: { 
+                                gridColumn: '1 / -1', 
+                                textAlign: 'center', 
+                                padding: '3rem', 
+                                opacity: 0.7 
+                            } 
+                        },
+                            React.createElement('p', null, 'No teams found matching your criteria.')
+                        ) :
+                        filteredTeams.map(team => 
+                            React.createElement('div', { 
+                                key: team.teamId,
+                                className: 'team-card'
+                            },
+                                React.createElement('div', { className: 'team-name' }, team.Team),
+                                React.createElement('div', { className: 'team-info' },
+                                    React.createElement('div', null, `League: ${team['League/Sport']}`),
+                                    React.createElement('div', null, `Founded: ${team.Founded || 'N/A'}`),
+                                    React.createElement('div', null, `Division: ${team['Division/Conference']}`),
+                                    React.createElement('div', null, `Titles: ${team.Titles || 0}`)
+                                ),
+                                React.createElement('div', { className: 'team-metrics' },
+                                    React.createElement('div', { className: 'metric' },
+                                        React.createElement('div', { className: 'metric-value' }, team.analytics?.competitiveIndex || 'N/A'),
+                                        React.createElement('div', { className: 'metric-label' }, 'Competitive')
+                                    ),
+                                    React.createElement('div', { className: 'metric' },
+                                        React.createElement('div', { className: 'metric-value' }, team.analytics?.legacyScore || 'N/A'),
+                                        React.createElement('div', { className: 'metric-label' }, 'Legacy')
+                                    )
+                                )
+                            )
+                        )
+                )
+            );
+        }
+
+        // Initialize Everything
+        document.addEventListener('DOMContentLoaded', () => {
+            initThree();
+            animate();
+            ReactDOM.render(React.createElement(Dashboard), document.getElementById('dashboard-root'));
+        });
+    </script>
+</body>
+</html>

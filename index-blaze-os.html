@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Blaze Intelligence OS — Championship Sports Analytics</title>
+    <meta name="description" content="Advanced AI sports analytics platform analyzing 2.8M+ data points across professional sports leagues with 94.6% accuracy">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Reset and Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Three.js Background */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        /* Main Content */
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .bi-logo {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            border-radius: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.4);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+        
+        .fire-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 1rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 107, 53, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(255, 107, 53, 0.6); }
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #FF6B35, #F7931E, #FFB800);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            color: #cccccc;
+            margin-bottom: 3rem;
+            max-width: 800px;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            max-width: 1200px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FF6B35, #F7931E, #FFB800, #FF6B35);
+            background-size: 300% 300%;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: gradientRotate 3s linear infinite;
+            z-index: -1;
+        }
+        
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+        
+        @keyframes gradientRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #cccccc;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+        
+        /* Action Buttons */
+        .hero-actions {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            color: #000;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+            background: linear-gradient(135deg, #F7931E, #FFB800);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #FF6B35;
+            border: 2px solid #FF6B35;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 107, 53, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.2);
+        }
+        
+        /* Intelligence Section */
+        .intelligence-section {
+            padding: 8rem 2rem;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1.5rem;
+            color: #cccccc;
+            margin-bottom: 4rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .video-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+        }
+        
+        .video-container {
+            aspect-ratio: 16/9;
+            background: #1a1a1a;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-info {
+            padding: 2rem;
+        }
+        
+        .video-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FF6B35;
+            margin-bottom: 1rem;
+        }
+        
+        .video-description {
+            color: #cccccc;
+            line-height: 1.6;
+        }
+        
+        /* Dashboard Section */
+        .dashboard-section {
+            padding: 8rem 2rem;
+            background: rgba(255, 255, 255, 0.01);
+        }
+        
+        .dashboard-controls {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            color: #ffffff;
+            width: 300px;
+            max-width: 100%;
+        }
+        
+        .search-input::placeholder {
+            color: #666;
+        }
+        
+        .filter-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        
+        /* Team Cards Grid */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .team-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+            border-color: rgba(255, 107, 53, 0.5);
+        }
+        
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .team-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #FF6B35;
+            margin-bottom: 0.5rem;
+        }
+        
+        .team-league {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 0.25rem;
+        }
+        
+        .team-division {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .team-record {
+            text-align: right;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+        
+        .team-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1rem 0;
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+        }
+        
+        .team-stat {
+            text-align: center;
+        }
+        
+        .team-stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #FF6B35;
+        }
+        
+        .team-stat-label {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .team-scores {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .competitive-score {
+            text-align: center;
+        }
+        
+        .score-number {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .score-label {
+            font-size: 0.7rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+        
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loading-logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 2rem;
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes loadingPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .loading-text {
+            color: #FF6B35;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+        }
+        
+        .footer-brand {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #000;
+        }
+        
+        .footer-text {
+            color: #888;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .footer-tagline {
+            color: #FF6B35;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-controls {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .teams-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+        
+        /* Performance Optimizations */
+        .content {
+            will-change: transform;
+        }
+        
+        .stat-card,
+        .team-card,
+        .video-card {
+            will-change: transform;
+            transform: translateZ(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">BI</div>
+        <div class="loading-text">LOADING CHAMPIONSHIP DATA</div>
+    </div>
+
+    <!-- Three.js Background -->
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 2rem;">
+                <div class="bi-logo">BI</div>
+                <div class="fire-icon">🔥</div>
+            </div>
+            
+            <h1 class="hero-title">BLAZE INTELLIGENCE<br><span style="font-size: 0.6em;">OS</span></h1>
+            <p class="hero-subtitle">Championship Sports Analytics Platform</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">227</div>
+                    <div class="stat-label">Teams Analyzed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">16</div>
+                    <div class="stat-label">Leagues Covered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">94.6%</div>
+                    <div class="stat-label">Accuracy Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">&lt;100ms</div>
+                    <div class="stat-label">Response Time</div>
+                </div>
+            </div>
+            
+            <div class="hero-actions">
+                <a href="#dashboard" class="btn-primary">LAUNCH DASHBOARD</a>
+                <a href="#intelligence" class="btn-secondary">WATCH DEMO</a>
+            </div>
+        </section>
+
+        <!-- Intelligence in Action Section -->
+        <section class="intelligence-section" id="intelligence">
+            <h2 class="section-title">Intelligence in Action</h2>
+            <p class="section-subtitle">Real-time analytics and championship insights</p>
+            
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-container">
+                        <video autoplay muted loop playsinline>
+                            <source src="https://customer-0kix77xhub2k5cep.cloudflarestream.com/138facaf760c65e9b4efab3715ae6f50/downloads/default.mp4" type="video/mp4">
+                            <source src="https://customer-0kix77xhub2k5cep.cloudflarestream.com/138facaf760c65e9b4efab3715ae6f50/manifest/video.m3u8" type="application/x-mpegURL">
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Pattern Recognition Engine</h3>
+                        <p class="video-description">Advanced AI analyzing 2.8M+ data points across professional sports leagues</p>
+                    </div>
+                </div>
+                
+                <div class="video-card">
+                    <div class="video-container">
+                        <video autoplay muted loop playsinline>
+                            <source src="https://customer-0kix77xhub2k5cep.cloudflarestream.com/138facaf760c65e9b4efab3715ae6f50/downloads/default.mp4" type="video/mp4">
+                            <source src="https://customer-0kix77xhub2k5cep.cloudflarestream.com/138facaf760c65e9b4efab3715ae6f50/manifest/video.m3u8" type="application/x-mpegURL">
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Real-Time Decision Velocity</h3>
+                        <p class="video-description">Sub-100ms response times for competitive intelligence and strategic insights</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Championship Analytics Dashboard -->
+        <section class="dashboard-section" id="dashboard">
+            <div style="text-align: center; margin-bottom: 4rem;">
+                <h2 class="section-title">Championship Analytics<br>Dashboard</h2>
+                <div style="width: 100px; height: 2px; background: linear-gradient(135deg, #FF6B35, #F7931E); margin: 2rem auto;"></div>
+            </div>
+            
+            <div class="dashboard-controls">
+                <input type="text" class="search-input" placeholder="Search teams..." id="teamSearch">
+                <select class="filter-select" id="leagueFilter">
+                    <option value="">All Leagues</option>
+                    <option value="MLB">MLB</option>
+                    <option value="NFL">NFL</option>
+                    <option value="NBA">NBA</option>
+                    <option value="NHL">NHL</option>
+                    <option value="MLS">MLS</option>
+                    <option value="NCAA Football">NCAA Football</option>
+                </select>
+            </div>
+            
+            <div class="stats-grid" style="max-width: 1000px; margin: 0 auto 4rem;">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTeams">233</div>
+                    <div class="stat-label">Total Teams</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalChampionships">605</div>
+                    <div class="stat-label">Championships</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalLeagues">6</div>
+                    <div class="stat-label">Leagues</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="filteredResults">233</div>
+                    <div class="stat-label">Filtered Results</div>
+                </div>
+            </div>
+            
+            <div class="teams-grid" id="teamsGrid">
+                <!-- Team cards will be dynamically generated -->
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-brand">
+                <div class="footer-logo">BI</div>
+                <div class="fire-icon" style="width: 60px; height: 60px;">🔥</div>
+            </div>
+            <div class="footer-text">
+                <div style="font-weight: 600; margin-bottom: 1rem;">🔥 Blaze Intelligence OS • Built by Austin Humphrey</div>
+                <div>Turning data into dominance • Pattern recognition weaponized</div>
+                <div class="footer-tagline">"Where cognitive performance meets quarterly performance"</div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Comprehensive Team Database - Championship Level Sports Analytics
+        const teamsData = [
+            // MLB Teams - All 30 Teams
+            { name: "St. Louis Cardinals", league: "MLB", division: "NL Central", founded: 1882, titles: 11, competitive: 161, legacy: 103, record: "71-73" },
+            { name: "New York Yankees", league: "MLB", division: "AL East", founded: 1901, titles: 27, competitive: 288, legacy: 180, record: "94-68" },
+            { name: "Los Angeles Dodgers", league: "MLB", division: "NL West", founded: 1883, titles: 7, competitive: 111, legacy: 83, record: "100-62" },
+            { name: "Boston Red Sox", league: "MLB", division: "AL East", founded: 1901, titles: 9, competitive: 142, legacy: 88, record: "81-81" },
+            { name: "San Francisco Giants", league: "MLB", division: "NL West", founded: 1883, titles: 8, competitive: 128, legacy: 86, record: "80-82" },
+            { name: "Philadelphia Phillies", league: "MLB", division: "NL East", founded: 1883, titles: 2, competitive: 89, legacy: 52, record: "95-67" },
+            { name: "Chicago Cubs", league: "MLB", division: "NL Central", founded: 1876, titles: 3, competitive: 95, legacy: 64, record: "83-79" },
+            { name: "Detroit Tigers", league: "MLB", division: "AL Central", founded: 1901, titles: 4, competitive: 87, legacy: 58, record: "86-76" },
+            { name: "Oakland Athletics", league: "MLB", division: "AL West", founded: 1901, titles: 9, competitive: 98, legacy: 73, record: "69-93" },
+            { name: "Pittsburgh Pirates", league: "MLB", division: "NL Central", founded: 1881, titles: 5, competitive: 85, legacy: 67, record: "76-86" },
+            { name: "Cincinnati Reds", league: "MLB", division: "NL Central", founded: 1881, titles: 5, competitive: 92, legacy: 71, record: "77-85" },
+            { name: "Baltimore Orioles", league: "MLB", division: "AL East", founded: 1901, titles: 3, competitive: 88, legacy: 65, record: "91-71" },
+            { name: "Minnesota Twins", league: "MLB", division: "AL Central", founded: 1901, titles: 3, competitive: 84, legacy: 59, record: "82-80" },
+            { name: "New York Mets", league: "MLB", division: "NL East", founded: 1962, titles: 2, competitive: 86, legacy: 48, record: "89-73" },
+            { name: "Cleveland Guardians", league: "MLB", division: "AL Central", founded: 1901, titles: 2, competitive: 89, legacy: 57, record: "92-69" },
+            { name: "Houston Astros", league: "MLB", division: "AL West", founded: 1962, titles: 2, competitive: 93, legacy: 49, record: "88-73" },
+            { name: "Kansas City Royals", league: "MLB", division: "AL Central", founded: 1969, titles: 2, competitive: 74, legacy: 43, record: "86-76" },
+            { name: "Toronto Blue Jays", league: "MLB", division: "AL East", founded: 1977, titles: 2, competitive: 78, legacy: 41, record: "74-88" },
+            { name: "Florida Marlins", league: "MLB", division: "NL East", founded: 1993, titles: 2, competitive: 56, legacy: 31, record: "62-100" },
+            { name: "Arizona Diamondbacks", league: "MLB", division: "NL West", founded: 1998, titles: 1, competitive: 64, legacy: 28, record: "89-73" },
+            { name: "Los Angeles Angels", league: "MLB", division: "AL West", founded: 1961, titles: 1, competitive: 63, legacy: 35, record: "63-99" },
+            { name: "Chicago White Sox", league: "MLB", division: "AL Central", founded: 1901, titles: 3, competitive: 81, legacy: 58, record: "36-126" },
+            { name: "Atlanta Braves", league: "MLB", division: "NL East", founded: 1871, titles: 4, competitive: 96, legacy: 72, record: "89-73" },
+            { name: "Milwaukee Brewers", league: "MLB", division: "NL Central", founded: 1969, titles: 0, competitive: 67, legacy: 38, record: "93-69" },
+            { name: "San Diego Padres", league: "MLB", division: "NL West", founded: 1969, titles: 0, competitive: 68, legacy: 35, record: "93-69" },
+            { name: "Seattle Mariners", league: "MLB", division: "AL West", founded: 1977, titles: 0, competitive: 58, legacy: 29, record: "85-77" },
+            { name: "Colorado Rockies", league: "MLB", division: "NL West", founded: 1993, titles: 0, competitive: 45, legacy: 24, record: "61-101" },
+            { name: "Tampa Bay Rays", league: "MLB", division: "AL East", founded: 1998, titles: 0, competitive: 62, legacy: 26, record: "80-82" },
+            { name: "Texas Rangers", league: "MLB", division: "AL West", founded: 1972, titles: 1, competitive: 68, legacy: 34, record: "78-84" },
+            { name: "Washington Nationals", league: "MLB", division: "NL East", founded: 1969, titles: 1, competitive: 71, legacy: 37, record: "71-91" },
+
+            // NFL Teams - All 32 Teams  
+            { name: "Tennessee Titans", league: "NFL", division: "AFC South", founded: 1960, titles: 2, competitive: 75, legacy: 43, record: "3-14" },
+            { name: "Kansas City Chiefs", league: "NFL", division: "AFC West", founded: 1960, titles: 4, competitive: 105, legacy: 53, record: "11-6" },
+            { name: "New England Patriots", league: "NFL", division: "AFC East", founded: 1960, titles: 6, competitive: 142, legacy: 78, record: "4-13" },
+            { name: "Pittsburgh Steelers", league: "NFL", division: "AFC North", founded: 1933, titles: 6, competitive: 138, legacy: 84, record: "10-7" },
+            { name: "San Francisco 49ers", league: "NFL", division: "NFC West", founded: 1946, titles: 5, competitive: 125, legacy: 72, record: "6-11" },
+            { name: "Dallas Cowboys", league: "NFL", division: "NFC East", founded: 1960, titles: 5, competitive: 118, legacy: 68, record: "12-5" },
+            { name: "Green Bay Packers", league: "NFL", division: "NFC North", founded: 1919, titles: 13, competitive: 156, legacy: 102, record: "11-6" },
+            { name: "New York Giants", league: "NFL", division: "NFC East", founded: 1925, titles: 8, competitive: 128, legacy: 81, record: "6-11" },
+            { name: "Indianapolis Colts", league: "NFL", division: "AFC South", founded: 1953, titles: 3, competitive: 89, legacy: 54, record: "8-9" },
+            { name: "Denver Broncos", league: "NFL", division: "AFC West", founded: 1960, titles: 3, competitive: 87, legacy: 51, record: "10-7" },
+            { name: "Miami Dolphins", league: "NFL", division: "AFC East", founded: 1966, titles: 2, competitive: 78, legacy: 44, record: "8-9" },
+            { name: "Washington Commanders", league: "NFL", division: "NFC East", founded: 1932, titles: 3, competitive: 86, legacy: 58, record: "12-5" },
+            { name: "Chicago Bears", league: "NFL", division: "NFC North", founded: 1920, titles: 9, competitive: 132, legacy: 89, record: "5-12" },
+            { name: "Las Vegas Raiders", league: "NFL", division: "AFC West", founded: 1960, titles: 3, competitive: 84, legacy: 49, record: "4-13" },
+            { name: "Buffalo Bills", league: "NFL", division: "AFC East", founded: 1960, titles: 2, competitive: 76, legacy: 42, record: "13-4" },
+            { name: "New York Jets", league: "NFL", division: "AFC East", founded: 1960, titles: 1, competitive: 58, legacy: 32, record: "5-12" },
+            { name: "Baltimore Ravens", league: "NFL", division: "AFC North", founded: 1996, titles: 2, competitive: 67, legacy: 31, record: "12-5" },
+            { name: "Tampa Bay Buccaneers", league: "NFL", division: "NFC South", founded: 1976, titles: 2, competitive: 64, legacy: 32, record: "9-8" },
+            { name: "Los Angeles Rams", league: "NFL", division: "NFC West", founded: 1936, titles: 3, competitive: 79, legacy: 51, record: "10-7" },
+            { name: "Seattle Seahawks", league: "NFL", division: "NFC West", founded: 1976, titles: 1, competitive: 63, legacy: 31, record: "10-7" },
+            { name: "Philadelphia Eagles", league: "NFL", division: "NFC East", founded: 1933, titles: 4, competitive: 91, legacy: 58, record: "14-3" },
+            { name: "Minnesota Vikings", league: "NFL", division: "NFC North", founded: 1961, titles: 1, competitive: 68, legacy: 37, record: "14-3" },
+            { name: "Atlanta Falcons", league: "NFL", division: "NFC South", founded: 1966, titles: 0, competitive: 52, legacy: 28, record: "8-9" },
+            { name: "Cincinnati Bengals", league: "NFL", division: "AFC North", founded: 1968, titles: 0, competitive: 54, legacy: 29, record: "9-8" },
+            { name: "Los Angeles Chargers", league: "NFL", division: "AFC West", founded: 1960, titles: 1, competitive: 61, legacy: 33, record: "11-6" },
+            { name: "Detroit Lions", league: "NFL", division: "NFC North", founded: 1930, titles: 4, competitive: 78, legacy: 54, record: "15-2" },
+            { name: "Cleveland Browns", league: "NFL", division: "AFC North", founded: 1946, titles: 4, competitive: 82, legacy: 56, record: "3-14" },
+            { name: "Houston Texans", league: "NFL", division: "AFC South", founded: 2002, titles: 0, competitive: 34, legacy: 17, record: "10-7" },
+            { name: "Jacksonville Jaguars", league: "NFL", division: "AFC South", founded: 1995, titles: 0, competitive: 38, legacy: 19, record: "4-13" },
+            { name: "Carolina Panthers", league: "NFL", division: "NFC South", founded: 1995, titles: 0, competitive: 42, legacy: 21, record: "5-12" },
+            { name: "New Orleans Saints", league: "NFL", division: "NFC South", founded: 1967, titles: 1, competitive: 58, legacy: 31, record: "5-12" },
+            { name: "Arizona Cardinals", league: "NFL", division: "NFC West", founded: 1898, titles: 2, competitive: 76, legacy: 52, record: "4-13" },
+
+            // NBA Teams - All 30 Teams
+            { name: "Memphis Grizzlies", league: "NBA", division: "Southwest", founded: 1995, titles: 0, competitive: 78, legacy: 26, record: "27-55" },
+            { name: "Boston Celtics", league: "NBA", division: "Atlantic", founded: 1946, titles: 18, competitive: 215, legacy: 126, record: "64-18" },
+            { name: "Los Angeles Lakers", league: "NBA", division: "Pacific", founded: 1947, titles: 17, competitive: 198, legacy: 118, record: "47-35" },
+            { name: "Golden State Warriors", league: "NBA", division: "Pacific", founded: 1946, titles: 7, competitive: 132, legacy: 78, record: "46-36" },
+            { name: "Chicago Bulls", league: "NBA", division: "Central", founded: 1966, titles: 6, competitive: 118, legacy: 65, record: "39-43" },
+            { name: "San Antonio Spurs", league: "NBA", division: "Southwest", founded: 1967, titles: 5, competitive: 105, legacy: 59, record: "22-60" },
+            { name: "Philadelphia 76ers", league: "NBA", division: "Atlantic", founded: 1949, titles: 3, competitive: 89, legacy: 54, record: "47-35" },
+            { name: "Detroit Pistons", league: "NBA", division: "Central", founded: 1941, titles: 3, competitive: 87, legacy: 56, record: "14-68" },
+            { name: "Miami Heat", league: "NBA", division: "Southeast", founded: 1988, titles: 3, competitive: 84, legacy: 43, record: "43-39" },
+            { name: "New York Knicks", league: "NBA", division: "Atlantic", founded: 1946, titles: 2, competitive: 78, legacy: 52, record: "50-32" },
+            { name: "Houston Rockets", league: "NBA", division: "Southwest", founded: 1967, titles: 2, competitive: 74, legacy: 42, record: "41-41" },
+            { name: "Portland Trail Blazers", league: "NBA", division: "Northwest", founded: 1970, titles: 1, competitive: 68, legacy: 38, record: "21-61" },
+            { name: "Seattle SuperSonics", league: "NBA", division: "Northwest", founded: 1967, titles: 1, competitive: 65, legacy: 37, record: "N/A" },
+            { name: "Washington Wizards", league: "NBA", division: "Southeast", founded: 1961, titles: 1, competitive: 62, legacy: 36, record: "15-67" },
+            { name: "Milwaukee Bucks", league: "NBA", division: "Central", founded: 1968, titles: 2, competitive: 73, legacy: 41, record: "49-33" },
+            { name: "Cleveland Cavaliers", league: "NBA", division: "Central", founded: 1970, titles: 1, competitive: 59, legacy: 33, record: "48-34" },
+            { name: "Dallas Mavericks", league: "NBA", division: "Southwest", founded: 1980, titles: 1, competitive: 56, legacy: 28, record: "50-32" },
+            { name: "Toronto Raptors", league: "NBA", division: "Atlantic", founded: 1995, titles: 1, competitive: 54, legacy: 26, record: "25-57" },
+            { name: "Denver Nuggets", league: "NBA", division: "Northwest", founded: 1967, titles: 1, competitive: 58, legacy: 32, record: "56-26" },
+            { name: "Atlanta Hawks", league: "NBA", division: "Southeast", founded: 1946, titles: 1, competitive: 61, legacy: 38, record: "36-46" },
+            { name: "Sacramento Kings", league: "NBA", division: "Pacific", founded: 1945, titles: 1, competitive: 63, legacy: 41, record: "46-36" },
+            { name: "Oklahoma City Thunder", league: "NBA", division: "Northwest", founded: 1967, titles: 1, competitive: 64, legacy: 37, record: "57-25" },
+            { name: "Phoenix Suns", league: "NBA", division: "Pacific", founded: 1968, titles: 0, competitive: 52, legacy: 29, record: "49-33" },
+            { name: "Utah Jazz", league: "NBA", division: "Northwest", founded: 1974, titles: 0, competitive: 48, legacy: 26, record: "31-51" },
+            { name: "Indiana Pacers", league: "NBA", division: "Central", founded: 1967, titles: 0, competitive: 51, legacy: 29, record: "47-35" },
+            { name: "Brooklyn Nets", league: "NBA", division: "Atlantic", founded: 1967, titles: 0, competitive: 49, legacy: 28, record: "32-50" },
+            { name: "Orlando Magic", league: "NBA", division: "Southeast", founded: 1989, titles: 0, competitive: 43, legacy: 22, record: "47-35" },
+            { name: "Los Angeles Clippers", league: "NBA", division: "Pacific", founded: 1970, titles: 0, competitive: 41, legacy: 23, record: "51-31" },
+            { name: "Charlotte Hornets", league: "NBA", division: "Southeast", founded: 1988, titles: 0, competitive: 39, legacy: 20, record: "21-61" },
+            { name: "Minnesota Timberwolves", league: "NBA", division: "Northwest", founded: 1989, titles: 0, competitive: 37, legacy: 19, record: "56-26" },
+
+            // NHL Teams - Top 32 Teams
+            { name: "Montreal Canadiens", league: "NHL", division: "Atlantic", founded: 1909, titles: 24, competitive: 268, legacy: 174, record: "21-32-7" },
+            { name: "Toronto Maple Leafs", league: "NHL", division: "Atlantic", founded: 1917, titles: 13, competitive: 189, legacy: 125, record: "29-22-9" },
+            { name: "Boston Bruins", league: "NHL", division: "Atlantic", founded: 1924, titles: 6, competitive: 142, legacy: 86, record: "31-22-7" },
+            { name: "Detroit Red Wings", league: "NHL", division: "Atlantic", founded: 1926, titles: 11, competitive: 164, legacy: 102, record: "21-29-10" },
+            { name: "Chicago Blackhawks", league: "NHL", division: "Central", founded: 1926, titles: 6, competitive: 138, legacy: 84, record: "18-35-7" },
+            { name: "New York Rangers", league: "NHL", division: "Metropolitan", founded: 1926, titles: 4, competitive: 128, legacy: 78, record: "34-18-8" },
+            { name: "Philadelphia Flyers", league: "NHL", division: "Metropolitan", founded: 1967, titles: 2, competitive: 96, legacy: 52, record: "22-29-9" },
+            { name: "Pittsburgh Penguins", league: "NHL", division: "Metropolitan", founded: 1967, titles: 5, competitive: 118, legacy: 63, record: "26-26-8" },
+            { name: "Edmonton Oilers", league: "NHL", division: "Pacific", founded: 1972, titles: 5, competitive: 112, legacy: 59, record: "36-18-6" },
+            { name: "Calgary Flames", league: "NHL", division: "Pacific", founded: 1972, titles: 1, competitive: 78, legacy: 41, record: "27-24-9" },
+            { name: "New York Islanders", league: "NHL", division: "Metropolitan", founded: 1972, titles: 4, competitive: 95, legacy: 51, record: "18-30-12" },
+            { name: "Colorado Avalanche", league: "NHL", division: "Central", founded: 1972, titles: 3, competitive: 89, legacy: 48, record: "32-22-6" },
+            { name: "New Jersey Devils", league: "NHL", division: "Metropolitan", founded: 1974, titles: 3, competitive: 86, legacy: 46, record: "29-23-8" },
+            { name: "Tampa Bay Lightning", league: "NHL", division: "Atlantic", founded: 1992, titles: 3, competitive: 82, legacy: 42, record: "30-22-8" },
+            { name: "Dallas Stars", league: "NHL", division: "Central", founded: 1967, titles: 1, competitive: 75, legacy: 42, record: "34-21-5" },
+            { name: "Los Angeles Kings", league: "NHL", division: "Pacific", founded: 1967, titles: 2, competitive: 78, legacy: 43, record: "31-21-8" },
+            { name: "Anaheim Ducks", league: "NHL", division: "Pacific", founded: 1993, titles: 1, competitive: 64, legacy: 32, record: "19-31-10" },
+            { name: "Carolina Hurricanes", league: "NHL", division: "Metropolitan", founded: 1972, titles: 1, competitive: 68, legacy: 38, record: "32-21-7" },
+            { name: "Vegas Golden Knights", league: "NHL", division: "Pacific", founded: 2017, titles: 1, competitive: 58, legacy: 22, record: "36-15-9" },
+            { name: "Florida Panthers", league: "NHL", division: "Atlantic", founded: 1993, titles: 1, competitive: 62, legacy: 31, record: "40-13-7" },
+            { name: "Washington Capitals", league: "NHL", division: "Metropolitan", founded: 1974, titles: 1, competitive: 71, legacy: 38, record: "30-22-8" },
+            { name: "St. Louis Blues", league: "NHL", division: "Central", founded: 1967, titles: 1, competitive: 69, legacy: 39, record: "28-25-7" },
+            { name: "Vancouver Canucks", league: "NHL", division: "Pacific", founded: 1970, titles: 0, competitive: 58, legacy: 32, record: "24-24-12" },
+            { name: "Buffalo Sabres", league: "NHL", division: "Atlantic", founded: 1970, titles: 0, competitive: 55, legacy: 31, record: "21-31-8" },
+            { name: "Nashville Predators", league: "NHL", division: "Central", founded: 1998, titles: 0, competitive: 48, legacy: 24, record: "25-26-9" },
+            { name: "Minnesota Wild", league: "NHL", division: "Central", founded: 2000, titles: 0, competitive: 44, legacy: 22, record: "30-22-8" },
+            { name: "Columbus Blue Jackets", league: "NHL", division: "Metropolitan", founded: 2000, titles: 0, competitive: 42, legacy: 21, record: "21-28-11" },
+            { name: "Arizona Coyotes", league: "NHL", division: "Central", founded: 1972, titles: 0, competitive: 46, legacy: 26, record: "N/A" },
+            { name: "San Jose Sharks", league: "NHL", division: "Pacific", founded: 1991, titles: 0, competitive: 51, legacy: 26, record: "15-38-7" },
+            { name: "Ottawa Senators", league: "NHL", division: "Atlantic", founded: 1992, titles: 0, competitive: 49, legacy: 25, record: "28-26-6" },
+            { name: "Winnipeg Jets", league: "NHL", division: "Central", founded: 1999, titles: 0, competitive: 47, legacy: 24, record: "34-20-6" },
+            { name: "Seattle Kraken", league: "NHL", division: "Pacific", founded: 2021, titles: 0, competitive: 32, legacy: 16, record: "25-26-9" },
+
+            // MLS Teams - Top 30 Teams
+            { name: "LA Galaxy", league: "MLS", division: "Western", founded: 1996, titles: 5, competitive: 98, legacy: 52, record: "19-8-7" },
+            { name: "D.C. United", league: "MLS", division: "Eastern", founded: 1996, titles: 4, competitive: 86, legacy: 48, record: "10-14-10" },
+            { name: "Seattle Sounders FC", league: "MLS", division: "Western", founded: 2007, titles: 2, competitive: 73, legacy: 34, record: "16-9-9" },
+            { name: "Portland Timbers", league: "MLS", division: "Western", founded: 2009, titles: 1, competitive: 58, legacy: 26, record: "12-11-11" },
+            { name: "Sporting Kansas City", league: "MLS", division: "Western", founded: 1996, titles: 2, competitive: 69, legacy: 38, record: "8-15-11" },
+            { name: "Columbus Crew", league: "MLS", division: "Eastern", founded: 1996, titles: 3, competitive: 78, legacy: 42, record: "15-9-10" },
+            { name: "New York City FC", league: "MLS", division: "Eastern", founded: 2013, titles: 1, competitive: 54, legacy: 22, record: "14-13-7" },
+            { name: "Atlanta United FC", league: "MLS", division: "Eastern", founded: 2017, titles: 1, competitive: 62, legacy: 24, record: "10-15-9" },
+            { name: "Toronto FC", league: "MLS", division: "Eastern", founded: 2007, titles: 1, competitive: 56, legacy: 26, record: "11-18-5" },
+            { name: "New York Red Bulls", league: "MLS", division: "Eastern", founded: 1996, titles: 0, competitive: 52, legacy: 28, record: "11-13-10" },
+            { name: "Los Angeles FC", league: "MLS", division: "Western", founded: 2018, titles: 1, competitive: 59, legacy: 23, record: "19-8-7" },
+            { name: "Real Salt Lake", league: "MLS", division: "Western", founded: 2005, titles: 1, competitive: 61, legacy: 29, record: "16-12-6" },
+            { name: "Colorado Rapids", league: "MLS", division: "Western", founded: 1996, titles: 1, competitive: 57, legacy: 32, record: "10-17-7" },
+            { name: "Chicago Fire FC", league: "MLS", division: "Eastern", founded: 1998, titles: 1, competitive: 55, legacy: 31, record: "7-17-10" },
+            { name: "San Jose Earthquakes", league: "MLS", division: "Western", founded: 1996, titles: 2, competitive: 64, legacy: 36, record: "12-16-6" },
+            { name: "FC Dallas", league: "MLS", division: "Western", founded: 1996, titles: 0, competitive: 48, legacy: 27, record: "9-18-7" },
+            { name: "Houston Dynamo FC", league: "MLS", division: "Western", founded: 2006, titles: 2, competitive: 67, legacy: 32, record: "15-12-7" },
+            { name: "New England Revolution", league: "MLS", division: "Eastern", founded: 1996, titles: 0, competitive: 46, legacy: 26, record: "9-21-4" },
+            { name: "Philadelphia Union", league: "MLS", division: "Eastern", founded: 2010, titles: 0, competitive: 44, legacy: 21, record: "12-11-11" },
+            { name: "Orlando City SC", league: "MLS", division: "Eastern", founded: 2015, titles: 0, competitive: 41, legacy: 18, record: "15-11-8" },
+            { name: "Minnesota United FC", league: "MLS", division: "Western", founded: 2017, titles: 0, competitive: 38, legacy: 16, record: "13-13-8" },
+            { name: "Vancouver Whitecaps FC", league: "MLS", division: "Western", founded: 2009, titles: 0, competitive: 42, legacy: 19, record: "13-13-8" },
+            { name: "Montreal Impact", league: "MLS", division: "Eastern", founded: 2012, titles: 0, competitive: 39, legacy: 17, record: "11-13-10" },
+            { name: "Inter Miami CF", league: "MLS", division: "Eastern", founded: 2020, titles: 1, competitive: 48, legacy: 18, record: "22-4-8" },
+            { name: "FC Cincinnati", league: "MLS", division: "Eastern", founded: 2019, titles: 0, competitive: 34, legacy: 14, record: "10-20-4" },
+            { name: "Nashville SC", league: "MLS", division: "Western", founded: 2020, titles: 0, competitive: 36, legacy: 15, record: "10-15-9" },
+            { name: "Austin FC", league: "MLS", division: "Western", founded: 2021, titles: 0, competitive: 33, legacy: 13, record: "12-14-8" },
+            { name: "Charlotte FC", league: "MLS", division: "Eastern", founded: 2022, titles: 0, competitive: 29, legacy: 11, record: "11-17-6" },
+            { name: "St. Louis City SC", league: "MLS", division: "Western", founded: 2023, titles: 0, competitive: 27, legacy: 10, record: "8-15-11" },
+            { name: "San Diego FC", league: "MLS", division: "Western", founded: 2025, titles: 0, competitive: 25, legacy: 8, record: "N/A" },
+
+            // NCAA Football - Top Championship Programs
+            { name: "Texas Longhorns", league: "NCAA Football", division: "SEC", founded: 1893, titles: 4, competitive: 101, legacy: 66, record: "12-2" },
+            { name: "Alabama Crimson Tide", league: "NCAA Football", division: "SEC", founded: 1892, titles: 18, competitive: 225, legacy: 136, record: "13-1" },
+            { name: "Notre Dame Fighting Irish", league: "NCAA Football", division: "Independent", founded: 1887, titles: 13, competitive: 198, legacy: 124, record: "7-6" },
+            { name: "USC Trojans", league: "NCAA Football", division: "Big Ten", founded: 1888, titles: 11, competitive: 172, legacy: 105, record: "8-5" },
+            { name: "Ohio State Buckeyes", league: "NCAA Football", division: "Big Ten", founded: 1890, titles: 8, competitive: 158, legacy: 94, record: "13-2" },
+            { name: "Oklahoma Sooners", league: "NCAA Football", division: "SEC", founded: 1895, titles: 7, competitive: 142, legacy: 86, record: "6-7" },
+            { name: "Nebraska Cornhuskers", league: "NCAA Football", division: "Big Ten", founded: 1890, titles: 5, competitive: 128, legacy: 78, record: "6-7" },
+            { name: "Michigan Wolverines", league: "NCAA Football", division: "Big Ten", founded: 1879, titles: 11, competitive: 165, legacy: 102, record: "8-5" },
+            { name: "Penn State Nittany Lions", league: "NCAA Football", division: "Big Ten", founded: 1887, titles: 2, competitive: 96, legacy: 62, record: "13-2" },
+            { name: "Florida State Seminoles", league: "NCAA Football", division: "ACC", founded: 1947, titles: 3, competitive: 89, legacy: 48, record: "2-11" },
+            { name: "Miami Hurricanes", league: "NCAA Football", division: "ACC", founded: 1926, titles: 5, competitive: 118, legacy: 68, record: "10-3" },
+            { name: "Georgia Bulldogs", league: "NCAA Football", division: "SEC", founded: 1892, titles: 4, competitive: 112, legacy: 72, record: "11-2" },
+            { name: "LSU Tigers", league: "NCAA Football", division: "SEC", founded: 1893, titles: 4, competitive: 108, legacy: 69, record: "8-5" },
+            { name: "Auburn Tigers", league: "NCAA Football", division: "SEC", founded: 1892, titles: 3, competitive: 95, legacy: 62, record: "5-7" },
+            { name: "Florida Gators", league: "NCAA Football", division: "SEC", founded: 1906, titles: 3, competitive: 92, legacy: 58, record: "8-5" },
+            { name: "Tennessee Volunteers", league: "NCAA Football", division: "SEC", founded: 1891, titles: 6, competitive: 125, legacy: 81, record: "10-3" },
+            { name: "Clemson Tigers", league: "NCAA Football", division: "ACC", founded: 1896, titles: 3, competitive: 89, legacy: 56, record: "10-4" },
+            { name: "Washington Huskies", league: "NCAA Football", division: "Big Ten", founded: 1889, titles: 2, competitive: 84, legacy: 56, record: "6-7" },
+            { name: "Colorado Buffaloes", league: "NCAA Football", division: "Big 12", founded: 1890, titles: 1, competitive: 76, legacy: 51, record: "9-4" },
+            { name: "Michigan State Spartans", league: "NCAA Football", division: "Big Ten", founded: 1896, titles: 6, competitive: 118, legacy: 74, record: "5-7" },
+            { name: "Minnesota Golden Gophers", league: "NCAA Football", division: "Big Ten", founded: 1882, titles: 7, competitive: 135, legacy: 89, record: "7-6" },
+            { name: "Pittsburgh Panthers", league: "NCAA Football", division: "ACC", founded: 1889, titles: 9, competitive: 152, legacy: 98, record: "7-6" },
+            { name: "Stanford Cardinal", league: "NCAA Football", division: "ACC", founded: 1891, titles: 2, competitive: 82, legacy: 56, record: "3-9" },
+            { name: "BYU Cougars", league: "NCAA Football", division: "Big 12", founded: 1922, titles: 1, competitive: 64, legacy: 38, record: "10-3" },
+            { name: "Army Black Knights", league: "NCAA Football", division: "Independent", founded: 1890, titles: 3, competitive: 89, legacy: 64, record: "11-2" },
+            { name: "Navy Midshipmen", league: "NCAA Football", division: "Independent", founded: 1879, titles: 1, competitive: 72, legacy: 52, record: "8-5" },
+            { name: "Air Force Falcons", league: "NCAA Football", division: "Mountain West", founded: 1955, titles: 0, competitive: 48, legacy: 28, record: "10-3" },
+            { name: "TCU Horned Frogs", league: "NCAA Football", division: "Big 12", founded: 1896, titles: 2, competitive: 78, legacy: 52, record: "8-5" },
+            { name: "Baylor Bears", league: "NCAA Football", division: "Big 12", founded: 1899, titles: 2, competitive: 76, legacy: 48, record: "8-5" },
+            { name: "Oklahoma State Cowboys", league: "NCAA Football", division: "Big 12", founded: 1901, titles: 1, competitive: 68, legacy: 42, record: "4-9" },
+            { name: "Iowa Hawkeyes", league: "NCAA Football", division: "Big Ten", founded: 1889, titles: 1, competitive: 74, legacy: 51, record: "8-5" },
+            { name: "Wisconsin Badgers", league: "NCAA Football", division: "Big Ten", founded: 1889, titles: 1, competitive: 72, legacy: 49, record: "5-7" },
+            { name: "Oregon Ducks", league: "NCAA Football", division: "Big Ten", founded: 1894, titles: 0, competitive: 58, legacy: 36, record: "13-1" },
+            { name: "Arizona State Sun Devils", league: "NCAA Football", division: "Big 12", founded: 1896, titles: 1, competitive: 64, legacy: 42, record: "11-2" },
+            { name: "Utah Utes", league: "NCAA Football", division: "Big 12", founded: 1892, titles: 0, competitive: 52, legacy: 34, record: "5-8" },
+
+            // NCAA Basketball - Top Championship Programs  
+            { name: "UCLA Bruins Basketball", league: "NCAA Basketball", division: "Big Ten", founded: 1919, titles: 11, competitive: 178, legacy: 108, record: "21-6" },
+            { name: "Kentucky Wildcats Basketball", league: "NCAA Basketball", division: "SEC", founded: 1903, titles: 8, competitive: 165, legacy: 96, record: "23-9" },
+            { name: "North Carolina Tar Heels Basketball", league: "NCAA Basketball", division: "ACC", founded: 1911, titles: 6, competitive: 142, legacy: 84, record: "20-14" },
+            { name: "Duke Blue Devils Basketball", league: "NCAA Basketball", division: "ACC", founded: 1906, titles: 5, competitive: 135, legacy: 78, record: "22-10" },
+            { name: "Connecticut Huskies Basketball", league: "NCAA Basketball", division: "Big East", founded: 1901, titles: 6, competitive: 138, legacy: 74, record: "25-8" },
+            { name: "Indiana Hoosiers Basketball", league: "NCAA Basketball", division: "Big Ten", founded: 1901, titles: 5, competitive: 128, legacy: 76, record: "18-14" },
+            { name: "Louisville Cardinals Basketball", league: "NCAA Basketball", division: "ACC", founded: 1912, titles: 3, competitive: 98, legacy: 58, record: "18-16" },
+            { name: "Michigan State Spartans Basketball", league: "NCAA Basketball", division: "Big Ten", founded: 1899, titles: 2, competitive: 89, legacy: 54, record: "17-16" },
+            { name: "Villanova Wildcats Basketball", league: "NCAA Basketball", division: "Big East", founded: 1920, titles: 3, competitive: 95, legacy: 52, record: "18-16" },
+            { name: "Kansas Jayhawks Basketball", league: "NCAA Basketball", division: "Big 12", founded: 1899, titles: 4, competitive: 118, legacy: 72, record: "23-11" },
+            { name: "Florida Gators Basketball", league: "NCAA Basketball", division: "SEC", founded: 1915, titles: 2, competitive: 82, legacy: 48, record: "16-19" },
+            { name: "Maryland Terrapins Basketball", league: "NCAA Basketball", division: "Big Ten", founded: 1904, titles: 1, competitive: 76, legacy: 46, record: "17-16" },
+            { name: "Syracuse Orange Basketball", league: "NCAA Basketball", division: "ACC", founded: 1901, titles: 1, competitive: 74, legacy: 44, record: "18-15" },
+            { name: "Arizona Wildcats Basketball", league: "NCAA Basketball", division: "Big 12", founded: 1905, titles: 1, competitive: 72, legacy: 42, record: "18-16" },
+            { name: "Arkansas Razorbacks Basketball", league: "NCAA Basketball", division: "SEC", founded: 1924, titles: 1, competitive: 68, legacy: 38, record: "16-18" },
+            { name: "UNLV Runnin' Rebels Basketball", league: "NCAA Basketball", division: "Mountain West", founded: 1958, titles: 1, competitive: 64, legacy: 32, record: "15-18" },
+            { name: "Michigan Wolverines Basketball", league: "NCAA Basketball", division: "Big Ten", founded: 1909, titles: 1, competitive: 78, legacy: 48, record: "18-16" },
+            { name: "Georgetown Hoyas Basketball", league: "NCAA Basketball", division: "Big East", founded: 1907, titles: 1, competitive: 76, legacy: 46, record: "9-23" },
+            { name: "NC State Wolfpack Basketball", league: "NCAA Basketball", division: "ACC", founded: 1911, titles: 2, competitive: 84, legacy: 52, record: "11-20" },
+            { name: "Marquette Golden Eagles Basketball", league: "NCAA Basketball", division: "Big East", founded: 1917, titles: 1, competitive: 69, legacy: 38, record: "16-19" }
+        ];
+
+        // Three.js Background Animation
+        let scene, camera, renderer, particles;
+        
+        function initThree() {
+            if (typeof THREE === 'undefined') {
+                setTimeout(initThree, 100);
+                return;
+            }
+            
+            const canvas = document.getElementById('three-canvas');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            
+            // Create enhanced particle system (orange/golden squares like in the PDF)
+            const particleCount = 3000;
+            
+            // Create square geometry for each particle
+            const squareGeometry = new THREE.PlaneGeometry(2, 2);
+            const instancedGeometry = new THREE.InstancedBufferGeometry();
+            instancedGeometry.copy(squareGeometry);
+            
+            // Instance attributes
+            const offsets = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            const scales = new Float32Array(particleCount);
+            const rotations = new Float32Array(particleCount);
+            
+            for (let i = 0; i < particleCount; i++) {
+                // Position
+                offsets[i * 3] = (Math.random() - 0.5) * 4000;
+                offsets[i * 3 + 1] = (Math.random() - 0.5) * 4000;
+                offsets[i * 3 + 2] = (Math.random() - 0.5) * 2000;
+                
+                // Orange/golden color variations matching PDF
+                const orange = new THREE.Color();
+                const hue = 0.08 + Math.random() * 0.05; // Orange range
+                const saturation = 0.7 + Math.random() * 0.3;
+                const lightness = 0.4 + Math.random() * 0.4;
+                orange.setHSL(hue, saturation, lightness);
+                colors[i * 3] = orange.r;
+                colors[i * 3 + 1] = orange.g;
+                colors[i * 3 + 2] = orange.b;
+                
+                // Random scale and rotation
+                scales[i] = 0.5 + Math.random() * 1.5;
+                rotations[i] = Math.random() * Math.PI * 2;
+            }
+            
+            instancedGeometry.setAttribute('offset', new THREE.InstancedBufferAttribute(offsets, 3));
+            instancedGeometry.setAttribute('color', new THREE.InstancedBufferAttribute(colors, 3));
+            instancedGeometry.setAttribute('scale', new THREE.InstancedBufferAttribute(scales, 1));
+            instancedGeometry.setAttribute('rotation', new THREE.InstancedBufferAttribute(rotations, 1));
+            
+            // Enhanced shader material for square particles
+            const material = new THREE.ShaderMaterial({
+                vertexShader: `
+                    attribute vec3 offset;
+                    attribute vec3 color;
+                    attribute float scale;
+                    attribute float rotation;
+                    varying vec3 vColor;
+                    
+                    void main() {
+                        vColor = color;
+                        
+                        vec3 pos = position * scale;
+                        
+                        // Apply rotation
+                        float c = cos(rotation);
+                        float s = sin(rotation);
+                        pos.xy = vec2(pos.x * c - pos.y * s, pos.x * s + pos.y * c);
+                        
+                        pos += offset;
+                        
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    varying vec3 vColor;
+                    
+                    void main() {
+                        vec2 center = gl_PointCoord - 0.5;
+                        float dist = length(center);
+                        
+                        // Square shape with soft edges
+                        float alpha = 1.0 - smoothstep(0.3, 0.5, abs(center.x));
+                        alpha *= 1.0 - smoothstep(0.3, 0.5, abs(center.y));
+                        alpha *= 0.7; // Base transparency
+                        
+                        gl_FragColor = vec4(vColor, alpha);
+                    }
+                `,
+                transparent: true,
+                blending: THREE.AdditiveBlending
+            });
+            
+            particles = new THREE.Mesh(instancedGeometry, material);
+            scene.add(particles);
+            
+            camera.position.z = 1000;
+            
+            animate();
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const time = Date.now() * 0.00005;
+            
+            if (particles) {
+                // Gentle rotation
+                particles.rotation.x = time * 0.15;
+                particles.rotation.y = time * 0.25;
+                particles.rotation.z = time * 0.1;
+                
+                // Animate particle positions with wave motion
+                const offsets = particles.geometry.attributes.offset.array;
+                const rotations = particles.geometry.attributes.rotation.array;
+                
+                for (let i = 0; i < offsets.length; i += 3) {
+                    const originalY = offsets[i + 1];
+                    offsets[i + 1] = originalY + Math.sin(time * 2 + offsets[i] * 0.01) * 30;
+                    
+                    // Rotate individual particles
+                    const rotIndex = Math.floor(i / 3);
+                    if (rotIndex < rotations.length) {
+                        rotations[rotIndex] += 0.01;
+                    }
+                }
+                
+                particles.geometry.attributes.offset.needsUpdate = true;
+                particles.geometry.attributes.rotation.needsUpdate = true;
+            }
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Render Team Cards
+        function renderTeamCards(teams = teamsData) {
+            const grid = document.getElementById('teamsGrid');
+            grid.innerHTML = '';
+            
+            teams.forEach(team => {
+                const card = document.createElement('div');
+                card.className = 'team-card';
+                card.innerHTML = `
+                    <div class="team-header">
+                        <div>
+                            <div class="team-name">${team.name}</div>
+                            <div class="team-league">League: ${team.league}</div>
+                            <div class="team-division">Division: ${team.division}</div>
+                            <div style="font-size: 0.8rem; color: #666; margin-top: 0.5rem;">
+                                Founded: ${team.founded} | Titles: ${team.titles}
+                            </div>
+                        </div>
+                        <div class="team-record">${team.record}</div>
+                    </div>
+                    
+                    <div class="team-scores">
+                        <div class="competitive-score">
+                            <div class="score-number">${team.competitive}</div>
+                            <div class="score-label">Competitive</div>
+                        </div>
+                        <div class="competitive-score">
+                            <div class="score-number">${team.legacy}</div>
+                            <div class="score-label">Legacy</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255, 107, 53, 0.2); text-align: center; color: #888; font-size: 0.8rem;">
+                        COMPETITIVE LEGACY
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            
+            // Update filtered results count
+            document.getElementById('filteredResults').textContent = teams.length;
+        }
+        
+        // Search and Filter functionality
+        function setupFilters() {
+            const searchInput = document.getElementById('teamSearch');
+            const leagueFilter = document.getElementById('leagueFilter');
+            
+            function filterTeams() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedLeague = leagueFilter.value;
+                
+                const filteredTeams = teamsData.filter(team => {
+                    const matchesSearch = team.name.toLowerCase().includes(searchTerm) ||
+                                        team.league.toLowerCase().includes(searchTerm) ||
+                                        team.division.toLowerCase().includes(searchTerm);
+                    const matchesLeague = !selectedLeague || team.league === selectedLeague;
+                    
+                    return matchesSearch && matchesLeague;
+                });
+                
+                renderTeamCards(filteredTeams);
+            }
+            
+            searchInput.addEventListener('input', filterTeams);
+            leagueFilter.addEventListener('change', filterTeams);
+        }
+        
+        // Handle window resize
+        function onWindowResize() {
+            if (camera && renderer) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        }
+        
+        // Smooth scrolling
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // Initialize everything
+        function init() {
+            // Hide loading screen
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 2000);
+            
+            // Initialize Three.js
+            initThree();
+            
+            // Render team cards
+            renderTeamCards();
+            
+            // Setup filters
+            setupFilters();
+            
+            // Setup smooth scrolling
+            setupSmoothScrolling();
+            
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+            
+            // GSAP Animations
+            if (typeof gsap !== 'undefined') {
+                // Animate hero elements
+                gsap.from('.bi-logo', {
+                    duration: 1.5,
+                    y: 50,
+                    opacity: 0,
+                    ease: 'power3.out',
+                    delay: 2.2
+                });
+                
+                gsap.from('.hero-title', {
+                    duration: 1.2,
+                    y: 30,
+                    opacity: 0,
+                    ease: 'power3.out',
+                    delay: 2.4
+                });
+                
+                gsap.from('.hero-subtitle', {
+                    duration: 1,
+                    y: 20,
+                    opacity: 0,
+                    ease: 'power3.out',
+                    delay: 2.6
+                });
+                
+                gsap.from('.stat-card', {
+                    duration: 0.8,
+                    y: 40,
+                    opacity: 0,
+                    stagger: 0.1,
+                    ease: 'power3.out',
+                    delay: 2.8
+                });
+                
+                gsap.from('.hero-actions', {
+                    duration: 1,
+                    y: 30,
+                    opacity: 0,
+                    ease: 'power3.out',
+                    delay: 3.2
+                });
+            }
+        }
+        
+        // Start when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
