@@ -7,6 +7,35 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'space': ['Space Grotesk', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        'blaze-orange': '#FF6B35',
+                        'glow-orange': '#FF7A00',
+                        'dark-orange': '#CC5500',
+                        'spark-orange': '#FFA500',
+                        'ember-orange': '#CC5500',
+                        'bg-primary': '#0A0A0A',
+                        'bg-secondary': '#141414',
+                        'text-primary': '#EAEAEA'
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                        'sm': '4px',
+                        'md': '8px',
+                        'lg': '16px',
+                        'xl': '24px'
+                    }
+                }
+            }
+        }
+    </script>
     
     <!-- Google Fonts: Inter (for UI), Space Grotesk (for headings) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -151,7 +180,7 @@
         }
     </style>
 </head>
-<body>
+<body class="bg-bg-primary text-text-primary font-inter overflow-x-hidden">
     <!-- Navigation -->
     <header class="fixed w-full top-0 z-50 nav-blur border-b border-gray-800">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -187,8 +216,8 @@
         <div id="hero-canvas"></div>
         
         <div class="z-10 max-w-4xl mx-auto px-4">
-            <h3 class="text-xl md:text-2xl font-semibold opacity-90">Welcome to the Future of</h3>
-            <h1 class="text-6xl md:text-7xl font-bold my-6 hero-glow" style="font-family: var(--font-heading);">
+            <h3 class="text-xl md:text-2xl font-semibold opacity-90 font-inter">Welcome to the Future of</h3>
+            <h1 class="text-6xl md:text-7xl font-bold my-6 hero-glow font-space">
                 Sports <span class="gradient-text">Intelligence</span>
             </h1>
             <h3 class="text-2xl md:text-3xl font-semibold mb-6">
@@ -225,7 +254,7 @@
     <!-- Live Metrics Section -->
     <section id="analytics" class="py-16 px-8 bg-gradient-to-b from-transparent to-gray-900/20">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl font-bold text-center mb-12" style="font-family: var(--font-heading);">
+            <h2 class="text-4xl font-bold text-center mb-12 font-space">
                 Live <span class="gradient-text">Performance Dashboard</span>
             </h2>
             
@@ -276,7 +305,7 @@
     <!-- Teams Section -->
     <section id="teams" class="py-16 px-8">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl font-bold text-center mb-4" style="font-family: var(--font-heading);">
+            <h2 class="text-4xl font-bold text-center mb-4 font-space">
                 Championship <span class="gradient-text">Focus</span>
             </h2>
             <p class="text-center text-lg opacity-90 mb-12 max-w-2xl mx-auto">
@@ -340,7 +369,7 @@
     <!-- Insights Section -->
     <section id="insights" class="bg-[var(--second-bg-color)] py-16 px-8">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl font-bold text-center mb-4" style="font-family: var(--font-heading);">
+            <h2 class="text-4xl font-bold text-center mb-4 font-space">
                 Strategic <span class="gradient-text">Intelligence</span>
             </h2>
             <p class="text-center text-lg opacity-90 mb-12 max-w-2xl mx-auto">
@@ -390,7 +419,7 @@
     <!-- Contact Section -->
     <section id="contact" class="py-16 px-8">
         <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-4xl font-bold mb-4" style="font-family: var(--font-heading);">
+            <h2 class="text-4xl font-bold mb-4 font-space">
                 Ready to <span class="gradient-text">Dominate</span>?
             </h2>
             <p class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
