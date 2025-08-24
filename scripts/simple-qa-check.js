@@ -4,7 +4,7 @@
  * /qa - Simple QA verification for production deployment
  */
 
-const PROD_URL = 'https://fe5b775f.blaze-intelligence-lsl.pages.dev';
+const PROD_URL = 'https://3eca9ea9.blaze-intelligence-lsl.pages.dev';
 
 async function checkEndpoint(url, description) {
     try {
@@ -24,12 +24,12 @@ async function main() {
     
     const checks = [
         [`${PROD_URL}`, 'Main site'],
-        [`${PROD_URL}/health`, 'Health endpoint'],
-        [`${PROD_URL}/api/champion-enigma/live-score`, 'Champion Enigma API'],
+        [`${PROD_URL}/competitive-analysis`, 'Competitive analysis page'],
+        [`${PROD_URL}/cardinals-intelligence`, 'Cardinals landing page'],
+        [`${PROD_URL}/privacy-policy`, 'Privacy policy'],
+        [`${PROD_URL}/manifest.json`, 'PWA manifest'],
+        [`${PROD_URL}/sw.js`, 'Service worker'],
         [`${PROD_URL}/data/analytics/readiness.json`, 'Cardinals Readiness data'],
-        [`${PROD_URL}/competitive-analysis.html`, 'Competitive analysis page'],
-        [`${PROD_URL}/cardinals-intelligence.html`, 'Cardinals landing page'],
-        [`${PROD_URL}/privacy-policy.html`, 'Privacy policy'],
     ];
     
     let passed = 0;

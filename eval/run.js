@@ -7,7 +7,7 @@
 
 import { execSync } from 'child_process';
 
-const DEFAULT_URL = 'https://fe5b775f.blaze-intelligence-lsl.pages.dev';
+const DEFAULT_URL = 'https://3eca9ea9.blaze-intelligence-lsl.pages.dev';
 
 class BlazeProofs {
     constructor(baseUrl) {
