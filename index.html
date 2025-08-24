@@ -1,705 +1,551 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sports Analytics & Performance Intelligence | Blaze Intelligence</title>
-  
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Evidence-based sports analytics platform combining cognitive performance with quarterly results. Featuring Cardinals, Titans, Longhorns, and Grizzlies intelligence.">
-  <meta name="keywords" content="sports analytics, performance intelligence, flow state, baseball analytics, football analytics, basketball analytics, cognitive performance">
-  <link rel="canonical" href="https://blaze-intelligence.com/">
-  
-  <!-- Open Graph -->
-  <meta property="og:title" content="Sports Analytics & Performance Intelligence | Blaze Intelligence">
-  <meta property="og:description" content="Evidence-based sports analytics platform combining cognitive performance with quarterly results.">
-  <meta property="og:image" content="https://blaze-intelligence.com/images/og-blaze-analytics.jpg">
-  <meta property="og:url" content="https://blaze-intelligence.com/">
-  <meta property="og:type" content="website">
-  
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Core Styles -->
-  <link rel="stylesheet" href="/css/blaze.css">
-  <link rel="stylesheet" href="/css/components.css">
-  
-  <!-- Legacy URL Redirect Handler (Must load first) -->
-  <script src="/js/redirect-handler.js"></script>
-  
-  <!-- SEO Migration Monitor -->
-  <script src="/scripts/seo-migration-monitor.js"></script>
-  
-  <!-- Flow State Integration -->
-  <link rel="stylesheet" href="/flow-styles.css" id="flow-state-styles">
-  <script type="module" src="/flow-state-api.js"></script>
-  <script type="module" src="/flow-widgets.js"></script>
-  
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#FF6B35">
-  
-  <!-- Schema Markup -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Blaze Intelligence",
-    "description": "Sports analytics and performance optimization platform",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "127"
-    }
-  }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence | Championship Sports Analytics</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter (for UI), Space Grotesk (for headings) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- GSAP & ScrollTrigger for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Three.js for Hero Visuals -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#FF6B35">
     
     <style>
-      /* Clean, professional styling */
-      body { margin: 0; background: #0A0A0A; color: #FFFFFF; font-family: 'Inter', sans-serif; }
-      
-      /* Professional sticky header */
-      .topbar {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        background: rgba(10, 10, 10, 0.95);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(255, 107, 53, 0.2);
-        padding: 1rem 0;
-      }
-      
-      .nav-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      
-      .logo {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-family: 'Space Grotesk', sans-serif;
-        font-weight: 700;
-        font-size: 1.25rem;
-        color: #FFFFFF;
-        text-decoration: none;
-      }
-      
-      .logo-icon {
-        background: linear-gradient(135deg, #FF6B35, #CC5500);
-        padding: 0.5rem;
-        border-radius: 8px;
-        font-size: 1rem;
-      }
-      
-      .nav-menu {
-        display: flex;
-        gap: 2rem;
-        align-items: center;
-      }
-      
-      .nav-link {
-        color: #FFFFFF;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.3s ease;
-      }
-      
-      .nav-link:hover {
-        color: #FF6B35;
-      }
-      
-      .nav-cta {
-        background: linear-gradient(135deg, #CC5500, #FF6B35);
-        color: #FFFFFF;
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: transform 0.3s ease;
-      }
-      
-      .nav-cta:hover {
-        transform: translateY(-2px);
-      }
-      
-      /* Navigation widgets */
-      .nav-widget {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: rgba(255, 107, 53, 0.1);
-        border: 1px solid rgba(255, 107, 53, 0.3);
-        border-radius: 8px;
-        padding: 0.5rem 0.75rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      
-      .nav-widget:hover {
-        background: rgba(255, 107, 53, 0.2);
-        border-color: rgba(255, 107, 53, 0.5);
-        transform: translateY(-1px);
-      }
-      
-      .nav-widget .widget-icon {
-        font-size: 1.2rem;
-      }
-      
-      .nav-widget .widget-content {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .nav-widget .widget-label {
-        font-size: 0.75rem;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.8);
-        line-height: 1;
-      }
-      
-      .nav-widget .widget-value {
-        font-size: 0.9rem;
-        font-weight: 700;
-        color: #FFFFFF;
-        line-height: 1;
-      }
-      
-      .champion-enigma-widget.active .widget-value {
-        color: #FFD700;
-      }
-      
-      .readiness-badge.active .widget-value {
-        color: #00FF88;
-      }
-      
-      /* Hero section */
-      .hero {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 4rem 2rem;
-        display: grid;
-        grid-template-columns: 1.2fr 1fr;
-        gap: 3rem;
-        align-items: start;
-      }
-      
-      .hero-content h1 {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: clamp(2rem, 4vw, 3rem);
-        font-weight: 700;
-        line-height: 1.1;
-        margin-bottom: 1.5rem;
-        color: #FFFFFF;
-      }
-      
-      .hero-content p {
-        font-size: 1.125rem;
-        line-height: 1.6;
-        color: #A1A5AE;
-        margin-bottom: 2rem;
-      }
-      
-      .cta-buttons {
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 2rem;
-        flex-wrap: wrap;
-      }
-      
-      .btn-primary {
-        background: linear-gradient(135deg, #CC5500, #FF6B35);
-        color: #FFFFFF;
-        padding: 1rem 2rem;
-        border-radius: 10px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
-      }
-      
-      .btn-secondary {
-        background: transparent;
-        color: #FFFFFF;
-        padding: 1rem 2rem;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-      }
-      
-      .btn-secondary:hover {
-        border-color: #FF6B35;
-        color: #FF6B35;
-      }
-      
-      /* Video container */
-      .video-container {
-        background: linear-gradient(135deg, rgba(22, 24, 28, 0.9), rgba(22, 24, 28, 0.7));
-        border: 1px solid rgba(255, 107, 53, 0.2);
-        border-radius: 16px;
-        padding: 1rem;
-        margin-top: 1rem;
-      }
-      
-      .video-container iframe {
-        width: 100%;
-        aspect-ratio: 16/9;
-        border-radius: 12px;
-        border: 0;
-      }
-      
-      /* Live data card */
-      .live-data-card {
-        background: linear-gradient(135deg, rgba(22, 24, 28, 0.9), rgba(22, 24, 28, 0.7));
-        border: 1px solid rgba(255, 107, 53, 0.2);
-        border-radius: 16px;
-        padding: 1.5rem;
-        position: relative;
-      }
-      
-      .live-header {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
-      }
-      
-      .live-dot {
-        width: 10px;
-        height: 10px;
-        background: #FF6B35;
-        border-radius: 50%;
-        animation: pulse 2s infinite;
-      }
-      
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-      }
-      
-      .data-item {
-        margin-bottom: 1.5rem;
-      }
-      
-      .data-label {
-        font-size: 0.875rem;
-        color: #A1A5AE;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 0.5rem;
-      }
-      
-      .data-value {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 2rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #FF6B35, #CC5500);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      
-      .last-updated {
-        font-size: 0.875rem;
-        color: #A1A5AE;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      
-      /* Footer */
-      .footer {
-        max-width: 1200px;
-        margin: 3rem auto 2rem;
-        padding: 0 2rem;
-      }
-      
-      .footer-content {
-        background: linear-gradient(135deg, rgba(22, 24, 28, 0.9), rgba(22, 24, 28, 0.7));
-        border: 1px solid rgba(255, 107, 53, 0.2);
-        border-radius: 16px;
-        padding: 1.5rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 1rem;
-      }
-      
-      .footer-content a {
-        color: #FF6B35;
-        text-decoration: none;
-      }
-      
-      /* Responsive */
-      @media (max-width: 768px) {
-        .hero {
-          grid-template-columns: 1fr;
-          gap: 2rem;
-          padding: 2rem 1rem;
+        :root {
+            --blaze-orange: #FF6B35;
+            --glow-orange: #FF7A00;
+            --dark-orange: #CC5500;
+            --spark-orange: #FFA500;
+            --ember-orange: #CC5500;
+            --bg-color: #0A0A0A;
+            --second-bg-color: #141414;
+            --text-color: #EAEAEA;
+            --main-color: var(--blaze-orange);
+            --font-body: 'Inter', sans-serif;
+            --font-heading: 'Space Grotesk', sans-serif;
         }
         
-        .nav-container {
-          padding: 0 1rem;
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            cursor: default;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
-        .nav-menu {
-          gap: 1rem;
+        .glass-effect {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 53, 0.2);
         }
         
-        .cta-buttons {
-          flex-direction: column;
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 10, 0.9);
         }
-      }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--blaze-orange), var(--spark-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-glow {
+            text-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+        }
+        
+        .metric-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .team-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .team-card:hover::before {
+            left: 100%;
+        }
+        
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .social-media a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: 2px solid var(--main-color);
+            border-radius: 50%;
+            font-size: 20px;
+            color: var(--main-color);
+            text-decoration: none;
+            margin: 30px 15px 30px 0;
+            transition: 0.5s ease;
+            opacity: 0;
+            animation: slideRight 1s ease forwards;
+        }
+        
+        .social-media a:hover {
+            background: var(--main-color);
+            color: var(--bg-color);
+            box-shadow: 0 0 20px var(--main-color);
+        }
+        
+        @keyframes slideRight {
+            to {
+                opacity: 1;
+            }
+        }
     </style>
-  </head>
-  
-  <body>
-    <!-- Skip to main content for accessibility -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <!-- Unified Navigation -->
-    <header class="topbar" id="unified-navigation">
-      <div class="nav-container">
-        <a href="/" class="logo">
-          <span class="logo-icon">🔥</span>
-          <span>Blaze Intelligence</span>
-        </a>
-        
-        <!-- Main Navigation Menu -->
-        <nav class="nav-menu">
-          <!-- Analytics Hub -->
-          <div class="nav-dropdown">
-            <a href="/analytics/" class="nav-link nav-dropdown-trigger">Analytics <span class="dropdown-arrow">▾</span></a>
-            <div class="nav-dropdown-content">
-              <a href="/analytics/" class="dropdown-item">Overview Dashboard</a>
-              <a href="/analytics/dashboard/" class="dropdown-item">Statistics Dashboard</a>
-              <a href="/analytics/real-time/" class="dropdown-item">Real-time Analytics</a>
-              <a href="/analytics/nil-valuation/" class="dropdown-item">NIL Valuation</a>
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="fixed w-full top-0 z-50 nav-blur border-b border-gray-800">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-fire text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-bold" style="font-family: var(--font-heading);">Blaze Intelligence</span>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="hover:text-orange-500 transition-colors">Home</a>
+                    <a href="#analytics" class="hover:text-orange-500 transition-colors">Analytics</a>
+                    <a href="#teams" class="hover:text-orange-500 transition-colors">Teams</a>
+                    <a href="#insights" class="hover:text-orange-500 transition-colors">Insights</a>
+                    <a href="#contact" class="hover:text-orange-500 transition-colors">Contact</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Live Data Widget -->
+                    <div class="hidden lg:flex items-center space-x-4 px-4 py-2 glass-effect rounded-lg">
+                        <div class="w-2 h-2 bg-green-500 rounded-full pulse-animation"></div>
+                        <span class="text-sm font-medium">Live Data</span>
+                    </div>
+                </div>
             </div>
-          </div>
-          
-          <!-- Capabilities Platform -->
-          <div class="nav-dropdown">
-            <a href="/capabilities/" class="nav-link nav-dropdown-trigger">Capabilities <span class="dropdown-arrow">▾</span></a>
-            <div class="nav-dropdown-content">
-              <a href="/capabilities/biomechanics/" class="dropdown-item">3D Biomechanics</a>
-              <a href="/capabilities/flow-state/" class="dropdown-item">Flow State</a>
-              <a href="/capabilities/scouting/" class="dropdown-item">Advanced Scouting</a>
-            </div>
-          </div>
-          
-          <!-- Interactive Demos -->
-          <div class="nav-dropdown">
-            <a href="/games/" class="nav-link nav-dropdown-trigger">Games <span class="dropdown-arrow">▾</span></a>
-            <div class="nav-dropdown-content">
-              <a href="/games/baseball/" class="dropdown-item">Baseball Demo</a>
-              <a href="/games/simulator/" class="dropdown-item">3D Simulator</a>
-              <a href="/games/advanced/" class="dropdown-item">Advanced Simulator</a>
-            </div>
-          </div>
-          
-          <!-- Company -->
-          <a href="/company/presentations/" class="nav-link">Presentations</a>
-          
-          <!-- Pricing -->
-          <a href="/pricing/" class="nav-link">Pricing</a>
-          
-          <!-- Champion Enigma Widget -->
-          <div class="nav-widget champion-enigma-widget" id="champion-enigma-nav">
-            <div class="widget-icon">🏆</div>
-            <div class="widget-content">
-              <span class="widget-label">Champion Enigma</span>
-              <span class="widget-value" id="enigma-score">--</span>
-            </div>
-          </div>
-          
-          <!-- Cardinals Readiness Badge -->
-          <div class="nav-widget readiness-badge" id="readiness-nav">
-            <div class="widget-icon">⚾</div>
-            <div class="widget-content">
-              <span class="widget-label">Cardinals Ready</span>
-              <span class="widget-value" id="readiness-score">--</span>
-            </div>
-          </div>
-          
-          <!-- Get Started CTA -->
-          <a href="/onboarding/" class="nav-cta">Get Started</a>
         </nav>
-        
-        <!-- Mobile menu toggle -->
-        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-      
-      <!-- Mobile Navigation -->
-      <div class="mobile-nav" id="mobile-nav">
-        <div class="mobile-nav-content">
-          <a href="/" class="mobile-nav-link">Home</a>
-          <a href="/analytics/" class="mobile-nav-link">Analytics</a>
-          <a href="/capabilities/" class="mobile-nav-link">Capabilities</a>
-          <a href="/games/" class="mobile-nav-link">Games</a>
-          <a href="/pricing/" class="mobile-nav-link">Pricing</a>
-          <a href="/company/" class="mobile-nav-link">Company</a>
-          <a href="/onboarding/" class="mobile-nav-cta">Get Started</a>
-        </div>
-      </div>
     </header>
 
-    <!-- Main Content -->
-    <main id="main-content" class="main-content">
-      <!-- Hero section -->
-      <section class="hero">
-      <div class="hero-content">
-        <h1>Welcome to the Future of Sports Analytics</h1>
-        <p>
-          Three-dimensional scouting + live intelligence. Focus set: 
-          <strong>Cardinals</strong>, <strong>Titans</strong>, 
-          <strong>Longhorns</strong>, <strong>Grizzlies</strong>. No soccer.
-        </p>
+    <!-- Hero Section -->
+    <section id="home" class="flex flex-col justify-center items-center text-center min-h-screen relative">
+        <div id="hero-canvas"></div>
         
-        <div class="cta-buttons">
-          <a href="/game.html" class="btn-primary">
-            🎮 Play Now
-          </a>
-          <a href="/index-corporate-enhanced.html" class="btn-secondary">
-            📊 Competitive Analysis
-          </a>
+        <div class="z-10 max-w-4xl mx-auto px-4">
+            <h3 class="text-xl md:text-2xl font-semibold opacity-90">Welcome to the Future of</h3>
+            <h1 class="text-6xl md:text-7xl font-bold my-6 hero-glow" style="font-family: var(--font-heading);">
+                Sports <span class="gradient-text">Intelligence</span>
+            </h1>
+            <h3 class="text-2xl md:text-3xl font-semibold mb-6">
+                Where <span class="text-orange-500">Data Meets Championship Vision</span>
+            </h3>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8 opacity-90 leading-relaxed">
+                Three-dimensional scouting + live intelligence. Turning pattern recognition into competitive advantage 
+                for <span class="text-orange-500">Cardinals, Titans, Longhorns, Grizzlies</span>. No soccer.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                <button onclick="scrollToSection('#analytics')" class="bg-gradient-to-r from-orange-500 to-orange-600 text-black px-8 py-4 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <i class="fas fa-play mr-2"></i>Explore Analytics
+                </button>
+                <a href="/competitive-analysis" class="bg-transparent border-2 border-orange-500 text-orange-500 px-8 py-4 rounded-lg font-semibold hover:bg-orange-500 hover:text-black transition-all duration-300">
+                    <i class="fas fa-chart-line mr-2"></i>View Performance
+                </a>
+            </div>
+            
+            <div class="social-media flex justify-center space-x-4">
+                <a href="https://www.linkedin.com/in/john-humphrey-2033" target="_blank" aria-label="LinkedIn">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+                <a href="https://github.com/ahump20" target="_blank" aria-label="GitHub">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="https://x.com/a_hump20" target="_blank" aria-label="Twitter">
+                    <i class="fa-brands fa-twitter"></i>
+                </a>
+            </div>
         </div>
-        
-        <div class="video-container">
-          <iframe
-            src="https://iframe.videodelivery.net/138facaf760c65e9b4efab3715ae6f50?autoplay=false&muted=false&controls=true&preload=metadata"
-            title="Sports Management & Operations Lecture"
-            allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture"
-            allowfullscreen>
-          </iframe>
-        </div>
-      </div>
+    </section>
 
-      <aside class="live-data-card">
-        <div class="live-header">
-          <span class="live-dot"></span>
-          <strong>Live Data</strong>
+    <!-- Live Metrics Section -->
+    <section id="analytics" class="py-16 px-8 bg-gradient-to-b from-transparent to-gray-900/20">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12" style="font-family: var(--font-heading);">
+                Live <span class="gradient-text">Performance Dashboard</span>
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <!-- Cardinals Readiness -->
+                <div class="metric-card glass-effect p-6 rounded-xl text-center">
+                    <div class="flex items-center justify-center mb-3">
+                        <i class="fas fa-baseball-ball text-red-500 text-2xl mr-2"></i>
+                        <h3 class="font-semibold">Cardinals Readiness</h3>
+                    </div>
+                    <div class="text-3xl font-bold gradient-text" id="readiness-score">87.3%</div>
+                    <div class="text-sm opacity-75 mt-1">Championship Level</div>
+                </div>
+                
+                <!-- Champion Enigma -->
+                <div class="metric-card glass-effect p-6 rounded-xl text-center">
+                    <div class="flex items-center justify-center mb-3">
+                        <i class="fas fa-crown text-yellow-500 text-2xl mr-2"></i>
+                        <h3 class="font-semibold">Champion Enigma</h3>
+                    </div>
+                    <div class="text-3xl font-bold gradient-text" id="enigma-score">94/100</div>
+                    <div class="text-sm opacity-75 mt-1">Elite Traits</div>
+                </div>
+                
+                <!-- Leverage Score -->
+                <div class="metric-card glass-effect p-6 rounded-xl text-center">
+                    <div class="flex items-center justify-center mb-3">
+                        <i class="fas fa-chart-line text-green-500 text-2xl mr-2"></i>
+                        <h3 class="font-semibold">Leverage</h3>
+                    </div>
+                    <div class="text-3xl font-bold gradient-text" id="leverage-score">0.74</div>
+                    <div class="text-sm opacity-75 mt-1">Competitive Edge</div>
+                </div>
+                
+                <!-- Flow State -->
+                <div class="metric-card glass-effect p-6 rounded-xl text-center">
+                    <div class="flex items-center justify-center mb-3">
+                        <i class="fas fa-fire text-orange-500 text-2xl mr-2"></i>
+                        <h3 class="font-semibold">Flow State</h3>
+                    </div>
+                    <div class="text-3xl font-bold gradient-text">Active</div>
+                    <div class="text-sm opacity-75 mt-1">Peak Performance</div>
+                </div>
+            </div>
         </div>
-        
-        <div class="data-item">
-          <div class="data-label">Readiness</div>
-          <div class="data-value" id="readiness">67.30</div>
+    </section>
+
+    <!-- Teams Section -->
+    <section id="teams" class="py-16 px-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-4" style="font-family: var(--font-heading);">
+                Championship <span class="gradient-text">Focus</span>
+            </h2>
+            <p class="text-center text-lg opacity-90 mb-12 max-w-2xl mx-auto">
+                Specialized analytics for elite organizations across four major leagues
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Cardinals -->
+                <div class="team-card glass-effect p-6 rounded-xl text-center hover:shadow-2xl transition-all duration-300">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-red-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-baseball-ball text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-red-400">Cardinals</h3>
+                    <p class="text-sm opacity-80 mb-4">MLB • St. Louis</p>
+                    <div class="text-2xl font-bold gradient-text mb-2">87.3%</div>
+                    <div class="text-xs opacity-70">Championship Readiness</div>
+                    <a href="/cardinals-intelligence" class="inline-block mt-4 text-xs text-orange-500 hover:text-orange-300 transition-colors">
+                        View Analysis →
+                    </a>
+                </div>
+                
+                <!-- Titans -->
+                <div class="team-card glass-effect p-6 rounded-xl text-center hover:shadow-2xl transition-all duration-300">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-football-ball text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-blue-400">Titans</h3>
+                    <p class="text-sm opacity-80 mb-4">NFL • Tennessee</p>
+                    <div class="text-2xl font-bold gradient-text mb-2">Active</div>
+                    <div class="text-xs opacity-70">Season Analysis</div>
+                    <div class="inline-block mt-4 text-xs opacity-50">Coming Soon</div>
+                </div>
+                
+                <!-- Longhorns -->
+                <div class="team-card glass-effect p-6 rounded-xl text-center hover:shadow-2xl transition-all duration-300">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-orange-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-football-ball text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-orange-400">Longhorns</h3>
+                    <p class="text-sm opacity-80 mb-4">NCAA • Texas</p>
+                    <div class="text-2xl font-bold gradient-text mb-2">Elite</div>
+                    <div class="text-xs opacity-70">Championship Swagger</div>
+                    <div class="inline-block mt-4 text-xs opacity-50">Coming Soon</div>
+                </div>
+                
+                <!-- Grizzlies -->
+                <div class="team-card glass-effect p-6 rounded-xl text-center hover:shadow-2xl transition-all duration-300">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-gray-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-basketball-ball text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-400">Grizzlies</h3>
+                    <p class="text-sm opacity-80 mb-4">NBA • Memphis</p>
+                    <div class="text-2xl font-bold gradient-text mb-2">Grit</div>
+                    <div class="text-xs opacity-70">Defensive Excellence</div>
+                    <div class="inline-block mt-4 text-xs opacity-50">Coming Soon</div>
+                </div>
+            </div>
         </div>
-        
-        <div class="data-item">
-          <div class="data-label">Leverage</div>
-          <div class="data-value" id="leverage">2.40</div>
+    </section>
+
+    <!-- Insights Section -->
+    <section id="insights" class="bg-[var(--second-bg-color)] py-16 px-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-4" style="font-family: var(--font-heading);">
+                Strategic <span class="gradient-text">Intelligence</span>
+            </h2>
+            <p class="text-center text-lg opacity-90 mb-12 max-w-2xl mx-auto">
+                Advanced analytics platforms that transform data into championship decisions
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-effect p-8 rounded-xl hover:shadow-2xl transition-all duration-300">
+                    <div class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-brain text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Pattern Recognition</h3>
+                    <p class="opacity-90 leading-relaxed">
+                        Proprietary algorithms that identify competitive advantages invisible to traditional scouting. 
+                        <span class="text-orange-500">94.6% accuracy</span> in performance prediction.
+                    </p>
+                </div>
+                
+                <div class="glass-effect p-8 rounded-xl hover:shadow-2xl transition-all duration-300">
+                    <div class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-bolt text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Real-Time Intelligence</h3>
+                    <p class="opacity-90 leading-relaxed">
+                        Live data processing with <span class="text-orange-500">&lt;100ms</span> latency. 
+                        Decision velocity optimization for championship moments.
+                    </p>
+                </div>
+                
+                <div class="glass-effect p-8 rounded-xl hover:shadow-2xl transition-all duration-300">
+                    <div class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-trophy text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Championship Framework</h3>
+                    <p class="opacity-90 leading-relaxed">
+                        Four Pillars methodology proven across professional leagues. 
+                        <span class="text-orange-500">67-80% cost savings</span> vs traditional platforms.
+                    </p>
+                    <a href="/competitive-analysis" class="inline-block mt-4 text-orange-500 hover:text-orange-300 transition-colors text-sm">
+                        View Analysis →
+                    </a>
+                </div>
+            </div>
         </div>
-        
-        <div class="last-updated">
-          Last updated: <span id="updated">Just now</span>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 px-8">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4" style="font-family: var(--font-heading);">
+                Ready to <span class="gradient-text">Dominate</span>?
+            </h2>
+            <p class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+                Transform your organization with championship-level analytics. 
+                Let's build something that wins.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="mailto:ahump20@outlook.com" class="bg-gradient-to-r from-orange-500 to-orange-600 text-black px-8 py-4 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg">
+                    <i class="fas fa-envelope mr-2"></i>Start Conversation
+                </a>
+                <a href="tel:+12102735538" class="bg-transparent border-2 border-orange-500 text-orange-500 px-8 py-4 rounded-lg font-semibold hover:bg-orange-500 hover:text-black transition-all duration-300">
+                    <i class="fas fa-phone mr-2"></i>(210) 273-5538
+                </a>
+            </div>
         </div>
-        
-        <!-- Flow Dashboard Tile -->
-        <div class="tile" id="flow-dashboard-tile" style="margin-top: 20px;">
-          <div class="label">Flow State</div>
-          <div class="value" id="flow-dashboard-value">--</div>
-          <div style="font-size: 12px; color: #A1A5AE; margin-top: 4px;">
-            Real-time flow metrics
-          </div>
-        </div>
-      </aside>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-content">
-        <div>Built with ❤️ by Blaze Intelligence — Where cognitive performance meets quarterly performance™</div>
-        <div>
-          <a href="mailto:ahump20@outlook.com">ahump20@outlook.com</a> • 
-          <a href="tel:+12102735538">(210) 273-5538</a> • 
-          <a href="#flow-methods" style="color: #FF6B35;">Flow Science Methods & Definitions</a>
+    <footer class="bg-black py-8 px-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="flex items-center justify-center space-x-2 mb-4">
+                <div class="w-6 h-6 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-fire text-white text-xs"></i>
+                </div>
+                <span class="font-bold" style="font-family: var(--font-heading);">Blaze Intelligence</span>
+            </div>
+            <p class="text-sm opacity-70 mb-4">© 2025 Blaze Intelligence. Championship analytics for elite organizations.</p>
+            <div class="flex justify-center space-x-6 text-sm">
+                <a href="/privacy-policy" class="hover:text-orange-500 transition-colors">Privacy Policy</a>
+                <a href="/competitive-analysis" class="hover:text-orange-500 transition-colors">Competitive Analysis</a>
+                <a href="/cardinals-intelligence" class="hover:text-orange-500 transition-colors">Cardinals Intelligence</a>
+            </div>
         </div>
-      </div>
-      
-      <!-- Scientific Flow Evidence Section -->
-      <div class="callout" style="margin-top: 20px;">
-        <h3>Evidence-Based Flow State Integration</h3>
-        <ul>
-          <li><strong>Research Foundation:</strong> Built on Csíkszentmihályi's 40+ years of flow research</li>
-          <li><strong>Neuroscience Backing:</strong> Leverages transient hypofrontality and theta-alpha brain wave states (8-12Hz)</li>
-          <li><strong>Validated Performance:</strong> Research demonstrates 10-25% performance improvements in optimal challenge conditions</li>
-          <li><strong>4% Challenge Rule:</strong> Implements Kotler's optimal challenge-to-skill ratio for sustained flow states</li>
-          <li><strong>MSPE Integration:</strong> Mindfulness-Based Sport Performance Enhancement with tactical breathing protocols</li>
-        </ul>
-        <div style="margin-top: 12px; font-size: 12px; opacity: 0.8;">
-          Sources: Flow Research Collective, Applied Neuroscience Institute, McKinsey Global Institute Performance Studies
-        </div>
-      </div>
     </footer>
-    </main>
 
-    <!-- Flow Meter Widget -->
-    <div id="flow-meter-container"></div>
-
-    <!-- Base Scripts -->
-    <script src="/js/core.js"></script>
-    
-    <!-- SEO Migration Monitor -->
-    <script src="/scripts/seo-migration-monitor.js"></script>
-
+    <!-- Scripts -->
     <script>
-      // Simple, clean live data updates
-      function updateLiveData() {
-        const readiness = (67.3 + (Math.random() - 0.5) * 2).toFixed(2);
-        const leverage = (2.4 + (Math.random() - 0.5) * 0.2).toFixed(2);
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
         
-        document.getElementById('readiness').textContent = readiness;
-        document.getElementById('leverage').textContent = leverage;
-        document.getElementById('updated').textContent = new Date().toLocaleTimeString();
-      }
-      
-      // Update every 5 seconds
-      setInterval(updateLiveData, 5000);
-      updateLiveData();
-      
-      // Update flow dashboard tile
-      function updateFlowDashboard() {
-        if (window.flowAPI) {
-          const state = window.flowAPI.getCurrentState();
-          const valueEl = document.getElementById('flow-dashboard-value');
-          if (valueEl && state.currentMetrics.flowScore !== undefined) {
-            valueEl.textContent = Math.round(state.currentMetrics.flowScore);
-          }
-        }
-      }
-      
-      setInterval(updateFlowDashboard, 2000);
-      setTimeout(updateFlowDashboard, 1000);
-    </script>
-    
-    <!-- Champion Enigma & Readiness Integration -->
-    <script type="module">
-      // Import Champion Enigma Engine
-      import('./js/champion-enigma-engine.js').then(module => {
-        const enigmaEngine = new module.ChampionEnigmaEngine();
+        // Hero animations
+        gsap.from("h1", {duration: 1, y: 50, opacity: 0, delay: 0.5});
+        gsap.from("h3", {duration: 1, y: 30, opacity: 0, delay: 0.7});
+        gsap.from("p", {duration: 1, y: 30, opacity: 0, delay: 0.9});
         
-        // Update Champion Enigma score every 30 seconds
-        async function updateEnigmaScore() {
-          try {
-            const response = await fetch('/api/champion-enigma/live-score');
-            if (response.ok) {
-              const data = await response.json();
-              const scoreElement = document.getElementById('enigma-score');
-              const widgetElement = document.getElementById('champion-enigma-nav');
-              
-              scoreElement.textContent = data.overallScore ? `${data.overallScore.toFixed(1)}` : '--';
-              
-              // Add active class if score is above threshold
-              if (data.overallScore && data.overallScore > 75) {
-                widgetElement.classList.add('active');
-              } else {
-                widgetElement.classList.remove('active');
-              }
-            }
-          } catch (error) {
-            console.warn('Champion Enigma score unavailable:', error);
-          }
-        }
+        // Three.js Hero Background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
         
-        // Initial load
-        updateEnigmaScore();
-        
-        // Update every 30 seconds
-        setInterval(updateEnigmaScore, 30000);
-      }).catch(err => console.warn('Champion Enigma engine not loaded:', err));
-
-      // Cardinals Readiness Board Integration
-      async function updateReadinessScore() {
-        try {
-          const response = await fetch('/data/analytics/readiness.json');
-          if (response.ok) {
-            const data = await response.json();
-            const scoreElement = document.getElementById('readiness-score');
-            const widgetElement = document.getElementById('readiness-nav');
+        const heroCanvas = document.getElementById('hero-canvas');
+        if (heroCanvas) {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.domElement.style.position = 'absolute';
+            renderer.domElement.style.top = '0';
+            renderer.domElement.style.zIndex = '-1';
+            heroCanvas.appendChild(renderer.domElement);
             
-            scoreElement.textContent = data.readiness ? `${data.readiness.toFixed(1)}%` : '--';
+            // Create particles
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
             
-            // Add active class if readiness is above 80%
-            if (data.readiness && data.readiness > 80) {
-              widgetElement.classList.add('active');
-            } else {
-              widgetElement.classList.remove('active');
+            for (let i = 0; i < 2000; i++) {
+                vertices.push(
+                    (Math.random() - 0.5) * 2000,
+                    (Math.random() - 0.5) * 2000,
+                    (Math.random() - 0.5) * 2000
+                );
+                
+                colors.push(
+                    Math.random() * 0.5 + 0.5,
+                    Math.random() * 0.3 + 0.2,
+                    0.1
+                );
             }
-          }
-        } catch (error) {
-          console.warn('Cardinals readiness data unavailable:', error);
+            
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            
+            const material = new THREE.PointsMaterial({ 
+                size: 2, 
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
+            });
+            
+            const particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+            
+            camera.position.z = 1000;
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                particles.rotation.x += 0.0005;
+                particles.rotation.y += 0.0005;
+                renderer.render(scene, camera);
+            }
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
         }
-      }
-      
-      // Initial load
-      updateReadinessScore();
-      
-      // Update every 10 seconds (faster for game-day readiness)
-      setInterval(updateReadinessScore, 10000);
-      
-      // Click handlers for widgets
-      document.getElementById('champion-enigma-nav').addEventListener('click', () => {
-        window.open('/capabilities/champion-enigma/', '_blank');
-      });
-      
-      document.getElementById('readiness-nav').addEventListener('click', () => {
-        window.open('/analytics/cardinals-readiness/', '_blank');
-      });
-    </script>
-    
-    <script type="module">
-      import { FlowMeterWidget } from './flow-widgets.js';
-      
-      // Initialize flow meter
-      document.addEventListener('DOMContentLoaded', () => {
-        const flowMeter = new FlowMeterWidget('flow-meter-container', {
-          autoStart: true,
-          showMSPE: true,
-          enableBreathing: true
+        
+        // Smooth scrolling function
+        function scrollToSection(targetId) {
+            const target = document.querySelector(targetId);
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
         
-        window.blazeFlowMeter = flowMeter;
-      });
-      
-      // Track engagement
-      let engagementTimer = 0;
-      setInterval(() => {
-        engagementTimer += 30;
-        if (engagementTimer % 120 === 0) {
-          window.flowAPI?.trackEvent('engagement_milestone', {
-            timeOnPage: engagementTimer,
-            scrollPercent: Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100)
-          });
+        // Load real-time data
+        async function loadRealtimeData() {
+            try {
+                const response = await fetch('/data/analytics/readiness.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.readiness) {
+                        document.getElementById('readiness-score').textContent = data.readiness + '%';
+                    }
+                    if (data.leverage) {
+                        document.getElementById('leverage-score').textContent = data.leverage;
+                    }
+                }
+            } catch (error) {
+                console.log('Real-time data not available');
+            }
         }
-      }, 30000);
+        
+        // Load data on page load and refresh every 30 seconds
+        loadRealtimeData();
+        setInterval(loadRealtimeData, 30000);
     </script>
-  </body>
+</body>
 </html>
