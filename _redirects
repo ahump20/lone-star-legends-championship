@@ -6,61 +6,61 @@
 /test-simple                          /analytics/                   301!
 /test-simple2                         https://blaze-intelligence.pages.dev/analytics/    301!
 
-# Analytics Hub Redirects
-/statistics-dashboard-enhanced.html    /analytics/dashboard/    301
-/statistics-dashboard.html             /analytics/dashboard/    301
-/nil-trust-dashboard.html              /analytics/nil-valuation/ 301
-/blaze-analytics-integration.html      /analytics/real-time/    301
-/cee-scorecard.html                    /analytics/scorecard/    301
+# Analytics Hub Redirects (Force override with !)
+/statistics-dashboard-enhanced.html    /analytics/dashboard/    301!
+/statistics-dashboard.html             /analytics/dashboard/    301!
+/nil-trust-dashboard.html              /analytics/nil-valuation/ 301!
+/blaze-analytics-integration.html      /analytics/real-time/    301!
+/cee-scorecard.html                    /analytics/scorecard/    301!
 
-# Games & Interactive Demos Redirects
-/game.html                            /games/baseball/         301
-/claude-baseball-demo.html            /games/baseball/         301
-/blaze-branded-game.html              /games/baseball/         301
-/proper-baseball-game.html            /games/baseball/         301
-/threejs-baseball-simulator.html      /games/simulator/        301
-/enhanced-threejs-simulator.html      /games/advanced/         301
-/lone-star-legends-game.html          /games/advanced/         301
-/enhanced-stadium-demo.html           /games/stadium/          301
-/multiplayer-client.html              /games/multiplayer/      301
+# Games & Interactive Demos Redirects (Force override with !)
+/game.html                            /games/baseball/         301!
+/claude-baseball-demo.html            /games/baseball/         301!
+/blaze-branded-game.html              /games/baseball/         301!
+/proper-baseball-game.html            /games/baseball/         301!
+/threejs-baseball-simulator.html      /games/simulator/        301!
+/enhanced-threejs-simulator.html      /games/advanced/         301!
+/lone-star-legends-game.html          /games/advanced/         301!
+/enhanced-stadium-demo.html           /games/stadium/          301!
+/multiplayer-client.html              /games/multiplayer/      301!
 
-# Capabilities Platform Redirects
-/3d-biometric-viewer.html             /capabilities/biomechanics/ 301
-/flow-snippets.html                   /capabilities/flow-state/ 301
+# Capabilities Platform Redirects (Force override with !)
+/3d-biometric-viewer.html             /capabilities/biomechanics/ 301!
+/flow-snippets.html                   /capabilities/flow-state/ 301!
 
-# Company Section Redirects
-/presentations.html                   /company/presentations/  301
-/team-showcase.html                   /company/team/           301
-/blaze-portfolio-showcase.html        /company/portfolio/      301
+# Company Section Redirects (Force override with !)
+/presentations.html                   /company/presentations/  301!
+/team-showcase.html                   /company/team/           301!
+/blaze-portfolio-showcase.html        /company/portfolio/      301!
 
-# Client Tools Redirects
-/client-onboarding-enhanced.html      /onboarding/            301
-/client-onboarding.html               /onboarding/            301
+# Client Tools Redirects (Force override with !)
+/client-onboarding-enhanced.html      /onboarding/            301!
+/client-onboarding.html               /onboarding/            301!
 
-# Legacy/Duplicate Homepage Redirects
-/index-corporate.html                 /company/about/         301
-/index-corporate-enhanced.html        /company/about/         301
-/index-enhanced.html                  /                       301
-/index-final.html                     /                       301
-/index-temp.html                      /                       301
-/index-backup.html                    /                       301
+# Legacy/Duplicate Homepage Redirects (Force override with !)
+/index-corporate.html                 /company/about/         301!
+/index-corporate-enhanced.html        /company/about/         301!
+/index-enhanced.html                  /                       301!
+/index-final.html                     /                       301!
+/index-temp.html                      /                       301!
+/index-backup.html                    /                       301!
 
-# Admin/CMS Redirects
-/cms-admin.html                       /admin/cms/             301
-/integration-hub.html                 /admin/integrations/    301
+# Admin/CMS Redirects (Force override with !)
+/cms-admin.html                       /admin/cms/             301!
+/integration-hub.html                 /admin/integrations/    301!
 
-# Development Tool Redirects (to 404)
-/icon-generator.html                  /404.html               301
-/demo.html                           /games/                  301
+# Development Tool Redirects (to 404) (Force override with !)
+/icon-generator.html                  /404.html               301!
+/demo.html                           /games/                  301!
 
-# Pricing & Business Redirects
-/pricing.html                        /pricing/                301
+# Pricing & Business Redirects (Force override with !)
+/pricing.html                        /pricing/                301!
 
-# FBS Integration Redirect
-/fbs-coverage-integration.html       /capabilities/coverage/ 301
+# FBS Integration Redirect (Force override with !)
+/fbs-coverage-integration.html       /capabilities/coverage/ 301!
 
-# AI Command Center Redirect
-/ai-command-center.html              /admin/ai-center/       301
+# AI Command Center Redirect (Force override with !)
+/ai-command-center.html              /admin/ai-center/       301!
 
 # Old Domain Redirects (when deploying to blaze-intelligence.com)
 https://blaze-intelligence-lsl.pages.dev/*           https://blaze-intelligence.com/:splat 301!
