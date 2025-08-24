@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence — Championship Sports Analytics Platform</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Blaze Intelligence: Where cognitive performance meets quarterly performance. Advanced sports analytics powered by AI.">
+    <meta name="keywords" content="sports analytics, AI, MLB, NFL, NBA, NCAA, performance tracking, Blaze Intelligence">
+    <meta name="author" content="Austin Humphrey">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Blaze Intelligence - Championship Analytics">
+    <meta property="og:description" content="Transform your sports operations with AI-powered intelligence">
+    <meta property="og:image" content="/images/bi-logo.png">
+    <meta property="og:url" content="https://blaze-intelligence.com">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        'blaze-orange': '#FF6B35',
+                        'blaze-gold': '#FFA500',
+                        'blaze-deep': '#0A0E27'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-gold: #FFA500;
+            --blaze-deep: #0A0E27;
+            --blaze-dark: #050505;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: var(--blaze-dark);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Video Background Container */
+        .video-hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                rgba(10, 14, 39, 0.7) 0%, 
+                rgba(10, 14, 39, 0.9) 50%, 
+                rgba(5, 5, 5, 1) 100%);
+            z-index: 1;
+        }
+
+        /* Three.js Canvas */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Hero Content */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #FF6B35, #FFA500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(18, 18, 18, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+            border-color: rgba(255, 107, 53, 0.4);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-gold));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 1rem;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.5);
+        }
+
+        /* Navigation */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-header.scrolled {
+            background: rgba(5, 5, 5, 0.95);
+        }
+
+        /* Animated Stats */
+        .stat-card {
+            background: rgba(255, 107, 53, 0.05);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 107, 53, 0.1);
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #FF6B35, #FFA500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Pulse Animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Loading Animation */
+        .loader {
+            border: 3px solid rgba(255, 107, 53, 0.2);
+            border-top: 3px solid var(--blaze-orange);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body class="h-full">
+    <!-- Three.js Canvas Background -->
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Navigation Header -->
+    <nav class="nav-header" id="nav-header">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <img src="images/bi-logo.svg" alt="Blaze Intelligence" class="h-10 w-10" 
+                         onerror="this.style.display='none'">
+                    <h1 class="font-orbitron font-bold text-2xl gradient-text">BLAZE INTELLIGENCE</h1>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#analytics" class="hover:text-blaze-orange transition">Analytics</a>
+                    <a href="#capabilities" class="hover:text-blaze-orange transition">Capabilities</a>
+                    <a href="#pricing" class="hover:text-blaze-orange transition">Pricing</a>
+                    <a href="#about" class="hover:text-blaze-orange transition">About</a>
+                    <button class="cta-button">Get Started</button>
+                </div>
+
+                <div class="md:hidden">
+                    <button id="mobile-menu-toggle" class="text-white">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Video Background -->
+    <section class="video-hero">
+        <!-- Video Background -->
+        <div class="video-background">
+            <video autoplay muted loop playsinline id="hero-video">
+                <source src="https://customer-mpdvoybjqct2pzls.cloudflarestream.com/138facaf760c65e9b4efab3715ae6f50/downloads/default.mp4" type="video/mp4">
+                <source src="https://customer-mpdvoybjqct2pzls.cloudflarestream.com/138facaf760c65e9b4efab3715ae6f50/manifest/video.m3u8" type="application/x-mpegURL">
+            </video>
+        </div>
+        <div class="video-overlay"></div>
+        
+        <!-- Hero Content -->
+        <div class="hero-content">
+            <div class="max-w-5xl mx-auto">
+                <h1 class="font-orbitron font-black text-5xl md:text-7xl mb-6 floating">
+                    <span class="gradient-text">CHAMPIONSHIP</span>
+                    <br>
+                    <span class="text-white">ANALYTICS</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                    Where cognitive performance meets quarterly performance. 
+                    Transform your sports operations with AI-powered intelligence.
+                </p>
+                
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button class="cta-button" onclick="scrollToSection('demo')">
+                        <i class="fas fa-play mr-2"></i> Watch Demo
+                    </button>
+                    <button class="cta-button" style="background: transparent; border: 2px solid var(--blaze-orange);">
+                        <i class="fas fa-chart-line mr-2"></i> View Analytics
+                    </button>
+                </div>
+
+                <!-- Live Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="2800000">0</div>
+                        <p class="text-gray-400 mt-2">Data Points Analyzed</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="94.6">0</div>
+                        <p class="text-gray-400 mt-2">% Accuracy Rate</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="247">0</div>
+                        <p class="text-gray-400 mt-2">Live Monitoring</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capabilities Section -->
+    <section id="capabilities" class="py-20 relative z-10">
+        <div class="container mx-auto px-6">
+            <h2 class="font-orbitron font-bold text-4xl md:text-5xl text-center mb-16">
+                <span class="gradient-text">CHAMPIONSHIP</span> CAPABILITIES
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Cardinals Analytics -->
+                <div class="glass-card">
+                    <div class="text-blaze-orange text-4xl mb-4">
+                        <i class="fas fa-baseball-ball"></i>
+                    </div>
+                    <h3 class="font-orbitron text-2xl mb-4">Cardinals Analytics</h3>
+                    <p class="text-gray-300 mb-4">
+                        Real-time MLB analytics with 11 championships worth of pattern recognition.
+                    </p>
+                    <ul class="text-gray-400 space-y-2">
+                        <li><i class="fas fa-check text-blaze-orange mr-2"></i> Player Performance Tracking</li>
+                        <li><i class="fas fa-check text-blaze-orange mr-2"></i> Predictive Modeling</li>
+                        <li><i class="fas fa-check text-blaze-orange mr-2"></i> Strategy Optimization</li>
+                    </ul>
+                </div>
+
+                <!-- Titans Analytics -->
+                <div class="glass-card">
+                    <div class="text-blaze-orange text-4xl mb-4">
+                        <i class="fas fa-football-ball"></i>
+                    </div>
+                    <h3 class="font-orbitron text-2xl mb-4">Titans Analytics</h3>
+                    <p class="text-gray-300 mb-4">
+                        NFL performance optimization with advanced play-calling intelligence.
+                    </p>
+                    <ul class="text-gray-400 space-y-2">
+                        <li><i class="fas fa-check text-blaze-orange mr-2"></i> Play Pattern Analysis</li>
+                        <li><i class="fas fa-check text-blaze-orange mr-2"></i> Injury Prevention</li>
+                        <li><i class="fas fa-check text-blaze-orange mr-2"></i> Draft Intelligence</li>
+                    </ul>
+                </div>
+
+                <!-- Grizzlies Analytics -->
+                <div class="glass-card">
+                    <div class="text-blaze-orange text-4xl mb-4">
+                        <i class="fas fa-basketball-ball"></i>
+                    </div>
+                    <h3 class="font-orbitron text-2xl mb-4">Grizzlies Analytics</h3>
+                    <p class="text-gray-300 mb-4">
+                        NBA court vision powered by real-time performance metrics.
+                    </p>
+                    <ul class="text-gray-400 space-y-2">
+                        <li><i class="fas fa-check text-blaze-orange mr-2"></i> Shot Selection Analysis</li>
+                        <li><i class="fas fa-check text-blaze-orange mr-2"></i> Lineup Optimization</li>
+                        <li><i class="fas fa-check text-blaze-orange mr-2"></i> Pace & Space Metrics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Video Section -->
+    <section id="demo" class="py-20 bg-black relative z-10">
+        <div class="container mx-auto px-6">
+            <h2 class="font-orbitron font-bold text-4xl md:text-5xl text-center mb-16">
+                SEE IT IN <span class="gradient-text">ACTION</span>
+            </h2>
+            
+            <div class="max-w-6xl mx-auto">
+                <div class="glass-card p-2">
+                    <video controls class="w-full rounded-lg" poster="/images/video-poster.jpg">
+                        <source src="https://customer-mpdvoybjqct2pzls.cloudflarestream.com/acb0f50e86caf8f840f3b36a0c463229/downloads/default.mp4" type="video/mp4">
+                        <source src="https://customer-mpdvoybjqct2pzls.cloudflarestream.com/acb0f50e86caf8f840f3b36a0c463229/manifest/video.m3u8" type="application/x-mpegURL">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section with Headshot -->
+    <section id="about" class="py-20 relative z-10">
+        <div class="container mx-auto px-6">
+            <h2 class="font-orbitron font-bold text-4xl md:text-5xl text-center mb-16">
+                MEET THE <span class="gradient-text">FOUNDER</span>
+            </h2>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-card flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-blaze-orange">
+                        <img src="images/headshot-color.jpg" 
+                             alt="Austin Humphrey" 
+                             class="w-full h-full object-cover"
+                             onerror="this.src='images/placeholder-headshot.jpg'">
+                    </div>
+                    
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="font-orbitron text-2xl mb-2 gradient-text">Austin Humphrey</h3>
+                        <p class="text-gray-400 mb-4">Founder & Chief Intelligence Officer</p>
+                        <p class="text-gray-300">
+                            Former Champion High School RB #20. Pattern recognition weaponized. 
+                            Building at the intersection of sports, AI, and championship performance.
+                        </p>
+                        <div class="flex justify-center md:justify-start gap-4 mt-4">
+                            <a href="https://linkedin.com/in/john-humphrey-2033" class="text-blaze-orange hover:text-blaze-gold">
+                                <i class="fab fa-linkedin text-2xl"></i>
+                            </a>
+                            <a href="https://twitter.com/a_hump20" class="text-blaze-orange hover:text-blaze-gold">
+                                <i class="fab fa-twitter text-2xl"></i>
+                            </a>
+                            <a href="mailto:ahump20@outlook.com" class="text-blaze-orange hover:text-blaze-gold">
+                                <i class="fas fa-envelope text-2xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Integration -->
+    <script defer src="/js/analytics.js"></script>
+    <script defer src="/js/performance-monitor.js"></script>
+    
+    <!-- Three.js Hero Animation -->
+    <script>
+        // Three.js Scene Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ 
+            canvas: document.getElementById('three-canvas'),
+            alpha: true,
+            antialias: true 
+        });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        
+        // Create particle field
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const particleCount = 2000;
+        
+        for (let i = 0; i < particleCount; i++) {
+            vertices.push(
+                Math.random() * 2000 - 1000,
+                Math.random() * 2000 - 1000,
+                Math.random() * 2000 - 1000
+            );
+        }
+        
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        
+        const material = new THREE.PointsMaterial({
+            color: 0xFF6B35,
+            size: 2,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+        });
+        
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+        
+        camera.position.z = 500;
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            particles.rotation.x += 0.0005;
+            particles.rotation.y += 0.001;
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Animated Counter
+        const counters = document.querySelectorAll('.stat-number');
+        const speed = 200;
+        
+        counters.forEach(counter => {
+            const updateCount = () => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const inc = target / speed;
+                
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + inc);
+                    setTimeout(updateCount, 1);
+                } else {
+                    counter.innerText = target.toLocaleString();
+                }
+            };
+            
+            // Start animation when visible
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        updateCount();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            observer.observe(counter);
+        });
+
+        // Scroll animations with GSAP
+        gsap.registerPlugin(ScrollTrigger);
+        
+        gsap.utils.toArray('.glass-card').forEach(card => {
+            gsap.from(card, {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // Navigation scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('nav-header');
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll function
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-toggle')?.addEventListener('click', () => {
+            // Add mobile menu implementation here
+            console.log('Mobile menu toggle');
+        });
+    </script>
+</body>
+</html>
