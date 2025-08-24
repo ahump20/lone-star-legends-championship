@@ -2,10 +2,6 @@
 # Based on SITE_ARCHITECTURE.md mapping strategy
 # These 301 redirects preserve SEO value during consolidation
 
-# Test redirect for debugging (force processing)
-/test-simple                          /analytics/                   301!
-/test-simple2                         https://blaze-intelligence.pages.dev/analytics/    301!
-
 # Analytics Hub Redirects
 /statistics-dashboard-enhanced.html    /analytics/dashboard/    301
 /statistics-dashboard.html             /analytics/dashboard/    301
