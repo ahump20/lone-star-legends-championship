@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Lone Star Legends Championship</title>
+    
+    <!-- SEO & Open Graph -->
+    <meta name="description" content="Blaze Intelligence Lone Star Legends Championship - Professional baseball simulation with advanced analytics">
+    <meta property="og:title" content="Blaze Intelligence - Lone Star Legends Championship">
+    <meta property="og:description" content="Experience professional baseball with real-time analytics and 3D gameplay">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#FF6B35">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Google Fonts: Space Grotesk for headings, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        /*
+         * =============================================
+         * BLAZE INTELLIGENCE DESIGN SYSTEM
+         * =============================================
+         */
+        :root {
+            /* Brand Colors */
+            --blaze-orange: #FF6B35;
+            --blaze-burnt-orange: #CC5500;
+            --blaze-black: #0A0A0A;
+            --blaze-white: #FFFFFF;
+            --blaze-grey: #1A1A1A;
+            --blaze-grey-light: #2A2A2A;
+            --blaze-text-secondary: #a0a0a0;
+            --blaze-success: #4CAF50;
+            --blaze-error: #F44336;
+            --blaze-warning: #FFC107;
+
+            /* Brand Typography */
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            
+            /* Transitions */
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Spacing */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --spacing-3xl: 4rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            background-color: var(--blaze-black);
+            color: var(--blaze-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /*
+         * =============================================
+         * 3D BASEBALL FIELD CANVAS
+         * =============================================
+         */
+        #baseball-field-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        .canvas-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, transparent 0%, rgba(10, 10, 10, 0.4) 50%, rgba(10, 10, 10, 0.8) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /*
+         * =============================================
+         * CONTAINER & LAYOUT
+         * =============================================
+         */
+        .page-wrapper {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-xl);
+        }
+
+        /*
+         * =============================================
+         * HEADER
+         * =============================================
+         */
+        header {
+            padding: var(--spacing-2xl) 0;
+            background: linear-gradient(180deg, rgba(10, 10, 10, 0.95) 0%, rgba(10, 10, 10, 0.7) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.1);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 0; 
+                transform: translateY(-50px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-lg);
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+            text-decoration: none;
+            transition: var(--transition-medium);
+        }
+
+        .logo-wrapper:hover {
+            transform: scale(1.02);
+        }
+
+        .blaze-logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--blaze-black);
+            font-family: var(--font-heading);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blaze-logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .brand-text h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(255, 107, 53, 0.3);
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .brand-text p {
+            font-size: 1.1rem;
+            color: var(--blaze-text-secondary);
+            margin-top: var(--spacing-sm);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /*
+         * =============================================
+         * MAIN CONTENT
+         * =============================================
+         */
+        main {
+            flex: 1;
+            padding: var(--spacing-3xl) 0;
+        }
+
+        /*
+         * =============================================
+         * HERO SECTION
+         * =============================================
+         */
+        .hero-section {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(40px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(26, 26, 26, 0.7));
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: var(--spacing-2xl);
+            border: 1px solid rgba(255, 107, 53, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--blaze-orange), var(--blaze-burnt-orange), var(--blaze-orange));
+            background-size: 200% 100%;
+            animation: gradientShift 3s linear infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            background: linear-gradient(135deg, var(--blaze-burnt-orange), var(--blaze-orange));
+            border: 2px solid transparent;
+            border-radius: 16px;
+            color: var(--blaze-white);
+            font-size: 1.6rem;
+            font-weight: 600;
+            font-family: var(--font-heading);
+            padding: 1.2rem 3rem;
+            text-decoration: none;
+            transition: var(--transition-medium);
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(255, 107, 53, 0.3);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(255, 107, 53, 0.4);
+            border-color: var(--blaze-orange);
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        /*
+         * =============================================
+         * VIDEO SECTION
+         * =============================================
+         */
+        .video-section {
+            margin: var(--spacing-2xl) 0;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.15);
+            background: var(--blaze-grey);
+            position: relative;
+        }
+
+        .video-header {
+            background: linear-gradient(135deg, var(--blaze-grey), var(--blaze-grey-light));
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-bottom: 2px solid var(--blaze-orange);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .video-badge {
+            background: var(--blaze-orange);
+            color: var(--blaze-black);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .video-title {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: var(--blaze-white);
+        }
+
+        #video-embed iframe {
+            border: 0;
+            width: 100%;
+            aspect-ratio: 16/9;
+            display: block;
+        }
+
+        /*
+         * =============================================
+         * CONTENT GRID
+         * =============================================
+         */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--spacing-2xl);
+            margin-top: var(--spacing-3xl);
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /*
+         * =============================================
+         * COMMAND CENTER
+         * =============================================
+         */
+        .command-center {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(26, 26, 26, 0.7));
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: var(--spacing-2xl);
+            border: 1px solid rgba(255, 107, 53, 0.1);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--blaze-white);
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--blaze-grey);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            color: var(--blaze-white);
+            padding: var(--spacing-md) var(--spacing-lg);
+            text-decoration: none;
+            transition: var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--blaze-orange), var(--blaze-burnt-orange));
+            transform: scaleY(0);
+            transition: transform var(--transition-fast);
+            transform-origin: bottom;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 107, 53, 0.1);
+            border-color: var(--blaze-orange);
+            transform: translateX(8px);
+        }
+
+        .nav-link:hover::before {
+            transform: scaleY(1);
+        }
+
+        .nav-link-content {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .nav-link-icon {
+            font-size: 1.4rem;
+        }
+
+        .nav-link-text {
+            font-size: 1rem;
+        }
+
+        .nav-link-arrow {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: var(--transition-fast);
+            color: var(--blaze-orange);
+        }
+
+        .nav-link:hover .nav-link-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /*
+         * =============================================
+         * LIVE DATA DASHBOARD
+         * =============================================
+         */
+        aside {
+            position: sticky;
+            top: var(--spacing-xl);
+            height: fit-content;
+        }
+
+        .live-data-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(26, 26, 26, 0.8));
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: var(--spacing-xl);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .live-indicator {
+            position: absolute;
+            top: var(--spacing-lg);
+            right: var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--blaze-orange);
+            border-radius: 50%;
+            animation: livePulse 2s infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.5;
+                transform: scale(1.5);
+            }
+        }
+
+        .live-text {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--blaze-orange);
+            font-weight: 600;
+        }
+
+        .data-grid {
+            display: grid;
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-2xl);
+        }
+
+        .data-item {
+            background: var(--blaze-grey);
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 107, 53, 0.1);
+            transition: var(--transition-fast);
+        }
+
+        .data-item:hover {
+            border-color: var(--blaze-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.2);
+        }
+
+        .data-label {
+            color: var(--blaze-text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 600;
+        }
+
+        .data-value {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .data-unit {
+            font-size: 1rem;
+            color: var(--blaze-text-secondary);
+            margin-left: var(--spacing-xs);
+        }
+
+        /* Skeleton Loader */
+        .skeleton {
+            background: linear-gradient(90deg, 
+                rgba(255, 107, 53, 0.05) 25%, 
+                rgba(255, 107, 53, 0.15) 50%, 
+                rgba(255, 107, 53, 0.05) 75%);
+            background-size: 200% 100%;
+            animation: skeletonLoading 1.5s infinite;
+            border-radius: 4px;
+            min-height: 2.5rem;
+            width: 120px;
+        }
+
+        @keyframes skeletonLoading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .status-message {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md);
+            background: rgba(255, 107, 53, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .status-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--blaze-grey);
+            position: relative;
+        }
+
+        .status-icon.connecting {
+            background: var(--blaze-warning);
+            animation: pulse 2s infinite;
+        }
+
+        .status-icon.connected {
+            background: var(--blaze-success);
+        }
+
+        .status-icon.error {
+            background: var(--blaze-error);
+        }
+
+        /*
+         * =============================================
+         * GAME FEATURES
+         * =============================================
+         */
+        .features-section {
+            margin-top: var(--spacing-3xl);
+            padding: var(--spacing-3xl) 0;
+            background: linear-gradient(180deg, transparent, rgba(255, 107, 53, 0.02), transparent);
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .features-title {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .features-subtitle {
+            color: var(--blaze-text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-xl);
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(26, 26, 26, 0.7));
+            backdrop-filter: blur(10px);
+            padding: var(--spacing-xl);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 107, 53, 0.1);
+            text-align: center;
+            transition: var(--transition-medium);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity var(--transition-medium);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--blaze-orange);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.2);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-emoji {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+            filter: drop-shadow(0 5px 10px rgba(255, 107, 53, 0.3));
+        }
+
+        .feature-name {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--blaze-white);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .feature-description {
+            color: var(--blaze-text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /*
+         * =============================================
+         * FOOTER
+         * =============================================
+         */
+        footer {
+            background: linear-gradient(180deg, transparent, rgba(10, 10, 10, 0.95));
+            padding: var(--spacing-3xl) 0 var(--spacing-2xl);
+            border-top: 1px solid rgba(255, 107, 53, 0.1);
+            margin-top: var(--spacing-3xl);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: var(--spacing-3xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .footer-section h3 {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: var(--blaze-orange);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .footer-section p,
+        .footer-section ul {
+            color: var(--blaze-text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            padding: var(--spacing-xs) 0;
+        }
+
+        .footer-section a {
+            color: var(--blaze-text-secondary);
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+
+        .footer-section a:hover {
+            color: var(--blaze-orange);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            background: var(--blaze-grey);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 107, 53, 0.1);
+        }
+
+        .control-key {
+            background: var(--blaze-orange);
+            color: var(--blaze-black);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            font-family: var(--font-heading);
+        }
+
+        .control-action {
+            color: var(--blaze-white);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: var(--spacing-xl);
+            border-top: 1px solid rgba(255, 107, 53, 0.1);
+            color: var(--blaze-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom a {
+            color: var(--blaze-orange);
+            text-decoration: none;
+        }
+
+        /*
+         * =============================================
+         * RESPONSIVE DESIGN
+         * =============================================
+         */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            aside {
+                position: relative;
+                top: 0;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--spacing-md);
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .brand-text h1 {
+                font-size: 2rem;
+            }
+
+            .cta-button {
+                font-size: 1.2rem;
+                padding: 1rem 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .data-value {
+                font-size: 2rem;
+            }
+        }
+
+        /*
+         * =============================================
+         * ACCESSIBILITY
+         * =============================================
+         */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--blaze-orange);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D Baseball Field Canvas -->
+    <canvas id="baseball-field-canvas" aria-hidden="true"></canvas>
+    <div class="canvas-overlay" aria-hidden="true"></div>
+
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header role="banner">
+            <div class="container">
+                <div class="header-content">
+                    <a href="#" class="logo-wrapper" aria-label="Blaze Intelligence Home">
+                        <div class="blaze-logo" aria-hidden="true">B</div>
+                        <div class="brand-text">
+                            <h1>Blaze Intelligence</h1>
+                            <p>Lone Star Legends Championship</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main role="main">
+            <div class="container">
+                <!-- Hero Section -->
+                <section class="hero-section" aria-labelledby="hero-title">
+                    <h2 id="hero-title" class="sr-only">Play the Game</h2>
+                    <div class="hero-card">
+                        <a href="game.html" class="cta-button" aria-label="Start playing Lone Star Legends Championship">
+                            <span>🎮</span>
+                            <span>PLAY NOW</span>
+                        </a>
+                        
+                        <!-- Video Section -->
+                        <section class="video-section" aria-labelledby="video-title">
+                            <div class="video-header">
+                                <span class="video-badge">FEATURED</span>
+                                <h3 id="video-title" class="video-title">Sports Management & Operations Lecture</h3>
+                            </div>
+                            <div id="video-embed">
+                                <iframe
+                                    src="https://iframe.videodelivery.net/138facaf760c65e9b4efab3715ae6f50?autoplay=false&muted=false&controls=true&preload=metadata"
+                                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                                    allowfullscreen
+                                    title="Sports Management & Operations Lecture Video">
+                                </iframe>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+
+                <!-- Content Grid -->
+                <div class="content-grid">
+                    <!-- Command Center Navigation -->
+                    <nav class="command-center" aria-labelledby="command-center-title">
+                        <div class="section-header">
+                            <div class="section-icon" aria-hidden="true">🎯</div>
+                            <h2 id="command-center-title" class="section-title">Command Center</h2>
+                        </div>
+                        <div class="nav-links">
+                            <a href="blaze-analytics-integration.html" class="nav-link">
+                                <div class="nav-link-content">
+                                    <span class="nav-link-icon" aria-hidden="true">📊</span>
+                                    <span class="nav-link-text">Live Sports Analytics Hub</span>
+                                </div>
+                                <svg class="nav-link-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                            <a href="fbs-coverage-integration.html" class="nav-link">
+                                <div class="nav-link-content">
+                                    <span class="nav-link-icon" aria-hidden="true">🏈</span>
+                                    <span class="nav-link-text">FBS Coverage & Predictions</span>
+                                </div>
+                                <svg class="nav-link-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                            <a href="blaze-portfolio-showcase.html" class="nav-link">
+                                <div class="nav-link-content">
+                                    <span class="nav-link-icon" aria-hidden="true">🚀</span>
+                                    <span class="nav-link-text">Three.js Portfolio Showcase</span>
+                                </div>
+                                <svg class="nav-link-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                            <a href="claude-baseball-demo.html" class="nav-link">
+                                <div class="nav-link-content">
+                                    <span class="nav-link-icon" aria-hidden="true">🎯</span>
+                                    <span class="nav-link-text">Three.js Game Demo</span>
+                                </div>
+                                <svg class="nav-link-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                            <a href="statistics-dashboard.html" class="nav-link">
+                                <div class="nav-link-content">
+                                    <span class="nav-link-icon" aria-hidden="true">📈</span>
+                                    <span class="nav-link-text">Statistics Dashboard</span>
+                                </div>
+                                <svg class="nav-link-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                            <a href="multiplayer-client.html" class="nav-link">
+                                <div class="nav-link-content">
+                                    <span class="nav-link-icon" aria-hidden="true">🌐</span>
+                                    <span class="nav-link-text">Multiplayer Mode</span>
+                                </div>
+                                <svg class="nav-link-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </nav>
+
+                    <!-- Live Data Dashboard -->
+                    <aside role="complementary" aria-labelledby="live-data-title">
+                        <div class="live-data-card">
+                            <div class="live-indicator" aria-live="polite">
+                                <span class="live-dot" aria-hidden="true"></span>
+                                <span class="live-text">LIVE</span>
+                            </div>
+                            <div class="section-header">
+                                <div class="section-icon" aria-hidden="true">📡</div>
+                                <h2 id="live-data-title" class="section-title">Game Data</h2>
+                            </div>
+                            <div class="status-message">
+                                <span class="status-icon connecting" id="status-icon" aria-hidden="true"></span>
+                                <span id="status-text">Connecting to game server...</span>
+                            </div>
+                            <div class="data-grid">
+                                <div class="data-item">
+                                    <div class="data-label">Team Readiness</div>
+                                    <div id="readiness-value" class="data-value skeleton" aria-live="polite"></div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Win Leverage</div>
+                                    <div id="leverage-value" class="data-value skeleton" aria-live="polite"></div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Players Online</div>
+                                    <div id="players-online" class="data-value" aria-live="polite">
+                                        <span>247</span>
+                                        <span class="data-unit">active</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+                <!-- Game Features Section -->
+                <section class="features-section" aria-labelledby="features-title">
+                    <div class="features-header">
+                        <h2 id="features-title" class="features-title">Championship Features</h2>
+                        <p class="features-subtitle">Experience professional baseball simulation with cutting-edge analytics</p>
+                    </div>
+                    <div class="features-grid">
+                        <article class="feature-card">
+                            <div class="feature-emoji" aria-hidden="true">⚾</div>
+                            <h3 class="feature-name">Realistic Physics</h3>
+                            <p class="feature-description">Advanced ball dynamics with spin, drag, and Magnus effect calculations</p>
+                        </article>
+                        <article class="feature-card">
+                            <div class="feature-emoji" aria-hidden="true">🤖</div>
+                            <h3 class="feature-name">AI Players</h3>
+                            <p class="feature-description">Smart opponents with adaptive strategies and realistic decision-making</p>
+                        </article>
+                        <article class="feature-card">
+                            <div class="feature-emoji" aria-hidden="true">🏟️</div>
+                            <h3 class="feature-name">Stadium Experience</h3>
+                            <p class="feature-description">Immersive 3D environment with dynamic lighting and weather effects</p>
+                        </article>
+                        <article class="feature-card">
+                            <div class="feature-emoji" aria-hidden="true">📊</div>
+                            <h3 class="feature-name">Live Analytics</h3>
+                            <p class="feature-description">Real-time performance metrics and predictive win probability</p>
+                        </article>
+                        <article class="feature-card">
+                            <div class="feature-emoji" aria-hidden="true">🏆</div>
+                            <h3 class="feature-name">Championships</h3>
+                            <p class="feature-description">Compete in tournaments and climb the global leaderboards</p>
+                        </article>
+                        <article class="feature-card">
+                            <div class="feature-emoji" aria-hidden="true">🎮</div>
+                            <h3 class="feature-name">Multiplayer</h3>
+                            <p class="feature-description">Challenge friends or match with players worldwide</p>
+                        </article>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer role="contentinfo">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>About Blaze Intelligence</h3>
+                        <p>Leading the intersection of sports analytics and gaming technology. Our platform delivers professional-grade simulations powered by real-time data and advanced AI.</p>
+                        <p style="margin-top: 1rem;">Where cognitive performance meets quarterly performance.</p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Game Controls</h3>
+                        <div class="controls-grid">
+                            <div class="control-item">
+                                <span class="control-key">WASD</span>
+                                <span class="control-action">Move Player</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="control-key">SPACE</span>
+                                <span class="control-action">Swing/Throw</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="control-key">↑↓←→</span>
+                                <span class="control-action">Base Running</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="control-key">SHIFT</span>
+                                <span class="control-action">Sprint</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="#" aria-label="View Documentation">Documentation</a></li>
+                            <li><a href="#" aria-label="Access API">API Access</a></li>
+                            <li><a href="#" aria-label="Join Community">Community</a></li>
+                            <li><a href="#" aria-label="Get Support">Support</a></li>
+                            <li><a href="#" aria-label="Read Blog">Blog</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 <a href="#">Blaze Intelligence</a>. All Rights Reserved. | Built with Three.js & Pure Performance</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Video SEO Schema -->
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"VideoObject",
+      "name":"Sports Management & Operations Lecture",
+      "description":"Professor interview discussing sports operations, management strategies, and analytics insights with Austin Humphrey.",
+      "thumbnailUrl":["https://blaze-intelligence.com/img/poster-prof-interview.jpg"],
+      "uploadDate":"2025-08-20",
+      "embedUrl":"https://blaze-intelligence.com/#video-embed"
+    }
+    </script>
+
+    <script>
+        /**
+         * =============================================
+         * ADVANCED 3D BASEBALL FIELD WITH PLAYERS
+         * =============================================
+         */
+        (function() {
+            // Scene setup
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.Fog(0x0A0A0A, 10, 50);
+            
+            const camera = new THREE.PerspectiveCamera(
+                60,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                100
+            );
+            
+            const renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('baseball-field-canvas'),
+                antialias: true,
+                alpha: false
+            });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+            
+            // Camera positioning
+            camera.position.set(0, 15, 25);
+            camera.lookAt(0, 0, 0);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+
+            const stadiumLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            stadiumLight1.position.set(20, 30, 10);
+            stadiumLight1.castShadow = true;
+            stadiumLight1.shadow.camera.near = 0.1;
+            stadiumLight1.shadow.camera.far = 100;
+            stadiumLight1.shadow.camera.left = -30;
+            stadiumLight1.shadow.camera.right = 30;
+            stadiumLight1.shadow.camera.top = 30;
+            stadiumLight1.shadow.camera.bottom = -30;
+            stadiumLight1.shadow.mapSize.width = 2048;
+            stadiumLight1.shadow.mapSize.height = 2048;
+            scene.add(stadiumLight1);
+
+            const stadiumLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
+            stadiumLight2.position.set(-20, 30, -10);
+            scene.add(stadiumLight2);
+
+            // Blaze accent light
+            const blazeLight = new THREE.PointLight(0xFF6B35, 2, 30);
+            blazeLight.position.set(0, 10, 0);
+            scene.add(blazeLight);
+
+            // Create Baseball Field
+            const fieldGroup = new THREE.Group();
+            
+            // Field ground
+            const fieldGeometry = new THREE.PlaneGeometry(60, 60);
+            const fieldMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x2d5016,
+                roughness: 0.8,
+                metalness: 0.1
+            });
+            const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+            field.rotation.x = -Math.PI / 2;
+            field.receiveShadow = true;
+            fieldGroup.add(field);
+
+            // Infield dirt
+            const infieldGeometry = new THREE.CircleGeometry(12, 32);
+            const infieldMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x8B7355,
+                roughness: 0.9,
+                metalness: 0
+            });
+            const infield = new THREE.Mesh(infieldGeometry, infieldMaterial);
+            infield.rotation.x = -Math.PI / 2;
+            infield.position.y = 0.01;
+            fieldGroup.add(infield);
+
+            // Pitcher's mound
+            const moundGeometry = new THREE.CylinderGeometry(1.5, 2, 0.3, 16);
+            const moundMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x8B7355,
+                roughness: 0.9
+            });
+            const mound = new THREE.Mesh(moundGeometry, moundMaterial);
+            mound.position.set(0, 0.15, 0);
+            mound.castShadow = true;
+            fieldGroup.add(mound);
+
+            // Base positions
+            const basePositions = [
+                { x: 0, z: 6 },     // Home plate
+                { x: 6, z: 0 },     // First base
+                { x: 0, z: -6 },    // Second base
+                { x: -6, z: 0 }     // Third base
+            ];
+
+            basePositions.forEach((pos, index) => {
+                const baseGeometry = new THREE.BoxGeometry(0.5, 0.1, 0.5);
+                const baseMaterial = new THREE.MeshStandardMaterial({ 
+                    color: index === 0 ? 0xFFFFFF : 0xFFF8DC,
+                    emissive: index === 0 ? 0xFF6B35 : 0x000000,
+                    emissiveIntensity: index === 0 ? 0.2 : 0
+                });
+                const base = new THREE.Mesh(baseGeometry, baseMaterial);
+                base.position.set(pos.x, 0.05, pos.z);
+                base.castShadow = true;
+                fieldGroup.add(base);
+            });
+
+            // Base lines
+            const lineMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+            for (let i = 0; i < 4; i++) {
+                const lineGeometry = new THREE.PlaneGeometry(0.1, 8.5);
+                const line = new THREE.Mesh(lineGeometry, lineMaterial);
+                line.rotation.x = -Math.PI / 2;
+                line.position.y = 0.02;
+                
+                if (i === 0) {
+                    line.position.set(3, 0.02, 3);
+                    line.rotation.z = Math.PI / 4;
+                } else if (i === 1) {
+                    line.position.set(3, 0.02, -3);
+                    line.rotation.z = -Math.PI / 4;
+                } else if (i === 2) {
+                    line.position.set(-3, 0.02, -3);
+                    line.rotation.z = Math.PI / 4;
+                } else {
+                    line.position.set(-3, 0.02, 3);
+                    line.rotation.z = -Math.PI / 4;
+                }
+                fieldGroup.add(line);
+            }
+
+            scene.add(fieldGroup);
+
+            // Create Player Class
+            class Player {
+                constructor(position, color, name, role) {
+                    this.name = name;
+                    this.role = role;
+                    this.group = new THREE.Group();
+                    
+                    // Body
+                    const bodyGeometry = new THREE.CapsuleGeometry(0.3, 1, 4, 8);
+                    const bodyMaterial = new THREE.MeshStandardMaterial({ 
+                        color: color,
+                        roughness: 0.7,
+                        metalness: 0.1
+                    });
+                    const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+                    body.castShadow = true;
+                    this.group.add(body);
+
+                    // Head
+                    const headGeometry = new THREE.SphereGeometry(0.25, 8, 6);
+                    const headMaterial = new THREE.MeshStandardMaterial({ 
+                        color: 0xFFDBB4,
+                        roughness: 0.8
+                    });
+                    const head = new THREE.Mesh(headGeometry, headMaterial);
+                    head.position.y = 0.9;
+                    head.castShadow = true;
+                    this.group.add(head);
+
+                    // Cap
+                    const capGeometry = new THREE.ConeGeometry(0.27, 0.2, 8);
+                    const capMaterial = new THREE.MeshStandardMaterial({ 
+                        color: color === 0xFF6B35 ? 0xFF6B35 : 0x000080
+                    });
+                    const cap = new THREE.Mesh(capGeometry, capMaterial);
+                    cap.position.y = 1.1;
+                    this.group.add(cap);
+
+                    // Arms
+                    const armGeometry = new THREE.CapsuleGeometry(0.1, 0.6, 4, 8);
+                    const armMaterial = new THREE.MeshStandardMaterial({ color: color });
+                    
+                    const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+                    leftArm.position.set(-0.35, 0.2, 0);
+                    leftArm.rotation.z = Math.PI / 8;
+                    this.group.add(leftArm);
+
+                    const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+                    rightArm.position.set(0.35, 0.2, 0);
+                    rightArm.rotation.z = -Math.PI / 8;
+                    this.group.add(rightArm);
+
+                    // Position player
+                    this.group.position.set(position.x, position.y || 0.8, position.z);
+                    
+                    // Add animation properties
+                    this.animationPhase = Math.random() * Math.PI * 2;
+                    this.animationSpeed = 0.5 + Math.random() * 0.5;
+                }
+
+                update(time) {
+                    // Idle animation
+                    this.group.position.y = 0.8 + Math.sin(time * this.animationSpeed + this.animationPhase) * 0.05;
+                    
+                    // Subtle rotation
+                    if (this.role === 'batter') {
+                        this.group.rotation.y = Math.sin(time * 0.5) * 0.1;
+                    }
+                }
+            }
+
+            // Create Players
+            const players = [];
+
+            // Home team (Blaze colors)
+            players.push(new Player({ x: 0, z: 0 }, 0xFF6B35, 'Pitcher', 'pitcher'));
+            players.push(new Player({ x: 0, z: 7 }, 0xFF6B35, 'Catcher', 'catcher'));
+            players.push(new Player({ x: 7, z: 0 }, 0xFF6B35, 'First Base', 'first'));
+            players.push(new Player({ x: 0, z: -7 }, 0xFF6B35, 'Second Base', 'second'));
+            players.push(new Player({ x: -7, z: 0 }, 0xFF6B35, 'Third Base', 'third'));
+            players.push(new Player({ x: -5, z: -8 }, 0xFF6B35, 'Shortstop', 'shortstop'));
+            players.push(new Player({ x: -10, z: -10 }, 0xFF6B35, 'Left Field', 'left'));
+            players.push(new Player({ x: 0, z: -12 }, 0xFF6B35, 'Center Field', 'center'));
+            players.push(new Player({ x: 10, z: -10 }, 0xFF6B35, 'Right Field', 'right'));
+
+            // Batter (Away team)
+            players.push(new Player({ x: 0.5, z: 6.5 }, 0x4169E1, 'Batter', 'batter'));
+
+            // Add all players to scene
+            players.forEach(player => {
+                scene.add(player.group);
+            });
+
+            // Create Baseball
+            const baseballGroup = new THREE.Group();
+            
+            const ballGeometry = new THREE.SphereGeometry(0.15, 16, 16);
+            const ballMaterial = new THREE.MeshStandardMaterial({
+                color: 0xFFFFFF,
+                roughness: 0.3,
+                metalness: 0.1,
+                emissive: 0xFF6B35,
+                emissiveIntensity: 0.1
+            });
+            const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+            ball.castShadow = true;
+            baseballGroup.add(ball);
+
+            // Add stitches to baseball
+            const stitchCurve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(-0.1, 0.1, 0.05),
+                new THREE.Vector3(0, 0.12, 0.03),
+                new THREE.Vector3(0.1, 0.1, 0.05),
+            ]);
+            
+            const stitchGeometry = new THREE.TubeGeometry(stitchCurve, 10, 0.01, 4, false);
+            const stitchMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0xFF0000,
+                emissive: 0xFF0000,
+                emissiveIntensity: 0.5
+            });
+            const stitch1 = new THREE.Mesh(stitchGeometry, stitchMaterial);
+            const stitch2 = stitch1.clone();
+            stitch2.rotation.y = Math.PI;
+            
+            baseballGroup.add(stitch1);
+            baseballGroup.add(stitch2);
+            
+            baseballGroup.position.set(0, 1.2, 0);
+            scene.add(baseballGroup);
+
+            // Particle System for atmosphere
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particleCount = 1000;
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 50;
+                positions[i + 1] = Math.random() * 30;
+                positions[i + 2] = (Math.random() - 0.5) * 50;
+                
+                const color = Math.random() > 0.5 ? 
+                    new THREE.Color(0xFF6B35) : 
+                    new THREE.Color(0xFFFFFF);
+                colors[i] = color.r;
+                colors[i + 1] = color.g;
+                colors[i + 2] = color.b;
+            }
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.1,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6,
+                blending: THREE.AdditiveBlending
+            });
+            
+            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
+
+            // Mouse interaction
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+
+            // Animation
+            let time = 0;
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.01;
+
+                // Rotate field slightly based on mouse
+                fieldGroup.rotation.y = mouseX * 0.1;
+                fieldGroup.rotation.x = mouseY * 0.05;
+
+                // Animate baseball
+                baseballGroup.rotation.x += 0.02;
+                baseballGroup.rotation.y += 0.03;
+                baseballGroup.position.y = 1.2 + Math.sin(time * 2) * 0.1;
+
+                // Simulate pitch trajectory
+                const pitchTime = (time * 0.5) % 1;
+                if (pitchTime < 0.5) {
+                    baseballGroup.position.x = 0;
+                    baseballGroup.position.z = pitchTime * 12;
+                } else {
+                    baseballGroup.position.x = (pitchTime - 0.5) * 4;
+                    baseballGroup.position.z = 6 - (pitchTime - 0.5) * 8;
+                    baseballGroup.position.y = 1.2 + (pitchTime - 0.5) * 10 - Math.pow((pitchTime - 0.5) * 2, 2) * 5;
+                }
+
+                // Animate players
+                players.forEach(player => {
+                    player.update(time);
+                });
+
+                // Animate particles
+                particles.rotation.y = time * 0.05;
+                const particlePositions = particles.geometry.attributes.position.array;
+                for (let i = 1; i < particlePositions.length; i += 3) {
+                    particlePositions[i] += Math.sin(time + i) * 0.01;
+                }
+                particles.geometry.attributes.position.needsUpdate = true;
+
+                // Pulsing stadium light
+                blazeLight.intensity = 2 + Math.sin(time * 3) * 0.5;
+
+                // Camera movement
+                camera.position.x = Math.sin(time * 0.1) * 2;
+                camera.position.z = 25 + Math.cos(time * 0.1) * 2;
+                camera.lookAt(0, 0, 0);
+
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            });
+        })();
+
+        /**
+         * =============================================
+         * LIVE DATA SYSTEM
+         * =============================================
+         */
+        async function initializeLiveData() {
+            const readinessValue = document.getElementById('readiness-value');
+            const leverageValue = document.getElementById('leverage-value');
+            const statusIcon = document.getElementById('status-icon');
+            const statusText = document.getElementById('status-text');
+            const playersOnline = document.getElementById('players-online');
+
+            // Simulate connection delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            try {
+                // Try to fetch real data
+                const response = await fetch('data/readiness.json');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Remove skeleton loading
+                    readinessValue.classList.remove('skeleton');
+                    leverageValue.classList.remove('skeleton');
+                    
+                    // Update values with animation
+                    readinessValue.innerHTML = `<span>${data.readiness.toFixed(2)}</span><span class="data-unit">%</span>`;
+                    leverageValue.innerHTML = `<span>${data.leverage.toFixed(2)}</span><span class="data-unit">x</span>`;
+                    
+                    // Update status
+                    statusIcon.className = 'status-icon connected';
+                    statusText.textContent = 'Connected to Cardinals Analytics';
+                    
+                } else {
+                    throw new Error('Data not available');
+                }
+                
+            } catch (error) {
+                // Fallback to demo data
+                readinessValue.classList.remove('skeleton');
+                leverageValue.classList.remove('skeleton');
+                
+                // Use demo values
+                readinessValue.innerHTML = `<span>87.3</span><span class="data-unit">%</span>`;
+                leverageValue.innerHTML = `<span>2.4</span><span class="data-unit">x</span>`;
+                
+                // Update status
+                statusIcon.className = 'status-icon connected';
+                statusText.textContent = 'Demo Mode Active';
+            }
+
+            // Simulate player count updates
+            setInterval(() => {
+                const currentCount = parseInt(playersOnline.querySelector('span').textContent);
+                const change = Math.floor(Math.random() * 11) - 5;
+                const newCount = Math.max(200, Math.min(300, currentCount + change));
+                playersOnline.querySelector('span').textContent = newCount;
+            }, 5000);
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeLiveData();
+            
+            // Add smooth scroll behavior
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+
+        // Performance optimization: pause animations when tab is not visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Pause heavy animations when tab is hidden
+                cancelAnimationFrame(window.animationFrame);
+            } else {
+                // Resume animations when tab is visible
+                window.animationFrame = requestAnimationFrame(animate);
+            }
+        });
+    </script>
+</body>
+</html>

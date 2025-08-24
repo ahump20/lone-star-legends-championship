@@ -1,0 +1,90 @@
+{
+  "account": {
+    "id": "a12cb329d84130460eed99b816e4d0d3",
+    "hash": "OIRkQQRLQBn_9nQh_tfKWA",
+    "subdomain": "customer-mpdvoybjqct2pzls.cloudflarestream.com"
+  },
+  "delivery": {
+    "baseUrl": "https://imagedelivery.net/OIRkQQRLQBn_9nQh_tfKWA",
+    "variants": {
+      "public": "public",
+      "thumbnail": "thumbnail",
+      "hero": "hero",
+      "card": "card",
+      "avatar": "avatar"
+    }
+  },
+  "images": {
+    "blaze-logo": {
+      "id": "blaze-logo-main",
+      "description": "Blaze Intelligence main logo",
+      "variants": ["public", "thumbnail"]
+    },
+    "austin-professional": {
+      "id": "austin-humphrey-professional",
+      "description": "Austin Humphrey professional headshot",
+      "variants": ["avatar", "card"],
+      "usage": "Limited use - founder section only"
+    },
+    "hero-analytics": {
+      "id": "hero-sports-analytics",
+      "description": "Sports analytics hero background",
+      "variants": ["hero", "public"]
+    },
+    "cardinals-action": {
+      "id": "cardinals-game-action",
+      "description": "Cardinals baseball action shot",
+      "variants": ["card", "public"]
+    },
+    "titans-field": {
+      "id": "titans-field-view",
+      "description": "Titans football field view",
+      "variants": ["card", "public"]
+    },
+    "longhorns-stadium": {
+      "id": "longhorns-stadium",
+      "description": "Texas Longhorns stadium",
+      "variants": ["card", "public"]
+    },
+    "grizzlies-court": {
+      "id": "grizzlies-basketball-court",
+      "description": "Memphis Grizzlies court",
+      "variants": ["card", "public"]
+    },
+    "data-visualization": {
+      "id": "data-viz-dashboard",
+      "description": "Data visualization dashboard",
+      "variants": ["hero", "card"]
+    },
+    "team-collaboration": {
+      "id": "team-collaboration",
+      "description": "Team collaboration and analytics",
+      "variants": ["card", "public"]
+    },
+    "mobile-app": {
+      "id": "mobile-app-mockup",
+      "description": "Mobile app interface mockup",
+      "variants": ["card", "public"]
+    }
+  },
+  "videos": {
+    "platform-demo": {
+      "id": "138facaf760c65e9b4efab3715ae6f50",
+      "title": "Blaze Intelligence Platform Demo",
+      "description": "Overview of the sports analytics platform",
+      "thumbnail": "https://customer-mpdvoybjqct2pzls.cloudflarestream.com/138facaf760c65e9b4efab3715ae6f50/thumbnails/thumbnail.jpg"
+    },
+    "professor-interview": {
+      "id": "prof-interview-sports-ops",
+      "title": "Sports Management & Operations Discussion",
+      "description": "Academic perspective on sports analytics",
+      "thumbnail": "https://customer-mpdvoybjqct2pzls.cloudflarestream.com/prof-interview-sports-ops/thumbnails/thumbnail.jpg"
+    }
+  },
+  "usage_guidelines": {
+    "austin_photos": "Use sparingly - only in founder/about sections, not as hero or repeated throughout site",
+    "team_logos": "Use official team imagery respectfully, focus on Cardinals, Titans, Longhorns, Grizzlies",
+    "data_viz": "Prioritize analytics dashboards and data visualization over personal imagery",
+    "professional_tone": "Maintain enterprise-level professional aesthetic"
+  }
+}

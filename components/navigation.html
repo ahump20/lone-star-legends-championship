@@ -1,0 +1,297 @@
+<!-- Unified Navigation Component for Blaze Intelligence -->
+<!-- Based on Site Architecture defined in SITE_ARCHITECTURE.md -->
+
+<header class="topbar" id="unified-navigation">
+  <div class="nav-container">
+    <a href="/" class="logo">
+      <span class="logo-icon">🔥</span>
+      <span>Blaze Intelligence</span>
+    </a>
+    
+    <!-- Main Navigation Menu -->
+    <nav class="nav-menu">
+      <!-- Analytics Hub -->
+      <div class="nav-dropdown">
+        <a href="/analytics/" class="nav-link nav-dropdown-trigger">Analytics <span class="dropdown-arrow">▾</span></a>
+        <div class="nav-dropdown-content">
+          <a href="/analytics/" class="dropdown-item">Overview Dashboard</a>
+          <a href="/analytics/dashboard/" class="dropdown-item">Statistics Dashboard</a>
+          <a href="/analytics/real-time/" class="dropdown-item">Real-time Analytics</a>
+          <a href="/analytics/reports/" class="dropdown-item">Custom Reports</a>
+          <a href="/analytics/nil-valuation/" class="dropdown-item">NIL Valuation</a>
+        </div>
+      </div>
+      
+      <!-- Capabilities Platform -->
+      <div class="nav-dropdown">
+        <a href="/capabilities/" class="nav-link nav-dropdown-trigger">Capabilities <span class="dropdown-arrow">▾</span></a>
+        <div class="nav-dropdown-content">
+          <a href="/capabilities/" class="dropdown-item">Overview</a>
+          <a href="/capabilities/scouting/" class="dropdown-item">Advanced Scouting</a>
+          <a href="/capabilities/biomechanics/" class="dropdown-item">3D Biomechanics</a>
+          <a href="/capabilities/flow-state/" class="dropdown-item">Flow State Integration</a>
+          <a href="/capabilities/nil-valuation/" class="dropdown-item">NIL Trust Dashboard</a>
+          <a href="/capabilities/performance/" class="dropdown-item">Performance Analytics</a>
+          <a href="/capabilities/predictive/" class="dropdown-item">Predictive Modeling</a>
+        </div>
+      </div>
+      
+      <!-- Interactive Demos -->
+      <div class="nav-dropdown">
+        <a href="/games/" class="nav-link nav-dropdown-trigger">Games <span class="dropdown-arrow">▾</span></a>
+        <div class="nav-dropdown-content">
+          <a href="/games/" class="dropdown-item">Game Hub</a>
+          <a href="/games/baseball/" class="dropdown-item">Baseball Demo</a>
+          <a href="/games/simulator/" class="dropdown-item">3D Simulator</a>
+          <a href="/games/advanced/" class="dropdown-item">Advanced Simulator</a>
+          <a href="/games/stadium/" class="dropdown-item">Stadium Demo</a>
+          <a href="/games/multiplayer/" class="dropdown-item">Multiplayer</a>
+        </div>
+      </div>
+      
+      <!-- Company -->
+      <div class="nav-dropdown">
+        <a href="/company/" class="nav-link nav-dropdown-trigger">Company <span class="dropdown-arrow">▾</span></a>
+        <div class="nav-dropdown-content">
+          <a href="/company/about/" class="dropdown-item">About</a>
+          <a href="/company/team/" class="dropdown-item">Team</a>
+          <a href="/company/presentations/" class="dropdown-item">Presentations</a>
+          <a href="/company/portfolio/" class="dropdown-item">Portfolio</a>
+          <a href="/company/careers/" class="dropdown-item">Careers</a>
+          <a href="/company/contact/" class="dropdown-item">Contact</a>
+        </div>
+      </div>
+      
+      <!-- Resources -->
+      <div class="nav-dropdown">
+        <a href="/resources/" class="nav-link nav-dropdown-trigger">Resources <span class="dropdown-arrow">▾</span></a>
+        <div class="nav-dropdown-content">
+          <a href="/resources/documentation/" class="dropdown-item">Documentation</a>
+          <a href="/resources/api-reference/" class="dropdown-item">API Reference</a>
+          <a href="/resources/help-center/" class="dropdown-item">Help Center</a>
+          <a href="/resources/case-studies/" class="dropdown-item">Case Studies</a>
+          <a href="/resources/blog/" class="dropdown-item">Blog</a>
+          <a href="/resources/research/" class="dropdown-item">Research</a>
+        </div>
+      </div>
+      
+      <!-- Pricing -->
+      <a href="/pricing/" class="nav-link">Pricing</a>
+      
+      <!-- Get Started CTA -->
+      <a href="/onboarding/" class="nav-cta">Get Started</a>
+    </nav>
+    
+    <!-- Mobile menu toggle -->
+    <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav" id="mobile-nav">
+    <div class="mobile-nav-content">
+      <a href="/" class="mobile-nav-link">Home</a>
+      <a href="/analytics/" class="mobile-nav-link">Analytics</a>
+      <a href="/capabilities/" class="mobile-nav-link">Capabilities</a>
+      <a href="/games/" class="mobile-nav-link">Games</a>
+      <a href="/pricing/" class="mobile-nav-link">Pricing</a>
+      <a href="/company/" class="mobile-nav-link">Company</a>
+      <a href="/resources/" class="mobile-nav-link">Resources</a>
+      <a href="/onboarding/" class="mobile-nav-cta">Get Started</a>
+    </div>
+  </div>
+</header>
+
+<style>
+/* Navigation Dropdown Styles */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.dropdown-arrow {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.nav-dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(10, 10, 10, 0.98);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  border-radius: 12px;
+  padding: 0.75rem 0;
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.nav-dropdown:hover .nav-dropdown-content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown:hover .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.dropdown-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 107, 53, 0.1);
+  color: #FF6B35;
+}
+
+/* Mobile Navigation Styles */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  gap: 3px;
+}
+
+.mobile-menu-toggle span {
+  width: 20px;
+  height: 2px;
+  background: #FFFFFF;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 10, 10, 0.98);
+  backdrop-filter: blur(10px);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 10000;
+}
+
+.mobile-nav.active {
+  transform: translateX(0);
+}
+
+.mobile-nav-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 4rem;
+}
+
+.mobile-nav-link {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 1.125rem;
+  font-weight: 500;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-nav-cta {
+  background: linear-gradient(135deg, #CC5500, #FF6B35);
+  color: #FFFFFF;
+  padding: 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex;
+  }
+}
+
+@media (max-width: 1024px) {
+  .nav-dropdown-content {
+    min-width: 180px;
+  }
+}
+</style>
+
+<script>
+// Mobile menu functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileToggle = document.getElementById('mobile-menu-toggle');
+  const mobileNav = document.getElementById('mobile-nav');
+  
+  if (mobileToggle && mobileNav) {
+    mobileToggle.addEventListener('click', function() {
+      mobileNav.classList.toggle('active');
+      
+      // Animate hamburger menu
+      const spans = mobileToggle.querySelectorAll('span');
+      if (mobileNav.classList.contains('active')) {
+        spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+      } else {
+        spans.forEach(span => {
+          span.style.transform = 'none';
+          span.style.opacity = '1';
+        });
+      }
+    });
+    
+    // Close mobile nav when clicking outside
+    mobileNav.addEventListener('click', function(e) {
+      if (e.target === mobileNav) {
+        mobileNav.classList.remove('active');
+        const spans = mobileToggle.querySelectorAll('span');
+        spans.forEach(span => {
+          span.style.transform = 'none';
+          span.style.opacity = '1';
+        });
+      }
+    });
+  }
+});
+
+// Active page highlighting
+document.addEventListener('DOMContentLoaded', function() {
+  const currentPath = window.location.pathname;
+  const navLinks = document.querySelectorAll('.nav-link, .dropdown-item, .mobile-nav-link');
+  
+  navLinks.forEach(link => {
+    const href = link.getAttribute('href');
+    if (href === currentPath || (href !== '/' && currentPath.startsWith(href))) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>

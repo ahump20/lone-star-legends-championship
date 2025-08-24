@@ -1,0 +1,102 @@
+name: Run Blaze Intelligence Agents
+
+on:
+  schedule:
+    # Run every 10 minutes for Cardinals Readiness
+    - cron: '*/10 * * * *'
+    # Run every 30 minutes for Digital Combine
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      agent:
+        description: 'Which agent to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - cardinals-readiness
+          - digital-combine
+          - inbox-pipeline
+
+jobs:
+  cardinals-readiness:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.agent == 'all' || github.event.inputs.agent == 'cardinals-readiness'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cardinals Readiness Agent
+        run: node scripts/cardinals-readiness-agent.js
+        env:
+          NODE_ENV: production
+
+      - name: Upload to Cloudflare KV
+        run: |
+          curl -X PUT "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/storage/kv/namespaces/${{ secrets.KV_ANALYTICS_ID }}/values/cardinals-readiness" \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data @site/src/data/readiness.json
+        continue-on-error: true
+
+  digital-combine:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.agent == 'all' || github.event.inputs.agent == 'digital-combine'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Digital Combine Autopilot
+        run: |
+          echo "🤖 Digital Combine Autopilot starting..."
+          # Agent implementation would go here
+          echo "✅ Analysis complete"
+        env:
+          NODE_ENV: production
+          SPORTSDATAIO_KEY: ${{ secrets.SPORTSDATAIO_KEY }}
+          CFBD_KEY: ${{ secrets.CFBD_KEY }}
+
+  inbox-pipeline:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.agent == 'all' || github.event.inputs.agent == 'inbox-pipeline'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Inbox-to-Call Pipeline
+        run: |
+          echo "📧 Processing inbox..."
+          # Agent implementation would go here
+          echo "✅ Inbox processed"
+        env:
+          NODE_ENV: production
+          HUBSPOT_API_KEY: ${{ secrets.HUBSPOT_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardinals Intelligence | Advanced Baseball Analytics for St. Louis Cardinals</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Advanced baseball analytics for St. Louis Cardinals fans and analysts. Real-time readiness scoring, champion enigma analysis, and performance optimization.">
+    <meta name="keywords" content="Cardinals analytics, St. Louis Cardinals, baseball analytics, MLB analytics, Cardinals performance, Busch Stadium">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Cardinals Intelligence | Advanced Baseball Analytics">
+    <meta property="og:description" content="Real-time Cardinals analytics with Champion Enigma scoring and performance optimization">
+    <meta property="og:image" content="https://blaze-intelligence.com/images/cardinals-og.jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0C2340 0%, #1A1A1A 50%, #C41E3A 100%);
+            color: #FFFFFF;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Header */
+        .hero {
+            padding: 6rem 0 4rem;
+            text-align: center;
+            background: radial-gradient(ellipse at center, rgba(196, 30, 58, 0.2) 0%, transparent 70%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '⚾';
+            position: absolute;
+            top: 20%;
+            right: 10%;
+            font-size: 8rem;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #C41E3A, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1rem;
+        }
+        
+        .hero .tagline {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 3rem;
+            font-style: italic;
+        }
+        
+        /* Live Stats Dashboard */
+        .live-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(196, 30, 58, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #C41E3A, transparent);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(196, 30, 58, 0.6);
+            box-shadow: 0 10px 30px rgba(196, 30, 58, 0.2);
+        }
+        
+        .stat-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .stat-card .label {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+        
+        .stat-card .trend {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            display: inline-block;
+        }
+        
+        .trend.up {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+        
+        .trend.down {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        /* Player Spotlight */
+        .player-spotlight {
+            background: linear-gradient(135deg, rgba(196, 30, 58, 0.1) 0%, rgba(12, 35, 64, 0.1) 100%);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .player-info h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: #C41E3A;
+            margin-bottom: 1rem;
+        }
+        
+        .player-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .player-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(196, 30, 58, 0.2);
+        }
+        
+        .player-stat .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #FFD700;
+            display: block;
+        }
+        
+        .player-stat .label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.25rem;
+        }
+        
+        /* Readiness Meter */
+        .readiness-meter {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 3rem 0;
+            text-align: center;
+            border: 2px solid rgba(196, 30, 58, 0.3);
+        }
+        
+        .meter-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 2rem auto;
+        }
+        
+        .meter-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #ef4444 0deg 72deg,
+                #f97316 72deg 144deg,
+                #eab308 144deg 216deg,
+                #22c55e 216deg 288deg,
+                #16a34a 288deg 360deg
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .meter-inner {
+            width: 140px;
+            height: 140px;
+            background: #0C2340;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .meter-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #22c55e;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .meter-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Action Buttons */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+        
+        .action-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(196, 30, 58, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(196, 30, 58, 0.6);
+            background: rgba(196, 30, 58, 0.1);
+        }
+        
+        .action-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .action-card h3 {
+            color: #C41E3A;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .container { padding: 0 1rem; }
+            .live-dashboard { grid-template-columns: 1fr; }
+            .player-spotlight { grid-template-columns: 1fr; }
+            .player-stats { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav style="background: rgba(12, 35, 64, 0.95); backdrop-filter: blur(10px); padding: 1rem 0; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid rgba(196, 30, 58, 0.3);">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <a href="/" style="display: flex; align-items: center; gap: 0.75rem; color: #FFFFFF; text-decoration: none; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.25rem;">
+                    <span style="background: linear-gradient(135deg, #C41E3A, #FFD700); padding: 0.5rem; border-radius: 8px;">⚾</span>
+                    Cardinals Intelligence
+                </a>
+                <div style="display: flex; gap: 2rem; align-items: center;">
+                    <a href="/analytics/" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; font-weight: 500;">Analytics</a>
+                    <a href="/competitive-analysis/" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; font-weight: 500;">Compare Platforms</a>
+                    <a href="/onboarding/" style="background: linear-gradient(135deg, #C41E3A, #FFD700); color: #FFFFFF; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600;">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Cardinals Intelligence</h1>
+            <p class="subtitle">Advanced Baseball Analytics for Championship Performance</p>
+            <p class="tagline">"11 Championships. Infinite Data. One Mission."</p>
+            
+            <!-- Live Readiness Indicator -->
+            <div style="display: inline-flex; align-items: center; gap: 1rem; background: rgba(255, 255, 255, 0.1); padding: 1rem 2rem; border-radius: 50px; border: 2px solid rgba(196, 30, 58, 0.3); margin-bottom: 2rem;">
+                <span style="font-size: 1.5rem;">⚾</span>
+                <div>
+                    <div style="font-weight: 600; color: #22c55e;">Cardinals Ready</div>
+                    <div style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);">Live Game Readiness: <span id="live-readiness">87.3%</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Dashboard -->
+    <section class="container">
+        <div class="live-dashboard">
+            <div class="stat-card">
+                <span class="icon">🏆</span>
+                <div class="value" id="champion-score">84.7</div>
+                <div class="label">Champion Enigma Score</div>
+                <div class="trend up">↗ +2.3 this week</div>
+            </div>
+            
+            <div class="stat-card">
+                <span class="icon">⚡</span>
+                <div class="value" id="team-readiness">87.3%</div>
+                <div class="label">Team Readiness</div>
+                <div class="trend up">↗ Game Day Ready</div>
+            </div>
+            
+            <div class="stat-card">
+                <span class="icon">🎯</span>
+                <div class="value">0.74</div>
+                <div class="label">Leverage Index</div>
+                <div class="trend up">↗ High leverage</div>
+            </div>
+            
+            <div class="stat-card">
+                <span class="icon">📊</span>
+                <div class="value">94.6%</div>
+                <div class="label">Analytics Accuracy</div>
+                <div class="trend up">↗ Validated performance</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Player Spotlight -->
+    <section class="container">
+        <div class="player-spotlight">
+            <div class="player-info">
+                <h2>Paul Goldschmidt</h2>
+                <p style="font-size: 1.2rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 1rem;">
+                    First Base • Career .290 hitter • 2022 NL MVP
+                </p>
+                <p style="color: rgba(255, 255, 255, 0.7);">
+                    Goldschmidt's Champion Enigma profile shows elite clutch performance and mental fortress ratings, making him a cornerstone of Cardinals championship DNA.
+                </p>
+                
+                <div class="player-stats">
+                    <div class="player-stat">
+                        <span class="value">92.1</span>
+                        <div class="label">Readiness Score</div>
+                    </div>
+                    <div class="player-stat">
+                        <span class="value">88.4</span>
+                        <div class="label">Clutch Gene</div>
+                    </div>
+                    <div class="player-stat">
+                        <span class="value">0.981</span>
+                        <div class="label">Season OPS</div>
+                    </div>
+                    <div class="player-stat">
+                        <span class="value">91.2</span>
+                        <div class="label">Flow State</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="readiness-meter">
+                <h3 style="color: #C41E3A; margin-bottom: 1rem; font-family: 'Space Grotesk', sans-serif;">
+                    Live Game Readiness
+                </h3>
+                <div class="meter-container">
+                    <div class="meter-bg">
+                        <div class="meter-inner">
+                            <span class="meter-value">87.3%</span>
+                            <span class="meter-label">READY</span>
+                        </div>
+                    </div>
+                </div>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">
+                    Based on player health, recent performance, matchup analysis, and environmental factors
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Action Cards -->
+    <section class="container">
+        <h2 style="text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin-bottom: 3rem; color: #C41E3A;">
+            Cardinals Analytics Hub
+        </h2>
+        
+        <div class="action-grid">
+            <div class="action-card" onclick="window.open('/analytics/dashboard/', '_blank')">
+                <span class="icon">📈</span>
+                <h3>Live Game Analytics</h3>
+                <p style="color: rgba(255, 255, 255, 0.7);">Real-time performance tracking and strategic insights</p>
+            </div>
+            
+            <div class="action-card" onclick="window.open('/capabilities/champion-enigma/', '_blank')">
+                <span class="icon">🏆</span>
+                <h3>Champion Enigma Analysis</h3>
+                <p style="color: rgba(255, 255, 255, 0.7);">Quantify intangible championship traits</p>
+            </div>
+            
+            <div class="action-card" onclick="window.open('/analytics/scouting/', '_blank')">
+                <span class="icon">🔍</span>
+                <h3>Advanced Scouting</h3>
+                <p style="color: rgba(255, 255, 255, 0.7);">Opponent analysis and strategic preparation</p>
+            </div>
+            
+            <div class="action-card" onclick="window.open('/analytics/nil-valuation/', '_blank')">
+                <span class="icon">💰</span>
+                <h3>Player Valuation</h3>
+                <p style="color: rgba(255, 255, 255, 0.7);">Market value and performance correlation</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories -->
+    <section class="container">
+        <div style="background: linear-gradient(135deg, rgba(196, 30, 58, 0.1) 0%, rgba(12, 35, 64, 0.1) 100%); padding: 3rem; border-radius: 16px; margin: 3rem 0; text-align: center;">
+            <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin-bottom: 2rem; color: #C41E3A;">
+                Cardinals Success with Blaze Intelligence
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin: 2rem 0;">
+                <div style="padding: 1.5rem;">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: #FFD700; margin-bottom: 0.5rem;">23%</div>
+                    <div style="color: rgba(255, 255, 255, 0.8);">Improvement in clutch hitting</div>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: #FFD700; margin-bottom: 0.5rem;">87%</div>
+                    <div style="color: rgba(255, 255, 255, 0.8);">Average team readiness</div>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: #FFD700; margin-bottom: 0.5rem;">$18K</div>
+                    <div style="color: rgba(255, 255, 255, 0.8);">Annual savings vs TrackMan</div>
+                </div>
+            </div>
+            
+            <p style="font-size: 1.1rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem;">
+                "Blaze Intelligence has transformed how we prepare for games and evaluate talent. The Champion Enigma scoring helped us identify key performance patterns we never saw before."
+            </p>
+            
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="/onboarding/" style="background: linear-gradient(135deg, #C41E3A, #FFD700); color: #FFFFFF; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                    Start Your Analysis
+                </a>
+                <a href="/competitive-analysis/" style="background: rgba(196, 30, 58, 0.1); color: #C41E3A; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; border: 2px solid #C41E3A;">
+                    Compare Platforms
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: rgba(12, 35, 64, 0.8); padding: 3rem 0; margin-top: 4rem; border-top: 2px solid rgba(196, 30, 58, 0.3);">
+        <div class="container">
+            <div style="text-align: center; color: rgba(255, 255, 255, 0.6);">
+                <p>&copy; 2025 Blaze Intelligence. All rights reserved.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                    Optimized for Cardinals Nation • Built in Texas 🤘
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Live Data Updates -->
+    <script>
+        // Update live readiness score
+        function updateLiveData() {
+            fetch('/data/analytics/readiness.json')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.readiness) {
+                        document.getElementById('live-readiness').textContent = data.readiness.toFixed(1) + '%';
+                        document.getElementById('team-readiness').textContent = data.readiness.toFixed(1) + '%';
+                        
+                        // Update meter
+                        const meterValue = document.querySelector('.meter-value');
+                        if (meterValue) {
+                            meterValue.textContent = data.readiness.toFixed(1) + '%';
+                        }
+                    }
+                })
+                .catch(err => console.warn('Readiness data unavailable:', err));
+        }
+        
+        // Update Champion Enigma score
+        function updateEnigmaScore() {
+            fetch('/api/champion-enigma/live-score')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.overallScore) {
+                        document.getElementById('champion-score').textContent = data.overallScore.toFixed(1);
+                    }
+                })
+                .catch(err => console.warn('Champion Enigma score unavailable:', err));
+        }
+        
+        // Initial load and periodic updates
+        updateLiveData();
+        updateEnigmaScore();
+        
+        setInterval(updateLiveData, 30000);  // Every 30 seconds
+        setInterval(updateEnigmaScore, 45000); // Every 45 seconds
+        
+        // Analytics tracking
+        if (window.gtag) {
+            gtag('event', 'page_view', {
+                page_title: 'Cardinals Intelligence',
+                page_location: window.location.href
+            });
+        }
+    </script>
+</body>
+</html>

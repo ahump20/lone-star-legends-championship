@@ -1,0 +1,25 @@
+{
+    "timestamp": "2025-08-20T14:54:26Z",
+    "ingestion_id": "20250820_095420",
+    "sports_processed": {
+        "mlb": {
+            "files":        5,
+            "latest_update": "Wed Aug 20 09:54:26 CDT 2025"
+        },
+        "nfl": {
+            "files":        3,
+            "latest_update": "Wed Aug 20 09:54:26 CDT 2025"
+        },
+        "nba": {
+            "files":        4,
+            "latest_update": "Wed Aug 20 09:54:26 CDT 2025"
+        },
+        "ncaa": {
+            "files":        2,
+            "latest_update": "Wed Aug 20 09:54:26 CDT 2025"
+        }
+    },
+    "total_files":       15,
+    "total_size": "656K",
+    "status": "completed"
+}

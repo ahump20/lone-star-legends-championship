@@ -1,0 +1,41 @@
+name = "blaze-intelligence-worker"
+main = "src/worker/index.js"
+compatibility_date = "2024-08-20"
+workers_dev = true
+
+# Durable Objects
+[[durable_objects.bindings]]
+name = "GAME_ROOMS"
+class_name = "GameRoom"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["GameRoom"]
+
+# D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "blaze-db"
+database_id = "d3d5415d-0264-41ee-840f-bf12d88d3319"
+
+# KV Namespaces
+[[kv_namespaces]]
+binding = "CACHE"
+id = "a53c3726fc3044be82e79d2d1e371d26"
+
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "44bb17e8a3cb463a8331f4d11d7ed63d"
+
+[[kv_namespaces]]
+binding = "ANALYTICS"
+id = "c8a0984ce5134c9d9f691818d3c551a3"
+
+# Environment Variables
+[vars]
+ENVIRONMENT = "production"
+
+# Development settings
+[dev]
+port = 8788
+local_protocol = "http"

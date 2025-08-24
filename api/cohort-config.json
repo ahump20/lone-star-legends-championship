@@ -1,0 +1,221 @@
+{
+  "cohorts": {
+    "mlb.closer": {
+      "sport": "baseball",
+      "level": "pro",
+      "role": "closer",
+      "baselines": {
+        "Clutch Gene": { "mean": 50, "std": 15, "n": 127 },
+        "Killer Instinct": { "mean": 50, "std": 14, "n": 127 },
+        "Flow State": { "mean": 50, "std": 16, "n": 127 },
+        "Mental Fortress": { "mean": 50, "std": 15, "n": 127 },
+        "Predator Mindset": { "mean": 50, "std": 13, "n": 127 },
+        "Champion Aura": { "mean": 50, "std": 14, "n": 127 },
+        "Winner DNA": { "mean": 50, "std": 15, "n": 127 },
+        "Beast Mode": { "mean": 50, "std": 16, "n": 127 }
+      },
+      "leverage_model": {
+        "high_leverage_threshold": 2.0,
+        "critical_leverage_threshold": 3.5
+      }
+    },
+    "mlb.starter": {
+      "sport": "baseball",
+      "level": "pro",
+      "role": "starter",
+      "baselines": {
+        "Clutch Gene": { "mean": 50, "std": 14, "n": 342 },
+        "Killer Instinct": { "mean": 50, "std": 15, "n": 342 },
+        "Flow State": { "mean": 50, "std": 15, "n": 342 },
+        "Mental Fortress": { "mean": 50, "std": 16, "n": 342 },
+        "Predator Mindset": { "mean": 50, "std": 14, "n": 342 },
+        "Champion Aura": { "mean": 50, "std": 15, "n": 342 },
+        "Winner DNA": { "mean": 50, "std": 14, "n": 342 },
+        "Beast Mode": { "mean": 50, "std": 15, "n": 342 }
+      },
+      "leverage_model": {
+        "high_leverage_threshold": 1.5,
+        "critical_leverage_threshold": 2.5
+      }
+    },
+    "nfl.qb": {
+      "sport": "football",
+      "level": "pro",
+      "role": "QB",
+      "baselines": {
+        "Clutch Gene": { "mean": 50, "std": 16, "n": 64 },
+        "Killer Instinct": { "mean": 50, "std": 15, "n": 64 },
+        "Flow State": { "mean": 50, "std": 14, "n": 64 },
+        "Mental Fortress": { "mean": 50, "std": 15, "n": 64 },
+        "Predator Mindset": { "mean": 50, "std": 16, "n": 64 },
+        "Champion Aura": { "mean": 50, "std": 17, "n": 64 },
+        "Winner DNA": { "mean": 50, "std": 15, "n": 64 },
+        "Beast Mode": { "mean": 50, "std": 14, "n": 64 }
+      },
+      "leverage_model": {
+        "high_leverage_threshold": 0.7,
+        "critical_leverage_threshold": 0.9
+      }
+    },
+    "nfl.wr": {
+      "sport": "football",
+      "level": "pro",
+      "role": "WR",
+      "baselines": {
+        "Clutch Gene": { "mean": 50, "std": 14, "n": 198 },
+        "Killer Instinct": { "mean": 50, "std": 15, "n": 198 },
+        "Flow State": { "mean": 50, "std": 16, "n": 198 },
+        "Mental Fortress": { "mean": 50, "std": 14, "n": 198 },
+        "Predator Mindset": { "mean": 50, "std": 15, "n": 198 },
+        "Champion Aura": { "mean": 50, "std": 14, "n": 198 },
+        "Winner DNA": { "mean": 50, "std": 15, "n": 198 },
+        "Beast Mode": { "mean": 50, "std": 16, "n": 198 }
+      },
+      "leverage_model": {
+        "high_leverage_threshold": 0.6,
+        "critical_leverage_threshold": 0.85
+      }
+    },
+    "nba.pg": {
+      "sport": "basketball",
+      "level": "pro",
+      "role": "PG",
+      "baselines": {
+        "Clutch Gene": { "mean": 50, "std": 15, "n": 90 },
+        "Killer Instinct": { "mean": 50, "std": 16, "n": 90 },
+        "Flow State": { "mean": 50, "std": 15, "n": 90 },
+        "Mental Fortress": { "mean": 50, "std": 14, "n": 90 },
+        "Predator Mindset": { "mean": 50, "std": 15, "n": 90 },
+        "Champion Aura": { "mean": 50, "std": 16, "n": 90 },
+        "Winner DNA": { "mean": 50, "std": 15, "n": 90 },
+        "Beast Mode": { "mean": 50, "std": 14, "n": 90 }
+      },
+      "leverage_model": {
+        "high_leverage_threshold": 5.0,
+        "critical_leverage_threshold": 8.0
+      }
+    },
+    "ncaa.qb": {
+      "sport": "football",
+      "level": "college",
+      "role": "QB",
+      "baselines": {
+        "Clutch Gene": { "mean": 50, "std": 17, "n": 256 },
+        "Killer Instinct": { "mean": 50, "std": 16, "n": 256 },
+        "Flow State": { "mean": 50, "std": 15, "n": 256 },
+        "Mental Fortress": { "mean": 50, "std": 16, "n": 256 },
+        "Predator Mindset": { "mean": 50, "std": 17, "n": 256 },
+        "Champion Aura": { "mean": 50, "std": 16, "n": 256 },
+        "Winner DNA": { "mean": 50, "std": 15, "n": 256 },
+        "Beast Mode": { "mean": 50, "std": 16, "n": 256 }
+      },
+      "leverage_model": {
+        "high_leverage_threshold": 0.6,
+        "critical_leverage_threshold": 0.85
+      }
+    },
+    "ncaa.pitcher": {
+      "sport": "baseball",
+      "level": "college",
+      "role": "pitcher",
+      "baselines": {
+        "Clutch Gene": { "mean": 50, "std": 16, "n": 412 },
+        "Killer Instinct": { "mean": 50, "std": 15, "n": 412 },
+        "Flow State": { "mean": 50, "std": 16, "n": 412 },
+        "Mental Fortress": { "mean": 50, "std": 17, "n": 412 },
+        "Predator Mindset": { "mean": 50, "std": 15, "n": 412 },
+        "Champion Aura": { "mean": 50, "std": 16, "n": 412 },
+        "Winner DNA": { "mean": 50, "std": 16, "n": 412 },
+        "Beast Mode": { "mean": 50, "std": 15, "n": 412 }
+      },
+      "leverage_model": {
+        "high_leverage_threshold": 1.2,
+        "critical_leverage_threshold": 2.0
+      }
+    }
+  },
+  "signal_families": {
+    "visual_behavioral": {
+      "sources": ["cv", "manual"],
+      "features": [
+        "micro_expressions",
+        "posture_confidence",
+        "huddle_leadership",
+        "approach_tempo",
+        "eye_contact_duration"
+      ]
+    },
+    "physiological": {
+      "sources": ["wearable"],
+      "features": [
+        "hrv_rmssd",
+        "gsr_peaks",
+        "load_strain_ratio",
+        "recovery_delta",
+        "sleep_efficiency"
+      ]
+    },
+    "contexted_performance": {
+      "sources": ["pbp"],
+      "features": [
+        "highLeverage_WPA",
+        "decision_latency_ms",
+        "error_rate_adverse",
+        "comeback_probability",
+        "clutch_efficiency"
+      ]
+    },
+    "social_psych": {
+      "sources": ["social"],
+      "features": [
+        "sentiment_stability",
+        "buzz_velocity",
+        "team_chemistry_index",
+        "media_composure",
+        "fan_engagement"
+      ]
+    }
+  },
+  "anchors": {
+    "50": {
+      "label": "Cohort Median",
+      "description": "Solid pro/college starter profile"
+    },
+    "60": {
+      "label": "Above Average",
+      "description": "Winning contributor"
+    },
+    "70": {
+      "label": "Playoff Caliber",
+      "description": "Noticeable competitive edge"
+    },
+    "85": {
+      "label": "Elite",
+      "description": "Top ~5% in cohort"
+    },
+    "95": {
+      "label": "Generational",
+      "description": "Top ~0.5% in cohort"
+    }
+  },
+  "calibration_targets": {
+    "reliability": {
+      "test_retest_r": 0.70,
+      "threshold": "year-over-year at constant role"
+    },
+    "convergent_validity": {
+      "min_correlation": 0.60,
+      "with": "contexted outcomes (e.g., clutch WPA)"
+    },
+    "predictive_validity": {
+      "nil_correlation": 0.59,
+      "window": "week-ahead during high-leverage"
+    },
+    "score_calibration": {
+      "tolerance": 0.03,
+      "method": "isotonic/Platt"
+    }
+  },
+  "version": "cee-cohort-0.9.0",
+  "last_updated": "2025-08-20T00:00:00Z"
+}

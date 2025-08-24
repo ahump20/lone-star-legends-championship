@@ -1,0 +1,43 @@
+{
+  "lastUpdated": "2025-08-20T14:54:37.592Z",
+  "topPerformers": [],
+  "breakouts": [
+    {
+      "sport": "mlb",
+      "athlete": "Player 4",
+      "team": 138,
+      "position": "SS",
+      "score": 77,
+      "reasons": [],
+      "projection": {}
+    },
+    {
+      "sport": "nba",
+      "athlete": "Player 1",
+      "team": 29,
+      "position": "PF",
+      "score": 77,
+      "reasons": [],
+      "projection": {}
+    },
+    {
+      "sport": "nba",
+      "athlete": "Player 5",
+      "team": 29,
+      "position": "SG",
+      "score": 77,
+      "reasons": [],
+      "projection": {}
+    },
+    {
+      "sport": "nba",
+      "athlete": "Player 3",
+      "team": 29,
+      "position": "PF",
+      "score": 77,
+      "reasons": [],
+      "projection": {}
+    }
+  ],
+  "insights": []
+}

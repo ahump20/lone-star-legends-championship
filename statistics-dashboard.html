@@ -247,7 +247,7 @@
         <!-- Header -->
         <div class="dashboard-header">
             <h1>⚾ Lone Star Legends Analytics Dashboard</h1>
-            <p>Champion Enigma Engine™ • Real-Time Performance Intelligence • AMSI Integration</p>
+            <p>Champion Enigma Engine™ • Real-Time Performance Intelligence • Blaze Intelligence Integration</p>
             <span class="live-indicator"></span>
             <span>LIVE DATA</span>
             
@@ -633,9 +633,58 @@
             alert('📊 Statistics have been reset!');
         }
 
-        function exportData() {
-            dashboard.exportData();
-            alert('📁 Data exported successfully!');
+        async function exportData() {
+            if (!dashboard.isActive) {
+                alert('Please start the simulation first');
+                return;
+            }
+            
+            const exportType = prompt('Export type (full/team/players/games):', 'full');
+            const format = prompt('Format (csv/json):', 'csv');
+            
+            if (!exportType || !format) return;
+            
+            try {
+                // Show loading indicator
+                const exportButton = document.querySelector('button[onclick="exportData()"]');
+                const originalText = exportButton.innerHTML;
+                exportButton.innerHTML = '⏳ Exporting...';
+                exportButton.disabled = true;
+                
+                const response = await fetch(`/api/stats/export?type=${exportType}&format=${format}`);
+                
+                if (!response.ok) throw new Error('Export failed');
+                
+                // Create download link
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const downloadElement = document.createElement('a');
+                downloadElement.href = url;
+                
+                const filename = response.headers.get('Content-Disposition')?.split('filename=')[1]?.replace(/"/g, '') || 
+                               `blaze-statistics.${format}`;
+                
+                downloadElement.download = filename;
+                document.body.appendChild(downloadElement);
+                downloadElement.click();
+                document.body.removeChild(downloadElement);
+                window.URL.revokeObjectURL(url);
+                
+                // Restore button
+                exportButton.innerHTML = originalText;
+                exportButton.disabled = false;
+                
+                alert(`📁 ${format.toUpperCase()} export completed!`);
+                
+            } catch (error) {
+                console.error('Export failed:', error);
+                alert('Export failed. Please try again.');
+                
+                // Restore button
+                const exportButton = document.querySelector('button[onclick="exportData()"]');
+                exportButton.innerHTML = '📊 Export Data';
+                exportButton.disabled = false;
+            }
         }
 
         function toggleRealTime() {

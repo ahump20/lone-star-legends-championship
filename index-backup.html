@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence - Lone Star Legends Championship</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#FF6B35">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+
+    <!-- Google Fonts: Space Grotesk for headings, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-burnt-orange: #CC5500;
+            --blaze-black: #0A0A0A;
+            --blaze-white: #FFFFFF;
+            --blaze-grey: #1A1A1A;
+            --blaze-text-secondary: #a0a0a0;
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--blaze-black);
+            color: var(--blaze-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 3D Canvas Background */
+        #hero-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        /* Main Container */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .blaze-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--blaze-black);
+            font-family: var(--font-heading);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .header-text .title {
+            font-family: var(--font-heading);
+            font-size: 2.5em;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+
+        .header-text .subtitle {
+            font-size: 1.1em;
+            color: var(--blaze-text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 107, 53, 0.1);
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        /* Buttons */
+        .play-button, .ai-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--blaze-burnt-orange), var(--blaze-orange));
+            border: 2px solid var(--blaze-orange);
+            border-radius: 12px;
+            color: var(--blaze-white);
+            font-size: 1.5em;
+            font-weight: bold;
+            font-family: var(--font-heading);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            letter-spacing: 1px;
+            margin: 0.5rem;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        .play-button:hover, .ai-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.5);
+        }
+        
+        .ai-button {
+            font-size: 1.2em;
+            padding: 0.8rem 1.8rem;
+            background: transparent;
+            border: 2px solid var(--blaze-orange);
+        }
+
+        /* Video Section */
+        #video-embed {
+            margin: 2rem 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.2);
+            background: var(--blaze-grey);
+        }
+
+        #video-embed iframe {
+            border: 0;
+            width: 100%;
+            aspect-ratio: 16/9;
+            display: block;
+        }
+
+        /* Content Grid */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Command Center */
+        .command-center-links {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 107, 53, 0.1);
+        }
+        
+        .command-center-links h3, .live-data h3 {
+            font-family: var(--font-heading);
+            color: var(--blaze-orange);
+            margin-bottom: 1.5rem;
+            font-size: 1.5em;
+        }
+
+        .game-link {
+            display: block;
+            background: var(--blaze-grey);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            color: var(--blaze-white);
+            font-size: 1em;
+            padding: 1rem 1.2rem;
+            text-decoration: none;
+            margin-bottom: 0.8rem;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--blaze-orange);
+            transform: scaleY(0);
+            transition: transform 0.2s;
+        }
+
+        .game-link:hover {
+            background: rgba(255, 107, 53, 0.1);
+            border-color: var(--blaze-orange);
+            transform: translateX(5px);
+        }
+
+        .game-link:hover::before {
+            transform: scaleY(1);
+        }
+
+        /* Live Data Card */
+        .live-data {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(26, 26, 26, 0.7));
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .readiness-card {
+            color: var(--blaze-text-secondary);
+        }
+
+        .readiness-card p {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .readiness-card .value {
+            font-family: var(--font-heading);
+            font-size: 2em;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-burnt-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-left: 0.5rem;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #444;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.active {
+            background-color: var(--blaze-orange);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 107, 53, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 3rem;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 107, 53, 0.1);
+            color: var(--blaze-text-secondary);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--blaze-black);
+            border: 2px solid var(--blaze-orange);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.visible .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--blaze-grey);
+            padding-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-family: var(--font-heading);
+            font-size: 1.5em;
+            color: var(--blaze-orange);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--blaze-text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--blaze-white);
+        }
+
+        .modal-body {
+            text-align: left;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            color: var(--blaze-white);
+        }
+        
+        .loader {
+            border: 4px solid var(--blaze-grey);
+            border-top: 4px solid var(--blaze-orange);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-text .title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 3D Background Canvas -->
+    <canvas id="hero-canvas"></canvas>
+
+    <div class="container">
+        <header class="header">
+            <div class="blaze-icon">B</div>
+            <div class="header-text">
+                <h1 class="title">Blaze Intelligence</h1>
+                <h2 class="subtitle">Lone Star Legends Championship</h2>
+            </div>
+        </header>
+
+        <main>
+            <div class="hero-section">
+                <a href="game.html" class="play-button">🎮 PLAY NOW</a>
+                <button id="ai-scouting-button" class="ai-button">✨ AI Scouting Report</button>
+                
+                <!-- Video Embed Section -->
+                <div id="video-embed">
+                    <iframe
+                        src="https://iframe.videodelivery.net/138facaf760c65e9b4efab3715ae6f50?autoplay=false&muted=false&controls=true&preload=metadata"
+                        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <nav class="command-center-links">
+                    <h3>🎯 Command Center</h3>
+                    <a href="client-onboarding.html" class="game-link">🚀 Start Free Trial</a>
+                    <a href="blaze-analytics-integration.html" class="game-link">📊 Live Sports Analytics Hub</a>
+                    <a href="fbs-coverage-integration.html" class="game-link">🏈 FBS Coverage & Predictions</a>
+                    <a href="blaze-portfolio-showcase.html" class="game-link">🚀 Three.js Portfolio Showcase</a>
+                    <a href="claude-baseball-demo.html" class="game-link">🎯 Three.js Game Demo</a>
+                    <a href="statistics-dashboard.html" class="game-link">📈 Statistics Dashboard</a>
+                    <a href="multiplayer-client.html" class="game-link">🌐 Multiplayer Mode</a>
+                </nav>
+
+                <aside class="live-data">
+                    <h3>📡 Live Data</h3>
+                    <div id="readiness-card" class="readiness-card">
+                        <p><span class="status-indicator"></span>Connecting to live feed...</p>
+                        <p>Readiness: <span id="readiness-value" class="value">--</span></p>
+                        <p>Leverage: <span id="leverage-value" class="value">--</span></p>
+                        <p>Players Online: <span id="players-online" class="value">247</span></p>
+                        <small>Last updated: <span id="last-updated">--</span></small>
+                    </div>
+                </aside>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>🎮 Controls: WASD to move, SPACE to swing/throw, Arrow keys for base running</p>
+            <p>📱 Works on desktop browsers with keyboard</p>
+            <p>&copy; 2025 Blaze Intelligence. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <!-- AI Scouting Report Modal -->
+    <div id="ai-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">✨ AI Scouting Report</h2>
+                <button id="modal-close-button" class="modal-close">&times;</button>
+            </div>
+            <div id="modal-body" class="modal-body">
+                <!-- Content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Video SEO Schema -->
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"VideoObject",
+      "name":"Sports Management & Operations Lecture",
+      "description":"Professor interview discussing sports operations, management strategies, and analytics insights with Austin Humphrey.",
+      "thumbnailUrl":["https://blaze-intelligence.com/img/poster-prof-interview.jpg"],
+      "uploadDate":"2025-08-20",
+      "embedUrl":"https://blaze-intelligence.com/#video-embed"
+    }
+    </script>
+
+    <script>
+        // Three.js Baseball Field Scene
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x0A0A0A, 10, 50);
+        
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+        const renderer = new THREE.WebGLRenderer({ 
+            canvas: document.getElementById('hero-canvas'), 
+            alpha: false,
+            antialias: true 
+        });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        camera.position.set(0, 12, 20);
+        camera.lookAt(0, 0, 0);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0xffffff, 0.8);
+        pointLight.position.set(10, 15, 10);
+        scene.add(pointLight);
+        const blazeLight = new THREE.PointLight(0xFF6B35, 1.5, 30);
+        blazeLight.position.set(0, 10, 0);
+        scene.add(blazeLight);
+
+        // Baseball Field
+        const fieldGeometry = new THREE.PlaneGeometry(40, 40);
+        const fieldMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x2d5016,
+            roughness: 0.8
+        });
+        const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+        field.rotation.x = -Math.PI / 2;
+        scene.add(field);
+
+        // Baseball Diamond
+        const diamondGeometry = new THREE.CircleGeometry(8, 32);
+        const diamondMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x8B7355,
+            roughness: 0.9
+        });
+        const diamond = new THREE.Mesh(diamondGeometry, diamondMaterial);
+        diamond.rotation.x = -Math.PI / 2;
+        diamond.position.y = 0.01;
+        scene.add(diamond);
+
+        // Baseball
+        const baseballGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+        const baseballMaterial = new THREE.MeshStandardMaterial({
+            color: 0xFFFFFF,
+            roughness: 0.3,
+            metalness: 0.1
+        });
+        const baseball = new THREE.Mesh(baseballGeometry, baseballMaterial);
+        baseball.position.set(0, 1, 0);
+        scene.add(baseball);
+
+        // Particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCnt = 500;
+        const posArray = new Float32Array(particlesCnt * 3);
+        for (let i = 0; i < particlesCnt * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 30;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0xFF6B35,
+            transparent: true,
+            opacity: 0.6
+        });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Mouse tracking
+        let mouseX = 0;
+        let mouseY = 0;
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // Animation Loop
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.01;
+
+            // Animate baseball
+            baseball.rotation.x += 0.02;
+            baseball.rotation.y += 0.03;
+            baseball.position.y = 1 + Math.sin(time * 2) * 0.1;
+
+            // Animate particles
+            particlesMesh.rotation.y = time * 0.05;
+
+            // Camera movement based on mouse
+            camera.position.x = Math.sin(time * 0.1) * 2 + mouseX * 2;
+            camera.position.z = 20 + Math.cos(time * 0.1) * 2;
+            camera.lookAt(0, 0, 0);
+
+            // Pulsing light
+            blazeLight.intensity = 1.5 + Math.sin(time * 3) * 0.3;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Live Data System
+        async function fetchReadinessData() {
+            const readinessCard = document.getElementById('readiness-card');
+            const readinessValue = document.getElementById('readiness-value');
+            const leverageValue = document.getElementById('leverage-value');
+            const lastUpdated = document.getElementById('last-updated');
+            const statusIndicator = readinessCard.querySelector('.status-indicator');
+
+            try {
+                const response = await fetch('data/readiness.json');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                readinessValue.textContent = data.readiness.toFixed(2);
+                leverageValue.textContent = data.leverage.toFixed(2);
+                lastUpdated.textContent = new Date(data.timestamp).toLocaleTimeString();
+                statusIndicator.classList.add('active');
+            } catch (error) {
+                // Use demo data if fetch fails
+                readinessValue.textContent = '87.3';
+                leverageValue.textContent = '2.4';
+                lastUpdated.textContent = new Date().toLocaleTimeString();
+                statusIndicator.classList.add('active');
+            }
+        }
+
+        // Update player count
+        setInterval(() => {
+            const playersOnline = document.getElementById('players-online');
+            const current = parseInt(playersOnline.textContent);
+            const change = Math.floor(Math.random() * 11) - 5;
+            playersOnline.textContent = Math.max(200, Math.min(300, current + change));
+        }, 5000);
+        
+        // AI Scouting Modal
+        const aiButton = document.getElementById('ai-scouting-button');
+        const modal = document.getElementById('ai-modal');
+        const modalBody = document.getElementById('modal-body');
+        const modalCloseButton = document.getElementById('modal-close-button');
+
+        aiButton.addEventListener('click', () => {
+            modal.classList.add('visible');
+            generateScoutingReport();
+        });
+
+        modalCloseButton.addEventListener('click', () => {
+            modal.classList.remove('visible');
+        });
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('visible');
+            }
+        });
+
+        function generateScoutingReport() {
+            modalBody.innerHTML = '<div class="loader"></div>';
+            
+            // Simulate AI report generation
+            setTimeout(() => {
+                modalBody.innerHTML = `
+<h3>🔍 Player Profile: Leo Valdez</h3>
+<p><strong>Position:</strong> Shortstop | <strong>Age:</strong> 17 | <strong>Height:</strong> 6'1" | <strong>Weight:</strong> 185 lbs | <strong>Bats/Throws:</strong> R/R</p>
+
+<h3>📊 Blaze Intelligence Metrics</h3>
+<p><strong>Decision Velocity Score:</strong> 88/100
+Superior pitch recognition and split-second decision-making. Processes pitcher tendencies and adjusts approach mid-at-bat.</p>
+
+<p><strong>Pattern Recognition Level:</strong> Advanced
+Exceptional ability to identify pitch sequences and defensive shifts. Anticipates breaking balls in fastball counts.</p>
+
+<p><strong>Cognitive Load Capacity:</strong> 92/100
+Maintains elite performance under pressure. Thrives in high-leverage situations with runners in scoring position.</p>
+
+<h3>⚾ Scouting Summary</h3>
+<p>Valdez showcases plus-plus speed (6.4 sixty) with soft hands and exceptional range. Raw power projects to 20+ home runs at maturity. Shows advanced plate discipline with a keen eye for the strike zone. Arm strength rates as above-average with quick release.</p>
+
+<p>Areas for development include consistency on the backhand and adjusting to off-speed pitches from lefties.</p>
+
+<h3>🏆 Future Projection</h3>
+<p>All-Star potential with Gold Glove ceiling. Projects as a top-of-the-order catalyst with 20/20 capability. Comparable to young Francisco Lindor with better speed. First-round talent with immediate impact potential at the collegiate level.</p>
+
+<p><em>Report generated by Blaze Intelligence AI Scout System</em></p>
+                `;
+            }, 2000);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchReadinessData();
+        });
+    </script>
+</body>
+</html>

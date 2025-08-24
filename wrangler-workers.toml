@@ -1,0 +1,72 @@
+name = "blaze-intelligence-api"
+main = "api/index.js"
+compatibility_date = "2025-08-20"
+
+# Account and route configuration
+account_id = "your_account_id_here"
+workers_dev = false
+route = "api.blaze-intelligence.com/*"
+
+# Environment variables
+[vars]
+ENVIRONMENT = "production"
+API_VERSION = "3.0.0"
+
+# KV Namespaces
+[[kv_namespaces]]
+binding = "CACHE_KV"
+id = "your_cache_kv_id"
+
+[[kv_namespaces]]
+binding = "NIL_CACHE"
+id = "your_nil_cache_kv_id"
+
+# D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "blaze-intelligence"
+database_id = "d3d5415d-0264-41ee-840f-bf12d88d3319"
+
+# Durable Objects for multiplayer
+[[durable_objects.bindings]]
+name = "GAME_ROOMS"
+class_name = "GameRoom"
+script_name = "blaze-intelligence-multiplayer"
+
+# Secrets (set these via wrangler secret put)
+# HUBSPOT_API_KEY
+# SENDGRID_API_KEY
+# NOTIFICATION_EMAIL
+# STRIPE_SECRET_KEY
+# OPENAI_API_KEY
+
+# Build configuration
+[build]
+command = "npm run build"
+
+# Multiplayer Worker Configuration
+[env.multiplayer]
+name = "blaze-intelligence-multiplayer"
+main = "api/multiplayer-durable.js"
+compatibility_date = "2025-08-20"
+route = "multiplayer.blaze-intelligence.com/*"
+
+[[env.multiplayer.durable_objects.bindings]]
+name = "GAME_ROOMS"
+class_name = "GameRoom"
+
+# Development environment
+[env.development]
+name = "blaze-intelligence-api-dev"
+workers_dev = true
+vars = { ENVIRONMENT = "development" }
+
+[[env.development.kv_namespaces]]
+binding = "CACHE_KV"
+id = "dev_cache_kv_id"
+preview_id = "dev_cache_kv_preview"
+
+[[env.development.d1_databases]]
+binding = "DB"
+database_name = "blaze-intelligence-dev"
+database_id = "dev_database_id"
