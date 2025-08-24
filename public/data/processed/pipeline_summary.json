@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-08-24T13:55:34.795784",
+  "pipeline_runtime": "17.2 seconds",
+  "total_records_processed": 861,
+  "leagues_covered": [
+    "MLB",
+    "NFL",
+    "NCAA",
+    "NPB",
+    "KBO"
+  ],
+  "hav_f_calculated_for": 861,
+  "system_health": "operational",
+  "next_run_scheduled": "2025-08-24T14:25:34.795871"
+}

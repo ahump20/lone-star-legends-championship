@@ -1,0 +1,61 @@
+{
+  "timestamp": "2025-08-24T13:55:34.757197",
+  "total_players": 861,
+  "leagues": {
+    "MLB": {
+      "total_players": 754,
+      "scored_players": 754,
+      "avg_hav_f_score": 58.6,
+      "top_performer": {
+        "name": "Andrew Chafin",
+        "hav_f_score": 58.9,
+        "team": null
+      },
+      "readiness_level": "Developing"
+    },
+    "NFL": {
+      "total_players": 99,
+      "scored_players": 99,
+      "avg_hav_f_score": 58.7,
+      "top_performer": {
+        "name": "Jonathan Lewis",
+        "hav_f_score": 58.9,
+        "team": "ARI"
+      },
+      "readiness_level": "Developing"
+    },
+    "NCAA": {
+      "total_players": 3,
+      "scored_players": 3,
+      "avg_hav_f_score": 58.9,
+      "top_performer": {
+        "name": "Arch Manning",
+        "hav_f_score": 58.9,
+        "team": null
+      },
+      "readiness_level": "Developing"
+    },
+    "NPB": {
+      "total_players": 3,
+      "scored_players": 3,
+      "avg_hav_f_score": 58.9,
+      "top_performer": {
+        "name": "Yoshinobu Yamamoto",
+        "hav_f_score": 58.9,
+        "team": "Orix Buffaloes"
+      },
+      "readiness_level": "Developing"
+    },
+    "KBO": {
+      "total_players": 2,
+      "scored_players": 2,
+      "avg_hav_f_score": 58.9,
+      "top_performer": {
+        "name": "Jung-Hoo Lee",
+        "hav_f_score": 58.9,
+        "team": "Kiwoom Heroes"
+      },
+      "readiness_level": "Developing"
+    }
+  }
+}

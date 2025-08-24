@@ -1,0 +1,456 @@
+{
+  "timestamp": "2025-08-24T13:55:34.755975",
+  "total_players_evaluated": 861,
+  "top_performers": [
+    {
+      "player_id": 605177,
+      "name": "Andrew Chafin",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 656271,
+      "name": "Brock Burke",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 669326,
+      "name": "Bryce Teodosio",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 681217,
+      "name": "Chase Silseth",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 695681,
+      "name": "Christian Moore",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 666176,
+      "name": "Jo Adell",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 820862,
+      "name": "José Fermin",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 667755,
+      "name": "José Soriano",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 445276,
+      "name": "Kenley Jansen",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 543294,
+      "name": "Kyle Hendricks",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 472610,
+      "name": "Luis García",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 650859,
+      "name": "Luis Rengifo",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 545361,
+      "name": "Mike Trout",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 694359,
+      "name": "Niko Kavadas",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 694384,
+      "name": "Nolan Schanuel",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 672724,
+      "name": "Oswald Peraza",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 672282,
+      "name": "Reid Detmers",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 596112,
+      "name": "Robert Stephenson",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 666171,
+      "name": "Ryan Zeferjahn",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 621493,
+      "name": "Taylor Ward",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 542881,
+      "name": "Tyler Anderson",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 660162,
+      "name": "Yoán Moncada",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 579328,
+      "name": "Yusei Kikuchi",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 687263,
+      "name": "Zach Neto",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 677950,
+      "name": "Alek Thomas",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 685314,
+      "name": "Andrew Saalfrank",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 677942,
+      "name": "Blaze Alexander",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 694297,
+      "name": "Brandon Pfaadt",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 686826,
+      "name": "Bryce Jarvis",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 682998,
+      "name": "Corbin Carroll",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 593958,
+      "name": "Eduardo Rodriguez",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 672695,
+      "name": "Geraldo Perdomo",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 545121,
+      "name": "Ildemaro Vargas",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 664983,
+      "name": "Jake McCarthy",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 663765,
+      "name": "Jake Woodford",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 656222,
+      "name": "Jalen Beeks",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 595928,
+      "name": "John Curtiss",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 686228,
+      "name": "Juan Burgos",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 666661,
+      "name": "Juan Morillo",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 606466,
+      "name": "Ketel Marte",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 679775,
+      "name": "Kyle Backhus",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 666971,
+      "name": "Lourdes Gurriel Jr.",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 622503,
+      "name": "Nabil Crismatt",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 656976,
+      "name": "Pavin Smith",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 669194,
+      "name": "Ryne Nelson",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 682988,
+      "name": "Tyler Locklear",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 668678,
+      "name": "Zac Gallen",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 700249,
+      "name": "Cade Povich",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 691723,
+      "name": "Coby Mayo",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    },
+    {
+      "player_id": 681297,
+      "name": "Colton Cowser",
+      "league": "MLB",
+      "hav_f_overall": 58.9,
+      "championship_readiness": 68.0,
+      "cognitive_leverage": 71.2,
+      "nil_trust": 34.5
+    }
+  ]
+}
