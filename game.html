@@ -6,6 +6,11 @@
     <title>Blaze Intelligence - Lone Star Legends Baseball</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="js/enhanced-3d-engine.js"></script>
+    
+    <!-- Flow State Integration -->
+    <link rel="stylesheet" href="/flow-styles.css" id="flow-state-styles">
+    <script type="module" src="/flow-state-api.js"></script>
+    <script type="module" src="/flow-widgets.js"></script>
     <style>
         * {
             margin: 0;
@@ -748,6 +753,67 @@
           </div>
         `;
         document.body.appendChild(controlsHelp);
+    </script>
+    
+    <!-- Flow Meter Widget -->
+    <div id="flow-meter-container"></div>
+    
+    <script type="module">
+        import { FlowMeterWidget } from './flow-widgets.js';
+        
+        // Initialize flow meter for game
+        document.addEventListener('DOMContentLoaded', () => {
+            const flowMeter = new FlowMeterWidget('flow-meter-container', {
+                autoStart: true,
+                showMSPE: true,
+                enableBreathing: true
+            });
+            
+            window.blazeFlowMeter = flowMeter;
+        });
+        
+        // Game integration - listen for flow challenge changes
+        window.addEventListener('flowChallengeChange', (event) => {
+            const { level } = event.detail;
+            
+            // Adjust game difficulty - modify auto-pitch frequency
+            if (window.autoPitchInterval) {
+                clearInterval(window.autoPitchInterval);
+            }
+            
+            // Higher flow challenge = faster pitches
+            const pitchSpeed = Math.max(2000, 6000 - (level * 400));
+            
+            window.autoPitchInterval = setInterval(() => {
+                if (game.balls.length < 2) {
+                    game.pitch();
+                    
+                    // Report performance back to flow system
+                    if (window.flowAPI) {
+                        const accuracy = Math.random() * 100; // Would be actual hit rate
+                        const reactionTime = 200 + Math.random() * 300; // Would be actual reaction time
+                        
+                        window.flowAPI.trackEvent('game_performance', {
+                            score: game.homeScore + game.awayScore,
+                            accuracy,
+                            reactionTime,
+                            challengeLevel: level
+                        });
+                        
+                        // Update flow metrics based on performance
+                        const metrics = {
+                            focus: Math.min(100, accuracy),
+                            engagement: Math.min(100, (game.homeScore + game.awayScore) * 10),
+                            skill: Math.min(100, (1000 / reactionTime) * 10)
+                        };
+                        
+                        window.flowAPI.updateMetrics(metrics);
+                    }
+                }
+            }, pitchSpeed);
+            
+            console.log(`Game difficulty adjusted to level ${level}, pitch speed: ${pitchSpeed}ms`);
+        });
     </script>
 </body>
 </html>

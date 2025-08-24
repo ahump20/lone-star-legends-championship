@@ -9,6 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/blaze.css">
     
+    <!-- Flow State Integration -->
+    <link rel="stylesheet" href="/flow-styles.css" id="flow-state-styles">
+    <script type="module" src="/flow-state-api.js"></script>
+    <script type="module" src="/flow-widgets.js"></script>
+    
     <style>
       /* Clean, professional styling */
       body { margin: 0; background: #0A0A0A; color: #FFFFFF; font-family: 'Inter', sans-serif; }
@@ -336,6 +341,15 @@
         <div class="last-updated">
           Last updated: <span id="updated">Just now</span>
         </div>
+        
+        <!-- Flow Dashboard Tile -->
+        <div class="tile" id="flow-dashboard-tile" style="margin-top: 20px;">
+          <div class="label">Flow State</div>
+          <div class="value" id="flow-dashboard-value">--</div>
+          <div style="font-size: 12px; color: #A1A5AE; margin-top: 4px;">
+            Real-time flow metrics
+          </div>
+        </div>
       </aside>
     </main>
 
@@ -349,6 +363,9 @@
         </div>
       </div>
     </footer>
+
+    <!-- Flow Meter Widget -->
+    <div id="flow-meter-container"></div>
 
     <script>
       // Simple, clean live data updates
@@ -364,6 +381,47 @@
       // Update every 5 seconds
       setInterval(updateLiveData, 5000);
       updateLiveData();
+      
+      // Update flow dashboard tile
+      function updateFlowDashboard() {
+        if (window.flowAPI) {
+          const state = window.flowAPI.getCurrentState();
+          const valueEl = document.getElementById('flow-dashboard-value');
+          if (valueEl && state.currentMetrics.flowScore !== undefined) {
+            valueEl.textContent = Math.round(state.currentMetrics.flowScore);
+          }
+        }
+      }
+      
+      setInterval(updateFlowDashboard, 2000);
+      setTimeout(updateFlowDashboard, 1000);
+    </script>
+    
+    <script type="module">
+      import { FlowMeterWidget } from './flow-widgets.js';
+      
+      // Initialize flow meter
+      document.addEventListener('DOMContentLoaded', () => {
+        const flowMeter = new FlowMeterWidget('flow-meter-container', {
+          autoStart: true,
+          showMSPE: true,
+          enableBreathing: true
+        });
+        
+        window.blazeFlowMeter = flowMeter;
+      });
+      
+      // Track engagement
+      let engagementTimer = 0;
+      setInterval(() => {
+        engagementTimer += 30;
+        if (engagementTimer % 120 === 0) {
+          window.flowAPI?.trackEvent('engagement_milestone', {
+            timeOnPage: engagementTimer,
+            scrollPercent: Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100)
+          });
+        }
+      }, 30000);
     </script>
   </body>
 </html>
