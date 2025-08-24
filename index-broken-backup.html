@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Intelligence — Championship Sports Analytics Platform</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Blaze Intelligence: Where cognitive performance meets quarterly performance. Real-time sports analytics with 94.6% accuracy.">
+    <meta name="keywords" content="sports analytics, AI, MLB Cardinals, NFL Titans, NBA Grizzlies, NCAA Longhorns, real-time data">
+    <meta name="author" content="Austin Humphrey">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Blaze Intelligence - Championship Analytics Platform">
+    <meta property="og:description" content="Transform your sports operations with AI-powered intelligence. 67-80% cost savings vs competitors.">
+    <meta property="og:image" content="https://blaze-intelligence.pages.dev/images/bi-logo.png">
+    <meta property="og:url" content="https://blaze-intelligence.com">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                        'mono': ['SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'monospace']
+                    },
+                    colors: {
+                        'blaze-orange': '#FF6B35',
+                        'blaze-gold': '#FFA500',
+                        'blaze-deep': '#0A0E27',
+                        'cardinal-red': '#C41E3A',
+                        'titan-blue': '#002A5C',
+                        'grizzly-blue': '#5D76A9',
+                        'longhorn-orange': '#BF5700'
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+                        'slide-up': 'slide-up 0.5s ease-out',
+                        'data-stream': 'data-stream 3s linear infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Chart.js for Real Data Visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-gold: #FFA500;
+            --blaze-deep: #0A0E27;
+            --blaze-dark: #050505;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0A0E27 0%, #050505 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Enhanced Three.js Canvas */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        /* Data Stream Animation */
+        @keyframes data-stream {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+
+        .data-point {
+            position: fixed;
+            color: var(--blaze-orange);
+            font-family: 'SF Mono', monospace;
+            font-size: 10px;
+            animation: data-stream 3s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Video Hero with Proper Fallback */
+        .video-hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZzEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNGRjZCMzU7c3RvcC1vcGFjaXR5OjAuMSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTQ5MDtzdG9wLW9wYWNpdHk6MC4wNSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZzEpIi8+PC9zdmc+') center/cover;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .video-background video,
+        .video-background iframe {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Glass Morphism Cards */
+        .glass-card {
+            background: rgba(18, 18, 18, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--blaze-orange), transparent);
+            animation: slide 3s infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+            border-color: rgba(255, 107, 53, 0.5);
+        }
+
+        /* Live Data Card */
+        .live-data-card {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 165, 0, 0.05));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .live-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            50% { opacity: 0.8; box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+        }
+
+        /* Team-Specific Styling */
+        .team-cardinals { border-color: #C41E3A !important; }
+        .team-titans { border-color: #002A5C !important; }
+        .team-grizzlies { border-color: #5D76A9 !important; }
+        .team-longhorns { border-color: #BF5700 !important; }
+
+        /* Navigation */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-header.scrolled {
+            background: rgba(5, 5, 5, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #FF6B35, #FFA500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        /* CTA Buttons */
+        .cta-button {
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-gold));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.5);
+        }
+
+        /* Stats Animation */
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #FF6B35, #FFA500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .stat-number { font-size: 2rem; }
+            .glass-card { padding: 1.5rem; }
+            h1 { font-size: 2.5rem !important; }
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0A0E27;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 107, 53, 0.2);
+            border-top: 3px solid var(--blaze-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body class="h-full">
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Three.js Canvas Background -->
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Data Stream Visualization -->
+    <div id="data-stream"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-header" id="nav-header">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <svg class="h-10 w-10" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="blazeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FF6B35;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="100" cy="100" r="95" fill="rgba(10, 14, 39, 0.9)" stroke="url(#blazeGrad)" stroke-width="2"/>
+                        <path d="M 100 40 C 85 50, 75 65, 75 85 C 75 95, 78 105, 85 112 C 88 108, 92 102, 92 95 C 92 90, 94 85, 98 82 C 100 80, 102 80, 104 82 C 108 85, 110 90, 110 95 C 110 102, 114 108, 117 112 C 124 105, 127 95, 127 85 C 127 65, 117 50, 102 40 L 100 35 Z" 
+                              fill="url(#blazeGrad)"/>
+                        <text x="100" y="155" font-family="Orbitron, Arial Black" font-size="48" font-weight="900" text-anchor="middle" fill="white">BI</text>
+                    </svg>
+                    <h1 class="font-orbitron font-bold text-2xl gradient-text">BLAZE INTELLIGENCE</h1>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#live-data" class="hover:text-blaze-orange transition">Live Data</a>
+                    <a href="#analytics" class="hover:text-blaze-orange transition">Analytics</a>
+                    <a href="#teams" class="hover:text-blaze-orange transition">Teams</a>
+                    <a href="#pricing" class="hover:text-blaze-orange transition">Pricing</a>
+                    <button class="cta-button">Launch Platform</button>
+                </div>
+
+                <div class="md:hidden">
+                    <button id="mobile-menu" class="text-white">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Video -->
+    <section class="video-hero relative z-10">
+        <!-- Video Background with Multiple Sources -->
+        <div class="video-background">
+            <video autoplay muted loop playsinline id="hero-video" poster="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwQTBFMjciLz48L3N2Zz4=">
+                <!-- Cloudflare Stream Sources -->
+                <source src="https://customer-mpdvoybjqct2pzls.cloudflarestream.com/138facaf760c65e9b4efab3715ae6f50/downloads/default.mp4" type="video/mp4">
+                <source src="https://customer-mpdvoybjqct2pzls.cloudflarestream.com/138facaf760c65e9b4efab3715ae6f50/manifest/video.m3u8" type="application/x-mpegURL">
+                <!-- Fallback to YouTube embed if video fails -->
+            </video>
+            <!-- Fallback gradient overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-blaze-deep/70 via-blaze-deep/90 to-black"></div>
+        </div>
+        
+        <!-- Hero Content -->
+        <div class="relative z-20 h-full flex items-center justify-center">
+            <div class="text-center px-6 max-w-6xl mx-auto">
+                <h1 class="font-orbitron font-black text-5xl md:text-7xl mb-6 floating">
+                    <span class="gradient-text">CHAMPIONSHIP</span>
+                    <br>
+                    <span class="text-white">INTELLIGENCE</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                    Where cognitive performance meets quarterly performance. 
+                    Real-time analytics. Championship decisions. Guaranteed results.
+                </p>
+
+                <!-- Live Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+                    <div class="live-data-card">
+                        <div class="live-indicator">
+                            <div class="live-dot"></div>
+                            <span class="text-xs text-green-400">LIVE</span>
+                        </div>
+                        <div class="stat-number" id="data-points">2.8M+</div>
+                        <p class="text-gray-400 text-sm mt-2">Data Points/Day</p>
+                    </div>
+                    <div class="live-data-card">
+                        <div class="stat-number" id="accuracy">94.6%</div>
+                        <p class="text-gray-400 text-sm mt-2">Prediction Accuracy</p>
+                    </div>
+                    <div class="live-data-card">
+                        <div class="stat-number" id="response-time"><100ms</div>
+                        <p class="text-gray-400 text-sm mt-2">Response Time</p>
+                    </div>
+                    <div class="live-data-card">
+                        <div class="stat-number" id="savings">67-80%</div>
+                        <p class="text-gray-400 text-sm mt-2">Cost Savings</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button class="cta-button" onclick="scrollToSection('live-data')">
+                        <i class="fas fa-chart-line mr-2"></i> View Live Data
+                    </button>
+                    <button class="cta-button" style="background: transparent; border: 2px solid var(--blaze-orange);">
+                        <i class="fas fa-play mr-2"></i> Watch Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Data Section -->
+    <section id="live-data" class="py-20 relative z-10">
+        <div class="container mx-auto px-6">
+            <h2 class="font-orbitron font-bold text-4xl md:text-5xl text-center mb-16">
+                <span class="gradient-text">REAL-TIME</span> ANALYTICS
+            </h2>
+
+            <!-- Team Performance Dashboard -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <!-- Cardinals Card -->
+                <div class="glass-card team-cardinals">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="font-orbitron text-xl text-cardinal-red">CARDINALS</h3>
+                            <p class="text-gray-400 text-sm">MLB - NL Central</p>
+                        </div>
+                        <div class="live-indicator">
+                            <div class="live-dot"></div>
+                            <span class="text-xs text-green-400">LIVE</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Win Rate</span>
+                            <span class="font-bold">71-73 (.493)</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Run Diff</span>
+                            <span class="font-bold text-green-400">+28</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Team OPS</span>
+                            <span class="font-bold">.734</span>
+                        </div>
+                        <div class="mt-4">
+                            <canvas id="cardinals-chart" width="100" height="60"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Titans Card -->
+                <div class="glass-card team-titans">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="font-orbitron text-xl text-titan-blue">TITANS</h3>
+                            <p class="text-gray-400 text-sm">NFL - AFC South</p>
+                        </div>
+                        <div class="live-indicator">
+                            <div class="live-dot"></div>
+                            <span class="text-xs text-green-400">LIVE</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Record</span>
+                            <span class="font-bold">3-14 (.176)</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Point Diff</span>
+                            <span class="font-bold text-red-400">-184</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Total Yards</span>
+                            <span class="font-bold">4,726</span>
+                        </div>
+                        <div class="mt-4">
+                            <canvas id="titans-chart" width="100" height="60"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grizzlies Card -->
+                <div class="glass-card team-grizzlies">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="font-orbitron text-xl text-grizzly-blue">GRIZZLIES</h3>
+                            <p class="text-gray-400 text-sm">NBA - Western</p>
+                        </div>
+                        <div class="live-indicator">
+                            <div class="live-dot"></div>
+                            <span class="text-xs text-green-400">LIVE</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Record</span>
+                            <span class="font-bold">27-55 (.329)</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">PPG</span>
+                            <span class="font-bold">105.8</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Def Rating</span>
+                            <span class="font-bold">118.4</span>
+                        </div>
+                        <div class="mt-4">
+                            <canvas id="grizzlies-chart" width="100" height="60"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Longhorns Card -->
+                <div class="glass-card team-longhorns">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="font-orbitron text-xl text-longhorn-orange">LONGHORNS</h3>
+                            <p class="text-gray-400 text-sm">NCAA - SEC</p>
+                        </div>
+                        <div class="live-indicator">
+                            <div class="live-dot"></div>
+                            <span class="text-xs text-green-400">LIVE</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Record</span>
+                            <span class="font-bold">12-2 (.857)</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">AP Rank</span>
+                            <span class="font-bold text-green-400">#3</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">PPG</span>
+                            <span class="font-bold">35.6</span>
+                        </div>
+                        <div class="mt-4">
+                            <canvas id="longhorns-chart" width="100" height="60"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Predictions Feed -->
+            <div class="glass-card mb-12">
+                <h3 class="font-orbitron text-2xl mb-6 gradient-text">Live Predictions Feed</h3>
+                <div class="space-y-4" id="predictions-feed">
+                    <!-- Predictions will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo Section -->
+    <section id="demo" class="py-20 bg-black/50 relative z-10">
+        <div class="container mx-auto px-6">
+            <h2 class="font-orbitron font-bold text-4xl md:text-5xl text-center mb-16">
+                SEE THE <span class="gradient-text">DIFFERENCE</span>
+            </h2>
+            
+            <div class="max-w-6xl mx-auto">
+                <div class="glass-card p-2">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <!-- Enhanced Video Player with Multiple Sources -->
+                        <video controls class="w-full rounded-lg" poster="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxMDEwMTAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZmlsbD0iI0ZGNkIzNSIgZm9udC1mYW1pbHk9Ik9yYml0cm9uIiBmb250LXNpemU9IjQ4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5QbGF5IERlbW88L3RleHQ+PC9zdmc+">
+                            <source src="https://customer-mpdvoybjqct2pzls.cloudflarestream.com/acb0f50e86caf8f840f3b36a0c463229/downloads/default.mp4" type="video/mp4">
+                            <source src="https://customer-mpdvoybjqct2pzls.cloudflarestream.com/acb0f50e86caf8f840f3b36a0c463229/manifest/video.m3u8" type="application/x-mpegURL">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+
+                <!-- Feature Comparison -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+                    <div class="glass-card text-center">
+                        <i class="fas fa-tachometer-alt text-4xl text-blaze-orange mb-4"></i>
+                        <h3 class="font-orbitron text-xl mb-2">Real-Time Speed</h3>
+                        <p class="text-gray-400">Sub-100ms response times with edge computing</p>
+                    </div>
+                    <div class="glass-card text-center">
+                        <i class="fas fa-brain text-4xl text-blaze-orange mb-4"></i>
+                        <h3 class="font-orbitron text-xl mb-2">AI-Powered Insights</h3>
+                        <p class="text-gray-400">94.6% accuracy with championship-tested models</p>
+                    </div>
+                    <div class="glass-card text-center">
+                        <i class="fas fa-dollar-sign text-4xl text-blaze-orange mb-4"></i>
+                        <h3 class="font-orbitron text-xl mb-2">67-80% Savings</h3>
+                        <p class="text-gray-400">Compared to Hudl, Second Spectrum, and Stats Inc.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 relative z-10">
+        <div class="container mx-auto px-6">
+            <h2 class="font-orbitron font-bold text-4xl md:text-5xl text-center mb-16">
+                CHAMPIONSHIP <span class="gradient-text">PRICING</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Starter Plan -->
+                <div class="glass-card text-center">
+                    <h3 class="font-orbitron text-2xl mb-4">ROOKIE</h3>
+                    <div class="text-4xl font-bold gradient-text mb-2">$99</div>
+                    <p class="text-gray-400 mb-6">per month</p>
+                    <ul class="space-y-3 mb-8 text-left">
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> 1 Team Analytics</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> Basic Predictions</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> Email Support</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> 100K Data Points/mo</li>
+                    </ul>
+                    <button class="cta-button w-full">Start Free Trial</button>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="glass-card text-center border-2 border-blaze-orange">
+                    <div class="bg-gradient-to-r from-blaze-orange to-blaze-gold text-white py-2 -mt-8 mb-4 rounded-t-lg">
+                        MOST POPULAR
+                    </div>
+                    <h3 class="font-orbitron text-2xl mb-4">CHAMPION</h3>
+                    <div class="text-4xl font-bold gradient-text mb-2">$499</div>
+                    <p class="text-gray-400 mb-6">per month</p>
+                    <ul class="space-y-3 mb-8 text-left">
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> Unlimited Teams</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> Advanced AI Models</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> 24/7 Support</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> 10M Data Points/mo</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> Custom Reports</li>
+                    </ul>
+                    <button class="cta-button w-full">Start Free Trial</button>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="glass-card text-center">
+                    <h3 class="font-orbitron text-2xl mb-4">DYNASTY</h3>
+                    <div class="text-4xl font-bold gradient-text mb-2">Custom</div>
+                    <p class="text-gray-400 mb-6">enterprise pricing</p>
+                    <ul class="space-y-3 mb-8 text-left">
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> Full League Access</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> Custom AI Training</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> Dedicated Team</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> Unlimited Everything</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i> On-Premise Option</li>
+                    </ul>
+                    <button class="cta-button w-full">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black/80 py-12 mt-20 relative z-10">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="font-orbitron text-2xl gradient-text mb-2">BLAZE INTELLIGENCE</h3>
+                    <p class="text-gray-400">Turning Data Into Dominance™</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="https://linkedin.com/in/john-humphrey-2033" class="text-gray-400 hover:text-blaze-orange">
+                        <i class="fab fa-linkedin text-2xl"></i>
+                    </a>
+                    <a href="https://twitter.com/a_hump20" class="text-gray-400 hover:text-blaze-orange">
+                        <i class="fab fa-twitter text-2xl"></i>
+                    </a>
+                    <a href="mailto:ahump20@outlook.com" class="text-gray-400 hover:text-blaze-orange">
+                        <i class="fas fa-envelope text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
+                <p>© 2025 Blaze Intelligence. All rights reserved. | Austin Humphrey, Founder</p>
+                <p class="mt-2">Built with championship standards in Boerne, TX</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Three.js Enhanced Background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ 
+            canvas: document.getElementById('three-canvas'),
+            alpha: true,
+            antialias: true 
+        });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        
+        // Create enhanced particle field
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const colors = [];
+        const particleCount = 3000;
+        
+        for (let i = 0; i < particleCount; i++) {
+            vertices.push(
+                Math.random() * 2000 - 1000,
+                Math.random() * 2000 - 1000,
+                Math.random() * 2000 - 1000
+            );
+            
+            // Add color variation
+            const color = new THREE.Color();
+            color.setHSL(0.05 + Math.random() * 0.05, 0.8, 0.5);
+            colors.push(color.r, color.g, color.b);
+        }
+        
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        
+        const material = new THREE.PointsMaterial({
+            size: 2,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+        
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+        
+        // Add grid
+        const gridHelper = new THREE.GridHelper(2000, 50, 0xFF6B35, 0x1a1a1a);
+        gridHelper.position.y = -500;
+        scene.add(gridHelper);
+        
+        camera.position.z = 500;
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            particles.rotation.x += 0.0005;
+            particles.rotation.y += 0.001;
+            
+            // Pulse effect
+            const time = Date.now() * 0.001;
+            material.size = 2 + Math.sin(time) * 0.5;
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Data Stream Animation
+        function createDataPoint() {
+            const dataPoint = document.createElement('div');
+            dataPoint.className = 'data-point';
+            dataPoint.textContent = Math.random() > 0.5 ? '1' : '0';
+            dataPoint.style.left = Math.random() * window.innerWidth + 'px';
+            dataPoint.style.animationDelay = Math.random() * 3 + 's';
+            document.getElementById('data-stream').appendChild(dataPoint);
+            
+            setTimeout(() => dataPoint.remove(), 3000);
+        }
+        
+        setInterval(createDataPoint, 200);
+
+        // Live Data Updates
+        function updateLiveData() {
+            // Simulate live data updates
+            const dataPoints = document.getElementById('data-points');
+            if (dataPoints) {
+                const current = parseFloat(dataPoints.textContent);
+                dataPoints.textContent = (current + Math.random() * 0.1).toFixed(1) + 'M+';
+            }
+        }
+        
+        setInterval(updateLiveData, 5000);
+
+        // Create mini charts for teams
+        function createMiniChart(canvasId, data, color) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['W1', 'W2', 'W3', 'W4', 'W5'],
+                    datasets: [{
+                        data: data,
+                        borderColor: color,
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    }
+                }
+            });
+        }
+
+        // Initialize charts when page loads
+        window.addEventListener('load', () => {
+            createMiniChart('cardinals-chart', [65, 72, 68, 75, 71], '#C41E3A');
+            createMiniChart('titans-chart', [14, 21, 17, 24, 20], '#002A5C');
+            createMiniChart('grizzlies-chart', [98, 105, 102, 108, 106], '#5D76A9');
+            createMiniChart('longhorns-chart', [35, 42, 28, 45, 38], '#BF5700');
+        });
+
+        // Live Predictions Feed
+        const predictions = [
+            { team: 'Cardinals', opponent: 'Cubs', prediction: 'W 6-4', confidence: 78 },
+            { team: 'Titans', opponent: 'Colts', prediction: 'L 17-24', confidence: 65 },
+            { team: 'Grizzlies', opponent: 'Lakers', prediction: 'W 112-108', confidence: 72 },
+            { team: 'Longhorns', opponent: 'Oklahoma', prediction: 'W 35-28', confidence: 84 }
+        ];
+
+        function updatePredictionsFeed() {
+            const feed = document.getElementById('predictions-feed');
+            if (!feed) return;
+            
+            feed.innerHTML = '';
+            predictions.forEach(pred => {
+                const item = document.createElement('div');
+                item.className = 'flex justify-between items-center p-4 bg-black/30 rounded-lg';
+                item.innerHTML = `
+                    <div>
+                        <span class="font-bold">${pred.team} vs ${pred.opponent}</span>
+                        <span class="ml-4 text-gray-400">Prediction: ${pred.prediction}</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-sm text-gray-400">Confidence</span>
+                        <div class="text-lg font-bold ${pred.confidence > 75 ? 'text-green-400' : 'text-yellow-400'}">
+                            ${pred.confidence}%
+                        </div>
+                    </div>
+                `;
+                feed.appendChild(item);
+            });
+        }
+
+        updatePredictionsFeed();
+        setInterval(updatePredictionsFeed, 10000);
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+        
+        gsap.utils.toArray('.glass-card').forEach(card => {
+            gsap.from(card, {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // Navigation scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('nav-header');
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Remove loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loading-screen');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.remove(), 500);
+                }
+            }, 1000);
+        });
+
+        // Video fallback
+        const heroVideo = document.getElementById('hero-video');
+        if (heroVideo) {
+            heroVideo.addEventListener('error', () => {
+                console.log('Video failed to load, using fallback');
+                heroVideo.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
