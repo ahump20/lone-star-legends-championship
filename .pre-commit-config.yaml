@@ -1,0 +1,21 @@
+# Blaze Intelligence Pre-commit Configuration
+repos:
+  - repo: local
+    hooks:
+      - id: blaze-secret-scan
+        name: Blaze Secret Pattern Scan
+        entry: node scripts/pre-commit-secrets.js
+        language: node
+        files: \.(js|ts|json|md|html|toml|yaml|yml)$
+        
+      - id: blaze-file-size-check
+        name: Blaze File Size Check  
+        entry: node scripts/pre-commit-filesize.js
+        language: node
+        files: \.
+        
+      - id: blaze-headers-check
+        name: Blaze Security Headers Check
+        entry: node scripts/pre-commit-headers.js
+        language: node
+        files: _headers$
