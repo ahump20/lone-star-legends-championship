@@ -1,0 +1,2148 @@
+{
+  "timestamp": "2025-08-20T14:54:37.592Z",
+  "evaluations": {
+    "mlb": {
+      "athletes": [
+        {
+          "id": "mlb_138_2",
+          "name": "Player 3",
+          "position": "3B",
+          "team": 138,
+          "age": 30,
+          "experience": 4,
+          "scores": {
+            "hitting": {
+              "exit_velocity": {
+                "value": 88.1264553401455,
+                "percentile": 51,
+                "grade": "D+",
+                "trend": "improving"
+              },
+              "launch_angle": {
+                "value": 18.538090843734988,
+                "percentile": 2,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "sprint_speed": {
+                "value": 28.11189943363338,
+                "percentile": 7,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "bat_speed": {
+                "value": 95.44275556725378,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              }
+            },
+            "pitching": {
+              "velocity": {
+                "value": 97.59352335230693,
+                "percentile": 97,
+                "grade": "A+",
+                "trend": "stable"
+              },
+              "spin_rate": {
+                "value": 2592.205993758194,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "release_extension": {
+                "value": 69.5058623570618,
+                "percentile": 90,
+                "grade": "A",
+                "trend": "declining"
+              },
+              "movement": {
+                "value": 53.092493188416,
+                "percentile": 58,
+                "grade": "C-",
+                "trend": "declining"
+              }
+            },
+            "fielding": {
+              "reaction_time": {
+                "value": 89.11254389059886,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "route_efficiency": {
+                "value": 96.33284129438317,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              },
+              "arm_strength": {
+                "value": 66.1718016565793,
+                "percentile": 86,
+                "grade": "A-",
+                "trend": "declining"
+              }
+            }
+          },
+          "percentiles": {
+            "hitting": 39.75,
+            "pitching": 86,
+            "fielding": 94.66666666666667
+          },
+          "grades": {
+            "hitting": "F",
+            "pitching": "A-",
+            "fielding": "A"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 73
+        },
+        {
+          "id": "mlb_138_3",
+          "name": "Player 4",
+          "position": "SS",
+          "team": 138,
+          "age": 22,
+          "experience": 6,
+          "scores": {
+            "hitting": {
+              "exit_velocity": {
+                "value": 89.45190512538244,
+                "percentile": 61,
+                "grade": "C",
+                "trend": "declining"
+              },
+              "launch_angle": {
+                "value": 17.137215642588878,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "sprint_speed": {
+                "value": 28.452307719232955,
+                "percentile": 8,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "bat_speed": {
+                "value": 14.804766466870012,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              }
+            },
+            "pitching": {
+              "velocity": {
+                "value": 94.45187955981152,
+                "percentile": 79,
+                "grade": "B",
+                "trend": "stable"
+              },
+              "spin_rate": {
+                "value": 2422.470140463812,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "release_extension": {
+                "value": 92.25116979176823,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "movement": {
+                "value": 57.39647739181204,
+                "percentile": 69,
+                "grade": "C+",
+                "trend": "improving"
+              }
+            },
+            "fielding": {
+              "reaction_time": {
+                "value": 16.812890531384973,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "route_efficiency": {
+                "value": 99.93267990587344,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "arm_strength": {
+                "value": 58.79972696462568,
+                "percentile": 72,
+                "grade": "B-",
+                "trend": "stable"
+              }
+            }
+          },
+          "percentiles": {
+            "hitting": 17.75,
+            "pitching": 86.5,
+            "fielding": 57.333333333333336
+          },
+          "grades": {
+            "hitting": "F",
+            "pitching": "A-",
+            "fielding": "C-"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 54
+        },
+        {
+          "id": "mlb_138_0",
+          "name": "Player 1",
+          "position": "LF",
+          "team": 138,
+          "age": 27,
+          "experience": 5,
+          "scores": {
+            "hitting": {
+              "exit_velocity": {
+                "value": 95.6135409411427,
+                "percentile": 94,
+                "grade": "A",
+                "trend": "stable"
+              },
+              "launch_angle": {
+                "value": 15.657716361312765,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "sprint_speed": {
+                "value": 28.284120216388487,
+                "percentile": 7,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "bat_speed": {
+                "value": 91.72753780637186,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              }
+            },
+            "pitching": {
+              "velocity": {
+                "value": 96.03384927202946,
+                "percentile": 91,
+                "grade": "A",
+                "trend": "stable"
+              },
+              "spin_rate": {
+                "value": 2298.8187591145434,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              },
+              "release_extension": {
+                "value": 27.880051733736067,
+                "percentile": 7,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "movement": {
+                "value": 74.12545300406804,
+                "percentile": 95,
+                "grade": "A+",
+                "trend": "declining"
+              }
+            },
+            "fielding": {
+              "reaction_time": {
+                "value": 2.2820633361514187,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "route_efficiency": {
+                "value": 19.27926639878357,
+                "percentile": 2,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "arm_strength": {
+                "value": 99.68203017186426,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "improving"
+              }
+            }
+          },
+          "percentiles": {
+            "hitting": 50.25,
+            "pitching": 73,
+            "fielding": 34
+          },
+          "grades": {
+            "hitting": "D+",
+            "pitching": "B-",
+            "fielding": "F"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 52
+        },
+        {
+          "id": "mlb_138_1",
+          "name": "Player 2",
+          "position": "RF",
+          "team": 138,
+          "age": 29,
+          "experience": 7,
+          "scores": {
+            "hitting": {
+              "exit_velocity": {
+                "value": 89.163903040322,
+                "percentile": 59,
+                "grade": "C-",
+                "trend": "improving"
+              },
+              "launch_angle": {
+                "value": 16.957495695571577,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "sprint_speed": {
+                "value": 28.79877090506105,
+                "percentile": 8,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "bat_speed": {
+                "value": 24.59551159446405,
+                "percentile": 5,
+                "grade": "F",
+                "trend": "improving"
+              }
+            },
+            "pitching": {
+              "velocity": {
+                "value": 92.01389503359587,
+                "percentile": 50,
+                "grade": "D+",
+                "trend": "declining"
+              },
+              "spin_rate": {
+                "value": 2273.940597563116,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "release_extension": {
+                "value": 95.93542888893762,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "movement": {
+                "value": 80.97395806718436,
+                "percentile": 98,
+                "grade": "A+",
+                "trend": "stable"
+              }
+            },
+            "fielding": {
+              "reaction_time": {
+                "value": 44.28352281031971,
+                "percentile": 35,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "route_efficiency": {
+                "value": 32.00130477922287,
+                "percentile": 12,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "arm_strength": {
+                "value": 80.59348410825828,
+                "percentile": 98,
+                "grade": "A+",
+                "trend": "stable"
+              }
+            }
+          },
+          "percentiles": {
+            "hitting": 18.25,
+            "pitching": 86.5,
+            "fielding": 48.333333333333336
+          },
+          "grades": {
+            "hitting": "F",
+            "pitching": "A-",
+            "fielding": "D"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 51
+        },
+        {
+          "id": "mlb_138_4",
+          "name": "Player 5",
+          "position": "1B",
+          "team": 138,
+          "age": 23,
+          "experience": 7,
+          "scores": {
+            "hitting": {
+              "exit_velocity": {
+                "value": 95.81181913427335,
+                "percentile": 94,
+                "grade": "A",
+                "trend": "stable"
+              },
+              "launch_angle": {
+                "value": 14.475372109782478,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "sprint_speed": {
+                "value": 28.209222622562592,
+                "percentile": 7,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "bat_speed": {
+                "value": 25.175469733347878,
+                "percentile": 5,
+                "grade": "F",
+                "trend": "improving"
+              }
+            },
+            "pitching": {
+              "velocity": {
+                "value": 94.3846341124889,
+                "percentile": 79,
+                "grade": "B",
+                "trend": "stable"
+              },
+              "spin_rate": {
+                "value": 2322.0330363558087,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              },
+              "release_extension": {
+                "value": 5.200803486345729,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "movement": {
+                "value": 46.519356109212765,
+                "percentile": 41,
+                "grade": "F",
+                "trend": "stable"
+              }
+            },
+            "fielding": {
+              "reaction_time": {
+                "value": 93.47283574876697,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "route_efficiency": {
+                "value": 35.384666997979664,
+                "percentile": 16,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "arm_strength": {
+                "value": 24.92885068565083,
+                "percentile": 5,
+                "grade": "F",
+                "trend": "declining"
+              }
+            }
+          },
+          "percentiles": {
+            "hitting": 26.75,
+            "pitching": 55,
+            "fielding": 40
+          },
+          "grades": {
+            "hitting": "F",
+            "pitching": "C-",
+            "fielding": "F"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 41
+        }
+      ],
+      "teamAverages": {
+        "Cardinals": {}
+      },
+      "leagueBaselines": {},
+      "topPerformers": {
+        "hitting": [],
+        "pitching": [],
+        "fielding": []
+      }
+    },
+    "nfl": {
+      "athletes": [
+        {
+          "id": "nfl_10_0",
+          "name": "Player 1",
+          "position": "TE",
+          "team": 10,
+          "age": 27,
+          "experience": 5,
+          "scores": {
+            "physical": {
+              "forty_yard": {
+                "value": 4.4634694065604315,
+                "percentile": 75,
+                "grade": "B",
+                "trend": "declining"
+              },
+              "vertical_jump": {
+                "value": 34.84613911657251,
+                "percentile": 76,
+                "grade": "B",
+                "trend": "declining"
+              },
+              "broad_jump": {
+                "value": 63.61072574387671,
+                "percentile": 82,
+                "grade": "B+",
+                "trend": "declining"
+              },
+              "bench_press": {
+                "value": 87.86944450967363,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              }
+            },
+            "agility": {
+              "three_cone": {
+                "value": 53.835419496187264,
+                "percentile": 60,
+                "grade": "C",
+                "trend": "declining"
+              },
+              "shuttle_run": {
+                "value": 94.65749379859353,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              },
+              "reaction_time": {
+                "value": 25.404712042293443,
+                "percentile": 5,
+                "grade": "F",
+                "trend": "improving"
+              }
+            },
+            "performance": {
+              "yards_after_contact": {
+                "value": 21.575081197503245,
+                "percentile": 3,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "separation_velocity": {
+                "value": 83.9091239613206,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              },
+              "closing_speed": {
+                "value": 93.23271248887211,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              }
+            }
+          },
+          "percentiles": {
+            "physical": 83,
+            "agility": 54.666666666666664,
+            "performance": 67
+          },
+          "grades": {
+            "physical": "B+",
+            "agility": "D+",
+            "performance": "C+"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 68
+        },
+        {
+          "id": "nfl_10_4",
+          "name": "Player 5",
+          "position": "S",
+          "team": 10,
+          "age": 23,
+          "experience": 7,
+          "scores": {
+            "physical": {
+              "forty_yard": {
+                "value": 4.731463336052025,
+                "percentile": 26,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "vertical_jump": {
+                "value": 34.36831368421232,
+                "percentile": 72,
+                "grade": "B-",
+                "trend": "improving"
+              },
+              "broad_jump": {
+                "value": 76.46421427976509,
+                "percentile": 96,
+                "grade": "A+",
+                "trend": "improving"
+              },
+              "bench_press": {
+                "value": 61.94287575274884,
+                "percentile": 79,
+                "grade": "B",
+                "trend": "improving"
+              }
+            },
+            "agility": {
+              "three_cone": {
+                "value": 52.39419489076083,
+                "percentile": 56,
+                "grade": "C-",
+                "trend": "declining"
+              },
+              "shuttle_run": {
+                "value": 54.41483443653943,
+                "percentile": 62,
+                "grade": "C",
+                "trend": "declining"
+              },
+              "reaction_time": {
+                "value": 92.76020939571565,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              }
+            },
+            "performance": {
+              "yards_after_contact": {
+                "value": 18.786260594330173,
+                "percentile": 2,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "separation_velocity": {
+                "value": 18.84376279497917,
+                "percentile": 2,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "closing_speed": {
+                "value": 56.63960957647636,
+                "percentile": 67,
+                "grade": "C+",
+                "trend": "stable"
+              }
+            }
+          },
+          "percentiles": {
+            "physical": 68.25,
+            "agility": 72.33333333333333,
+            "performance": 23.666666666666668
+          },
+          "grades": {
+            "physical": "C+",
+            "agility": "B-",
+            "performance": "F"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 55
+        },
+        {
+          "id": "nfl_10_2",
+          "name": "Player 3",
+          "position": "QB",
+          "team": 10,
+          "age": 30,
+          "experience": 4,
+          "scores": {
+            "physical": {
+              "forty_yard": {
+                "value": 4.735544194230571,
+                "percentile": 25,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "vertical_jump": {
+                "value": 33.0893492067372,
+                "percentile": 61,
+                "grade": "C",
+                "trend": "stable"
+              },
+              "broad_jump": {
+                "value": 55.91634713671401,
+                "percentile": 65,
+                "grade": "C+",
+                "trend": "improving"
+              },
+              "bench_press": {
+                "value": 62.04394629406649,
+                "percentile": 79,
+                "grade": "B",
+                "trend": "stable"
+              }
+            },
+            "agility": {
+              "three_cone": {
+                "value": 39.846823162289425,
+                "percentile": 25,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "shuttle_run": {
+                "value": 20.304908161445013,
+                "percentile": 2,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "reaction_time": {
+                "value": 7.633869505088042,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "declining"
+              }
+            },
+            "performance": {
+              "yards_after_contact": {
+                "value": 87.31489458125917,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "improving"
+              },
+              "separation_velocity": {
+                "value": 49.39145420050639,
+                "percentile": 48,
+                "grade": "D",
+                "trend": "stable"
+              },
+              "closing_speed": {
+                "value": 54.53609721270416,
+                "percentile": 62,
+                "grade": "C",
+                "trend": "stable"
+              }
+            }
+          },
+          "percentiles": {
+            "physical": 57.5,
+            "agility": 9.333333333333334,
+            "performance": 69.66666666666667
+          },
+          "grades": {
+            "physical": "C-",
+            "agility": "F",
+            "performance": "C+"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 46
+        },
+        {
+          "id": "nfl_10_3",
+          "name": "Player 4",
+          "position": "LB",
+          "team": 10,
+          "age": 30,
+          "experience": 5,
+          "scores": {
+            "physical": {
+              "forty_yard": {
+                "value": 4.44810719537338,
+                "percentile": 78,
+                "grade": "B",
+                "trend": "declining"
+              },
+              "vertical_jump": {
+                "value": 32.420942024087566,
+                "percentile": 54,
+                "grade": "D+",
+                "trend": "stable"
+              },
+              "broad_jump": {
+                "value": 2.560341959008272,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "bench_press": {
+                "value": 21.390474567730088,
+                "percentile": 3,
+                "grade": "F",
+                "trend": "improving"
+              }
+            },
+            "agility": {
+              "three_cone": {
+                "value": 9.63155181616595,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "shuttle_run": {
+                "value": 7.514010316418007,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "reaction_time": {
+                "value": 87.8975857411717,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              }
+            },
+            "performance": {
+              "yards_after_contact": {
+                "value": 12.362730923433007,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "separation_velocity": {
+                "value": 48.895895887233195,
+                "percentile": 47,
+                "grade": "D",
+                "trend": "stable"
+              },
+              "closing_speed": {
+                "value": 91.38243172030114,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              }
+            }
+          },
+          "percentiles": {
+            "physical": 34,
+            "agility": 33.666666666666664,
+            "performance": 49
+          },
+          "grades": {
+            "physical": "F",
+            "agility": "F",
+            "performance": "D"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 39
+        },
+        {
+          "id": "nfl_10_1",
+          "name": "Player 2",
+          "position": "S",
+          "team": 10,
+          "age": 27,
+          "experience": 2,
+          "scores": {
+            "physical": {
+              "forty_yard": {
+                "value": 4.718164483070316,
+                "percentile": 28,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "vertical_jump": {
+                "value": 36.35198029521217,
+                "percentile": 86,
+                "grade": "A-",
+                "trend": "declining"
+              },
+              "broad_jump": {
+                "value": 31.675877513705487,
+                "percentile": 11,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "bench_press": {
+                "value": 23.04480900020256,
+                "percentile": 4,
+                "grade": "F",
+                "trend": "declining"
+              }
+            },
+            "agility": {
+              "three_cone": {
+                "value": 43.94781930243481,
+                "percentile": 34,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "shuttle_run": {
+                "value": 0.5492221948427245,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "reaction_time": {
+                "value": 13.559693716551902,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              }
+            },
+            "performance": {
+              "yards_after_contact": {
+                "value": 25.714120144369666,
+                "percentile": 5,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "separation_velocity": {
+                "value": 49.366702801042365,
+                "percentile": 48,
+                "grade": "D",
+                "trend": "declining"
+              },
+              "closing_speed": {
+                "value": 61.89278752301581,
+                "percentile": 79,
+                "grade": "B",
+                "trend": "declining"
+              }
+            }
+          },
+          "percentiles": {
+            "physical": 32.25,
+            "agility": 12,
+            "performance": 44
+          },
+          "grades": {
+            "physical": "F",
+            "agility": "F",
+            "performance": "F"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 29
+        }
+      ],
+      "teamAverages": {
+        "Titans": {}
+      },
+      "leagueBaselines": {},
+      "topPerformers": {
+        "physical": [],
+        "agility": [],
+        "performance": []
+      }
+    },
+    "nba": {
+      "athletes": [
+        {
+          "id": "nba_29_0",
+          "name": "Player 1",
+          "position": "PF",
+          "team": 29,
+          "age": 22,
+          "experience": 1,
+          "scores": {
+            "athleticism": {
+              "vertical_leap": {
+                "value": 69.66397769324948,
+                "percentile": 91,
+                "grade": "A",
+                "trend": "declining"
+              },
+              "lane_agility": {
+                "value": 24.171788982977137,
+                "percentile": 4,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "sprint_speed": {
+                "value": 27.40361736760474,
+                "percentile": 7,
+                "grade": "F",
+                "trend": "declining"
+              }
+            },
+            "skills": {
+              "shooting_accuracy": {
+                "value": 0.42443189676703874,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "handle_pressure": {
+                "value": 79.45507072731151,
+                "percentile": 98,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "court_vision": {
+                "value": 47.29564568279585,
+                "percentile": 43,
+                "grade": "F",
+                "trend": "improving"
+              }
+            },
+            "advanced": {
+              "usage_rate": {
+                "value": 74.75630244635809,
+                "percentile": 95,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "true_shooting": {
+                "value": 64.70524583136499,
+                "percentile": 84,
+                "grade": "B+",
+                "trend": "improving"
+              },
+              "defensive_rating": {
+                "value": 69.27473981627345,
+                "percentile": 90,
+                "grade": "A",
+                "trend": "declining"
+              }
+            }
+          },
+          "percentiles": {
+            "athleticism": 34,
+            "skills": 47.333333333333336,
+            "advanced": 89.66666666666667
+          },
+          "grades": {
+            "athleticism": "F",
+            "skills": "D",
+            "advanced": "A-"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 57
+        },
+        {
+          "id": "nba_29_1",
+          "name": "Player 2",
+          "position": "PG",
+          "team": 29,
+          "age": 23,
+          "experience": 2,
+          "scores": {
+            "athleticism": {
+              "vertical_leap": {
+                "value": 27.025399828138717,
+                "percentile": 6,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "lane_agility": {
+                "value": 51.2072250987293,
+                "percentile": 53,
+                "grade": "D+",
+                "trend": "stable"
+              },
+              "sprint_speed": {
+                "value": 28.612383575736523,
+                "percentile": 8,
+                "grade": "F",
+                "trend": "declining"
+              }
+            },
+            "skills": {
+              "shooting_accuracy": {
+                "value": 0.3544887126791879,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "handle_pressure": {
+                "value": 98.29860730898574,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "improving"
+              },
+              "court_vision": {
+                "value": 57.37423735515226,
+                "percentile": 69,
+                "grade": "C+",
+                "trend": "stable"
+              }
+            },
+            "advanced": {
+              "usage_rate": {
+                "value": 65.64928288097698,
+                "percentile": 85,
+                "grade": "A-",
+                "trend": "improving"
+              },
+              "true_shooting": {
+                "value": 65.19263399747292,
+                "percentile": 84,
+                "grade": "B+",
+                "trend": "stable"
+              },
+              "defensive_rating": {
+                "value": 44.32652776779109,
+                "percentile": 35,
+                "grade": "F",
+                "trend": "declining"
+              }
+            }
+          },
+          "percentiles": {
+            "athleticism": 22.333333333333332,
+            "skills": 56.333333333333336,
+            "advanced": 68
+          },
+          "grades": {
+            "athleticism": "F",
+            "skills": "C-",
+            "advanced": "C+"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 49
+        },
+        {
+          "id": "nba_29_3",
+          "name": "Player 4",
+          "position": "PG",
+          "team": 29,
+          "age": 29,
+          "experience": 6,
+          "scores": {
+            "athleticism": {
+              "vertical_leap": {
+                "value": 15.21265133964178,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "lane_agility": {
+                "value": 96.19760772286838,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "improving"
+              },
+              "sprint_speed": {
+                "value": 27.5543171126787,
+                "percentile": 7,
+                "grade": "F",
+                "trend": "improving"
+              }
+            },
+            "skills": {
+              "shooting_accuracy": {
+                "value": 0.46494958118479657,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "handle_pressure": {
+                "value": 81.10892159953274,
+                "percentile": 98,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "court_vision": {
+                "value": 10.999199687159788,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "declining"
+              }
+            },
+            "advanced": {
+              "usage_rate": {
+                "value": 67.94427017133458,
+                "percentile": 88,
+                "grade": "A-",
+                "trend": "declining"
+              },
+              "true_shooting": {
+                "value": 67.94563258433183,
+                "percentile": 88,
+                "grade": "A-",
+                "trend": "improving"
+              },
+              "defensive_rating": {
+                "value": 53.55175457797243,
+                "percentile": 59,
+                "grade": "C-",
+                "trend": "stable"
+              }
+            }
+          },
+          "percentiles": {
+            "athleticism": 35.666666666666664,
+            "skills": 33.333333333333336,
+            "advanced": 78.33333333333333
+          },
+          "grades": {
+            "athleticism": "F",
+            "skills": "F",
+            "advanced": "B"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 49
+        },
+        {
+          "id": "nba_29_4",
+          "name": "Player 5",
+          "position": "SG",
+          "team": 29,
+          "age": 22,
+          "experience": 3,
+          "scores": {
+            "athleticism": {
+              "vertical_leap": {
+                "value": 87.2499128660815,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "improving"
+              },
+              "lane_agility": {
+                "value": 0.828849683739552,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "sprint_speed": {
+                "value": 29.150463182493883,
+                "percentile": 8,
+                "grade": "F",
+                "trend": "declining"
+              }
+            },
+            "skills": {
+              "shooting_accuracy": {
+                "value": 0.365121253596722,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "handle_pressure": {
+                "value": 31.57051400313513,
+                "percentile": 11,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "court_vision": {
+                "value": 32.005640207896626,
+                "percentile": 12,
+                "grade": "F",
+                "trend": "improving"
+              }
+            },
+            "advanced": {
+              "usage_rate": {
+                "value": 79.38792495852138,
+                "percentile": 97,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "true_shooting": {
+                "value": 6.306731183510883,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "defensive_rating": {
+                "value": 17.103565468428616,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              }
+            }
+          },
+          "percentiles": {
+            "athleticism": 36,
+            "skills": 8,
+            "advanced": 33
+          },
+          "grades": {
+            "athleticism": "F",
+            "skills": "F",
+            "advanced": "F"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 26
+        },
+        {
+          "id": "nba_29_2",
+          "name": "Player 3",
+          "position": "PF",
+          "team": 29,
+          "age": 22,
+          "experience": 0,
+          "scores": {
+            "athleticism": {
+              "vertical_leap": {
+                "value": 29.056265292508222,
+                "percentile": 8,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "lane_agility": {
+                "value": 14.887774220150574,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "sprint_speed": {
+                "value": 29.025901739471987,
+                "percentile": 8,
+                "grade": "F",
+                "trend": "stable"
+              }
+            },
+            "skills": {
+              "shooting_accuracy": {
+                "value": 0.36081172521850746,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "handle_pressure": {
+                "value": 7.930170599871422,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "court_vision": {
+                "value": 46.42644925450534,
+                "percentile": 41,
+                "grade": "F",
+                "trend": "stable"
+              }
+            },
+            "advanced": {
+              "usage_rate": {
+                "value": 6.445135888630782,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "true_shooting": {
+                "value": 11.391795882447031,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "defensive_rating": {
+                "value": 47.82637565133952,
+                "percentile": 44,
+                "grade": "F",
+                "trend": "improving"
+              }
+            }
+          },
+          "percentiles": {
+            "athleticism": 5.666666666666667,
+            "skills": 14.333333333333334,
+            "advanced": 15.333333333333334
+          },
+          "grades": {
+            "athleticism": "F",
+            "skills": "F",
+            "advanced": "F"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 12
+        }
+      ],
+      "teamAverages": {
+        "Grizzlies": {}
+      },
+      "leagueBaselines": {},
+      "topPerformers": {
+        "athleticism": [],
+        "skills": [],
+        "advanced": []
+      }
+    },
+    "ncaa": {
+      "athletes": [
+        {
+          "id": "ncaa_251_2",
+          "name": "Player 3",
+          "position": "RB",
+          "team": 251,
+          "age": 23,
+          "experience": 0,
+          "scores": {
+            "combine": {
+              "speed_score": {
+                "value": 86.39434463021006,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              },
+              "power_index": {
+                "value": 67.86819143754366,
+                "percentile": 88,
+                "grade": "A-",
+                "trend": "improving"
+              },
+              "agility_rating": {
+                "value": 13.21084386116076,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              }
+            },
+            "potential": {
+              "development_curve": {
+                "value": 76.36233719219913,
+                "percentile": 96,
+                "grade": "A+",
+                "trend": "improving"
+              },
+              "ceiling_projection": {
+                "value": 61.74044069032458,
+                "percentile": 78,
+                "grade": "B",
+                "trend": "improving"
+              },
+              "floor_estimate": {
+                "value": 71.7072825286646,
+                "percentile": 93,
+                "grade": "A",
+                "trend": "improving"
+              }
+            },
+            "readiness": {
+              "pro_comparison": {
+                "value": 23.838583333313768,
+                "percentile": 4,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "nfl_grade": {
+                "value": 49.510358246144804,
+                "percentile": 49,
+                "grade": "D",
+                "trend": "stable"
+              },
+              "draft_projection": {
+                "value": 56.24795904736535,
+                "percentile": 66,
+                "grade": "C+",
+                "trend": "stable"
+              }
+            }
+          },
+          "percentiles": {
+            "combine": 62.666666666666664,
+            "potential": 89,
+            "readiness": 39.666666666666664
+          },
+          "grades": {
+            "combine": "C",
+            "potential": "A-",
+            "readiness": "F"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 64
+        },
+        {
+          "id": "ncaa_251_3",
+          "name": "Player 4",
+          "position": "DB",
+          "team": 251,
+          "age": 28,
+          "experience": 2,
+          "scores": {
+            "combine": {
+              "speed_score": {
+                "value": 34.451329807314224,
+                "percentile": 15,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "power_index": {
+                "value": 23.312769813753896,
+                "percentile": 4,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "agility_rating": {
+                "value": 71.50761692103598,
+                "percentile": 92,
+                "grade": "A",
+                "trend": "declining"
+              }
+            },
+            "potential": {
+              "development_curve": {
+                "value": 80.76633786433611,
+                "percentile": 98,
+                "grade": "A+",
+                "trend": "stable"
+              },
+              "ceiling_projection": {
+                "value": 3.967116116193403,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "floor_estimate": {
+                "value": 94.8203069387356,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              }
+            },
+            "readiness": {
+              "pro_comparison": {
+                "value": 65.7456289552824,
+                "percentile": 85,
+                "grade": "A-",
+                "trend": "declining"
+              },
+              "nfl_grade": {
+                "value": 73.74135354834708,
+                "percentile": 94,
+                "grade": "A",
+                "trend": "stable"
+              },
+              "draft_projection": {
+                "value": 58.616415703678506,
+                "percentile": 72,
+                "grade": "B-",
+                "trend": "stable"
+              }
+            }
+          },
+          "percentiles": {
+            "combine": 37,
+            "potential": 66,
+            "readiness": 83.66666666666667
+          },
+          "grades": {
+            "combine": "F",
+            "potential": "C+",
+            "readiness": "B+"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 62
+        },
+        {
+          "id": "ncaa_251_4",
+          "name": "Player 5",
+          "position": "OL",
+          "team": 251,
+          "age": 25,
+          "experience": 1,
+          "scores": {
+            "combine": {
+              "speed_score": {
+                "value": 25.792404486365193,
+                "percentile": 5,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "power_index": {
+                "value": 90.82125678289526,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              },
+              "agility_rating": {
+                "value": 74.04174747303682,
+                "percentile": 95,
+                "grade": "A+",
+                "trend": "improving"
+              }
+            },
+            "potential": {
+              "development_curve": {
+                "value": 23.889669127671187,
+                "percentile": 4,
+                "grade": "F",
+                "trend": "declining"
+              },
+              "ceiling_projection": {
+                "value": 13.854512599424185,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "floor_estimate": {
+                "value": 61.7269541343523,
+                "percentile": 78,
+                "grade": "B",
+                "trend": "stable"
+              }
+            },
+            "readiness": {
+              "pro_comparison": {
+                "value": 95.8716816809548,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              },
+              "nfl_grade": {
+                "value": 41.32432145028058,
+                "percentile": 28,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "draft_projection": {
+                "value": 96.26555989598093,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              }
+            }
+          },
+          "percentiles": {
+            "combine": 66.33333333333333,
+            "potential": 27.666666666666668,
+            "readiness": 75.33333333333333
+          },
+          "grades": {
+            "combine": "C+",
+            "potential": "F",
+            "readiness": "B"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 56
+        },
+        {
+          "id": "ncaa_251_1",
+          "name": "Player 2",
+          "position": "DB",
+          "team": 251,
+          "age": 27,
+          "experience": 7,
+          "scores": {
+            "combine": {
+              "speed_score": {
+                "value": 42.950880660326774,
+                "percentile": 32,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "power_index": {
+                "value": 49.45628576370953,
+                "percentile": 49,
+                "grade": "D",
+                "trend": "declining"
+              },
+              "agility_rating": {
+                "value": 73.95716856099905,
+                "percentile": 94,
+                "grade": "A",
+                "trend": "stable"
+              }
+            },
+            "potential": {
+              "development_curve": {
+                "value": 97.50146477043118,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              },
+              "ceiling_projection": {
+                "value": 20.828731533895596,
+                "percentile": 3,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "floor_estimate": {
+                "value": 92.09873830832453,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "stable"
+              }
+            },
+            "readiness": {
+              "pro_comparison": {
+                "value": 48.195644492770874,
+                "percentile": 45,
+                "grade": "D",
+                "trend": "stable"
+              },
+              "nfl_grade": {
+                "value": 18.172970183194572,
+                "percentile": 2,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "draft_projection": {
+                "value": 54.49522337985648,
+                "percentile": 62,
+                "grade": "C",
+                "trend": "declining"
+              }
+            }
+          },
+          "percentiles": {
+            "combine": 58.333333333333336,
+            "potential": 67,
+            "readiness": 36.333333333333336
+          },
+          "grades": {
+            "combine": "C-",
+            "potential": "C+",
+            "readiness": "F"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 54
+        },
+        {
+          "id": "ncaa_251_0",
+          "name": "Player 1",
+          "position": "WR",
+          "team": 251,
+          "age": 24,
+          "experience": 5,
+          "scores": {
+            "combine": {
+              "speed_score": {
+                "value": 4.093362823786828,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "power_index": {
+                "value": 28.406063183691188,
+                "percentile": 7,
+                "grade": "F",
+                "trend": "improving"
+              },
+              "agility_rating": {
+                "value": 30.267656106822027,
+                "percentile": 9,
+                "grade": "F",
+                "trend": "declining"
+              }
+            },
+            "potential": {
+              "development_curve": {
+                "value": 37.4978626875961,
+                "percentile": 20,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "ceiling_projection": {
+                "value": 88.4404353790153,
+                "percentile": 99,
+                "grade": "A+",
+                "trend": "declining"
+              },
+              "floor_estimate": {
+                "value": 14.90744783532536,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              }
+            },
+            "readiness": {
+              "pro_comparison": {
+                "value": 12.443572582856799,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              },
+              "nfl_grade": {
+                "value": 72.77944552634817,
+                "percentile": 94,
+                "grade": "A",
+                "trend": "improving"
+              },
+              "draft_projection": {
+                "value": 0.15907944513722239,
+                "percentile": 1,
+                "grade": "F",
+                "trend": "stable"
+              }
+            }
+          },
+          "percentiles": {
+            "combine": 5.666666666666667,
+            "potential": 40,
+            "readiness": 32
+          },
+          "grades": {
+            "combine": "F",
+            "potential": "F",
+            "readiness": "F"
+          },
+          "comparisons": [],
+          "projections": {},
+          "compositeScore": 26
+        }
+      ],
+      "teamAverages": {
+        "Longhorns": {}
+      },
+      "leagueBaselines": {},
+      "topPerformers": {
+        "combine": [],
+        "potential": [],
+        "readiness": []
+      }
+    }
+  },
+  "rankings": {
+    "mlb": {
+      "overall": [
+        {
+          "rank": 1,
+          "name": "Player 3",
+          "team": 138,
+          "position": "3B",
+          "score": 73,
+          "change": 0
+        },
+        {
+          "rank": 2,
+          "name": "Player 4",
+          "team": 138,
+          "position": "SS",
+          "score": 54,
+          "change": 0
+        },
+        {
+          "rank": 3,
+          "name": "Player 1",
+          "team": 138,
+          "position": "LF",
+          "score": 52,
+          "change": 0
+        },
+        {
+          "rank": 4,
+          "name": "Player 2",
+          "team": 138,
+          "position": "RF",
+          "score": 51,
+          "change": 0
+        },
+        {
+          "rank": 5,
+          "name": "Player 5",
+          "team": 138,
+          "position": "1B",
+          "score": 41,
+          "change": 0
+        }
+      ],
+      "byPosition": {},
+      "rookies": [],
+      "mostImproved": []
+    },
+    "nfl": {
+      "overall": [
+        {
+          "rank": 1,
+          "name": "Player 1",
+          "team": 10,
+          "position": "TE",
+          "score": 68,
+          "change": 0
+        },
+        {
+          "rank": 2,
+          "name": "Player 5",
+          "team": 10,
+          "position": "S",
+          "score": 55,
+          "change": 0
+        },
+        {
+          "rank": 3,
+          "name": "Player 3",
+          "team": 10,
+          "position": "QB",
+          "score": 46,
+          "change": 0
+        },
+        {
+          "rank": 4,
+          "name": "Player 4",
+          "team": 10,
+          "position": "LB",
+          "score": 39,
+          "change": 0
+        },
+        {
+          "rank": 5,
+          "name": "Player 2",
+          "team": 10,
+          "position": "S",
+          "score": 29,
+          "change": 0
+        }
+      ],
+      "byPosition": {},
+      "rookies": [],
+      "mostImproved": []
+    },
+    "nba": {
+      "overall": [
+        {
+          "rank": 1,
+          "name": "Player 1",
+          "team": 29,
+          "position": "PF",
+          "score": 57,
+          "change": 0
+        },
+        {
+          "rank": 2,
+          "name": "Player 2",
+          "team": 29,
+          "position": "PG",
+          "score": 49,
+          "change": 0
+        },
+        {
+          "rank": 3,
+          "name": "Player 4",
+          "team": 29,
+          "position": "PG",
+          "score": 49,
+          "change": 0
+        },
+        {
+          "rank": 4,
+          "name": "Player 5",
+          "team": 29,
+          "position": "SG",
+          "score": 26,
+          "change": 0
+        },
+        {
+          "rank": 5,
+          "name": "Player 3",
+          "team": 29,
+          "position": "PF",
+          "score": 12,
+          "change": 0
+        }
+      ],
+      "byPosition": {},
+      "rookies": [],
+      "mostImproved": []
+    },
+    "ncaa": {
+      "overall": [
+        {
+          "rank": 1,
+          "name": "Player 3",
+          "team": 251,
+          "position": "RB",
+          "score": 64,
+          "change": 0
+        },
+        {
+          "rank": 2,
+          "name": "Player 4",
+          "team": 251,
+          "position": "DB",
+          "score": 62,
+          "change": 0
+        },
+        {
+          "rank": 3,
+          "name": "Player 5",
+          "team": 251,
+          "position": "OL",
+          "score": 56,
+          "change": 0
+        },
+        {
+          "rank": 4,
+          "name": "Player 2",
+          "team": 251,
+          "position": "DB",
+          "score": 54,
+          "change": 0
+        },
+        {
+          "rank": 5,
+          "name": "Player 1",
+          "team": 251,
+          "position": "WR",
+          "score": 26,
+          "change": 0
+        }
+      ],
+      "byPosition": {},
+      "rookies": [],
+      "mostImproved": []
+    }
+  },
+  "breakouts": [
+    {
+      "sport": "mlb",
+      "athlete": "Player 4",
+      "team": 138,
+      "position": "SS",
+      "score": 77,
+      "reasons": [],
+      "projection": {}
+    },
+    {
+      "sport": "nba",
+      "athlete": "Player 1",
+      "team": 29,
+      "position": "PF",
+      "score": 77,
+      "reasons": [],
+      "projection": {}
+    },
+    {
+      "sport": "nba",
+      "athlete": "Player 5",
+      "team": 29,
+      "position": "SG",
+      "score": 77,
+      "reasons": [],
+      "projection": {}
+    },
+    {
+      "sport": "nba",
+      "athlete": "Player 3",
+      "team": 29,
+      "position": "PF",
+      "score": 77,
+      "reasons": [],
+      "projection": {}
+    }
+  ],
+  "trajectories": {
+    "mlb": {
+      "rising": [],
+      "declining": [],
+      "steady": [
+        {
+          "athlete": "Player 3",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 4",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 1",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 2",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 5",
+          "consistency": 0.8
+        }
+      ]
+    },
+    "nfl": {
+      "rising": [],
+      "declining": [],
+      "steady": [
+        {
+          "athlete": "Player 1",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 5",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 3",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 4",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 2",
+          "consistency": 0.8
+        }
+      ]
+    },
+    "nba": {
+      "rising": [],
+      "declining": [],
+      "steady": [
+        {
+          "athlete": "Player 1",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 2",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 4",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 5",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 3",
+          "consistency": 0.8
+        }
+      ]
+    },
+    "ncaa": {
+      "rising": [],
+      "declining": [],
+      "steady": [
+        {
+          "athlete": "Player 3",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 4",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 5",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 2",
+          "consistency": 0.8
+        },
+        {
+          "athlete": "Player 1",
+          "consistency": 0.8
+        }
+      ]
+    }
+  },
+  "insights": [],
+  "recommendations": {
+    "recruiting": [],
+    "development": [],
+    "trades": [],
+    "draft": []
+  }
+}

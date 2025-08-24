@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analytics Hub | Blaze Intelligence</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Advanced sports analytics dashboard with real-time data, NIL valuation, and comprehensive reporting for Cardinals, Titans, Longhorns, and Grizzlies.">
+  <meta name="keywords" content="sports analytics dashboard, real-time analytics, NIL valuation, sports data, Cardinals analytics, Titans analytics">
+  <link rel="canonical" href="https://blaze-intelligence.com/analytics/">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="/css/blaze.css">
+  <link rel="stylesheet" href="/css/components.css">
+  
+  <!-- Flow State Integration -->
+  <link rel="stylesheet" href="/flow-styles.css">
+  <script type="module" src="/flow-state-api.js"></script>
+  <script type="module" src="/flow-widgets.js"></script>
+</head>
+
+<body class="analytics-page">
+  <!-- Skip to main content for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Unified Navigation -->
+  <header class="topbar">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <span class="logo-icon">🔥</span>
+        <span>Blaze Intelligence</span>
+      </a>
+      <nav class="nav-menu">
+        <a href="/analytics/" class="nav-link active">Analytics</a>
+        <a href="/capabilities/" class="nav-link">Capabilities</a>
+        <a href="/games/" class="nav-link">Games</a>
+        <a href="/pricing/" class="nav-link">Pricing</a>
+        <a href="/company/" class="nav-link">Company</a>
+        <a href="/onboarding/" class="nav-cta">Get Started</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" class="main-content">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Analytics Hub</h1>
+          <p class="text-large">Real-time sports intelligence combining performance data with cognitive insights. Evidence-based analytics for Cardinals, Titans, Longhorns, and Grizzlies.</p>
+          
+          <div class="hero-cta">
+            <a href="/analytics/dashboard/" class="btn btn-primary">
+              📊 View Dashboard
+            </a>
+            <a href="/analytics/real-time/" class="btn btn-secondary">
+              ⚡ Real-time Data
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Analytics Overview Cards -->
+    <section class="section">
+      <div class="container">
+        <div class="grid grid-3">
+          <!-- Statistics Dashboard -->
+          <div class="card" onclick="window.location.href='/analytics/dashboard/'">
+            <div class="card-header">
+              <h3 class="card-title">Statistics Dashboard</h3>
+              <div class="card-subtitle">Comprehensive performance metrics</div>
+            </div>
+            <p>Advanced statistical analysis with performance tracking, trend analysis, and predictive modeling.</p>
+            <div style="margin-top: 1rem;">
+              <span class="status-indicator">
+                <span class="status-dot status-live"></span>
+                Live Data
+              </span>
+            </div>
+          </div>
+
+          <!-- Real-time Analytics -->
+          <div class="card" onclick="window.location.href='/analytics/real-time/'">
+            <div class="card-header">
+              <h3 class="card-title">Real-time Analytics</h3>
+              <div class="card-subtitle">Live performance monitoring</div>
+            </div>
+            <p>Instant insights with live data feeds, real-time scoring, and immediate performance alerts.</p>
+            <div style="margin-top: 1rem;">
+              <span class="status-indicator">
+                <span class="status-dot status-live"></span>
+                Active
+              </span>
+            </div>
+          </div>
+
+          <!-- NIL Valuation -->
+          <div class="card" onclick="window.location.href='/analytics/nil-valuation/'">
+            <div class="card-header">
+              <h3 class="card-title">NIL Trust Dashboard</h3>
+              <div class="card-subtitle">Name, Image, Likeness valuation</div>
+            </div>
+            <p>Evidence-based NIL valuation with market analysis, brand potential, and earning projections.</p>
+            <div style="margin-top: 1rem;">
+              <span class="status-indicator">
+                <span class="status-dot status-live"></span>
+                Beta
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Data Dashboard -->
+    <section class="section">
+      <div class="container">
+        <h2>Live Performance Metrics</h2>
+        <div class="dashboard-tiles">
+          <div class="tile">
+            <div class="label">Team Readiness</div>
+            <div class="value" id="readiness">67.30</div>
+          </div>
+          
+          <div class="tile">
+            <div class="label">Performance Leverage</div>
+            <div class="value" id="leverage">2.40</div>
+          </div>
+          
+          <div class="tile">
+            <div class="label">Flow State</div>
+            <div class="value" id="flow-score">--</div>
+          </div>
+          
+          <div class="tile">
+            <div class="label">Active Sessions</div>
+            <div class="value" id="active-sessions">142</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Analytics -->
+    <section class="section">
+      <div class="container">
+        <h2>Featured Analysis</h2>
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Performance Scorecard</h3>
+            </div>
+            <p>Comprehensive evaluation metrics with CEE (Competitive Execution Excellence) scoring system.</p>
+            <a href="/analytics/scorecard/" class="btn btn-ghost">View Scorecard</a>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Custom Reports</h3>
+            </div>
+            <p>Generate detailed reports with customizable metrics, timeframes, and export options.</p>
+            <a href="/analytics/reports/" class="btn btn-ghost">Create Report</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <span class="logo-icon">🔥</span>
+            <span>Blaze Intelligence</span>
+          </div>
+          <p class="footer-tagline">Where cognitive performance meets quarterly performance™</p>
+        </div>
+        
+        <div class="footer-links">
+          <div class="footer-column">
+            <h4>Analytics</h4>
+            <ul>
+              <li><a href="/analytics/dashboard/">Dashboard</a></li>
+              <li><a href="/analytics/real-time/">Real-time</a></li>
+              <li><a href="/analytics/nil-valuation/">NIL Valuation</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          <span>&copy; 2024 Blaze Intelligence. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Flow Meter Widget -->
+  <div id="flow-meter-container"></div>
+
+  <!-- Scripts -->
+  <script src="/js/core.js"></script>
+  
+  <script type="module">
+    import { FlowMeterWidget } from '/flow-widgets.js';
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize flow meter
+      new FlowMeterWidget('flow-meter-container', {
+        autoStart: true,
+        showMSPE: false,
+        enableBreathing: true
+      });
+      
+      // Add click handlers for cards
+      document.querySelectorAll('.card[onclick]').forEach(card => {
+        card.style.cursor = 'pointer';
+      });
+    });
+  </script>
+</body>
+</html>

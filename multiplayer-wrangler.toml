@@ -1,0 +1,27 @@
+name = "lone-star-legends-multiplayer"
+main = "api/multiplayer-durable.js"
+compatibility_date = "2025-08-24"
+compatibility_flags = ["nodejs_compat"]
+
+[[durable_objects.bindings]]
+name = "GAME_ROOMS"
+class_name = "GameRoom"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["GameRoom"]
+
+# Environment variables
+[vars]
+ENVIRONMENT = "production"
+MAX_PLAYERS_PER_ROOM = "8"
+GAME_TIMEOUT_MINUTES = "30"
+
+# Routes
+[[routes]]
+pattern = "multiplayer.blaze-intelligence.com/*"
+zone_name = "blaze-intelligence.com"
+
+# Build configuration
+[build]
+command = "echo 'No build step required for multiplayer worker'"

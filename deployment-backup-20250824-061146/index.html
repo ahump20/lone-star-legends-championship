@@ -130,57 +130,6 @@
         transform: translateY(-2px);
       }
       
-      /* Navigation widgets */
-      .nav-widget {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: rgba(255, 107, 53, 0.1);
-        border: 1px solid rgba(255, 107, 53, 0.3);
-        border-radius: 8px;
-        padding: 0.5rem 0.75rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      
-      .nav-widget:hover {
-        background: rgba(255, 107, 53, 0.2);
-        border-color: rgba(255, 107, 53, 0.5);
-        transform: translateY(-1px);
-      }
-      
-      .nav-widget .widget-icon {
-        font-size: 1.2rem;
-      }
-      
-      .nav-widget .widget-content {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .nav-widget .widget-label {
-        font-size: 0.75rem;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.8);
-        line-height: 1;
-      }
-      
-      .nav-widget .widget-value {
-        font-size: 0.9rem;
-        font-weight: 700;
-        color: #FFFFFF;
-        line-height: 1;
-      }
-      
-      .champion-enigma-widget.active .widget-value {
-        color: #FFD700;
-      }
-      
-      .readiness-badge.active .widget-value {
-        color: #00FF88;
-      }
-      
       /* Hero section */
       .hero {
         max-width: 1200px;
@@ -421,24 +370,6 @@
           <!-- Pricing -->
           <a href="/pricing/" class="nav-link">Pricing</a>
           
-          <!-- Champion Enigma Widget -->
-          <div class="nav-widget champion-enigma-widget" id="champion-enigma-nav">
-            <div class="widget-icon">🏆</div>
-            <div class="widget-content">
-              <span class="widget-label">Champion Enigma</span>
-              <span class="widget-value" id="enigma-score">--</span>
-            </div>
-          </div>
-          
-          <!-- Cardinals Readiness Badge -->
-          <div class="nav-widget readiness-badge" id="readiness-nav">
-            <div class="widget-icon">⚾</div>
-            <div class="widget-content">
-              <span class="widget-label">Cardinals Ready</span>
-              <span class="widget-value" id="readiness-score">--</span>
-            </div>
-          </div>
-          
           <!-- Get Started CTA -->
           <a href="/onboarding/" class="nav-cta">Get Started</a>
         </nav>
@@ -592,81 +523,6 @@
       
       setInterval(updateFlowDashboard, 2000);
       setTimeout(updateFlowDashboard, 1000);
-    </script>
-    
-    <!-- Champion Enigma & Readiness Integration -->
-    <script type="module">
-      // Import Champion Enigma Engine
-      import('./js/champion-enigma-engine.js').then(module => {
-        const enigmaEngine = new module.ChampionEnigmaEngine();
-        
-        // Update Champion Enigma score every 30 seconds
-        async function updateEnigmaScore() {
-          try {
-            const response = await fetch('/api/champion-enigma/live-score');
-            if (response.ok) {
-              const data = await response.json();
-              const scoreElement = document.getElementById('enigma-score');
-              const widgetElement = document.getElementById('champion-enigma-nav');
-              
-              scoreElement.textContent = data.overallScore ? `${data.overallScore.toFixed(1)}` : '--';
-              
-              // Add active class if score is above threshold
-              if (data.overallScore && data.overallScore > 75) {
-                widgetElement.classList.add('active');
-              } else {
-                widgetElement.classList.remove('active');
-              }
-            }
-          } catch (error) {
-            console.warn('Champion Enigma score unavailable:', error);
-          }
-        }
-        
-        // Initial load
-        updateEnigmaScore();
-        
-        // Update every 30 seconds
-        setInterval(updateEnigmaScore, 30000);
-      }).catch(err => console.warn('Champion Enigma engine not loaded:', err));
-
-      // Cardinals Readiness Board Integration
-      async function updateReadinessScore() {
-        try {
-          const response = await fetch('/data/analytics/readiness.json');
-          if (response.ok) {
-            const data = await response.json();
-            const scoreElement = document.getElementById('readiness-score');
-            const widgetElement = document.getElementById('readiness-nav');
-            
-            scoreElement.textContent = data.readiness ? `${data.readiness.toFixed(1)}%` : '--';
-            
-            // Add active class if readiness is above 80%
-            if (data.readiness && data.readiness > 80) {
-              widgetElement.classList.add('active');
-            } else {
-              widgetElement.classList.remove('active');
-            }
-          }
-        } catch (error) {
-          console.warn('Cardinals readiness data unavailable:', error);
-        }
-      }
-      
-      // Initial load
-      updateReadinessScore();
-      
-      // Update every 10 seconds (faster for game-day readiness)
-      setInterval(updateReadinessScore, 10000);
-      
-      // Click handlers for widgets
-      document.getElementById('champion-enigma-nav').addEventListener('click', () => {
-        window.open('/capabilities/champion-enigma/', '_blank');
-      });
-      
-      document.getElementById('readiness-nav').addEventListener('click', () => {
-        window.open('/analytics/cardinals-readiness/', '_blank');
-      });
     </script>
     
     <script type="module">
