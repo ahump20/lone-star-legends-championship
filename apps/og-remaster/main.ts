@@ -9,6 +9,13 @@ import { InputManager } from './input';
 import { AudioEngine } from './audio/AudioEngine';
 import { themeManager } from './theme';
 import config from './og.config';
+import { BlazeAI } from './ai/BlazeAI';
+import { CommentaryEngine } from './audio/CommentaryEngine';
+import { TournamentMode } from './modes/TournamentMode';
+import { ReplaySystem } from './replay/ReplaySystem';
+import { HighlightsViewer } from './ui/HighlightsViewer';
+import { MLBDataLoader, MLBTeam } from './data/MLBDataLoader';
+import { TeamSelector } from './ui/TeamSelector';
 
 class OGRemasterGame {
   private canvas: HTMLCanvasElement;
@@ -17,6 +24,14 @@ class OGRemasterGame {
   private renderer: CanvasRenderer;
   private inputManager: InputManager;
   private audioEngine: AudioEngine;
+  private commentaryEngine: CommentaryEngine;
+  private blazeAI: BlazeAI;
+  private tournamentMode: TournamentMode;
+  private replaySystem: ReplaySystem;
+  private highlightsViewer: HighlightsViewer;
+  private mlbDataLoader: MLBDataLoader;
+  private teamSelector: TeamSelector;
+  private selectedTeam?: MLBTeam;
   
   private isRunning = false;
   private lastFrameTime = 0;
@@ -42,6 +57,13 @@ class OGRemasterGame {
     this.renderer = new CanvasRenderer(ctx, this.gameState, config);
     this.audioEngine = new AudioEngine();
     this.inputManager = new InputManager(this.gameState);
+    this.commentaryEngine = new CommentaryEngine();
+    this.blazeAI = new BlazeAI();
+    this.tournamentMode = new TournamentMode(this.gameState);
+    this.replaySystem = new ReplaySystem(this.canvas);
+    this.highlightsViewer = new HighlightsViewer(this.replaySystem);
+    this.mlbDataLoader = new MLBDataLoader();
+    this.teamSelector = new TeamSelector(this.mlbDataLoader, (team) => this.onTeamSelected(team));
 
     this.setupEventListeners();
     this.setupGameplayCallbacks();
@@ -72,6 +94,9 @@ class OGRemasterGame {
       
       // Apply theme
       themeManager.applyGameState('menu');
+      
+      // Add highlights button to UI
+      this.highlightsViewer.addHighlightsButton();
       
       // Start game loop
       this.start();
@@ -145,6 +170,10 @@ class OGRemasterGame {
       this.startNewGame();
     });
 
+    this.inputManager.on('selectTeam', () => {
+      this.teamSelector.show();
+    });
+
     // Theme changes
     themeManager.onChange((theme) => {
       console.log('🎨 Theme updated:', theme);
@@ -164,6 +193,9 @@ class OGRemasterGame {
     this.gameState.swingBat = () => {
       const result = originalSwingBat();
       
+      // Start recording for potential highlights
+      this.replaySystem.startRecording();
+      
       if (result.contact) {
         let hitStrength: 'weak' | 'solid' | 'crushing' = 'solid';
         
@@ -177,10 +209,16 @@ class OGRemasterGame {
         if (result.result === 'homerun') {
           this.renderer.createHitEffect(ball.x, ball.y, 'homerun');
           this.audioEngine.onHomeRun();
+          
+          // Detect highlight
+          this.replaySystem.detectHighlight(this.gameState, 'home_run');
         } else if (result.contact) {
           this.renderer.createHitEffect(ball.x, ball.y, 'contact');
         }
       }
+      
+      // Stop recording after a few seconds
+      setTimeout(() => this.replaySystem.stopRecording(), 5000);
       
       return result;
     };
@@ -189,13 +227,68 @@ class OGRemasterGame {
   private startNewGame(): void {
     console.log('🚀 Starting new game...');
     
+    // Show team selector if no team selected
+    if (!this.selectedTeam) {
+      this.teamSelector.show();
+      return;
+    }
+    
     this.gameState = new GameState();
     this.gameState.startGame();
+    
+    // Set team data in game state
+    this.applyTeamToGameState(this.selectedTeam);
     
     themeManager.applyGameState('playing');
     this.audioEngine.onGameStart();
     
     this.setupGameplayCallbacks(); // Re-setup callbacks for new game state
+  }
+  
+  private onTeamSelected(team: MLBTeam): void {
+    console.log(`🏆 Team selected: ${team.city} ${team.name}`);
+    this.selectedTeam = team;
+    
+    // Update UI with team colors
+    document.documentElement.style.setProperty('--team-primary', team.primaryColor);
+    document.documentElement.style.setProperty('--team-secondary', team.secondaryColor);
+    
+    // Start new game with selected team
+    this.startNewGame();
+  }
+  
+  private applyTeamToGameState(team: MLBTeam): void {
+    // Apply team roster to game state
+    if (this.gameState) {
+      // Set team name and colors
+      (this.gameState as any).homeTeam = {
+        name: team.name,
+        city: team.city,
+        abbreviation: team.abbreviation,
+        primaryColor: team.primaryColor,
+        secondaryColor: team.secondaryColor,
+        roster: team.roster
+      };
+      
+      // Set starting lineup (first 9 position players)
+      const lineup = team.roster
+        .filter(p => !['SP', 'RP', 'CP', 'P'].includes(p.position))
+        .slice(0, 9);
+      
+      (this.gameState as any).homeLineup = lineup;
+      
+      // Set starting pitcher
+      const pitcher = team.roster.find(p => p.position === 'SP') || team.roster[0];
+      (this.gameState as any).currentPitcher = pitcher.name;
+      
+      // Set first batter
+      if (lineup.length > 0) {
+        (this.gameState as any).currentBatter = lineup[0].name;
+      }
+      
+      console.log(`📋 Lineup set with ${lineup.length} players`);
+      console.log(`⚾ Starting pitcher: ${pitcher.name}`);
+    }
   }
 
   private handleSwing(result: any): void {
@@ -213,6 +306,11 @@ class OGRemasterGame {
       // Check if it was a strikeout
       if (this.gameState.strikes >= 3) {
         this.audioEngine.onStrikeout();
+        
+        // Detect strikeout highlight
+        this.replaySystem.startRecording();
+        this.replaySystem.detectHighlight(this.gameState, 'strikeout');
+        setTimeout(() => this.replaySystem.stopRecording(), 3000);
       }
     }
   }
@@ -258,6 +356,11 @@ class OGRemasterGame {
 
     // Update game state
     this.gameState.update();
+    
+    // Capture frame for replay system
+    if (this.replaySystem) {
+      this.replaySystem.captureFrame(this.gameState);
+    }
     
     // Check for game end
     if (this.gameState.gamePhase === 'complete') {
