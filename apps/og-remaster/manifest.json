@@ -1,0 +1,105 @@
+{
+  "name": "Blaze Intelligence - OG Remaster Baseball",
+  "short_name": "OG Baseball",
+  "description": "Championship baseball reimagined - Backyard Baseball meets Blaze Intelligence. Offline-ready arcade baseball game with Texas heritage design.",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "landscape-primary",
+  "theme_color": "#BF5700",
+  "background_color": "#6ab150",
+  "scope": "./",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["games", "sports", "entertainment", "arcade"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "../../icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "../../icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "../../icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "../../icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../../icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "./assets/screenshots/og-gameplay.png",
+      "sizes": "1024x768",
+      "type": "image/png",
+      "label": "OG Remaster - Backyard Baseball Style"
+    },
+    {
+      "src": "./assets/screenshots/og-characters.png",
+      "sizes": "1024x768",
+      "type": "image/png",
+      "label": "Texas Kids Baseball Teams"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Quick Play",
+      "short_name": "Quick",
+      "description": "Jump into instant baseball action",
+      "url": "./index.html?mode=quick",
+      "icons": [
+        {
+          "src": "../../icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Sandlot Mode",
+      "short_name": "Sandlot",
+      "description": "Draft teams and customize rules",
+      "url": "./index.html?mode=sandlot",
+      "icons": [
+        {
+          "src": "../../icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Season Lite",
+      "short_name": "Season",
+      "description": "Championship tournament mode",
+      "url": "./index.html?mode=season",
+      "icons": [
+        {
+          "src": "../../icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "features": [
+    "offline-play",
+    "cross-device",
+    "gamepad-support",
+    "touch-controls"
+  ]
+}
