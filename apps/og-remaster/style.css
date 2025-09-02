@@ -1,247 +1,47 @@
 @import "./brand.css";
 @import "./typography.css";
 
-:root { 
-  --ui-pad: 16px; 
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,body {
+/* Base resets */
+html, body {
   margin: 0;
-  padding: 0;
   height: 100%;
   background: var(--og-bg);
   font-family: var(--bi-font-secondary);
   color: var(--og-ui-text);
-  overflow: hidden;
 }
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #6ab150 0%, #5ba143 100%);
-}
-
+/* Canvas style: center and outline */
 canvas#gameCanvas {
   display: block;
   margin: 0 auto;
-  max-width: 100vw;
-  max-height: 100vh;
-  border: 4px solid var(--bi-graphite);
-  border-radius: 12px;
-  box-shadow: 
-    0 8px 32px rgba(0,0,0,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.1);
+  max-width: 100%;
+  outline: 2px solid var(--bi-platinum);
   background: radial-gradient(1200px 800px at 50% 50%, #78c261, var(--og-field));
 }
 
+/* Generic UI card for future use */
 .ui-card {
   position: absolute;
-  top: 20px; 
+  top: 20px;
   left: 20px;
   background: var(--og-ui-bg);
-  padding: var(--ui-pad);
+  padding: 16px;
   border-radius: 12px;
   border: 1px solid color-mix(in oklab, var(--bi-pearl) 30%, transparent);
   backdrop-filter: blur(3px);
-  font-family: var(--bi-font-secondary);
 }
 
+/* Button styling for menus */
 .button {
   font-family: var(--bi-font-primary);
   font-weight: 600;
-  letter-spacing: 0.4px;
+  letter-spacing: .4px;
   background: var(--bi-burnt-orange);
   color: white;
   border: none;
-  padding: 12px 16px;
+  padding: 10px 14px;
   border-radius: 10px;
-  cursor: pointer;
-  transition: 
-    transform 0.15s var(--bi-ease), 
-    filter 0.2s var(--bi-ease),
-    box-shadow 0.2s var(--bi-ease);
-  box-shadow: 0 2px 8px rgba(191, 87, 0, 0.3);
+  transition: transform .15s var(--bi-ease), filter .2s var(--bi-ease);
 }
-
-.button:hover { 
-  filter: brightness(1.1); 
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(191, 87, 0, 0.4);
-}
-
-.button:active { 
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(191, 87, 0, 0.3);
-}
-
-.button.secondary {
-  background: var(--bi-teal);
-  box-shadow: 0 2px 8px rgba(0, 178, 169, 0.3);
-}
-
-.button.secondary:hover {
-  box-shadow: 0 4px 16px rgba(0, 178, 169, 0.4);
-}
-
-/* Loading screen enhancements */
-#loadingScreen {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--bi-burnt-orange), #FF8C00);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-family: var(--bi-font-primary);
-  font-size: 24px;
-  font-weight: 600;
-  z-index: 1000;
-  transition: opacity 0.5s var(--bi-ease);
-}
-
-#loadingScreen.fade-out {
-  opacity: 0;
-  pointer-events: none;
-}
-
-#loadingSpinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid rgba(255,255,255,0.3);
-  border-top: 5px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 20px;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.hidden {
-  display: none !important;
-}
-
-/* Mobile controls styling */
-#mobileControls {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 16px;
-  z-index: 100;
-  padding: 12px;
-  background: var(--og-ui-bg);
-  backdrop-filter: blur(8px);
-  border-radius: 16px;
-  border: 1px solid color-mix(in oklab, var(--bi-pearl) 20%, transparent);
-}
-
-#mobileControls .button {
-  font-size: 16px;
-  padding: 12px 20px;
-  min-width: 80px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Texas Heritage Accent Elements */
-.texas-accent::before {
-  content: "★";
-  color: var(--bi-burnt-orange);
-  margin-right: 8px;
-  font-size: 1.2em;
-}
-
-.championship-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  background: linear-gradient(135deg, var(--bi-burnt-orange), #FF8C00);
-  color: white;
-  border-radius: 20px;
-  font-family: var(--bi-font-primary);
-  font-weight: 600;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  #gameCanvas {
-    width: 100vw;
-    height: 60vh;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-  }
-  
-  .ui-card {
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    padding: 12px;
-  }
-  
-  #mobileControls {
-    bottom: 10px;
-    gap: 12px;
-  }
-  
-  #mobileControls .button {
-    padding: 10px 16px;
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  #loadingScreen {
-    font-size: 18px;
-  }
-  
-  #loadingSpinner {
-    width: 40px;
-    height: 40px;
-    border-width: 4px;
-  }
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .button {
-    border: 2px solid currentColor;
-  }
-  
-  #gameCanvas {
-    border-width: 6px;
-  }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  
-  #loadingSpinner {
-    animation: none;
-    border-top-color: var(--bi-burnt-orange);
-  }
-}
+.button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.button:active { transform: translateY(0); }

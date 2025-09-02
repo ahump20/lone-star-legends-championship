@@ -11,7 +11,7 @@
   --bi-font-secondary:"Inter","Helvetica Neue",Arial,sans-serif;
   --bi-font-mono:"JetBrains Mono",ui-monospace,Consolas,Monaco,monospace;
 
-  --bi-ease:cubic-bezier(0.4, 0, 0.2, 1);
+  --bi-ease:Cubic-bezier(0.4, 0, 0.2, 1);
 
   /* OG mode derived tokens */
   --og-bg: var(--bi-platinum);

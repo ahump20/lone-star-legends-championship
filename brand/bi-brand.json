@@ -110,7 +110,7 @@
     },
     "experientialElements": {
       "motion": {
-        "transitions": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "transitions": "Cubic-bezier(0.4, 0, 0.2, 1)",
         "microInteractions": "Subtle pulse on data updates",
         "loadingStates": "Progressive reveal with orange gradient"
       },

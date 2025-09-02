@@ -1,97 +1,58 @@
 {
   "kids": [
-    { "name": "Ace",    "speed": 8, "contact": 6, "power": 5, "arm": 7, "fielding": 6, "palette": "burnt-orange", "position": "P",  "nickname": "The Flame", "hometown": "Austin, TX" },
-    { "name": "Skye",   "speed": 6, "contact": 8, "power": 4, "arm": 6, "fielding": 7, "palette": "sky-blue",    "position": "CF", "nickname": "Cardinal", "hometown": "St. Louis, MO" },
-    { "name": "Tex",    "speed": 5, "contact": 6, "power": 8, "arm": 7, "fielding": 5, "palette": "navy",        "position": "1B", "nickname": "The Titan", "hometown": "Nashville, TN" },
-    { "name": "Nova",   "speed": 7, "contact": 5, "power": 6, "arm": 6, "fielding": 8, "palette": "teal",        "position": "SS", "nickname": "Grizzly", "hometown": "Memphis, TN" },
-    { "name": "Blaze",  "speed": 9, "contact": 7, "power": 3, "arm": 5, "fielding": 6, "palette": "burnt-orange", "position": "LF", "nickname": "Lightning", "hometown": "Houston, TX" },
-    { "name": "Scout",  "speed": 4, "contact": 9, "power": 7, "arm": 8, "fielding": 4, "palette": "sky-blue",    "position": "C",  "nickname": "The Eye", "hometown": "Columbia, MO" },
-    { "name": "Ranger", "speed": 6, "contact": 4, "power": 9, "arm": 9, "fielding": 6, "palette": "navy",        "position": "RF", "nickname": "Cannon", "hometown": "Knoxville, TN" },
-    { "name": "River",  "speed": 8, "contact": 6, "power": 5, "arm": 4, "fielding": 9, "palette": "teal",        "position": "2B", "nickname": "The Wall", "hometown": "Vancouver, BC" },
-    { "name": "Sage",   "speed": 5, "contact": 8, "power": 6, "arm": 7, "fielding": 7, "palette": "burnt-orange", "position": "3B", "nickname": "The Wise", "hometown": "Dallas, TX" },
-    { "name": "Storm",  "speed": 7, "contact": 5, "power": 8, "arm": 6, "fielding": 5, "palette": "sky-blue",    "position": "DH", "nickname": "Thunder", "hometown": "Kansas City, MO" },
-    { "name": "Ridge",  "speed": 6, "contact": 7, "power": 4, "arm": 8, "fielding": 8, "palette": "navy",        "position": "P",  "nickname": "Mountain", "hometown": "Chattanooga, TN" },
-    { "name": "Bay",    "speed": 8, "contact": 6, "power": 6, "arm": 5, "fielding": 7, "palette": "teal",        "position": "CF", "nickname": "Breeze", "hometown": "Seattle, WA" }
+    {
+      "name": "Ace",
+      "speed": 8,
+      "contact": 6,
+      "power": 5,
+      "arm": 7,
+      "fielding": 6,
+      "palette": "burnt-orange"
+    },
+    {
+      "name": "Skye",
+      "speed": 6,
+      "contact": 8,
+      "power": 4,
+      "arm": 6,
+      "fielding": 7,
+      "palette": "sky-blue"
+    },
+    {
+      "name": "Tex",
+      "speed": 5,
+      "contact": 6,
+      "power": 8,
+      "arm": 7,
+      "fielding": 5,
+      "palette": "navy"
+    },
+    {
+      "name": "Nova",
+      "speed": 7,
+      "contact": 5,
+      "power": 6,
+      "arm": 6,
+      "fielding": 8,
+      "palette": "teal"
+    }
   ],
   "palettes": {
-    "burnt-orange": { 
-      "primary": "#BF5700", 
-      "secondary": "#E5E4E2",
-      "accent": "#FF8C00",
-      "name": "Texas Heritage"
+    "burnt-orange": {
+      "primary": "var(--bi-burnt-orange)",
+      "secondary": "var(--bi-platinum)"
     },
-    "sky-blue": { 
-      "primary": "#9BCBEB", 
-      "secondary": "#36454F",
-      "accent": "#87CEEB",
-      "name": "Cardinal Clarity" 
+    "sky-blue": {
+      "primary": "var(--bi-sky-blue)",
+      "secondary": "var(--bi-graphite)"
     },
-    "navy": { 
-      "primary": "#002244", 
-      "secondary": "#FAFAFA",
-      "accent": "#4682B4",
-      "name": "Tennessee Deep" 
+    "navy": {
+      "primary": "var(--bi-navy)",
+      "secondary": "var(--bi-pearl)"
     },
-    "teal": { 
-      "primary": "#00B2A9", 
-      "secondary": "#FAFAFA",
-      "accent": "#20B2AA",
-      "name": "Grizzly Innovation" 
-    }
-  },
-  "teams": [
-    {
-      "name": "Texas Legends",
-      "kids": ["Ace", "Blaze", "Sage"],
-      "colors": ["burnt-orange"],
-      "mascot": "Longhorn",
-      "stadium": "Lone Star Field"
-    },
-    {
-      "name": "Cardinal Scouts",
-      "kids": ["Skye", "Scout", "Storm"],
-      "colors": ["sky-blue"],
-      "mascot": "Redbird",
-      "stadium": "Gateway Diamond"
-    },
-    {
-      "name": "Tennessee Titans",
-      "kids": ["Tex", "Ranger", "Ridge"],
-      "colors": ["navy"],
-      "mascot": "Titan",
-      "stadium": "Music City Park"
-    },
-    {
-      "name": "Pacific Grizzlies", 
-      "kids": ["Nova", "River", "Bay"],
-      "colors": ["teal"],
-      "mascot": "Grizzly Bear",
-      "stadium": "Northwest Grove"
-    }
-  ],
-  "specialties": {
-    "speed": ["Blaze", "Bay", "Nova"],
-    "power": ["Tex", "Ranger", "Storm"],
-    "contact": ["Scout", "Sage", "Ridge"],
-    "defense": ["River", "Nova", "Ridge"],
-    "clutch": ["Ace", "Skye", "Sage"]
-  },
-  "animations": {
-    "batting": {
-      "frames": 6,
-      "sequence": ["setup", "load", "swing", "contact", "follow", "finish"]
-    },
-    "pitching": {
-      "frames": 8,
-      "sequence": ["windup", "lift", "stride", "arm", "release", "follow1", "follow2", "reset"]
-    },
-    "fielding": {
-      "frames": 4,
-      "sequence": ["ready", "move", "glove", "throw"]
-    },
-    "running": {
-      "frames": 4,
-      "sequence": ["push", "stride1", "stride2", "stride3"]
+    "teal": {
+      "primary": "var(--bi-teal)",
+      "secondary": "var(--bi-pearl)"
     }
   }
 }

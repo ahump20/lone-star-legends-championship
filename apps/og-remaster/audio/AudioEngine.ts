@@ -1,7 +1,10 @@
 /**
  * Arcade-Style Audio Engine
  * Handles SFX, commentary, and background music with Blaze Intelligence polish
+ * Integrates with AudioBus for simple audio playback
  */
+
+import { AudioBus } from './index';
 
 interface AudioClip {
   id: string;
@@ -47,6 +50,7 @@ interface AudioManifest {
 }
 
 export class AudioEngine {
+  private audioBus: AudioBus;
   private sfxBank = new Map<string, AudioClip>();
   private commentaryBank = new Map<string, CommentaryClip>();
   private musicBank = new Map<string, AudioClip>();
@@ -61,6 +65,7 @@ export class AudioEngine {
   private audioContext: AudioContext | null = null;
 
   constructor() {
+    this.audioBus = new AudioBus();
     this.initializeAudioContext();
   }
 
@@ -87,8 +92,19 @@ export class AudioEngine {
     if (this.isInitialized) return;
     
     try {
-      const manifestResponse = await fetch('./assets/audio/manifest.json');
-      const manifest: AudioManifest = await manifestResponse.json();
+      // First try to load manifest, fall back to AudioBus if needed
+      let manifest: AudioManifest | null = null;
+      try {
+        const manifestResponse = await fetch('./assets/audio/manifest.json');
+        manifest = await manifestResponse.json();
+      } catch (e) {
+        // If manifest doesn't exist, use AudioBus with default sounds
+        console.log('Using AudioBus for audio loading');
+        const defaultSounds = ['hit.wav', 'catch.wav', 'cheer.wav', 'strike.wav'];
+        await this.audioBus.load(defaultSounds);
+      }
+      
+      if (manifest) {
       
       console.log('🎵 Loading Blaze Intelligence Audio System...');
       
