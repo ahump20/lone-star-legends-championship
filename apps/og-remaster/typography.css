@@ -1,0 +1,10 @@
+/* Inter + JetBrains Mono (self-host or via CDN as you prefer) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+/* Neue Haas Grotesk Display is commercial; declare family to prefer it if present. */
+:root {
+  --bi-font-primary: "Neue Haas Grotesk Display","Inter","Helvetica Neue",Arial,sans-serif;
+  --bi-font-secondary: "Inter","Helvetica Neue",Arial,sans-serif;
+  --bi-font-mono: "JetBrains Mono",ui-monospace,Consolas,Monaco,monospace;
+}

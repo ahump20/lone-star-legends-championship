@@ -1,0 +1,53 @@
+{
+  "name": "Scout",
+  "width": 128,
+  "height": 128,
+  "frames": {
+    "batting": {
+      "x": 0,
+      "y": 0,
+      "frames": 6,
+      "width": 32,
+      "height": 32
+    },
+    "pitching": {
+      "x": 0,
+      "y": 32,
+      "frames": 8,
+      "width": 32,
+      "height": 32
+    },
+    "fielding": {
+      "x": 0,
+      "y": 64,
+      "frames": 4,
+      "width": 32,
+      "height": 32
+    },
+    "running": {
+      "x": 0,
+      "y": 96,
+      "frames": 4,
+      "width": 32,
+      "height": 32
+    }
+  },
+  "palette": {
+    "primary": "#9BCBEB",
+    "secondary": "#36454F",
+    "accent": "#87CEEB",
+    "name": "Cardinal Clarity"
+  },
+  "kid": {
+    "name": "Scout",
+    "speed": 4,
+    "contact": 9,
+    "power": 7,
+    "arm": 8,
+    "fielding": 4,
+    "palette": "sky-blue",
+    "position": "C",
+    "nickname": "The Eye",
+    "hometown": "Columbia, MO"
+  }
+}

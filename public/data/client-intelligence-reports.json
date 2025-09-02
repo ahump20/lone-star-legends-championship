@@ -1,9 +1,9 @@
 {
   "reports": {
-    "b5be104e-101f-43c7-97a0-50f065144521": {
-      "client_id": "b5be104e-101f-43c7-97a0-50f065144521",
+    "016fbac9-8ef7-4d74-b39e-9c9e48124585": {
+      "client_id": "016fbac9-8ef7-4d74-b39e-9c9e48124585",
       "client_name": "St. Louis Cardinals",
-      "report_date": "2025-08-24T16:08:03.952079",
+      "report_date": "2025-08-24T17:05:33.454389",
       "executive_summary": "Intelligence analysis reveals 3 high-impact opportunities for St. Louis Cardinals across key operational areas.",
       "insights": [
         {
@@ -34,9 +34,9 @@
       },
       "roi_analysis": {
         "monthly_investment": 85000,
-        "projected_annual_value": 3724773.4354561223,
-        "roi_multiple": 5.9,
-        "payback_period": "4 months"
+        "projected_annual_value": 5075907.663638825,
+        "roi_multiple": 5.1,
+        "payback_period": "5 months"
       },
       "next_actions": [
         "Schedule executive briefing on high-priority insights",
@@ -45,10 +45,10 @@
         "Plan expanded intelligence integration"
       ]
     },
-    "d2f0fb8b-1b60-44d6-9c48-7c9e7bb0b9bc": {
-      "client_id": "d2f0fb8b-1b60-44d6-9c48-7c9e7bb0b9bc",
+    "41f8cec8-13c0-4aea-9c23-74bd67e608e0": {
+      "client_id": "41f8cec8-13c0-4aea-9c23-74bd67e608e0",
       "client_name": "Tennessee Titans",
-      "report_date": "2025-08-24T16:08:03.952110",
+      "report_date": "2025-08-24T17:05:33.454438",
       "executive_summary": "Intelligence analysis reveals 2 high-impact opportunities for Tennessee Titans across key operational areas.",
       "insights": [
         {
@@ -73,8 +73,8 @@
       },
       "roi_analysis": {
         "monthly_investment": 95000,
-        "projected_annual_value": 8738268.576003883,
-        "roi_multiple": 3.9,
+        "projected_annual_value": 4211150.523426829,
+        "roi_multiple": 5.6,
         "payback_period": "3 months"
       },
       "next_actions": [
@@ -84,10 +84,10 @@
         "Plan expanded intelligence integration"
       ]
     },
-    "04c625f1-b4bc-4121-9d0a-b00f383197d3": {
-      "client_id": "04c625f1-b4bc-4121-9d0a-b00f383197d3",
+    "0ec004ca-868c-4506-aee6-67456c0a4115": {
+      "client_id": "0ec004ca-868c-4506-aee6-67456c0a4115",
       "client_name": "University of Texas Athletics",
-      "report_date": "2025-08-24T16:08:03.952130",
+      "report_date": "2025-08-24T17:05:33.454451",
       "executive_summary": "Intelligence analysis reveals 2 high-impact opportunities for University of Texas Athletics across key operational areas.",
       "insights": [
         {
@@ -112,9 +112,9 @@
       },
       "roi_analysis": {
         "monthly_investment": 25000,
-        "projected_annual_value": 2367930.751300325,
-        "roi_multiple": 4.5,
-        "payback_period": "6 months"
+        "projected_annual_value": 1225679.8292402292,
+        "roi_multiple": 7.1,
+        "payback_period": "3 months"
       },
       "next_actions": [
         "Schedule executive briefing on high-priority insights",
@@ -123,10 +123,10 @@
         "Plan expanded intelligence integration"
       ]
     },
-    "1b8e8549-e4aa-4f12-9c12-8827c7360534": {
-      "client_id": "1b8e8549-e4aa-4f12-9c12-8827c7360534",
+    "fd525dbd-3787-4a5f-bb21-fb3284725023": {
+      "client_id": "fd525dbd-3787-4a5f-bb21-fb3284725023",
       "client_name": "Memphis Grizzlies",
-      "report_date": "2025-08-24T16:08:03.952142",
+      "report_date": "2025-08-24T17:05:33.454459",
       "executive_summary": "Intelligence analysis reveals 2 high-impact opportunities for Memphis Grizzlies across key operational areas.",
       "insights": [
         {
@@ -151,8 +151,8 @@
       },
       "roi_analysis": {
         "monthly_investment": 75000,
-        "projected_annual_value": 6603504.553296892,
-        "roi_multiple": 4.2,
+        "projected_annual_value": 3406331.0244326545,
+        "roi_multiple": 4.6,
         "payback_period": "6 months"
       },
       "next_actions": [
@@ -162,10 +162,10 @@
         "Plan expanded intelligence integration"
       ]
     },
-    "18e78fd2-0e9d-46b3-a310-aec6e123e47a": {
-      "client_id": "18e78fd2-0e9d-46b3-a310-aec6e123e47a",
+    "64dd25ce-d559-44f3-924b-50b5a991dca8": {
+      "client_id": "64dd25ce-d559-44f3-924b-50b5a991dca8",
       "client_name": "CAA Sports Agency",
-      "report_date": "2025-08-24T16:08:03.952147",
+      "report_date": "2025-08-24T17:05:33.454465",
       "executive_summary": "Intelligence analysis reveals 1 high-impact opportunities for CAA Sports Agency across key operational areas.",
       "insights": [
         {
@@ -184,9 +184,9 @@
       },
       "roi_analysis": {
         "monthly_investment": 15000,
-        "projected_annual_value": 991066.2489071551,
-        "roi_multiple": 5.3,
-        "payback_period": "5 months"
+        "projected_annual_value": 995238.0012036755,
+        "roi_multiple": 5.9,
+        "payback_period": "3 months"
       },
       "next_actions": [
         "Schedule executive briefing on high-priority insights",
@@ -195,10 +195,10 @@
         "Plan expanded intelligence integration"
       ]
     },
-    "eae01d49-313e-4827-aca8-f4e4e2502f4c": {
-      "client_id": "eae01d49-313e-4827-aca8-f4e4e2502f4c",
+    "aa04fd76-838b-4fcd-9394-1743636a1420": {
+      "client_id": "aa04fd76-838b-4fcd-9394-1743636a1420",
       "client_name": "Elite Performance Institute",
-      "report_date": "2025-08-24T16:08:03.952150",
+      "report_date": "2025-08-24T17:05:33.454472",
       "executive_summary": "Intelligence analysis reveals 1 high-impact opportunities for Elite Performance Institute across key operational areas.",
       "insights": [
         {
@@ -217,9 +217,9 @@
       },
       "roi_analysis": {
         "monthly_investment": 8000,
-        "projected_annual_value": 472825.7044181122,
-        "roi_multiple": 4.2,
-        "payback_period": "4 months"
+        "projected_annual_value": 461799.7964544021,
+        "roi_multiple": 4.8,
+        "payback_period": "6 months"
       },
       "next_actions": [
         "Schedule executive briefing on high-priority insights",
@@ -229,6 +229,6 @@
       ]
     }
   },
-  "generated_at": "2025-08-24T16:08:03.952240",
+  "generated_at": "2025-08-24T17:05:33.455089",
   "total_reports": 6
 }

@@ -1,0 +1,53 @@
+{
+  "name": "Tex",
+  "width": 128,
+  "height": 128,
+  "frames": {
+    "batting": {
+      "x": 0,
+      "y": 0,
+      "frames": 6,
+      "width": 32,
+      "height": 32
+    },
+    "pitching": {
+      "x": 0,
+      "y": 32,
+      "frames": 8,
+      "width": 32,
+      "height": 32
+    },
+    "fielding": {
+      "x": 0,
+      "y": 64,
+      "frames": 4,
+      "width": 32,
+      "height": 32
+    },
+    "running": {
+      "x": 0,
+      "y": 96,
+      "frames": 4,
+      "width": 32,
+      "height": 32
+    }
+  },
+  "palette": {
+    "primary": "#002244",
+    "secondary": "#FAFAFA",
+    "accent": "#4682B4",
+    "name": "Tennessee Deep"
+  },
+  "kid": {
+    "name": "Tex",
+    "speed": 5,
+    "contact": 6,
+    "power": 8,
+    "arm": 7,
+    "fielding": 5,
+    "palette": "navy",
+    "position": "1B",
+    "nickname": "The Titan",
+    "hometown": "Nashville, TN"
+  }
+}

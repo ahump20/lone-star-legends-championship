@@ -1,0 +1,508 @@
+[
+  {
+    "name": "Scout_bat_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "batting",
+      "frame": 0,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_bat_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "batting",
+      "frame": 1,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_bat_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "batting",
+      "frame": 2,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_bat_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "batting",
+      "frame": 3,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_bat_4",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "batting",
+      "frame": 4,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_bat_5",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "batting",
+      "frame": 5,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_pitch_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "pitching",
+      "frame": 0,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_pitch_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "pitching",
+      "frame": 1,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_pitch_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "pitching",
+      "frame": 2,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_pitch_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "pitching",
+      "frame": 3,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_pitch_4",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "pitching",
+      "frame": 4,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_pitch_5",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "pitching",
+      "frame": 5,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_pitch_6",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "pitching",
+      "frame": 6,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_pitch_7",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "pitching",
+      "frame": 7,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_field_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "fielding",
+      "frame": 0,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_field_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "fielding",
+      "frame": 1,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_field_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "fielding",
+      "frame": 2,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_field_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "fielding",
+      "frame": 3,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_run_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "running",
+      "frame": 0,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_run_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "running",
+      "frame": 1,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_run_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "running",
+      "frame": 2,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  },
+  {
+    "name": "Scout_run_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Scout",
+      "animation": "running",
+      "frame": 3,
+      "colors": {
+        "primary": "#9BCBEB",
+        "secondary": "#36454F",
+        "accent": "#87CEEB",
+        "name": "Cardinal Clarity"
+      },
+      "stats": {
+        "speed": 4,
+        "contact": 9,
+        "power": 7,
+        "arm": 8,
+        "fielding": 4
+      }
+    }
+  }
+]

@@ -1,0 +1,161 @@
+{
+  "blazeIntelligence": {
+    "brandIdentity": {
+      "corePillars": {
+        "heritage": "Texas as a state of mind: scale, grit, and pride fused with modern innovation",
+        "integrity": "Unwavering moral compass in data-driven decisions",
+        "sophistication": "Executive-level refinement with athletic edge"
+      },
+      "missionStatement": "Pioneering sports intelligence through Texas-inspired innovation, frontier daring, and uncompromising integrity"
+    },
+    "colorPalette": {
+      "primary": {
+        "texasLegacy": {
+          "hex": "#BF5700",
+          "name": "Burnt Orange Heritage",
+          "psychology": "Confidence, tradition, Texas as state of mind",
+          "usage": "Primary brand identifier, headers, CTAs"
+        },
+        "cardinalClarity": {
+          "hex": "#9BCBEB",
+          "name": "Cardinal Sky Blue",
+          "psychology": "Trust, precision, championship mentality",
+          "usage": "Data visualizations, secondary accents"
+        }
+      },
+      "secondary": {
+        "oilerNavy": {
+          "hex": "#002244",
+          "name": "Tennessee Deep",
+          "psychology": "Authority, depth, analytical prowess",
+          "usage": "Text, technical documentation"
+        },
+        "grizzlyTeal": {
+          "hex": "#00B2A9",
+          "name": "Vancouver Throwback Teal",
+          "psychology": "Innovation, fresh perspective, Pacific Northwest tech",
+          "usage": "Highlights, interactive elements"
+        }
+      },
+      "supporting": {
+        "platinum": "#E5E4E2",
+        "graphite": "#36454F",
+        "pearl": "#FAFAFA"
+      }
+    },
+    "typography": {
+      "primary": {
+        "family": "Neue Haas Grotesk Display",
+        "weights": ["Medium", "Bold", "Black"],
+        "usage": "Headlines, brand statements"
+      },
+      "secondary": {
+        "family": "Inter",
+        "weights": ["Regular", "Medium", "Semibold"],
+        "usage": "Body text, UI elements"
+      },
+      "technical": {
+        "family": "JetBrains Mono",
+        "weights": ["Regular", "Bold"],
+        "usage": "Data displays, code snippets, statistics"
+      }
+    },
+    "visualLanguage": {
+      "designPrinciples": {
+        "geometric": "Sharp angles meeting fluid data curves",
+        "layering": "Transparent overlays suggesting depth of analysis",
+        "grid": "12-column system with golden ratio proportions"
+      },
+      "iconography": {
+        "style": "Outlined with selective fills",
+        "strokeWidth": "2px consistent",
+        "corners": "4px radius for approachability"
+      },
+      "dataVisualization": {
+        "charts": "Gradient overlays using primary palette",
+        "animations": "Smooth 400ms easing transitions",
+        "interactions": "Hover states with +10% brightness"
+      }
+    },
+    "packagingDesign": {
+      "physical": {
+        "materials": "Soft-touch matte with spot UV accents",
+        "structure": "Magnetic closure boxes with foam inserts",
+        "sustainability": "FSC-certified, 80% post-consumer recycled"
+      },
+      "digital": {
+        "containers": "Glassmorphic cards with subtle shadows",
+        "borders": "1px burnt orange on hover/focus",
+        "spacing": "8px base unit system"
+      }
+    },
+    "brandApplications": {
+      "sportstech": {
+        "interface": {
+          "dashboards": "Dark mode default with burnt orange accents",
+          "analytics": "Real-time data streams in cardinal blue",
+          "predictions": "AI-powered insights highlighted in teal"
+        },
+        "hardware": {
+          "sensors": "Matte graphite with orange LED indicators",
+          "wearables": "Premium leather/fabric bands in brand colors",
+          "displays": "Edge-to-edge glass with minimal bezels"
+        }
+      },
+      "marketing": {
+        "positioning": "Texas as state of mind meets Silicon Valley innovation",
+        "tagline": "Intelligence. Integrity. Innovation.",
+        "voiceTone": "Confident, precise, frontier daring"
+      }
+    },
+    "experientialElements": {
+      "motion": {
+        "transitions": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "microInteractions": "Subtle pulse on data updates",
+        "loadingStates": "Progressive reveal with orange gradient"
+      },
+      "sound": {
+        "notifications": "Crisp, minimal tones in C major",
+        "achievements": "Ascending three-note progression",
+        "alerts": "Distinct but non-intrusive dual tone"
+      },
+      "haptics": {
+        "feedback": "Light tap for selections",
+        "confirmation": "Double pulse for completions",
+        "warnings": "Extended vibration pattern"
+      }
+    },
+    "targetAesthetic": {
+      "keywords": [
+        "Executive Athletic",
+        "Heritage Tech",
+        "Premium Performance",
+        "Data Elegance",
+        "Texas State of Mind"
+      ],
+      "avoidance": [
+        "Rural imagery",
+        "Overly casual elements",
+        "Generic tech clichés",
+        "Dated sports metaphors"
+      ],
+      "inspiration": {
+        "brands": ["Palantir", "Formula 1", "Bloomberg Terminal", "Nike Elite"],
+        "eras": ["90s sports excellence", "Modern fintech", "Texas oil boom sophistication"]
+      }
+    },
+    "implementation": {
+      "platforms": {
+        "web": "Responsive, WebGL-enhanced experiences",
+        "mobile": "Native performance with Flutter/React Native",
+        "ar": "Spatial computing ready for Vision Pro",
+        "broadcast": "Broadcast-grade graphics packages"
+      },
+      "accessibility": {
+        "wcag": "AAA compliance on all text",
+        "colorBlind": "Patterns and shapes supplement color",
+        "motion": "Reduced motion options available"
+      }
+    }
+  }
+}

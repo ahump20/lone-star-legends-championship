@@ -1,0 +1,128 @@
+{
+  "version": "1.0.0",
+  "sfx": [
+    {
+      "id": "bat_ping",
+      "file": "bat_ping.wav",
+      "volume": 0.8,
+      "category": "gameplay",
+      "description": "Satisfying bat contact sound"
+    },
+    {
+      "id": "glove_thump", 
+      "file": "glove_thump.wav",
+      "volume": 0.7,
+      "category": "gameplay",
+      "description": "Ball hitting glove"
+    },
+    {
+      "id": "crowd_ooh",
+      "file": "crowd_ooh.wav", 
+      "volume": 0.6,
+      "category": "atmosphere",
+      "description": "Crowd anticipation"
+    },
+    {
+      "id": "crowd_ahh",
+      "file": "crowd_ahh.wav",
+      "volume": 0.6,
+      "category": "atmosphere", 
+      "description": "Crowd disappointment"
+    },
+    {
+      "id": "crowd_cheer",
+      "file": "crowd_cheer.wav",
+      "volume": 0.8,
+      "category": "atmosphere",
+      "description": "Crowd celebration"
+    },
+    {
+      "id": "error_oops",
+      "file": "error_oops.wav",
+      "volume": 0.5,
+      "category": "gameplay",
+      "description": "Playful error sound"
+    },
+    {
+      "id": "whistle_play",
+      "file": "whistle_play.wav",
+      "volume": 0.7,
+      "category": "gameplay",
+      "description": "Start of play whistle"
+    },
+    {
+      "id": "coin_pickup",
+      "file": "coin_pickup.wav",
+      "volume": 0.6,
+      "category": "ui",
+      "description": "Achievement unlock sound"
+    }
+  ],
+  "commentary": [
+    {
+      "id": "nice_hit",
+      "files": ["nice_hit_01.ogg", "nice_hit_02.ogg", "nice_hit_03.ogg"],
+      "volume": 0.9,
+      "category": "positive",
+      "triggers": ["single", "double", "good_contact"]
+    },
+    {
+      "id": "big_hit",
+      "files": ["big_rip_01.ogg", "big_rip_02.ogg", "what_a_shot_01.ogg"],
+      "volume": 1.0,
+      "category": "exciting",
+      "triggers": ["triple", "homerun", "deep_fly"]
+    },
+    {
+      "id": "speed",
+      "files": ["wheels_01.ogg", "blazing_speed_01.ogg", "look_at_em_go_01.ogg"],
+      "volume": 0.8,
+      "category": "baserunning", 
+      "triggers": ["steal", "inside_park", "speed_display"]
+    },
+    {
+      "id": "defense",
+      "files": ["great_catch_01.ogg", "web_gem_01.ogg", "defensive_play_01.ogg"],
+      "volume": 0.9,
+      "category": "defensive",
+      "triggers": ["diving_catch", "double_play", "great_throw"]
+    },
+    {
+      "id": "strikeout",
+      "files": ["struck_him_out_01.ogg", "whiff_01.ogg", "got_em_looking_01.ogg"],
+      "volume": 0.8,
+      "category": "pitching",
+      "triggers": ["strikeout_swinging", "strikeout_looking"]
+    },
+    {
+      "id": "encouragement",
+      "files": ["way_to_go_01.ogg", "nice_try_01.ogg", "shake_it_off_01.ogg"],
+      "volume": 0.7,
+      "category": "supportive",
+      "triggers": ["error", "close_call", "good_effort"]
+    }
+  ],
+  "music": [
+    {
+      "id": "menu_theme",
+      "file": "backyard_dreams.ogg",
+      "volume": 0.4,
+      "loop": true,
+      "category": "ambient"
+    },
+    {
+      "id": "game_theme",
+      "file": "sandlot_summer.ogg", 
+      "volume": 0.3,
+      "loop": true,
+      "category": "ambient"
+    },
+    {
+      "id": "victory_theme",
+      "file": "championship_celebration.ogg",
+      "volume": 0.6,
+      "loop": false,
+      "category": "event"
+    }
+  ]
+}
