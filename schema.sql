@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
     organization_id TEXT,
     role TEXT DEFAULT 'member',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (organization_id) REFERENCES organizations(id)
+    FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS athletes (
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS athletes (
     sport TEXT NOT NULL,
     position TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (organization_id) REFERENCES organizations(id)
+    FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS cee_scores (
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS cee_scores (
     score REAL NOT NULL,
     confidence REAL NOT NULL,
     calculated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (athlete_id) REFERENCES athletes(id)
+    FOREIGN KEY (athlete_id) REFERENCES athletes(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE INDEX idx_athletes_org ON athletes(organization_id);
-CREATE INDEX idx_cee_scores_athlete ON cee_scores(athlete_id);
+CREATE INDEX IF NOT EXISTS idx_athletes_org ON athletes(organization_id);
+CREATE INDEX IF NOT EXISTS idx_cee_scores_athlete ON cee_scores(athlete_id);

@@ -1,0 +1,8 @@
+/* Critical CSS for above-the-fold content */
+:root{--blaze-orange:#FF6B35;--blaze-burnt:#CC5500;--blaze-deep:#001F3F;--blaze-midnight:#0A0A0A;--blaze-text:#FFFFFF;--blaze-muted:#A1A5AE}
+*{margin:0;padding:0;box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at center,#001F3F 0%,#0A0A0A 70%);color:var(--blaze-text);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-weight:400;line-height:1.6;overflow-x:hidden;position:relative}
+.topbar{position:fixed;top:0;width:100%;z-index:1000;background:rgba(10,10,10,0.98);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,107,53,0.15);padding:1rem 0}
+.nav-container{max-width:1400px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:0.75rem;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.4rem;color:var(--blaze-text);text-decoration:none;z-index:10}
+.hero-section{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;padding:6rem 0 2rem;z-index:5}

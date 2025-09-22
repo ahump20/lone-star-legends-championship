@@ -21,4 +21,18 @@ CACHE_TTL = "3600"
 [env.preview.vars]
 ENVIRONMENT = "preview"
 API_BASE_URL = "https://blaze-intelligence.pages.dev"
+API_VERSION = "v1"
 CACHE_TTL = "60"
+
+# KV Namespace bindings (uncomment and add IDs after creation)
+# [[kv_namespaces]]
+# binding = "ANALYTICS_KV"
+# id = "your_analytics_kv_id"
+
+# [[kv_namespaces]]
+# binding = "LEADS_KV" 
+# id = "your_leads_kv_id"
+
+# [[kv_namespaces]]
+# binding = "CONTENT_KV"
+# id = "your_content_kv_id"
