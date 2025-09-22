@@ -8,7 +8,7 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 
-const PROD_URL = 'https://fe5b775f.blaze-intelligence-lsl.pages.dev';
+const PROD_URL = process.env.PROD_URL || 'https://fe5b775f.blaze-intelligence-lsl.pages.dev';
 
 function exec(cmd, options = {}) {
     try {
