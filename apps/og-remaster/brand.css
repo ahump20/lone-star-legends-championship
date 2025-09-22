@@ -1,0 +1,24 @@
+:root{
+  --bi-burnt-orange:#BF5700;
+  --bi-sky-blue:#9BCBEB;
+  --bi-navy:#002244;
+  --bi-teal:#00B2A9;
+  --bi-platinum:#E5E4E2;
+  --bi-graphite:#36454F;
+  --bi-pearl:#FAFAFA;
+
+  --bi-font-primary:"Neue Haas Grotesk Display","Inter","Helvetica Neue",Arial,sans-serif;
+  --bi-font-secondary:"Inter","Helvetica Neue",Arial,sans-serif;
+  --bi-font-mono:"JetBrains Mono",ui-monospace,Consolas,Monaco,monospace;
+
+  --bi-ease:Cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* OG mode derived tokens */
+  --og-bg: var(--bi-platinum);
+  --og-field: #6ab150; /* sandlot green */
+  --og-dirt: #c49a6c;
+  --og-lines: var(--bi-pearl);
+  --og-ui-bg: rgba(0,0,0,0.65);
+  --og-ui-accent: var(--bi-burnt-orange);
+  --og-ui-text: var(--bi-pearl);
+}

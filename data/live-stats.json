@@ -1,0 +1,85 @@
+{
+  "lastUpdated": "2025-08-24T17:00:00Z",
+  "teams": {
+    "cardinals": {
+      "name": "St. Louis Cardinals",
+      "league": "MLB",
+      "division": "NL Central",
+      "record": { "wins": 71, "losses": 73 },
+      "stats": {
+        "runs_scored": 726,
+        "runs_allowed": 698,
+        "team_ops": 0.734,
+        "team_era": 4.21
+      },
+      "recent_games": [6, 4, 7, 3, 5],
+      "key_players": [
+        { "name": "Paul Goldschmidt", "avg": ".268", "hr": 22, "rbi": 80 },
+        { "name": "Nolan Arenado", "avg": ".272", "hr": 26, "rbi": 93 }
+      ]
+    },
+    "titans": {
+      "name": "Tennessee Titans",
+      "league": "NFL",
+      "division": "AFC South",
+      "record": { "wins": 3, "losses": 14 },
+      "stats": {
+        "points_for": 295,
+        "points_against": 479,
+        "total_yards": 4726,
+        "yards_allowed": 6234
+      },
+      "recent_games": [14, 21, 17, 24, 20],
+      "key_players": [
+        { "name": "Derrick Henry", "yards": 1167, "td": 12, "ypc": 4.2 },
+        { "name": "Will Levis", "yards": 3201, "td": 18, "int": 16 }
+      ]
+    },
+    "grizzlies": {
+      "name": "Memphis Grizzlies",
+      "league": "NBA",
+      "conference": "Western",
+      "record": { "wins": 27, "losses": 55 },
+      "stats": {
+        "ppg": 105.8,
+        "oppg": 118.4,
+        "fg_pct": 0.442,
+        "three_pct": 0.348
+      },
+      "recent_games": [98, 105, 102, 108, 106],
+      "key_players": [
+        { "name": "Jaren Jackson Jr.", "ppg": 22.5, "rpg": 5.5, "bpg": 1.6 },
+        { "name": "Desmond Bane", "ppg": 24.7, "rpg": 4.4, "apg": 5.5 }
+      ]
+    },
+    "longhorns": {
+      "name": "Texas Longhorns",
+      "league": "NCAA",
+      "conference": "SEC",
+      "record": { "wins": 12, "losses": 2 },
+      "stats": {
+        "ppg": 35.6,
+        "papg": 19.2,
+        "total_yards": 6234,
+        "ap_rank": 3
+      },
+      "recent_games": [35, 42, 28, 45, 38],
+      "key_players": [
+        { "name": "Quinn Ewers", "yards": 3479, "td": 31, "comp_pct": 69.2 },
+        { "name": "Jonathon Brooks", "yards": 1139, "td": 11, "ypc": 6.8 }
+      ]
+    }
+  },
+  "predictions": {
+    "accuracy": 94.6,
+    "total_predictions": 2847,
+    "correct": 2693,
+    "pending": 24
+  },
+  "system_metrics": {
+    "data_points_today": 2834567,
+    "response_time_ms": 87,
+    "uptime_percent": 99.98,
+    "active_models": 4
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "updated_at": "2025-08-24T15:38:49.234135",
+  "total_subscriptions": 2,
+  "subscriptions": {
+    "1ae32939-fb7a-4c15-9912-51c1085460ea": {
+      "client_id": "39bb3bfe-3eb0-43f6-9b37-251793ba3c7e",
+      "subscription_id": "1ae32939-fb7a-4c15-9912-51c1085460ea",
+      "plan_id": "elite",
+      "status": "trial",
+      "billing_cycle": "monthly",
+      "current_period_start": "2025-09-07T15:30:39.784030",
+      "current_period_end": "2025-10-07T15:30:39.784030",
+      "next_billing_date": "2025-10-07T15:30:39.784030",
+      "amount_due": 1297.0,
+      "trial_end": "2025-09-07T15:30:39.784030",
+      "usage_metrics": {
+        "video_analyses_used": 5,
+        "tell_detector_analyses_used": 3,
+        "real_time_coaching_minutes_used": 0,
+        "custom_training_programs_used": 0,
+        "api_calls_made": 0,
+        "storage_gb_used": 0
+      },
+      "payment_method": null,
+      "billing_address": null,
+      "created_at": "2025-08-24T15:30:39.784030",
+      "updated_at": "2025-08-24T15:30:39.824882"
+    },
+    "4c7c0298-11af-4167-be98-79b0160438d2": {
+      "client_id": "e6e64394-0eec-49d7-b762-1678afa87fd0",
+      "subscription_id": "4c7c0298-11af-4167-be98-79b0160438d2",
+      "plan_id": "elite",
+      "status": "trial",
+      "billing_cycle": "monthly",
+      "current_period_start": "2025-09-07T15:38:48.723460",
+      "current_period_end": "2025-10-07T15:38:48.723460",
+      "next_billing_date": "2025-10-07T15:38:48.723460",
+      "amount_due": 1297.0,
+      "trial_end": "2025-09-07T15:38:48.723460",
+      "usage_metrics": {
+        "video_analyses_used": 5,
+        "tell_detector_analyses_used": 3,
+        "real_time_coaching_minutes_used": 0,
+        "custom_training_programs_used": 0,
+        "api_calls_made": 0,
+        "storage_gb_used": 0
+      },
+      "payment_method": null,
+      "billing_address": null,
+      "created_at": "2025-08-24T15:38:48.723460",
+      "updated_at": "2025-08-24T15:38:48.729487"
+    }
+  }
+}

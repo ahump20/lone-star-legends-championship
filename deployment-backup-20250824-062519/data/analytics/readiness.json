@@ -1,0 +1,46 @@
+{
+  "team": "Cardinals",
+  "readiness": 87.3,
+  "leverage": 0.74,
+  "lastUpdated": "2025-08-24T18:05:32.304Z",
+  "gameDay": true,
+  "opponent": "Cubs",
+  "gameTime": "2025-08-24T19:15:00.000Z",
+  "factors": {
+    "recentPerformance": 89.2,
+    "playerHealth": 94.1,
+    "teamMorale": 85.7,
+    "weatherConditions": 82.5,
+    "homeFieldAdvantage": 88.0,
+    "pitchingRotation": 91.3,
+    "lineupOptimization": 86.8
+  },
+  "keyPlayers": [
+    {
+      "name": "Paul Goldschmidt",
+      "position": "1B",
+      "readiness": 92.1,
+      "status": "Ready"
+    },
+    {
+      "name": "Nolan Arenado", 
+      "position": "3B",
+      "readiness": 88.4,
+      "status": "Ready"
+    },
+    {
+      "name": "Jordan Walker",
+      "position": "OF",
+      "readiness": 85.2,
+      "status": "Caution"
+    }
+  ],
+  "recommendations": [
+    "Optimize batting order against left-handed pitching",
+    "Monitor Jordan Walker's minor injury status", 
+    "Leverage home field momentum early in game"
+  ],
+  "confidence": 94.6,
+  "source": "Cardinals Readiness Board Agent",
+  "version": "2.1"
+}

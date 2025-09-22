@@ -1,0 +1,214 @@
+{
+  "name": "Blaze Intelligence Ingestion Pipeline",
+  "version": "1.0.0",
+  "description": "Multi-league sports data ingestion with HAV-F metrics",
+  "agents": [
+    {
+      "id": "mlb-ingestion",
+      "name": "MLB Data Ingestion Agent",
+      "schedule": "0 3 * * *",
+      "description": "Fetches MLB player data from Statcast and MLB Stats API",
+      "script": "scripts/ingestion_agents.py",
+      "function": "MLBIngestionAgent",
+      "connectors": ["github", "mlb-stats-api"],
+      "rate_limit": 0.5,
+      "timeout": 3600,
+      "retry": 3,
+      "monitoring": {
+        "success_threshold": 0.95,
+        "latency_threshold": 30,
+        "data_freshness": 86400
+      }
+    },
+    {
+      "id": "nfl-ingestion",
+      "name": "NFL Data Ingestion Agent",
+      "schedule": "0 4 * * 1",
+      "description": "Fetches NFL player data from nflverse and ESPN",
+      "script": "scripts/ingestion_agents.py",
+      "function": "NFLIngestionAgent",
+      "connectors": ["github", "espn-api", "nflverse"],
+      "rate_limit": 1.0,
+      "timeout": 3600,
+      "retry": 3,
+      "monitoring": {
+        "success_threshold": 0.95,
+        "latency_threshold": 45,
+        "data_freshness": 604800
+      }
+    },
+    {
+      "id": "ncaa-ingestion",
+      "name": "NCAA Football Ingestion Agent",
+      "schedule": "0 5 * * 1",
+      "description": "Fetches NCAA football data from CollegeFootballData API",
+      "script": "scripts/ingestion_agents.py",
+      "function": "NCAAIngestionAgent",
+      "connectors": ["github", "cfbd-api"],
+      "rate_limit": 2.0,
+      "timeout": 3600,
+      "retry": 3,
+      "monitoring": {
+        "success_threshold": 0.90,
+        "latency_threshold": 60,
+        "data_freshness": 604800
+      }
+    },
+    {
+      "id": "high-school-ingestion",
+      "name": "High School Football Ingestion Agent",
+      "schedule": "0 6 * * 1,4",
+      "description": "Scrapes high school football data from MaxPreps",
+      "script": "scripts/ingestion_agents.py",
+      "function": "HighSchoolIngestionAgent",
+      "connectors": ["github"],
+      "rate_limit": 3.0,
+      "timeout": 5400,
+      "retry": 2,
+      "monitoring": {
+        "success_threshold": 0.85,
+        "latency_threshold": 90,
+        "data_freshness": 1209600
+      }
+    },
+    {
+      "id": "nil-ingestion",
+      "name": "NIL Valuation Ingestion Agent",
+      "schedule": "0 12 1 * *",
+      "description": "Fetches NIL valuations from On3 and other sources",
+      "script": "scripts/ingestion_agents.py",
+      "function": "NILIngestionAgent",
+      "connectors": ["github"],
+      "rate_limit": 5.0,
+      "timeout": 3600,
+      "retry": 2,
+      "monitoring": {
+        "success_threshold": 0.80,
+        "latency_threshold": 120,
+        "data_freshness": 2592000
+      }
+    },
+    {
+      "id": "international-ingestion",
+      "name": "International Baseball Ingestion Agent",
+      "schedule": "0 7 * * 2,5",
+      "description": "Fetches NPB, KBO, CPBL player data",
+      "script": "scripts/ingestion_agents.py",
+      "function": "InternationalIngestionAgent",
+      "connectors": ["github"],
+      "rate_limit": 2.0,
+      "timeout": 3600,
+      "retry": 3,
+      "monitoring": {
+        "success_threshold": 0.85,
+        "latency_threshold": 90,
+        "data_freshness": 1209600
+      }
+    },
+    {
+      "id": "hav-f-calculator",
+      "name": "HAV-F Metrics Calculator",
+      "schedule": "*/10 * * * *",
+      "description": "Calculates HAV-F metrics for all players",
+      "script": "scripts/blaze_aggregator.py",
+      "function": "calculate_hav_f",
+      "connectors": ["github"],
+      "rate_limit": null,
+      "timeout": 600,
+      "retry": 3,
+      "monitoring": {
+        "success_threshold": 0.99,
+        "latency_threshold": 10,
+        "data_freshness": 600
+      }
+    },
+    {
+      "id": "readiness-board",
+      "name": "Universal Readiness Board",
+      "schedule": "*/5 * * * *",
+      "description": "Generates readiness scores for all teams",
+      "script": "scripts/readiness_board.py",
+      "function": "generate_readiness",
+      "connectors": ["github", "cloudflare"],
+      "rate_limit": null,
+      "timeout": 300,
+      "retry": 2,
+      "monitoring": {
+        "success_threshold": 0.99,
+        "latency_threshold": 5,
+        "data_freshness": 300
+      }
+    },
+    {
+      "id": "deployment-pipeline",
+      "name": "Continuous Deployment Agent",
+      "schedule": "*/30 * * * *",
+      "description": "Commits data updates and triggers Cloudflare deployment",
+      "script": "scripts/deploy.py",
+      "function": "deploy_updates",
+      "connectors": ["github", "cloudflare"],
+      "rate_limit": null,
+      "timeout": 600,
+      "retry": 1,
+      "monitoring": {
+        "success_threshold": 0.95,
+        "latency_threshold": 60,
+        "data_freshness": 1800
+      }
+    }
+  ],
+  "connectors": {
+    "github": {
+      "type": "git",
+      "repo": "lone-star-legends-championship",
+      "branch": "main",
+      "auth": "env:GITHUB_TOKEN"
+    },
+    "cloudflare": {
+      "type": "cloudflare-pages",
+      "project": "blaze-intelligence-official",
+      "auth": "env:CLOUDFLARE_API_TOKEN"
+    },
+    "mlb-stats-api": {
+      "type": "rest",
+      "base_url": "https://statsapi.mlb.com/api/v1",
+      "auth": null
+    },
+    "espn-api": {
+      "type": "rest",
+      "base_url": "https://site.api.espn.com/apis/site/v2/sports",
+      "auth": null
+    },
+    "nflverse": {
+      "type": "github-data",
+      "repo": "nflverse/nfldata",
+      "branch": "master"
+    },
+    "cfbd-api": {
+      "type": "rest",
+      "base_url": "https://api.collegefootballdata.com",
+      "auth": "env:CFBD_API_KEY"
+    }
+  },
+  "monitoring": {
+    "healthcheck_endpoint": "/api/health",
+    "metrics_endpoint": "/api/metrics",
+    "alert_channels": [
+      {
+        "type": "email",
+        "address": "ahump20@outlook.com",
+        "severity": ["critical", "error"]
+      },
+      {
+        "type": "notion",
+        "database_id": "env:NOTION_DATABASE_ID",
+        "severity": ["warning", "info"]
+      }
+    ],
+    "sla": {
+      "uptime": 0.99,
+      "latency_p95": 60,
+      "data_freshness": 3600
+    }
+  }
+}

@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏢 Blaze Intelligence - Enterprise Dashboard</title>
+    
+    <!-- External Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary: #BF5700;
+            --primary-light: #FF7A00;
+            --accent: #FFB81C;
+            --dark: #0A0A0F;
+            --darker: #050507;
+            --light: #F8F9FA;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glow: rgba(191, 87, 0, 0.5);
+            --success: #00D4AA;
+            --warning: #FFB81C;
+            --danger: #FF4757;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .logo-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .header-stat {
+            text-align: center;
+        }
+
+        .header-stat-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .header-stat-label {
+            font-size: 0.8rem;
+            color: var(--light);
+            text-transform: uppercase;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px var(--glow);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .metric-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--light);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-trend {
+            color: var(--success);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Client List */
+        .client-list {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 3rem;
+        }
+
+        .client-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--darker);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .client-info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .client-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--light);
+        }
+
+        .client-type {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .client-tier {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.2rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .client-revenue {
+            text-align: right;
+        }
+
+        .client-mrr {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            color: var(--success);
+            font-size: 1.2rem;
+        }
+
+        .client-arr {
+            font-size: 0.8rem;
+            color: var(--light);
+        }
+
+        /* Charts */
+        .chart-container {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 3rem;
+        }
+
+        .chart-canvas {
+            max-height: 400px;
+        }
+
+        /* Revenue Projections */
+        .projection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .projection-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .projection-period {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .projection-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .projection-growth {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        /* Intelligence Insights */
+        .insights-section {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .insight-item {
+            background: var(--darker);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--success);
+        }
+
+        .insight-client {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-text {
+            color: var(--light);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .insight-impact {
+            color: var(--success);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content { padding: 1rem; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .header-stats { flex-direction: column; gap: 1rem; }
+            .client-item { flex-direction: column; align-items: flex-start; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="images/blaze-logo.png" alt="Blaze Intelligence" class="logo-image">
+                Blaze Intelligence Enterprise
+            </div>
+            <div class="header-stats">
+                <div class="header-stat">
+                    <div class="header-stat-value" id="total-clients">6</div>
+                    <div class="header-stat-label">Enterprise Clients</div>
+                </div>
+                <div class="header-stat">
+                    <div class="header-stat-value" id="monthly-revenue">$303K</div>
+                    <div class="header-stat-label">Monthly Revenue</div>
+                </div>
+                <div class="header-stat">
+                    <div class="header-stat-value" id="annual-revenue">$3.6M</div>
+                    <div class="header-stat-label">Annual Revenue</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Key Metrics Dashboard -->
+        <section class="dashboard-grid">
+            <div class="dashboard-card">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-line"></i>
+                    Monthly Recurring Revenue
+                </h3>
+                <div class="metric-value">$303,000</div>
+                <div class="metric-label">Current MRR</div>
+                <div class="metric-trend">+47% growth this quarter</div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3 class="card-title">
+                    <i class="fas fa-building"></i>
+                    Enterprise Clients
+                </h3>
+                <div class="metric-value">6</div>
+                <div class="metric-label">Active Enterprises</div>
+                <div class="metric-trend">2 new clients this month</div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3 class="card-title">
+                    <i class="fas fa-brain"></i>
+                    Intelligence Processing
+                </h3>
+                <div class="metric-value">8,451</div>
+                <div class="metric-label">Patterns Discovered</div>
+                <div class="metric-trend">Real-time processing active</div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3 class="card-title">
+                    <i class="fas fa-eye"></i>
+                    Tell Detector™ Analyses
+                </h3>
+                <div class="metric-value">3,074</div>
+                <div class="metric-label">Total Analyses</div>
+                <div class="metric-trend">96.8% accuracy rate</div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3 class="card-title">
+                    <i class="fas fa-video"></i>
+                    Video Minutes Analyzed
+                </h3>
+                <div class="metric-value">42,750</div>
+                <div class="metric-label">Total Minutes</div>
+                <div class="metric-trend">5,200 hours processed</div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3 class="card-title">
+                    <i class="fas fa-api"></i>
+                    API Usage
+                </h3>
+                <div class="metric-value">186K</div>
+                <div class="metric-label">Monthly API Calls</div>
+                <div class="metric-trend">99.97% uptime</div>
+            </div>
+        </section>
+
+        <!-- Revenue Projections -->
+        <section class="projection-grid">
+            <div class="projection-card">
+                <div class="projection-period">Q1 Target</div>
+                <div class="projection-value">$483K</div>
+                <div class="projection-growth">+59% growth</div>
+            </div>
+            <div class="projection-card">
+                <div class="projection-period">Q2 Target</div>
+                <div class="projection-value">$758K</div>
+                <div class="projection-growth">+150% growth</div>
+            </div>
+            <div class="projection-card">
+                <div class="projection-period">Year 1 Target</div>
+                <div class="projection-value">$2.0M</div>
+                <div class="projection-growth">$24M ARR</div>
+            </div>
+            <div class="projection-card">
+                <div class="projection-period">Year 2 Target</div>
+                <div class="projection-value">$5.5M</div>
+                <div class="projection-growth">$66M ARR</div>
+            </div>
+        </section>
+
+        <!-- Client List -->
+        <section class="client-list">
+            <h2 class="card-title">
+                <i class="fas fa-users"></i>
+                Enterprise Client Portfolio
+            </h2>
+            
+            <div class="client-item">
+                <div class="client-info">
+                    <div class="client-name">St. Louis Cardinals</div>
+                    <div class="client-type">MLB Team</div>
+                </div>
+                <div class="client-tier">Enterprise Premium</div>
+                <div class="client-revenue">
+                    <div class="client-mrr">$85,000</div>
+                    <div class="client-arr">$1.02M ARR</div>
+                </div>
+            </div>
+
+            <div class="client-item">
+                <div class="client-info">
+                    <div class="client-name">Tennessee Titans</div>
+                    <div class="client-type">NFL Team</div>
+                </div>
+                <div class="client-tier">Enterprise Premium</div>
+                <div class="client-revenue">
+                    <div class="client-mrr">$95,000</div>
+                    <div class="client-arr">$1.14M ARR</div>
+                </div>
+            </div>
+
+            <div class="client-item">
+                <div class="client-info">
+                    <div class="client-name">University of Texas Athletics</div>
+                    <div class="client-type">NCAA Division I</div>
+                </div>
+                <div class="client-tier">Enterprise Standard</div>
+                <div class="client-revenue">
+                    <div class="client-mrr">$25,000</div>
+                    <div class="client-arr">$300K ARR</div>
+                </div>
+            </div>
+
+            <div class="client-item">
+                <div class="client-info">
+                    <div class="client-name">Memphis Grizzlies</div>
+                    <div class="client-type">NBA Team</div>
+                </div>
+                <div class="client-tier">Enterprise Premium</div>
+                <div class="client-revenue">
+                    <div class="client-mrr">$75,000</div>
+                    <div class="client-arr">$900K ARR</div>
+                </div>
+            </div>
+
+            <div class="client-item">
+                <div class="client-info">
+                    <div class="client-name">CAA Sports Agency</div>
+                    <div class="client-type">Talent Agency</div>
+                </div>
+                <div class="client-tier">Professional</div>
+                <div class="client-revenue">
+                    <div class="client-mrr">$15,000</div>
+                    <div class="client-arr">$180K ARR</div>
+                </div>
+            </div>
+
+            <div class="client-item">
+                <div class="client-info">
+                    <div class="client-name">Elite Performance Institute</div>
+                    <div class="client-type">Training Facility</div>
+                </div>
+                <div class="client-tier">Professional</div>
+                <div class="client-revenue">
+                    <div class="client-mrr">$8,000</div>
+                    <div class="client-arr">$96K ARR</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Revenue Growth Chart -->
+        <section class="chart-container">
+            <h2 class="card-title">
+                <i class="fas fa-chart-area"></i>
+                Revenue Growth Trajectory
+            </h2>
+            <canvas id="revenueChart" class="chart-canvas"></canvas>
+        </section>
+
+        <!-- Client Intelligence Insights -->
+        <section class="insights-section">
+            <h2 class="card-title">
+                <i class="fas fa-lightbulb"></i>
+                Latest Client Intelligence Insights
+            </h2>
+
+            <div class="insight-item">
+                <div class="insight-client">St. Louis Cardinals</div>
+                <div class="insight-text">
+                    Starting rotation shows 15% improvement in pressure situations after implementing Tell Detector™ insights
+                </div>
+                <div class="insight-impact">Projected 8-12 additional wins this season</div>
+            </div>
+
+            <div class="insight-item">
+                <div class="insight-client">Tennessee Titans</div>
+                <div class="insight-text">
+                    O-line stress patterns indicate 73% injury risk increase - modified practice schedule recommended
+                </div>
+                <div class="insight-impact">Prevent $12M+ in salary cap impact from injuries</div>
+            </div>
+
+            <div class="insight-item">
+                <div class="insight-client">University of Texas</div>
+                <div class="insight-text">
+                    Top basketball recruit shows 94% academic-athletic balance - character fit confirmed
+                </div>
+                <div class="insight-impact">Program-changing talent with low academic risk</div>
+            </div>
+
+            <div class="insight-item">
+                <div class="insight-client">Memphis Grizzlies</div>
+                <div class="insight-text">
+                    Young core shows accelerated learning patterns in development program
+                </div>
+                <div class="insight-impact">All-Star potential in 18-month timeline</div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Initialize revenue growth chart
+        function initRevenueChart() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Current', 'Q1', 'Q2', 'Q3', 'Q4', 'Year 1', 'Year 2'],
+                    datasets: [{
+                        label: 'Monthly Recurring Revenue',
+                        data: [303000, 483000, 758000, 1200000, 1600000, 2000000, 5500000],
+                        borderColor: '#BF5700',
+                        backgroundColor: 'rgba(191, 87, 0, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#F8F9FA',
+                                font: {
+                                    family: 'Inter',
+                                    weight: '500'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#F8F9FA',
+                                font: {
+                                    family: 'Inter'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#F8F9FA',
+                                font: {
+                                    family: 'Inter'
+                                },
+                                callback: function(value) {
+                                    return '$' + (value / 1000).toFixed(0) + 'K';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Animate counters
+        function animateCounters() {
+            const counters = document.querySelectorAll('.metric-value, .projection-value');
+            
+            counters.forEach(counter => {
+                const target = parseFloat(counter.textContent.replace(/[$,KM]/g, ''));
+                let current = 0;
+                const increment = target / 100;
+                const suffix = counter.textContent.includes('$') ? '$' : '';
+                const isK = counter.textContent.includes('K');
+                const isM = counter.textContent.includes('M');
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    
+                    let displayValue = Math.floor(current);
+                    if (isK && displayValue >= 1000) {
+                        displayValue = (displayValue / 1000).toFixed(1) + 'K';
+                    } else if (isM && displayValue >= 1000000) {
+                        displayValue = (displayValue / 1000000).toFixed(1) + 'M';
+                    } else if (displayValue >= 1000) {
+                        displayValue = displayValue.toLocaleString();
+                    }
+                    
+                    counter.textContent = suffix + displayValue;
+                }, 20);
+            });
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initRevenueChart();
+            
+            // Delay counter animation for visual effect
+            setTimeout(animateCounters, 500);
+        });
+    </script>
+</body>
+</html>

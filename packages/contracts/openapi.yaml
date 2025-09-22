@@ -1,0 +1,692 @@
+openapi: 3.1.0
+info:
+  title: Blaze Intelligence API
+  description: |
+    Production-grade sports analytics API powering Blaze Intelligence dashboards.
+    
+    Features:
+    - HAV-F (Human Athletic Valuation Framework) scoring
+    - Real-time readiness and performance metrics  
+    - NIL valuations and market intelligence
+    - Multi-league player data (MLB, NFL, NBA, NCAA, International)
+    - High-performance caching with ETags
+  version: 2.0.0
+  contact:
+    name: Blaze Intelligence
+    email: ahump20@outlook.com
+  license:
+    name: MIT
+    
+servers:
+  - url: https://blaze-intelligence.pages.dev/api
+    description: Production API
+  - url: https://preview.blaze-intelligence.pages.dev/api  
+    description: Preview/Staging API
+  - url: http://localhost:3000/api
+    description: Local Development
+    
+security:
+  - BearerAuth: []
+  - ApiKeyAuth: []
+
+paths:
+  /healthz:
+    get:
+      summary: Health Check
+      description: Returns API health status and dependency checks
+      operationId: getHealth
+      tags: [System]
+      security: []
+      responses:
+        '200':
+          description: System is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiHealth'
+        '503':
+          description: System is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /readyz:
+    get:
+      summary: Readiness Check
+      description: Returns readiness status for accepting traffic
+      operationId: getReadiness
+      tags: [System]  
+      security: []
+      responses:
+        '200':
+          description: System is ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiHealth'
+        '503':
+          description: System is not ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /metrics:
+    get:
+      summary: Prometheus Metrics
+      description: Returns Prometheus-compatible metrics
+      operationId: getMetrics
+      tags: [System]
+      security: []
+      responses:
+        '200':
+          description: Metrics in Prometheus format
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /teams/{teamId}/readiness:
+    get:
+      summary: Team Readiness Metrics
+      description: |
+        Returns real-time readiness scores for team players.
+        Supports rolling windows and contextual filtering.
+      operationId: getTeamReadiness
+      tags: [Teams]
+      parameters:
+        - name: teamId
+          in: path
+          required: true
+          description: Team identifier (e.g., 'STL', 'TEN', 'MEM')
+          schema:
+            type: string
+            pattern: '^[A-Z]{2,4}$'
+        - name: window
+          in: query
+          description: Time window for readiness calculation
+          schema:
+            type: string
+            enum: [day, week, month, season]
+            default: day
+        - name: since
+          in: query
+          description: Return data since this timestamp (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: context
+          in: query
+          description: Context filter for readiness scores
+          schema:
+            type: string
+            enum: [game, practice, season, playoffs]
+      responses:
+        '200':
+          description: Team readiness data
+          headers:
+            ETag:
+              description: Resource version for caching
+              schema:
+                type: string
+            Cache-Control:
+              description: Cache directives
+              schema:
+                type: string
+                example: "s-maxage=60, stale-while-revalidate=120"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  teamId:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  averageReadiness:
+                    type: number
+                    minimum: 0
+                    maximum: 100
+                  players:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReadinessSnapshot'
+        '404':
+          description: Team not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /players/{playerId}/havf:
+    get:
+      summary: Player HAV-F Metrics
+      description: |
+        Returns HAV-F (Human Athletic Valuation Framework) scores for a player.
+        Includes Champion Readiness, Cognitive Leverage, and NIL Trust Score.
+      operationId: getPlayerHavf
+      tags: [Players]
+      parameters:
+        - name: playerId
+          in: path
+          required: true
+          description: Player identifier
+          schema:
+            type: string
+        - name: history
+          in: query
+          description: Include historical HAV-F scores
+          schema:
+            type: boolean
+            default: false
+        - name: window
+          in: query  
+          description: Historical window (requires history=true)
+          schema:
+            type: string
+            enum: [week, month, season, career]
+            default: month
+      responses:
+        '200':
+          description: Player HAV-F metrics
+          headers:
+            ETag:
+              description: Resource version for caching
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  playerId:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  havf:
+                    $ref: '#/components/schemas/HavfMetrics'
+                  history:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: date-time
+                        havf:
+                          $ref: '#/components/schemas/HavfMetrics'
+        '404':
+          description: Player not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /players/{playerId}/nil:
+    get:
+      summary: Player NIL Valuation
+      description: |
+        Returns Name, Image, Likeness (NIL) valuation and market data.
+        Includes trust scores and trend analysis.
+      operationId: getPlayerNil
+      tags: [Players]
+      parameters:
+        - name: playerId
+          in: path
+          required: true
+          description: Player identifier
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player NIL valuation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NilValuation'
+        '404':
+          description: Player not found or no NIL data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /players:
+    get:
+      summary: Search Players
+      description: |
+        Search and filter players across leagues with pagination.
+        Supports organization, position, league, and tier filtering.
+      operationId: searchPlayers
+      tags: [Players]
+      parameters:
+        - name: org
+          in: query
+          description: Organization/school filter (e.g., 'texas', 'alabama')
+          schema:
+            type: string
+        - name: position
+          in: query
+          description: Position filter
+          schema:
+            type: string
+        - name: league
+          in: query
+          description: League filter
+          schema:
+            type: string
+            enum: [MLB, NFL, NBA, NCAA_FOOTBALL, NCAA_BASEBALL]
+        - name: tier
+          in: query
+          description: HAV-F tier filter
+          schema:
+            type: string
+            enum: [Elite, High, Average, Development]
+        - name: limit
+          in: query
+          description: Number of results to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Player search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  players:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UnifiedPlayer'
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      limit:
+                        type: integer  
+                      offset:
+                        type: integer
+                      hasMore:
+                        type: boolean
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+    ApiHealth:
+      type: object
+      required: [status, timestamp, services, version, uptime]
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        timestamp:
+          type: string
+          format: date-time
+        services:
+          type: object
+          additionalProperties:
+            type: string
+            enum: [healthy, degraded, unhealthy]
+        version:
+          type: string
+        uptime:
+          type: number
+        
+    ApiError:
+      type: object
+      required: [error, code, message, timestamp]
+      properties:
+        error:
+          type: string
+        code:
+          type: number
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        trace:
+          type: string
+
+    HavfMetrics:
+      type: object
+      required: [championReadiness, cognitiveLeverage, nilTrustScore, composite, lastUpdated, version]
+      properties:
+        championReadiness:
+          type: object
+          properties:
+            score:
+              type: number
+              minimum: 0
+              maximum: 100
+            components:
+              type: object
+              properties:
+                performanceDominance:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+                physiologicalResilience:
+                  type: number
+                  minimum: 0  
+                  maximum: 100
+                careerTrajectory:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+            percentile:
+              type: number
+              minimum: 0
+              maximum: 100
+            trend:
+              type: string
+              enum: [Improving, Stable, Declining]
+        cognitiveLeverage:
+          type: object
+          properties:
+            score:
+              type: number
+              minimum: 0
+              maximum: 100
+            components:
+              type: object
+              properties:
+                neuralProcessingSpeed:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+                pressureComposure:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+            clutchRating:
+              type: number
+              minimum: 0
+              maximum: 100
+            decisionVelocity:
+              type: number
+              minimum: 0
+              maximum: 100
+            patternRecognition:
+              type: number
+              minimum: 0
+              maximum: 100
+        nilTrustScore:
+          type: object
+          properties:
+            score:
+              type: number
+              minimum: 0
+              maximum: 100
+            components:
+              type: object
+              properties:
+                brandAuthenticity:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+                marketVelocity:
+                  type: number
+                publicSalience:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+            valuation:
+              type: number
+              minimum: 0
+            socialReach:
+              type: number
+              minimum: 0
+            engagementRate:
+              type: number
+              minimum: 0
+              maximum: 1
+        composite:
+          type: object
+          properties:
+            overall:
+              type: number
+              minimum: 0
+              maximum: 100
+            rank:
+              type: integer
+              minimum: 1
+            tier:
+              type: string
+              enum: [Elite, High, Average, Development]
+            confidence:
+              type: number
+              minimum: 0
+              maximum: 100
+        lastUpdated:
+          type: string
+          format: date-time
+        nextEvaluation:
+          type: string
+          format: date-time
+        version:
+          type: string
+          default: "2.0.0"
+
+    ReadinessSnapshot:
+      type: object
+      required: [id, teamId, timestamp, readinessScore, leverageScore, context, confidence]
+      properties:
+        id:
+          type: string
+          format: uuid
+        teamId:
+          type: string
+        playerId:
+          type: string
+          nullable: true
+        timestamp:
+          type: string
+          format: date-time
+        readinessScore:
+          type: number
+          minimum: 0
+          maximum: 100
+        leverageScore:
+          type: number
+          minimum: 0
+          maximum: 100
+        context:
+          type: string
+          enum: [game, practice, season, playoffs]
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 100
+        factors:
+          type: object
+          additionalProperties:
+            type: number
+
+    NilValuation:
+      type: object
+      required: [id, playerId, timestamp, valuation, source, trustScore, trend]
+      properties:
+        id:
+          type: string
+          format: uuid
+        playerId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        valuation:
+          type: number
+          minimum: 0
+        source:
+          type: string
+        components:
+          type: object
+          properties:
+            socialFollowing:
+              type: number
+              minimum: 0
+            engagementRate:
+              type: number
+              minimum: 0
+              maximum: 1
+            brandDeals:
+              type: number
+              minimum: 0
+            marketingValue:
+              type: number
+              minimum: 0
+            performance:
+              type: number
+              minimum: 0
+              maximum: 100
+        trustScore:
+          type: number
+          minimum: 0
+          maximum: 100
+        trend:
+          type: string
+          enum: [Rising, Stable, Declining]
+
+    UnifiedPlayer:
+      type: object
+      required: [identity, affiliation, havf, statistics, health, metadata]
+      properties:
+        identity:
+          type: object
+          properties:
+            id:
+              type: string
+            blazeId:
+              type: string
+            name:
+              type: string
+            alternateNames:
+              type: array
+              items:
+                type: string
+            dateOfBirth:
+              type: string
+              format: date
+              nullable: true
+            age:
+              type: integer
+              minimum: 0
+              maximum: 60
+              nullable: true
+            nationality:
+              type: string
+              default: "USA"
+            secondaryNationality:
+              type: string
+              nullable: true
+        affiliation:
+          type: object
+          properties:
+            league:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: [MLB, NFL, NBA, NCAA_FOOTBALL, NCAA_BASEBALL, PERFECT_GAME, NIL, KBO, NPB, LATIN]
+                name:
+                  type: string
+                level:
+                  type: string
+                  enum: [Professional, College, Youth, International]
+            team:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                abbreviation:
+                  type: string
+                conference:
+                  type: string
+                  nullable: true
+                division:
+                  type: string
+                  nullable: true
+            position:
+              type: object
+              properties:
+                primary:
+                  type: string
+                secondary:
+                  type: array
+                  items:
+                    type: string
+                depth:
+                  type: integer
+                  nullable: true
+        havf:
+          $ref: '#/components/schemas/HavfMetrics'
+        statistics:
+          type: object
+          properties:
+            current:
+              type: object
+            career:
+              type: object
+            projections:
+              type: object
+        health:
+          type: object
+          properties:
+            status:
+              type: string
+              enum: [Healthy, Injured, IL, Recovery]
+            durabilityScore:
+              type: number
+              minimum: 0
+              maximum: 100
+        metadata:
+          type: object
+          properties:
+            dataQuality:
+              type: number
+              minimum: 0
+              maximum: 100
+            lastUpdated:
+              type: string
+              format: date-time
+            sources:
+              type: array
+              items:
+                type: string
+            version:
+              type: string
+            flags:
+              type: array
+              items:
+                type: string
+            tags:
+              type: array
+              items:
+                type: string

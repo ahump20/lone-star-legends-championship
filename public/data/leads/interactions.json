@@ -1,0 +1,33 @@
+{
+  "updated_at": "2025-08-24T15:25:26.895461",
+  "total_interactions": 3,
+  "interactions": [
+    {
+      "timestamp": "2025-08-24T15:25:26.890199",
+      "interaction_type": "page_view",
+      "page_url": "/landing-page.html",
+      "session_id": "test_session_001",
+      "user_agent": "Mozilla/5.0 Test Browser",
+      "duration_seconds": 45,
+      "additional_data": {}
+    },
+    {
+      "timestamp": "2025-08-24T15:25:26.893802",
+      "interaction_type": "demo_start",
+      "page_url": "/video-upload.html",
+      "session_id": "test_session_001",
+      "user_agent": "Mozilla/5.0 Test Browser",
+      "duration_seconds": 120,
+      "additional_data": {}
+    },
+    {
+      "timestamp": "2025-08-24T15:25:26.894799",
+      "interaction_type": "video_upload",
+      "page_url": "/video-upload.html",
+      "session_id": "test_session_001",
+      "user_agent": "Mozilla/5.0 Test Browser",
+      "duration_seconds": null,
+      "additional_data": {}
+    }
+  ]
+}

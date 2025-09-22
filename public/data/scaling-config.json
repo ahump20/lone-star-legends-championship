@@ -1,0 +1,30 @@
+{
+  "infrastructure": {
+    "cdn": "Cloudflare Enterprise",
+    "compute": "Cloudflare Workers + D1 Database",
+    "storage": "R2 Object Storage",
+    "monitoring": "Sentry + Custom Analytics",
+    "security": "Zero Trust + WAF + DDoS Protection"
+  },
+  "performance_targets": {
+    "api_response_time": "<100ms p95",
+    "intelligence_processing": "<5 seconds",
+    "uptime": "99.99%",
+    "concurrent_users": "10,000+",
+    "data_processing": "1TB+/day"
+  },
+  "auto_scaling": {
+    "triggers": [
+      "CPU utilization > 70%",
+      "Memory usage > 80%",
+      "Request queue > 100",
+      "Response time > 200ms"
+    ],
+    "actions": [
+      "Scale worker instances",
+      "Increase D1 compute units",
+      "Enable additional CDN regions",
+      "Activate overflow capacity"
+    ]
+  }
+}

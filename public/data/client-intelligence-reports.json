@@ -1,0 +1,234 @@
+{
+  "reports": {
+    "016fbac9-8ef7-4d74-b39e-9c9e48124585": {
+      "client_id": "016fbac9-8ef7-4d74-b39e-9c9e48124585",
+      "client_name": "St. Louis Cardinals",
+      "report_date": "2025-08-24T17:05:33.454389",
+      "executive_summary": "Intelligence analysis reveals 3 high-impact opportunities for St. Louis Cardinals across key operational areas.",
+      "insights": [
+        {
+          "type": "Player Performance",
+          "insight": "Starting rotation shows 15% improvement in pressure situations",
+          "recommendation": "Optimize bullpen usage in high-leverage moments",
+          "impact": "Projected 8-12 additional wins this season"
+        },
+        {
+          "type": "Draft Intelligence",
+          "insight": "Top prospect shows elite character traits and clutch performance",
+          "recommendation": "Prioritize in first round - low bust probability",
+          "impact": "Franchise cornerstone potential identified"
+        },
+        {
+          "type": "Team Chemistry",
+          "insight": "Leadership vacuum detected in clubhouse dynamics",
+          "recommendation": "Target veteran presence in free agency",
+          "impact": "Team culture optimization critical for playoff run"
+        }
+      ],
+      "usage_summary": {
+        "patterns_discovered": 2847,
+        "video_minutes_analyzed": 12500,
+        "tell_detector_analyses": 890,
+        "api_calls_monthly": 45000,
+        "dashboard_users": 15
+      },
+      "roi_analysis": {
+        "monthly_investment": 85000,
+        "projected_annual_value": 5075907.663638825,
+        "roi_multiple": 5.1,
+        "payback_period": "5 months"
+      },
+      "next_actions": [
+        "Schedule executive briefing on high-priority insights",
+        "Implement recommended intelligence-driven strategies",
+        "Monitor performance metrics for validation",
+        "Plan expanded intelligence integration"
+      ]
+    },
+    "41f8cec8-13c0-4aea-9c23-74bd67e608e0": {
+      "client_id": "41f8cec8-13c0-4aea-9c23-74bd67e608e0",
+      "client_name": "Tennessee Titans",
+      "report_date": "2025-08-24T17:05:33.454438",
+      "executive_summary": "Intelligence analysis reveals 2 high-impact opportunities for Tennessee Titans across key operational areas.",
+      "insights": [
+        {
+          "type": "Injury Prevention",
+          "insight": "O-line stress patterns indicate 73% injury risk increase",
+          "recommendation": "Implement modified practice schedule immediately",
+          "impact": "Prevent $12M+ in salary cap impact from injuries"
+        },
+        {
+          "type": "Opponent Analysis",
+          "insight": "Division rival defense vulnerable to specific route combinations",
+          "recommendation": "Game plan adjustment for Week 8 matchup",
+          "impact": "Projected 21-point scoring advantage"
+        }
+      ],
+      "usage_summary": {
+        "patterns_discovered": 1923,
+        "video_minutes_analyzed": 8750,
+        "tell_detector_analyses": 645,
+        "api_calls_monthly": 38000,
+        "dashboard_users": 12
+      },
+      "roi_analysis": {
+        "monthly_investment": 95000,
+        "projected_annual_value": 4211150.523426829,
+        "roi_multiple": 5.6,
+        "payback_period": "3 months"
+      },
+      "next_actions": [
+        "Schedule executive briefing on high-priority insights",
+        "Implement recommended intelligence-driven strategies",
+        "Monitor performance metrics for validation",
+        "Plan expanded intelligence integration"
+      ]
+    },
+    "0ec004ca-868c-4506-aee6-67456c0a4115": {
+      "client_id": "0ec004ca-868c-4506-aee6-67456c0a4115",
+      "client_name": "University of Texas Athletics",
+      "report_date": "2025-08-24T17:05:33.454451",
+      "executive_summary": "Intelligence analysis reveals 2 high-impact opportunities for University of Texas Athletics across key operational areas.",
+      "insights": [
+        {
+          "type": "Recruitment Intelligence",
+          "insight": "Top basketball recruit shows 94% academic-athletic balance",
+          "recommendation": "Accelerate recruitment - character fit confirmed",
+          "impact": "Program-changing talent with low academic risk"
+        },
+        {
+          "type": "NIL Optimization",
+          "insight": "Current athletes undervalued by 34% in NIL marketplace",
+          "recommendation": "Partner with marketing agency for brand building",
+          "impact": "Additional $200K+ annual NIL revenue for athletes"
+        }
+      ],
+      "usage_summary": {
+        "patterns_discovered": 1456,
+        "video_minutes_analyzed": 6200,
+        "tell_detector_analyses": 420,
+        "api_calls_monthly": 22000,
+        "dashboard_users": 8
+      },
+      "roi_analysis": {
+        "monthly_investment": 25000,
+        "projected_annual_value": 1225679.8292402292,
+        "roi_multiple": 7.1,
+        "payback_period": "3 months"
+      },
+      "next_actions": [
+        "Schedule executive briefing on high-priority insights",
+        "Implement recommended intelligence-driven strategies",
+        "Monitor performance metrics for validation",
+        "Plan expanded intelligence integration"
+      ]
+    },
+    "fd525dbd-3787-4a5f-bb21-fb3284725023": {
+      "client_id": "fd525dbd-3787-4a5f-bb21-fb3284725023",
+      "client_name": "Memphis Grizzlies",
+      "report_date": "2025-08-24T17:05:33.454459",
+      "executive_summary": "Intelligence analysis reveals 2 high-impact opportunities for Memphis Grizzlies across key operational areas.",
+      "insights": [
+        {
+          "type": "Trade Analysis",
+          "insight": "Potential trade target shows elite leadership under pressure",
+          "recommendation": "Pursue aggressive trade package - culture fit confirmed",
+          "impact": "Championship window acceleration"
+        },
+        {
+          "type": "Development Intelligence",
+          "insight": "Young core shows accelerated learning patterns",
+          "recommendation": "Increase development program investment",
+          "impact": "All-Star potential in 18-month timeline"
+        }
+      ],
+      "usage_summary": {
+        "patterns_discovered": 2134,
+        "video_minutes_analyzed": 9800,
+        "tell_detector_analyses": 678,
+        "api_calls_monthly": 41000,
+        "dashboard_users": 10
+      },
+      "roi_analysis": {
+        "monthly_investment": 75000,
+        "projected_annual_value": 3406331.0244326545,
+        "roi_multiple": 4.6,
+        "payback_period": "6 months"
+      },
+      "next_actions": [
+        "Schedule executive briefing on high-priority insights",
+        "Implement recommended intelligence-driven strategies",
+        "Monitor performance metrics for validation",
+        "Plan expanded intelligence integration"
+      ]
+    },
+    "64dd25ce-d559-44f3-924b-50b5a991dca8": {
+      "client_id": "64dd25ce-d559-44f3-924b-50b5a991dca8",
+      "client_name": "CAA Sports Agency",
+      "report_date": "2025-08-24T17:05:33.454465",
+      "executive_summary": "Intelligence analysis reveals 1 high-impact opportunities for CAA Sports Agency across key operational areas.",
+      "insights": [
+        {
+          "type": "Client Intelligence",
+          "insight": "Optimized strategies show significant ROI improvement",
+          "recommendation": "Expand current intelligence integration",
+          "impact": "Enhanced competitive advantage across operations"
+        }
+      ],
+      "usage_summary": {
+        "patterns_discovered": 892,
+        "video_minutes_analyzed": 3400,
+        "tell_detector_analyses": 285,
+        "api_calls_monthly": 12000,
+        "dashboard_users": 6
+      },
+      "roi_analysis": {
+        "monthly_investment": 15000,
+        "projected_annual_value": 995238.0012036755,
+        "roi_multiple": 5.9,
+        "payback_period": "3 months"
+      },
+      "next_actions": [
+        "Schedule executive briefing on high-priority insights",
+        "Implement recommended intelligence-driven strategies",
+        "Monitor performance metrics for validation",
+        "Plan expanded intelligence integration"
+      ]
+    },
+    "aa04fd76-838b-4fcd-9394-1743636a1420": {
+      "client_id": "aa04fd76-838b-4fcd-9394-1743636a1420",
+      "client_name": "Elite Performance Institute",
+      "report_date": "2025-08-24T17:05:33.454472",
+      "executive_summary": "Intelligence analysis reveals 1 high-impact opportunities for Elite Performance Institute across key operational areas.",
+      "insights": [
+        {
+          "type": "Client Intelligence",
+          "insight": "Optimized strategies show significant ROI improvement",
+          "recommendation": "Expand current intelligence integration",
+          "impact": "Enhanced competitive advantage across operations"
+        }
+      ],
+      "usage_summary": {
+        "patterns_discovered": 634,
+        "video_minutes_analyzed": 2100,
+        "tell_detector_analyses": 156,
+        "api_calls_monthly": 8500,
+        "dashboard_users": 4
+      },
+      "roi_analysis": {
+        "monthly_investment": 8000,
+        "projected_annual_value": 461799.7964544021,
+        "roi_multiple": 4.8,
+        "payback_period": "6 months"
+      },
+      "next_actions": [
+        "Schedule executive briefing on high-priority insights",
+        "Implement recommended intelligence-driven strategies",
+        "Monitor performance metrics for validation",
+        "Plan expanded intelligence integration"
+      ]
+    }
+  },
+  "generated_at": "2025-08-24T17:05:33.455089",
+  "total_reports": 6
+}

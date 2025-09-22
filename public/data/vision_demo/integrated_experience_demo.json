@@ -1,0 +1,30 @@
+{
+  "video_analysis": {
+    "overall_score": 89.7,
+    "technical_grade": "A-",
+    "improvement_areas": [
+      "timing",
+      "power_transfer"
+    ]
+  },
+  "computer_vision": {
+    "pose_accuracy": 96.3,
+    "biomechanics_precision": 94.8,
+    "injury_risk_assessment": "low"
+  },
+  "gamification": {
+    "xp_earned": 485,
+    "achievements_unlocked": 2,
+    "level_progress": "78%"
+  },
+  "coaching": {
+    "personalized_drills": 6,
+    "expected_improvement": "12-18%",
+    "timeline": "2-3 weeks"
+  },
+  "user_satisfaction": {
+    "platform_rating": 4.9,
+    "coaching_effectiveness": 4.8,
+    "user_engagement": 4.9
+  }
+}

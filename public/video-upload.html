@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Upload - Blaze Vision AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0b 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .upload-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .step.active {
+            color: #ff6b6b;
+        }
+
+        .step-number {
+            background: #333;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .step.active .step-number {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+        }
+
+        .step-divider {
+            width: 50px;
+            height: 2px;
+            background: #333;
+            margin: 0 20px;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h3 {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-section h3::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+            border-radius: 2px;
+            margin-right: 10px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.8rem;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-upload-area {
+            border: 2px dashed rgba(255, 107, 107, 0.3);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload-area:hover {
+            border-color: rgba(255, 107, 107, 0.6);
+            background: rgba(255, 107, 107, 0.02);
+        }
+
+        .file-upload-area.dragover {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-info {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .progress-container {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .progress-container.show {
+            display: block;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b 0%, #ffd93d 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .results-container.show {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+
+        .session-id {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: monospace;
+            color: #ffd93d;
+            margin: 1rem 0;
+        }
+
+        .status-link {
+            display: inline-block;
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .status-link:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .upload-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎥 Blaze Vision AI</h1>
+            <p>Upload your training videos for championship-level biomechanics analysis and personalized coaching insights</p>
+        </div>
+
+        <div class="upload-container">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" id="step1">
+                    <span class="step-number">1</span>
+                    <span>Player Info</span>
+                </div>
+                <div class="step-divider"></div>
+                <div class="step" id="step2">
+                    <span class="step-number">2</span>
+                    <span>Upload Video</span>
+                </div>
+                <div class="step-divider"></div>
+                <div class="step" id="step3">
+                    <span class="step-number">3</span>
+                    <span>Analysis</span>
+                </div>
+            </div>
+
+            <form id="uploadForm" enctype="multipart/form-data">
+                <!-- Player Information Section -->
+                <div class="form-section">
+                    <h3>Player Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="playerName">Player Name *</label>
+                            <input type="text" id="playerName" name="playerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="playerAge">Age</label>
+                            <input type="number" id="playerAge" name="playerAge" min="8" max="50">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sport">Sport *</label>
+                            <select id="sport" name="sport" required>
+                                <option value="">Select Sport</option>
+                                <option value="baseball">Baseball</option>
+                                <option value="football">Football</option>
+                                <option value="basketball">Basketball</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="position">Position</label>
+                            <input type="text" id="position" name="position" placeholder="e.g., Pitcher, QB, Point Guard">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="actionType">Action Type *</label>
+                            <select id="actionType" name="actionType" required>
+                                <option value="">Select Action</option>
+                                <option value="batting" data-sport="baseball">Batting</option>
+                                <option value="pitching" data-sport="baseball">Pitching</option>
+                                <option value="throwing" data-sport="football">Quarterback Throwing</option>
+                                <option value="running" data-sport="football">Running Back</option>
+                                <option value="shooting" data-sport="basketball">Shooting</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="skillLevel">Skill Level</label>
+                            <select id="skillLevel" name="skillLevel">
+                                <option value="">Select Level</option>
+                                <option value="youth">Youth (8-12)</option>
+                                <option value="middle_school">Middle School</option>
+                                <option value="high_school">High School</option>
+                                <option value="college">College</option>
+                                <option value="professional">Professional</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="goals">Training Goals (Optional)</label>
+                        <textarea id="goals" name="goals" placeholder="What specific areas would you like to improve? Any particular challenges you're facing?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Video Upload Section -->
+                <div class="form-section">
+                    <h3>Video Upload</h3>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <div class="upload-icon">📹</div>
+                        <h4>Drop your video here or click to browse</h4>
+                        <p>Supports MP4, MOV, AVI files up to 500MB</p>
+                        <p style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">
+                            Best results: 30-60 second clips, clear view of player, good lighting
+                        </p>
+                        <input type="file" id="videoFile" name="videoFile" class="file-input" accept="video/*" required>
+                    </div>
+                    
+                    <div class="file-info" id="fileInfo">
+                        <h4>Selected File:</h4>
+                        <p id="fileName"></p>
+                        <p id="fileSize"></p>
+                        <p id="fileType"></p>
+                    </div>
+
+                    <div class="progress-container" id="progressContainer">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">Preparing upload...</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                    🚀 Start Analysis
+                </button>
+            </form>
+
+            <!-- Results Section -->
+            <div class="results-container" id="resultsContainer">
+                <div class="success-icon">✅</div>
+                <h3>Upload Successful!</h3>
+                <p>Your video has been queued for analysis. You can track the progress using your session ID:</p>
+                <div class="session-id" id="sessionId"></div>
+                <p>Estimated processing time: <span id="processingTime"></span></p>
+                <a href="#" class="status-link" id="statusLink">Track Analysis Progress</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class VideoUploadManager {
+            constructor() {
+                this.form = document.getElementById('uploadForm');
+                this.fileInput = document.getElementById('videoFile');
+                this.uploadArea = document.getElementById('fileUploadArea');
+                this.fileInfo = document.getElementById('fileInfo');
+                this.progressContainer = document.getElementById('progressContainer');
+                this.resultsContainer = document.getElementById('resultsContainer');
+                this.submitBtn = document.getElementById('submitBtn');
+                
+                this.selectedFile = null;
+                this.currentStep = 1;
+                
+                this.initializeEventListeners();
+                this.updateActionTypeOptions();
+            }
+            
+            initializeEventListeners() {
+                // File upload handlers
+                this.uploadArea.addEventListener('click', () => this.fileInput.click());
+                this.uploadArea.addEventListener('dragover', this.handleDragOver.bind(this));
+                this.uploadArea.addEventListener('dragleave', this.handleDragLeave.bind(this));
+                this.uploadArea.addEventListener('drop', this.handleFileDrop.bind(this));
+                this.fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+                
+                // Form handlers
+                this.form.addEventListener('submit', this.handleSubmit.bind(this));
+                document.getElementById('sport').addEventListener('change', this.updateActionTypeOptions.bind(this));
+                
+                // Form validation
+                this.form.addEventListener('input', this.validateForm.bind(this));
+            }
+            
+            handleDragOver(e) {
+                e.preventDefault();
+                this.uploadArea.classList.add('dragover');
+            }
+            
+            handleDragLeave(e) {
+                e.preventDefault();
+                this.uploadArea.classList.remove('dragover');
+            }
+            
+            handleFileDrop(e) {
+                e.preventDefault();
+                this.uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    this.processFile(files[0]);
+                }
+            }
+            
+            handleFileSelect(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    this.processFile(file);
+                }
+            }
+            
+            processFile(file) {
+                // Validate file type
+                if (!file.type.startsWith('video/')) {
+                    alert('Please select a valid video file.');
+                    return;
+                }
+                
+                // Validate file size (500MB limit)
+                const maxSize = 500 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    alert('File size exceeds 500MB limit. Please select a smaller file.');
+                    return;
+                }
+                
+                this.selectedFile = file;
+                this.displayFileInfo(file);
+                this.updateStep(2);
+                this.validateForm();
+            }
+            
+            displayFileInfo(file) {
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSize').textContent = `Size: ${this.formatFileSize(file.size)}`;
+                document.getElementById('fileType').textContent = `Type: ${file.type}`;
+                
+                this.fileInfo.classList.add('show');
+            }
+            
+            formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            updateActionTypeOptions() {
+                const sport = document.getElementById('sport').value;
+                const actionType = document.getElementById('actionType');
+                const options = actionType.querySelectorAll('option[data-sport]');
+                
+                // Hide all sport-specific options
+                options.forEach(option => {
+                    option.style.display = 'none';
+                    option.disabled = true;
+                });
+                
+                // Show options for selected sport
+                if (sport) {
+                    const relevantOptions = actionType.querySelectorAll(`option[data-sport="${sport}"]`);
+                    relevantOptions.forEach(option => {
+                        option.style.display = 'block';
+                        option.disabled = false;
+                    });
+                }
+                
+                // Reset action type selection
+                actionType.value = '';
+                this.validateForm();
+            }
+            
+            validateForm() {
+                const playerName = document.getElementById('playerName').value.trim();
+                const sport = document.getElementById('sport').value;
+                const actionType = document.getElementById('actionType').value;
+                const hasFile = this.selectedFile !== null;
+                
+                const isValid = playerName && sport && actionType && hasFile;
+                this.submitBtn.disabled = !isValid;
+                
+                if (isValid && this.currentStep < 3) {
+                    this.updateStep(3);
+                }
+            }
+            
+            updateStep(step) {
+                // Remove active class from all steps
+                document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+                
+                // Add active class to current step
+                document.getElementById(`step${step}`).classList.add('active');
+                
+                this.currentStep = step;
+            }
+            
+            async handleSubmit(e) {
+                e.preventDefault();
+                
+                if (!this.selectedFile) {
+                    alert('Please select a video file.');
+                    return;
+                }
+                
+                this.submitBtn.disabled = true;
+                this.submitBtn.textContent = 'Uploading...';
+                this.showProgress();
+                
+                try {
+                    // Prepare form data
+                    const formData = new FormData();
+                    formData.append('videoFile', this.selectedFile);
+                    formData.append('playerName', document.getElementById('playerName').value);
+                    formData.append('playerAge', document.getElementById('playerAge').value || '');
+                    formData.append('sport', document.getElementById('sport').value);
+                    formData.append('position', document.getElementById('position').value || '');
+                    formData.append('actionType', document.getElementById('actionType').value);
+                    formData.append('skillLevel', document.getElementById('skillLevel').value || '');
+                    formData.append('goals', document.getElementById('goals').value || '');
+                    
+                    // Simulate upload progress
+                    await this.simulateUpload();
+                    
+                    // Make actual API call
+                    const response = await fetch('/api/video/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        this.showResults(result);
+                    } else {
+                        throw new Error('Upload failed');
+                    }
+                    
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    alert('Upload failed. Please try again.');
+                    this.submitBtn.disabled = false;
+                    this.submitBtn.textContent = '🚀 Start Analysis';
+                    this.hideProgress();
+                }
+            }
+            
+            async simulateUpload() {
+                const progressFill = document.getElementById('progressFill');
+                const progressText = document.getElementById('progressText');
+                
+                const stages = [
+                    { progress: 20, text: 'Uploading video...' },
+                    { progress: 40, text: 'Validating file...' },
+                    { progress: 60, text: 'Preparing analysis...' },
+                    { progress: 80, text: 'Queuing for processing...' },
+                    { progress: 100, text: 'Upload complete!' }
+                ];
+                
+                for (const stage of stages) {
+                    progressFill.style.width = stage.progress + '%';
+                    progressText.textContent = stage.text;
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+            }
+            
+            showProgress() {
+                this.progressContainer.classList.add('show');
+            }
+            
+            hideProgress() {
+                this.progressContainer.classList.remove('show');
+            }
+            
+            showResults(result) {
+                if (result.success) {
+                    document.getElementById('sessionId').textContent = result.session_id;
+                    document.getElementById('processingTime').textContent = result.estimated_processing_time;
+                    
+                    const statusLink = document.getElementById('statusLink');
+                    statusLink.href = `/video-status.html?session=${result.session_id}`;
+                    
+                    this.resultsContainer.classList.add('show');
+                    this.form.style.display = 'none';
+                } else {
+                    alert('Upload failed: ' + (result.error || 'Unknown error'));
+                }
+            }
+        }
+        
+        // Initialize the upload manager when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new VideoUploadManager();
+        });
+    </script>
+</body>
+</html>

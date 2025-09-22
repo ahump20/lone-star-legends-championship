@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Blaze Intelligence OS — Championship Sports Analytics</title>
+    <meta name="description" content="Advanced Sports Analytics Platform with 3D visualization, real-time data, and championship intelligence">
+    <meta name="keywords" content="sports analytics, data visualization, team intelligence, competitive analysis, Austin Humphrey">
+    
+    <!-- External Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Video.js for Cloudflare Stream -->
+    <link href="https://vjs.zencdn.net/8.0.4/video-js.css" rel="stylesheet">
+    <script src="https://vjs.zencdn.net/8.0.4/video.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #BF5700;
+            --primary-light: #FF7A00;
+            --primary-dark: #8B3D00;
+            --accent: #FFB81C;
+            --dark: #0A0A0F;
+            --darker: #050507;
+            --light: #F8F9FA;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glow: rgba(191, 87, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* Three.js Hero Canvas */
+        #hero-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, 
+                rgba(10, 10, 15, 0) 0%, 
+                rgba(10, 10, 15, 0.5) 50%, 
+                rgba(10, 10, 15, 1) 100%);
+            z-index: 1;
+        }
+
+        .hero-video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .hero-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px var(--glow);
+            max-width: 1000px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .bi-logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--dark);
+            box-shadow: 0 10px 30px var(--glow);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .headshot {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            box-shadow: 0 10px 30px var(--glow);
+            object-fit: cover;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero-subtitle {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .hero-stat {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--light);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px var(--glow);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px var(--glow);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2rem;
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--light);
+            transform: translateY(-2px);
+        }
+
+        /* Video Showcase */
+        .video-showcase {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .dashboard-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .video-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px var(--glow);
+        }
+
+        .video-player {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .video-description {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Tell Detector Section */
+        .tell-detector-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
+        }
+
+        .tell-detector-hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .tell-detector-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .tell-detector-subtitle {
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 40px var(--glow);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .feature-description {
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .feature-metrics {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            opacity: 0.8;
+        }
+
+        .metric-value {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Dashboard styles from original */
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box, .filter-select {
+            padding: 0.8rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--light);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+        }
+
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-container {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .team-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px rgba(191, 87, 0, 0.2);
+        }
+
+        .team-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .team-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .team-metrics {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .metric {
+            text-align: center;
+            flex: 1;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Loading and animations */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Three.js Background -->
+    <canvas id="hero-canvas"></canvas>
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-video-container">
+            <video class="hero-video" autoplay muted loop playsinline>
+                <source src="https://customer-w33nxaivs01oev2i.cloudflarestream.com/3f4a5b2e1c6d7e8f9a0b1c2d3e4f5a6b/manifest/video.m3u8" type="application/x-mpegURL">
+            </video>
+        </div>
+        
+        <div class="hero-content">
+            <div class="logo-container">
+                <div class="bi-logo">BI</div>
+                <img class="headshot" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCABkAGQDASIAAhEBAxEB/8QAGwAAAQUBAQAAAAAAAAAAAAAABQIDBAYHAQj/xAA5EAABAwMDAgQDBgUDBQAAAAABAgMEAAURBiExEkEHE1FhInGBFTKRobHBFVLC4fAII0IWM2Jygv/EABoBAAIDAQEAAAAAAAAAAAAAAAIDAAEEBQb/xAAnEQACAgICAQMEAwEAAAAAAAAAAQIRAyESMUEEIlETMnGRgbHB8P/aAAwDAQACEQMRAD8A" alt="Austin Humphrey">
+                <div class="bi-logo">🔥</div>
+            </div>
+            
+            <h1 class="hero-title">Blaze Intelligence OS</h1>
+            <p class="hero-subtitle">Championship Sports Analytics Platform</p>
+            
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-value">96.3%</div>
+                    <div class="hero-stat-label">Analysis Accuracy</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">&lt;50ms</div>
+                    <div class="hero-stat-label">Response Time</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">4.9/5</div>
+                    <div class="hero-stat-label">User Rating</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">100%</div>
+                    <div class="hero-stat-label">Demo Success</div>
+                </div>
+            </div>
+            
+            <div class="hero-cta">
+                <a href="/video-upload.html" class="btn-primary">🎥 Try Live Demo</a>
+                <a href="#videos" class="btn-secondary">Watch Demo Videos</a>
+                <a href="/analytics-dashboard.html" class="btn-primary">📊 Launch Dashboard</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tell Detector Section -->
+    <section class="tell-detector-section" id="tell-detector">
+        <div class="tell-detector-hero">
+            <h2 class="tell-detector-title">🧠 Tell Detector™ Technology</h2>
+            <p class="tell-detector-subtitle">Revolutionary dual-signal fusion analyzing biomechanics and micro-expressions for championship-level character insights</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🎭</span>
+                <h3 class="feature-title">Micro-Expression Analysis</h3>
+                <p class="feature-description">Advanced facial action unit detection revealing character traits, grit, and determination through micro-expressions invisible to the naked eye.</p>
+                <div class="feature-metrics">
+                    <div class="metric-row">
+                        <span class="metric-label">Character Grade</span>
+                        <span class="metric-value">A-</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Grit Score</span>
+                        <span class="metric-value">84.52</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Mental Toughness</span>
+                        <span class="metric-value">89.7%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <span class="feature-icon">⚖️</span>
+                <h3 class="feature-title">Dual-Signal Fusion</h3>
+                <p class="feature-description">Combines biomechanics stability with facial micro-expressions for complete performance psychology analysis.</p>
+                <div class="feature-metrics">
+                    <div class="metric-row">
+                        <span class="metric-label">Biomechanics Score</span>
+                        <span class="metric-value">92.1/100</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Expression Stability</span>
+                        <span class="metric-value">87.3%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Pressure Handling</span>
+                        <span class="metric-value">94.7%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <span class="feature-icon">🏆</span>
+                <h3 class="feature-title">Championship Character</h3>
+                <p class="feature-description">Identifies and quantifies the mental traits that separate champions from competitors through advanced psychological profiling.</p>
+                <div class="feature-metrics">
+                    <div class="metric-row">
+                        <span class="metric-label">Leadership Potential</span>
+                        <span class="metric-value">67.9/100</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Clutch Factor</span>
+                        <span class="metric-value">84.5%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Competitive Drive</span>
+                        <span class="metric-value">92.97</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="/premium-packages.html" class="btn-primary" style="font-size: 1.2rem; padding: 1.2rem 2.5rem;">
+                🚀 Unlock Tell Detector™ Premium
+            </a>
+        </div>
+    </section>
+
+    <!-- Video Showcase -->
+    <section class="video-showcase" id="videos">
+        <div class="dashboard-header">
+            <h2 class="dashboard-title">Intelligence in Action</h2>
+            <p style="font-size: 1.2rem; opacity: 0.8;">Revolutionary video analysis powered by championship AI</p>
+        </div>
+        
+        <div class="video-grid">
+            <div class="video-card">
+                <video class="video-player" controls poster="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=500&h=300&fit=crop">
+                    <source src="https://customer-w33nxaivs01oev2i.cloudflarestream.com/pattern-recognition-demo/manifest/video.m3u8" type="application/x-mpegURL">
+                </video>
+                <div class="video-info">
+                    <h3 class="video-title">Tell Detector™ Micro-Expression Analysis</h3>
+                    <p class="video-description">Advanced AI analyzing facial micro-expressions and character traits that determine championship performance under pressure</p>
+                </div>
+            </div>
+            
+            <div class="video-card">
+                <video class="video-player" controls poster="https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d?w=500&h=300&fit=crop">
+                    <source src="https://customer-w33nxaivs01oev2i.cloudflarestream.com/decision-velocity-demo/manifest/video.m3u8" type="application/x-mpegURL">
+                </video>
+                <div class="video-info">
+                    <h3 class="video-title">Real-Time Biomechanics Coaching</h3>
+                    <p class="video-description">Sub-50ms response times delivering championship-level coaching insights and performance optimization recommendations</p>
+                </div>
+            </div>
+            
+            <div class="video-card">
+                <video class="video-player" controls poster="https://images.unsplash.com/photo-1606778118143-3a9ab58b605e?w=500&h=300&fit=crop">
+                    <source src="https://customer-w33nxaivs01oev2i.cloudflarestream.com/gamification-demo/manifest/video.m3u8" type="application/x-mpegURL">
+                </video>
+                <div class="video-info">
+                    <h3 class="video-title">Championship Gamification Engine</h3>
+                    <p class="video-description">Rewarding progression system with 1072 XP earned, achievement unlocks, and level progression that drives sustained improvement</p>
+                </div>
+            </div>
+            
+            <div class="video-card">
+                <video class="video-player" controls poster="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=300&fit=crop">
+                    <source src="https://customer-w33nxaivs01oev2i.cloudflarestream.com/integrated-experience-demo/manifest/video.m3u8" type="application/x-mpegURL">
+                </video>
+                <div class="video-info">
+                    <h3 class="video-title">Complete Integrated Platform</h3>
+                    <p class="video-description">Seamless user journey from upload to championship insights with 4.9/5.0 satisfaction rating and proven results</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="/blaze-vision-showcase.html" class="btn-primary" style="margin-right: 1rem;">📊 View Full Results</a>
+            <a href="/video-upload.html" class="btn-secondary">🎯 Start Your Analysis</a>
+        </div>
+    </section>
+
+    <!-- Dashboard -->
+    <div id="dashboard-root"></div>
+
+    <!-- Scripts -->
+    <script>
+        // Three.js Background Animation
+        function initThreeJS() {
+            const canvas = document.getElementById('hero-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+
+            // Create particle system
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 2000;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 50;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.02,
+                color: 0xBF5700,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            camera.position.z = 5;
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                particlesMesh.rotation.x += 0.0005;
+                particlesMesh.rotation.y += 0.001;
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Smooth scrolling functions
+        function scrollToDashboard() {
+            document.getElementById('dashboard-root').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        function scrollToVideos() {
+            document.getElementById('videos').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeJS();
+        });
+
+        // Dashboard React Component (simplified version)
+        const DashboardComponent = () => {
+            const [teams, setTeams] = React.useState([]);
+            const [filteredTeams, setFilteredTeams] = React.useState([]);
+            const [searchTerm, setSearchTerm] = React.useState('');
+            const [selectedLeague, setSelectedLeague] = React.useState('all');
+
+            // Sample team data (you would load this from your API)
+            React.useEffect(() => {
+                const sampleTeams = [
+                    { name: "St. Louis Cardinals", league: "MLB", founded: 1882, division: "NL Central", titles: 11, competitive: 164, legacy: 103 },
+                    { name: "Texas Rangers", league: "MLB", founded: 1961, division: "AL West", titles: 1, competitive: 94, legacy: 38 },
+                    { name: "Tennessee Titans", league: "NFL", founded: 1960, division: "AFC South", titles: 0, competitive: 78, legacy: 35 },
+                    { name: "Memphis Grizzlies", league: "NBA", founded: 1995, division: "Southwest", titles: 0, competitive: 67, legacy: 28 }
+                ];
+                setTeams(sampleTeams);
+                setFilteredTeams(sampleTeams);
+            }, []);
+
+            // Filter teams based on search and league selection
+            React.useEffect(() => {
+                let filtered = teams.filter(team => 
+                    team.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                    (selectedLeague === 'all' || team.league === selectedLeague)
+                );
+                setFilteredTeams(filtered);
+            }, [searchTerm, selectedLeague, teams]);
+
+            return React.createElement('div', { className: 'dashboard', id: 'dashboard' },
+                React.createElement('div', { className: 'dashboard-header' },
+                    React.createElement('h2', { className: 'dashboard-title' }, 'Championship Analytics Dashboard'),
+                    React.createElement('p', { style: { fontSize: '1.2rem', opacity: 0.8 } }, `${filteredTeams.length} teams • Real-time intelligence`)
+                ),
+                React.createElement('div', { className: 'controls' },
+                    React.createElement('input', {
+                        type: 'text',
+                        className: 'search-box',
+                        placeholder: 'Search teams...',
+                        value: searchTerm,
+                        onChange: (e) => setSearchTerm(e.target.value)
+                    }),
+                    React.createElement('select', {
+                        className: 'filter-select',
+                        value: selectedLeague,
+                        onChange: (e) => setSelectedLeague(e.target.value)
+                    },
+                        React.createElement('option', { value: 'all' }, 'All Leagues'),
+                        React.createElement('option', { value: 'MLB' }, 'MLB'),
+                        React.createElement('option', { value: 'NFL' }, 'NFL'),
+                        React.createElement('option', { value: 'NBA' }, 'NBA')
+                    )
+                ),
+                React.createElement('div', { className: 'stats-grid' },
+                    React.createElement('div', { className: 'stat-card' },
+                        React.createElement('div', { className: 'stat-value' }, filteredTeams.length),
+                        React.createElement('div', { className: 'stat-label' }, 'Total Teams')
+                    ),
+                    React.createElement('div', { className: 'stat-card' },
+                        React.createElement('div', { className: 'stat-value' }, '96.3%'),
+                        React.createElement('div', { className: 'stat-label' }, 'Accuracy Rate')
+                    ),
+                    React.createElement('div', { className: 'stat-card' },
+                        React.createElement('div', { className: 'stat-value' }, '<50ms'),
+                        React.createElement('div', { className: 'stat-label' }, 'Response Time')
+                    ),
+                    React.createElement('div', { className: 'stat-card' },
+                        React.createElement('div', { className: 'stat-value' }, '4.9/5'),
+                        React.createElement('div', { className: 'stat-label' }, 'User Rating')
+                    )
+                ),
+                React.createElement('div', { className: 'teams-grid' },
+                    filteredTeams.map(team =>
+                        React.createElement('div', { className: 'team-card', key: team.name },
+                            React.createElement('div', { className: 'team-name' }, team.name),
+                            React.createElement('div', { className: 'team-info' },
+                                React.createElement('div', null, `League: ${team.league}`),
+                                React.createElement('div', null, `Founded: ${team.founded}`),
+                                React.createElement('div', null, `Division: ${team.division}`),
+                                React.createElement('div', null, `Titles: ${team.titles}`)
+                            ),
+                            React.createElement('div', { className: 'team-metrics' },
+                                React.createElement('div', { className: 'metric' },
+                                    React.createElement('div', { className: 'metric-value' }, team.competitive),
+                                    React.createElement('div', { className: 'metric-label' }, 'Competitive')
+                                ),
+                                React.createElement('div', { className: 'metric' },
+                                    React.createElement('div', { className: 'metric-value' }, team.legacy),
+                                    React.createElement('div', { className: 'metric-label' }, 'Legacy')
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        };
+
+        // Render dashboard after React loads
+        setTimeout(() => {
+            ReactDOM.render(React.createElement(DashboardComponent), document.getElementById('dashboard-root'));
+        }, 1000);
+    </script>
+</body>
+</html>

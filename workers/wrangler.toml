@@ -1,0 +1,55 @@
+name = "blaze-data-pipeline"
+main = "data-pipeline-worker.js"
+compatibility_date = "2025-08-24"
+compatibility_flags = ["nodejs_compat"]
+
+[env.production]
+name = "blaze-data-pipeline-prod"
+
+[env.staging]
+name = "blaze-data-pipeline-staging"
+
+# R2 Bucket bindings
+[[r2_buckets]]
+binding = "DATA_BUCKET"
+bucket_name = "blaze-intelligence-data"
+preview_bucket_name = "blaze-intelligence-data-preview"
+
+# KV namespace for metadata and caching
+[[kv_namespaces]]
+binding = "PIPELINE_KV"
+id = "1ddc00485f6140e281c8545a92fa83e4"
+preview_id = "1ddc00485f6140e281c8545a92fa83e4"
+
+# Environment variables
+[vars]
+API_VERSION = "1.0"
+PIPELINE_NAME = "blaze-data-pipeline"
+MAX_BATCH_SIZE = "1000"
+DEFAULT_CACHE_TTL = "300"
+
+# Production environment variables (will be set via CLI)
+[env.production.vars]
+ENVIRONMENT = "production"
+LOG_LEVEL = "info"
+
+[env.staging.vars]  
+ENVIRONMENT = "staging"
+LOG_LEVEL = "debug"
+
+# Analytics Engine binding for metrics
+[[analytics_engine_datasets]]
+binding = "ANALYTICS"
+
+# Scheduled triggers for data ingestion
+[[triggers]]
+crons = ["0 */6 * * *"]
+
+# Route configuration
+[[routes]]
+pattern = "data-pipeline.blaze-intelligence.com/*"
+zone_name = "blaze-intelligence.com"
+
+# Build configuration
+[build]
+command = "echo 'No build step required for this worker'"

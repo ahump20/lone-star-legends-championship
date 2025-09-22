@@ -1,0 +1,508 @@
+[
+  {
+    "name": "Ridge_bat_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "batting",
+      "frame": 0,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_bat_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "batting",
+      "frame": 1,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_bat_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "batting",
+      "frame": 2,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_bat_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "batting",
+      "frame": 3,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_bat_4",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "batting",
+      "frame": 4,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_bat_5",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "batting",
+      "frame": 5,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_pitch_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "pitching",
+      "frame": 0,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_pitch_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "pitching",
+      "frame": 1,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_pitch_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "pitching",
+      "frame": 2,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_pitch_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "pitching",
+      "frame": 3,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_pitch_4",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "pitching",
+      "frame": 4,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_pitch_5",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "pitching",
+      "frame": 5,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_pitch_6",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "pitching",
+      "frame": 6,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_pitch_7",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "pitching",
+      "frame": 7,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_field_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "fielding",
+      "frame": 0,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_field_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "fielding",
+      "frame": 1,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_field_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "fielding",
+      "frame": 2,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_field_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "fielding",
+      "frame": 3,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_run_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "running",
+      "frame": 0,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_run_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "running",
+      "frame": 1,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_run_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "running",
+      "frame": 2,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  },
+  {
+    "name": "Ridge_run_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ridge",
+      "animation": "running",
+      "frame": 3,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 7,
+        "power": 4,
+        "arm": 8,
+        "fielding": 8
+      }
+    }
+  }
+]

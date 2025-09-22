@@ -1,0 +1,29 @@
+{
+  "sport": "baseball",
+  "analysis_type": "batting",
+  "biomechanics": {
+    "stance_score": 87.3,
+    "balance_score": 92.1,
+    "timing_score": 84.7,
+    "power_efficiency": 89.5,
+    "consistency_rating": 91.2,
+    "kinetic_chain_efficiency": 88.9,
+    "injury_risk_factor": 15.3
+  },
+  "coaching_insights": [
+    {
+      "priority": "high",
+      "title": "Timing Synchronization Opportunity",
+      "description": "Small timing adjustments could unlock 12-15% more power",
+      "confidence": 0.89
+    },
+    {
+      "priority": "medium",
+      "title": "Balance Enhancement",
+      "description": "Excellent balance foundation - optimize for consistency",
+      "confidence": 0.92
+    }
+  ],
+  "improvement_potential": 15.7,
+  "championship_readiness": 88.4
+}

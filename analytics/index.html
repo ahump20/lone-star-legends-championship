@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics Hub | Blaze Intelligence</title>
+  <meta name="description" content="Comprehensive sports analytics platform with real-time insights, dashboard, and NIL valuation tools.">
+  <link rel="canonical" href="https://blaze-intelligence.com/analytics/">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/blaze.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/flow-styles.css">
+</head>
+<body>
+  <div id="navigation-container"></div>
+  
+  <main class="main-content">
+    <div class="container">
+      <div class="hero-section text-center">
+        <h1 class="hero-title">Analytics Hub</h1>
+        <p class="hero-description">
+          Real-time sports analytics with championship-grade intelligence
+        </p>
+      </div>
+      
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <h3><a href="/analytics/dashboard/">Live Dashboard</a></h3>
+          <p>Real-time performance metrics and team analytics</p>
+        </div>
+        
+        <div class="analytics-card">
+          <h3><a href="/analytics/nil-valuation/">NIL Valuation</a></h3>
+          <p>Name, Image, Likeness valuation and market analysis</p>
+        </div>
+        
+        <div class="analytics-card">
+          <h3><a href="/analytics/real-time/">Real-Time Feed</a></h3>
+          <p>Live data streams and instant insights</p>
+        </div>
+        
+        <div class="analytics-card">
+          <h3><a href="/analytics/scorecard/">Performance Scorecard</a></h3>
+          <p>Comprehensive performance evaluation framework</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <script type="module" src="/js/core.js"></script>
+  <script>
+    // Load navigation
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const response = await fetch('/components/navigation.html');
+        const navHTML = await response.text();
+        document.getElementById('navigation-container').innerHTML = navHTML;
+        
+        // Initialize navigation if needed
+        if (typeof initializeNavigation === 'function') {
+          initializeNavigation();
+        }
+      } catch (error) {
+        console.error('Failed to load navigation:', error);
+      }
+    });
+  </script>
+</body>
+</html>

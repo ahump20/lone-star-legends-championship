@@ -1,0 +1,95 @@
+{
+  "integrations": {
+    "real_time_video_analysis": {
+      "description": "Live video stream analysis during games/practices",
+      "capabilities": [
+        "Real-time micro-expression detection",
+        "Stress level monitoring",
+        "Confidence assessment",
+        "Team chemistry analysis",
+        "Momentum shift detection"
+      ],
+      "technical_specs": {
+        "input_formats": [
+          "RTMP",
+          "WebRTC",
+          "HLS"
+        ],
+        "processing_latency": "<500ms",
+        "accuracy": ">95%",
+        "concurrent_streams": "100+"
+      }
+    },
+    "historical_video_processing": {
+      "description": "Batch analysis of game footage and interviews",
+      "capabilities": [
+        "Performance correlation analysis",
+        "Character trait identification",
+        "Leadership quality assessment",
+        "Pressure response evaluation",
+        "Development tracking"
+      ],
+      "technical_specs": {
+        "supported_formats": [
+          "MP4",
+          "MOV",
+          "AVI",
+          "MKV"
+        ],
+        "processing_speed": "10x real-time",
+        "batch_size": "Unlimited",
+        "storage": "Encrypted cloud storage"
+      }
+    },
+    "recruitment_intelligence": {
+      "description": "Character and performance assessment for draft/recruitment",
+      "capabilities": [
+        "Interview analysis",
+        "Combine performance correlation",
+        "Character red flags detection",
+        "Team fit assessment",
+        "Long-term potential prediction"
+      ],
+      "roi_metrics": {
+        "draft_success_improvement": "35%",
+        "character_issue_prevention": "78%",
+        "team_chemistry_optimization": "42%",
+        "recruitment_cost_reduction": "23%"
+      }
+    },
+    "coaching_optimization": {
+      "description": "Tell Detector\u2122 insights for coaching staff",
+      "capabilities": [
+        "Player motivation state tracking",
+        "Communication style optimization",
+        "Team meeting effectiveness",
+        "Individual player coaching needs",
+        "Crisis intervention alerts"
+      ],
+      "integration_points": [
+        "Practice planning software",
+        "Game day preparation tools",
+        "Player development platforms",
+        "Performance analytics suites"
+      ]
+    }
+  },
+  "api_documentation": {
+    "authentication": "Bearer token + API key",
+    "base_url": "https://api.blaze.ai/v1/tell-detector",
+    "endpoints": {
+      "/analyze/video": "POST - Upload video for analysis",
+      "/analyze/stream": "WebSocket - Real-time stream analysis",
+      "/results/{analysis_id}": "GET - Retrieve analysis results",
+      "/insights/player/{player_id}": "GET - Player-specific insights",
+      "/insights/team/{team_id}": "GET - Team-level insights"
+    },
+    "pricing": {
+      "per_minute_analysis": "$2.50",
+      "real_time_streaming": "$10.00/hour",
+      "bulk_processing": "$1.00/minute (1000+ minutes)",
+      "enterprise_unlimited": "$25,000/month"
+    }
+  },
+  "created_at": "2025-08-24T17:05:23.924757"
+}

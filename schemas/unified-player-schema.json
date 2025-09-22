@@ -1,0 +1,196 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Blaze Intelligence Unified Player Schema",
+  "type": "object",
+  "required": ["player_id", "name", "team", "league", "position", "2024_stats", "2025_projection", "HAV_F", "last_updated"],
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Unique identifier for the player"
+    },
+    "name": {
+      "type": "string",
+      "description": "Player's full name"
+    },
+    "team": {
+      "type": "string",
+      "description": "Current team name"
+    },
+    "league": {
+      "type": "string",
+      "enum": ["MLB", "NFL", "NBA", "NCAA_FB", "NCAA_BB", "HS_FB", "HS_BB", "NPB", "KBO", "CPBL", "LMB", "LIDOM", "LVBP", "ABL"],
+      "description": "League identifier"
+    },
+    "position": {
+      "type": "string",
+      "description": "Player's primary position"
+    },
+    "age": {
+      "type": "integer",
+      "minimum": 14,
+      "maximum": 50
+    },
+    "height": {
+      "type": "string",
+      "pattern": "^\\d{1}['']\\d{1,2}[\"'']?$"
+    },
+    "weight": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 400
+    },
+    "2024_stats": {
+      "type": "object",
+      "properties": {
+        "games_played": { "type": "integer" },
+        "primary_metric": { "type": "number" },
+        "secondary_metric": { "type": "number" },
+        "efficiency_rating": { "type": "number" },
+        "war_equivalent": { "type": "number" },
+        "raw_stats": { "type": "object" }
+      }
+    },
+    "2025_projection": {
+      "type": "object",
+      "properties": {
+        "games_projected": { "type": "integer" },
+        "primary_metric": { "type": "number" },
+        "secondary_metric": { "type": "number" },
+        "breakout_probability": { "type": "number", "minimum": 0, "maximum": 1 },
+        "injury_risk": { "type": "number", "minimum": 0, "maximum": 1 },
+        "confidence_interval": {
+          "type": "object",
+          "properties": {
+            "lower": { "type": "number" },
+            "upper": { "type": "number" }
+          }
+        }
+      }
+    },
+    "NIL_profile": {
+      "type": "object",
+      "properties": {
+        "current_value": { "type": "number", "minimum": 0 },
+        "projected_value": { "type": "number", "minimum": 0 },
+        "social_following": {
+          "type": "object",
+          "properties": {
+            "instagram": { "type": "integer" },
+            "twitter": { "type": "integer" },
+            "tiktok": { "type": "integer" },
+            "total": { "type": "integer" }
+          }
+        },
+        "endorsements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "brand": { "type": "string" },
+              "value": { "type": "number" },
+              "start_date": { "type": "string", "format": "date" },
+              "end_date": { "type": "string", "format": "date" }
+            }
+          }
+        },
+        "marketability_score": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "HAV_F": {
+      "type": "object",
+      "required": ["championship_readiness", "cognitive_leverage", "nil_trust", "overall"],
+      "properties": {
+        "championship_readiness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Weighted: Performance (40%), Clutch (30%), Health (30%)"
+        },
+        "cognitive_leverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Weighted: Decision speed (35%), Pattern recognition (35%), Adaptability (30%)"
+        },
+        "nil_trust": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Weighted: Social influence (40%), Brand alignment (30%), Market timing (30%)"
+        },
+        "overall": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Composite HAV-F score"
+        }
+      }
+    },
+    "scouting_notes": {
+      "type": "object",
+      "properties": {
+        "strengths": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "weaknesses": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "comparisons": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "development_path": { "type": "string" }
+      }
+    },
+    "contract_status": {
+      "type": "object",
+      "properties": {
+        "current_contract": {
+          "type": "object",
+          "properties": {
+            "years": { "type": "integer" },
+            "total_value": { "type": "number" },
+            "aav": { "type": "number" },
+            "expiry": { "type": "string", "format": "date" }
+          }
+        },
+        "market_value": { "type": "number" },
+        "free_agency_year": { "type": "integer" }
+      }
+    },
+    "injury_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": { "type": "string", "format": "date" },
+          "injury": { "type": "string" },
+          "games_missed": { "type": "integer" },
+          "severity": {
+            "type": "string",
+            "enum": ["minor", "moderate", "major", "career-threatening"]
+          }
+        }
+      }
+    },
+    "international_status": {
+      "type": "object",
+      "properties": {
+        "posting_eligible": { "type": "boolean" },
+        "posting_deadline": { "type": "string", "format": "date" },
+        "mlb_ready": { "type": "boolean" },
+        "visa_status": { "type": "string" }
+      }
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "data_sources": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+@import "./brand.css";
+@import "./typography.css";
+
+/* Base resets */
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--og-bg);
+  font-family: var(--bi-font-secondary);
+  color: var(--og-ui-text);
+}
+
+/* Canvas style: center and outline */
+canvas#gameCanvas {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  outline: 2px solid var(--bi-platinum);
+  background: radial-gradient(1200px 800px at 50% 50%, #78c261, var(--og-field));
+}
+
+/* Generic UI card for future use */
+.ui-card {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: var(--og-ui-bg);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in oklab, var(--bi-pearl) 30%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+/* Button styling for menus */
+.button {
+  font-family: var(--bi-font-primary);
+  font-weight: 600;
+  letter-spacing: .4px;
+  background: var(--bi-burnt-orange);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  transition: transform .15s var(--bi-ease), filter .2s var(--bi-ease);
+}
+.button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.button:active { transform: translateY(0); }

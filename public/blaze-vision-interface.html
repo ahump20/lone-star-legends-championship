@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaze Vision AI - Championship Video Coaching</title>
+    <script src="https://unpkg.com/three@0.155.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.155.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Three.js Hero Background */
+        #hero-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 165, 0, 0.2);
+            padding: 1rem 2rem;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #FFA500;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #FFA500, #FF6B35);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover {
+            color: #FFA500;
+            background: rgba(255, 165, 0, 0.1);
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #FFA500, #FF6B35);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 165, 0, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            min-height: 100vh;
+        }
+
+        .hero-section {
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            background: linear-gradient(45deg, #FFA500, #FF6B35, #FFA500);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Video Upload Interface */
+        .upload-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 165, 0, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 165, 0, 0.1), transparent);
+            transition: left 1.5s ease;
+        }
+
+        .upload-section:hover::before {
+            left: 100%;
+        }
+
+        .upload-section:hover {
+            border-color: rgba(255, 165, 0, 0.6);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .upload-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(45deg, #FFA500, #FF6B35);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .upload-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #FFA500;
+        }
+
+        .upload-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-button {
+            background: linear-gradient(45deg, #FFA500, #FF6B35);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 1rem;
+        }
+
+        .file-input-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 165, 0, 0.3);
+        }
+
+        /* Sport Selection */
+        .sport-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .sport-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 165, 0, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sport-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 165, 0, 0.1), rgba(255, 107, 53, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sport-card:hover::before {
+            opacity: 1;
+        }
+
+        .sport-card:hover {
+            border-color: #FFA500;
+            transform: translateY(-5px);
+        }
+
+        .sport-card.active {
+            border-color: #FFA500;
+            background: rgba(255, 165, 0, 0.1);
+        }
+
+        .sport-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .sport-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .sport-description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Analysis Dashboard */
+        .analysis-dashboard {
+            display: none;
+            margin: 3rem auto;
+            max-width: 1400px;
+            padding: 0 2rem;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #FFA500;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .video-player-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 165, 0, 0.2);
+        }
+
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .control-button {
+            background: rgba(255, 165, 0, 0.2);
+            border: 1px solid rgba(255, 165, 0, 0.4);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 165, 0, 0.4);
+        }
+
+        .metrics-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 165, 0, 0.2);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 165, 0, 0.1);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #FFA500;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Coaching Insights */
+        .insights-section {
+            margin: 3rem auto;
+            max-width: 1400px;
+            padding: 0 2rem;
+        }
+
+        .insights-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .insights-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #FFA500;
+            margin-bottom: 0.5rem;
+        }
+
+        .insights-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .insight-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 165, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .insight-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 165, 0, 0.4);
+        }
+
+        .insight-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .priority-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .priority-critical {
+            background: rgba(255, 59, 48, 0.2);
+            color: #FF3B30;
+            border: 1px solid rgba(255, 59, 48, 0.3);
+        }
+
+        .priority-high {
+            background: rgba(255, 165, 0, 0.2);
+            color: #FFA500;
+            border: 1px solid rgba(255, 165, 0, 0.3);
+        }
+
+        .priority-medium {
+            background: rgba(52, 199, 89, 0.2);
+            color: #34C759;
+            border: 1px solid rgba(52, 199, 89, 0.3);
+        }
+
+        .insight-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .insight-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .drill-recommendations {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 165, 0, 0.1);
+        }
+
+        .drill-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #FFA500;
+            margin-bottom: 1rem;
+        }
+
+        .drill-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .drill-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .drill-item:last-child {
+            border-bottom: none;
+        }
+
+        .drill-item::before {
+            content: "→";
+            color: #FFA500;
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
+        /* Progress Tracking */
+        .progress-section {
+            margin: 3rem auto;
+            max-width: 1400px;
+            padding: 0 2rem;
+        }
+
+        .progress-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 165, 0, 0.2);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .progress-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #FFA500;
+        }
+
+        .xp-display {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .xp-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #FFA500;
+        }
+
+        .xp-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .achievement-badge {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .analysis-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .upload-section {
+                padding: 2rem 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 15, 35, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(255, 165, 0, 0.2);
+            border-top: 4px solid #FFA500;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 1rem;
+            color: #FFA500;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Three.js Hero Background -->
+    <canvas id="hero-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-icon">🎯</div>
+                <span>Blaze Vision AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#sports" class="nav-link">Sports</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#upload" class="cta-button">Start Analysis</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section" id="hero">
+            <h1 class="hero-title">Championship Video Intelligence</h1>
+            <p class="hero-subtitle">
+                The world's most advanced AI coaching platform. Upload your video, get championship-grade biomechanics analysis, personalized coaching insights, and unlock your athletic potential.
+            </p>
+
+            <!-- Video Upload Interface -->
+            <div class="upload-section" id="upload">
+                <div class="upload-icon">🎥</div>
+                <h2 class="upload-title">Upload Your Video</h2>
+                <p class="upload-description">
+                    Drop your video here or click to select. We support all major formats and provide instant AI analysis.
+                </p>
+                
+                <div class="file-input-wrapper">
+                    <input type="file" id="videoFile" class="file-input" accept="video/*" multiple>
+                    <button class="file-input-button" onclick="document.getElementById('videoFile').click()">
+                        Choose Video File
+                    </button>
+                    <button class="file-input-button" onclick="startLiveAnalysis()">
+                        Live Analysis
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sport Selection -->
+            <div class="sport-selection" id="sportSelection">
+                <div class="sport-card" data-sport="baseball">
+                    <span class="sport-icon">⚾</span>
+                    <div class="sport-name">Baseball</div>
+                    <div class="sport-description">Batting, Pitching, Fielding</div>
+                </div>
+                <div class="sport-card" data-sport="football">
+                    <span class="sport-icon">🏈</span>
+                    <div class="sport-name">Football</div>
+                    <div class="sport-description">Quarterback, Running, Kicking</div>
+                </div>
+                <div class="sport-card" data-sport="basketball">
+                    <span class="sport-icon">🏀</span>
+                    <div class="sport-name">Basketball</div>
+                    <div class="sport-description">Shooting, Dribbling, Defense</div>
+                </div>
+                <div class="sport-card" data-sport="tennis">
+                    <span class="sport-icon">🎾</span>
+                    <div class="sport-name">Tennis</div>
+                    <div class="sport-description">Serve, Forehand, Backhand</div>
+                </div>
+                <div class="sport-card" data-sport="golf">
+                    <span class="sport-icon">⛳</span>
+                    <div class="sport-name">Golf</div>
+                    <div class="sport-description">Drive, Iron, Putt</div>
+                </div>
+                <div class="sport-card" data-sport="soccer">
+                    <span class="sport-icon">⚽</span>
+                    <div class="sport-name">Soccer</div>
+                    <div class="sport-description">Shooting, Passing, Dribbling</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analysis Dashboard -->
+        <section class="analysis-dashboard" id="dashboard">
+            <div class="dashboard-header">
+                <h2 class="dashboard-title">Championship Analysis Results</h2>
+            </div>
+
+            <div class="analysis-grid">
+                <!-- Video Player Section -->
+                <div class="video-player-section">
+                    <div class="video-player" id="videoPlayer">
+                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: rgba(255,255,255,0.5);">
+                            Video Player
+                        </div>
+                    </div>
+                    <div class="video-controls">
+                        <button class="control-button">⏮️</button>
+                        <button class="control-button">⏯️</button>
+                        <button class="control-button">⏭️</button>
+                        <button class="control-button">🔄</button>
+                        <button class="control-button">⚙️</button>
+                    </div>
+                </div>
+
+                <!-- Metrics Section -->
+                <div class="metrics-section">
+                    <h3 style="color: #FFA500; margin-bottom: 1.5rem;">Performance Metrics</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="overallScore">87.3</div>
+                            <div class="metric-label">Overall Score</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="balanceScore">92.1</div>
+                            <div class="metric-label">Balance</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="timingScore">84.7</div>
+                            <div class="metric-label">Timing</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="powerScore">89.5</div>
+                            <div class="metric-label">Power</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="consistencyScore">91.2</div>
+                            <div class="metric-label">Consistency</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="injuryRisk">12%</div>
+                            <div class="metric-label">Injury Risk</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Tracking -->
+            <div class="progress-section">
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <h3 class="progress-title">Your Progress</h3>
+                        <div class="xp-display">
+                            <div>
+                                <span class="xp-value" id="xpEarned">+250</span>
+                                <span class="xp-label">XP Earned</span>
+                            </div>
+                            <div class="achievement-badge" id="achievement">🏆 Elite Performance</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coaching Insights -->
+        <section class="insights-section" id="insights">
+            <div class="insights-header">
+                <h2 class="insights-title">AI Coaching Insights</h2>
+                <p style="color: rgba(255,255,255,0.7);">Personalized recommendations from championship-level analysis</p>
+            </div>
+
+            <div class="insights-grid" id="insightsGrid">
+                <!-- Insights will be populated dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div style="text-align: center;">
+            <div class="loading-spinner"></div>
+            <div class="loading-text" id="loadingText">Analyzing your video...</div>
+        </div>
+    </div>
+
+    <script>
+        // Three.js Hero Background
+        let scene, camera, renderer, particles;
+        
+        function initThreeJS() {
+            const canvas = document.getElementById('hero-canvas');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Create particle system
+            const geometry = new THREE.BufferGeometry();
+            const particleCount = 200;
+            const positions = new Float32Array(particleCount * 3);
+            const velocities = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 20;
+                positions[i + 1] = (Math.random() - 0.5) * 20;
+                positions[i + 2] = (Math.random() - 0.5) * 20;
+                
+                velocities[i] = (Math.random() - 0.5) * 0.02;
+                velocities[i + 1] = (Math.random() - 0.5) * 0.02;
+                velocities[i + 2] = (Math.random() - 0.5) * 0.02;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+
+            const material = new THREE.PointsMaterial({
+                color: 0xFFA500,
+                size: 0.1,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            camera.position.z = 10;
+
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (particles) {
+                particles.rotation.x += 0.001;
+                particles.rotation.y += 0.002;
+
+                const positions = particles.geometry.attributes.position.array;
+                const velocities = particles.geometry.attributes.velocity.array;
+
+                for (let i = 0; i < positions.length; i += 3) {
+                    positions[i] += velocities[i];
+                    positions[i + 1] += velocities[i + 1];
+                    positions[i + 2] += velocities[i + 2];
+
+                    // Wrap around
+                    if (Math.abs(positions[i]) > 10) velocities[i] *= -1;
+                    if (Math.abs(positions[i + 1]) > 10) velocities[i + 1] *= -1;
+                    if (Math.abs(positions[i + 2]) > 10) velocities[i + 2] *= -1;
+                }
+
+                particles.geometry.attributes.position.needsUpdate = true;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Sport Selection
+        let selectedSport = null;
+        let selectedAnalysis = null;
+
+        document.querySelectorAll('.sport-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.sport-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                selectedSport = card.dataset.sport;
+                console.log('Selected sport:', selectedSport);
+            });
+        });
+
+        // File Upload Handler
+        document.getElementById('videoFile').addEventListener('change', handleVideoUpload);
+
+        // Drag and Drop
+        const uploadSection = document.querySelector('.upload-section');
+        
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.style.borderColor = 'rgba(255, 165, 0, 0.8)';
+        });
+
+        uploadSection.addEventListener('dragleave', () => {
+            uploadSection.style.borderColor = 'rgba(255, 165, 0, 0.3)';
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.style.borderColor = 'rgba(255, 165, 0, 0.3)';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleVideoFile(files[0]);
+            }
+        });
+
+        function handleVideoUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleVideoFile(file);
+            }
+        }
+
+        function handleVideoFile(file) {
+            if (!selectedSport) {
+                alert('Please select a sport first!');
+                return;
+            }
+
+            showLoading('Analyzing your video...');
+            
+            // Simulate video analysis
+            setTimeout(() => {
+                showAnalysisResults(file);
+                hideLoading();
+            }, 3000);
+        }
+
+        function showLoading(text) {
+            document.getElementById('loadingText').textContent = text;
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function showAnalysisResults(file) {
+            // Show video in player
+            const videoPlayer = document.getElementById('videoPlayer');
+            const video = document.createElement('video');
+            video.src = URL.createObjectURL(file);
+            video.controls = true;
+            video.style.width = '100%';
+            video.style.height = '100%';
+            video.style.borderRadius = '12px';
+            videoPlayer.innerHTML = '';
+            videoPlayer.appendChild(video);
+
+            // Update metrics with random realistic values
+            updateMetrics();
+
+            // Generate coaching insights
+            generateCoachingInsights();
+
+            // Show dashboard
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('insights').style.display = 'block';
+
+            // Scroll to results
+            document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateMetrics() {
+            const metrics = {
+                overallScore: (Math.random() * 20 + 75).toFixed(1),
+                balanceScore: (Math.random() * 20 + 75).toFixed(1),
+                timingScore: (Math.random() * 20 + 70).toFixed(1),
+                powerScore: (Math.random() * 25 + 70).toFixed(1),
+                consistencyScore: (Math.random() * 20 + 75).toFixed(1),
+                injuryRisk: (Math.random() * 25 + 5).toFixed(0) + '%'
+            };
+
+            Object.entries(metrics).forEach(([key, value]) => {
+                const element = document.getElementById(key);
+                if (element) {
+                    animateValue(element, 0, parseFloat(value), 1500, key === 'injuryRisk' ? '%' : '');
+                }
+            });
+
+            // Update XP
+            const xp = Math.floor(Math.random() * 300 + 150);
+            animateValue(document.getElementById('xpEarned'), 0, xp, 2000, '+', 'XP');
+        }
+
+        function animateValue(element, start, end, duration, prefix = '', suffix = '') {
+            const startTime = performance.now();
+            const isPercentage = suffix === '%' || element.id === 'injuryRisk';
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                let current;
+                if (isPercentage) {
+                    current = Math.floor(start + (end - start) * progress);
+                } else {
+                    current = (start + (end - start) * progress).toFixed(1);
+                }
+                
+                element.textContent = prefix + current + suffix;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        function generateCoachingInsights() {
+            const insights = [
+                {
+                    priority: 'high',
+                    title: 'Balance Enhancement Opportunity',
+                    description: 'Your balance score shows great potential for improvement. Better balance leads to more consistent power generation and reduced injury risk.',
+                    drills: [
+                        'Single-leg stability holds (30 seconds each)',
+                        'Dynamic balance challenges (10 reps)',
+                        'Proprioceptive training (5 minutes)',
+                        'Weight transfer drills (15 reps)'
+                    ],
+                    improvement: '15-20%',
+                    timeframe: '2-3 weeks'
+                },
+                {
+                    priority: 'medium',
+                    title: 'Timing Synchronization',
+                    description: 'Small adjustments to your timing sequence could unlock significant power gains. Focus on the kinetic chain flow.',
+                    drills: [
+                        'Rhythm development exercises (10 reps)',
+                        'Tempo training sequences (5 minutes)',
+                        'Metronome synchronization (3 sets)',
+                        'Progressive timing challenges'
+                    ],
+                    improvement: '10-15%',
+                    timeframe: '1-2 weeks'
+                },
+                {
+                    priority: 'high',
+                    title: 'Power Transfer Optimization',
+                    description: 'Your kinetic chain efficiency is strong, but optimizing energy transfer could add significant power to your performance.',
+                    drills: [
+                        'Kinetic chain activation (8 reps)',
+                        'Explosive movement patterns (6 reps)',
+                        'Plyometric progressions (3 sets x 5)',
+                        'Power transfer exercises (10 reps)'
+                    ],
+                    improvement: '18-25%',
+                    timeframe: '3-4 weeks'
+                }
+            ];
+
+            const insightsGrid = document.getElementById('insightsGrid');
+            insightsGrid.innerHTML = '';
+
+            insights.forEach(insight => {
+                const insightCard = document.createElement('div');
+                insightCard.className = 'insight-card';
+                
+                insightCard.innerHTML = `
+                    <div class="insight-header">
+                        <span class="priority-badge priority-${insight.priority}">${insight.priority} Priority</span>
+                        <h3 class="insight-title">${insight.title}</h3>
+                    </div>
+                    <p class="insight-description">${insight.description}</p>
+                    <div class="drill-recommendations">
+                        <h4 class="drill-title">Recommended Drills</h4>
+                        <ul class="drill-list">
+                            ${insight.drills.map(drill => `<li class="drill-item">${drill}</li>`).join('')}
+                        </ul>
+                        <div style="margin-top: 1rem; display: flex; justify-content: space-between; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                            <span>Expected improvement: ${insight.improvement}</span>
+                            <span>Timeline: ${insight.timeframe}</span>
+                        </div>
+                    </div>
+                `;
+                
+                insightsGrid.appendChild(insightCard);
+            });
+        }
+
+        function startLiveAnalysis() {
+            if (!selectedSport) {
+                alert('Please select a sport first!');
+                return;
+            }
+
+            showLoading('Connecting to live analysis...');
+            
+            setTimeout(() => {
+                hideLoading();
+                alert('Live analysis feature coming soon! Upload a video file to get started.');
+            }, 2000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeJS();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+/* Font declarations: stub definitions. Font files should be provided via @font-face in production. */
+@font-face {
+  font-family: "Inter";
+  src: local("Inter");
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: local("JetBrains Mono");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+/* Define CSS variables for fonts */
+:root {
+  --bi-font-primary: "Neue Haas Grotesk Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --bi-font-secondary: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --bi-font-mono: "JetBrains Mono", ui-monospace, Consolas, Monaco, monospace;
+}

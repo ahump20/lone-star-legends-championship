@@ -1,0 +1,58 @@
+{
+  "kids": [
+    {
+      "name": "Ace",
+      "speed": 8,
+      "contact": 6,
+      "power": 5,
+      "arm": 7,
+      "fielding": 6,
+      "palette": "burnt-orange"
+    },
+    {
+      "name": "Skye",
+      "speed": 6,
+      "contact": 8,
+      "power": 4,
+      "arm": 6,
+      "fielding": 7,
+      "palette": "sky-blue"
+    },
+    {
+      "name": "Tex",
+      "speed": 5,
+      "contact": 6,
+      "power": 8,
+      "arm": 7,
+      "fielding": 5,
+      "palette": "navy"
+    },
+    {
+      "name": "Nova",
+      "speed": 7,
+      "contact": 5,
+      "power": 6,
+      "arm": 6,
+      "fielding": 8,
+      "palette": "teal"
+    }
+  ],
+  "palettes": {
+    "burnt-orange": {
+      "primary": "var(--bi-burnt-orange)",
+      "secondary": "var(--bi-platinum)"
+    },
+    "sky-blue": {
+      "primary": "var(--bi-sky-blue)",
+      "secondary": "var(--bi-graphite)"
+    },
+    "navy": {
+      "primary": "var(--bi-navy)",
+      "secondary": "var(--bi-pearl)"
+    },
+    "teal": {
+      "primary": "var(--bi-teal)",
+      "secondary": "var(--bi-pearl)"
+    }
+  }
+}

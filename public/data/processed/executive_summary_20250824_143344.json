@@ -1,0 +1,42 @@
+{
+  "timestamp": "2025-08-24T14:33:26.595357",
+  "runtime": "17.7 seconds",
+  "total_players": 861,
+  "modules_executed": [
+    "core",
+    "ai_predictions",
+    "video_analysis",
+    "social_sentiment",
+    "betting_markets"
+  ],
+  "key_insights": [
+    {
+      "insight": "Video mechanics correlate with social sentiment",
+      "confidence": "medium",
+      "description": "Players with superior biomechanics show 23% higher positive sentiment"
+    },
+    {
+      "insight": "HAV-F scores outperform market expectations",
+      "confidence": "high",
+      "description": "HAV-F cognitive leverage predicts market undervaluation with 78% accuracy"
+    }
+  ],
+  "value_opportunities": [
+    {
+      "category": "high_hav_f_undervalued",
+      "count": 0,
+      "description": "Players with 70+ HAV-F showing market undervaluation"
+    },
+    {
+      "category": "sentiment_market_mismatch",
+      "count": 5,
+      "description": "Positive sentiment players with favorable betting odds"
+    }
+  ],
+  "performance_correlations": {
+    "hav_f_vs_market_value": 0.67,
+    "video_grade_vs_sentiment": 0.43,
+    "betting_odds_vs_predictions": 0.71,
+    "social_following_vs_nil_value": 0.82
+  }
+}

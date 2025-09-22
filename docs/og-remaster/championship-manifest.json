@@ -1,0 +1,24 @@
+{
+  "name": "Blaze Intelligence OG Remaster - Championship Edition",
+  "version": "3.0.0-championship",
+  "description": "Pattern Recognition Weaponized for Championship Baseball",
+  "build": "2025-09-02T21:08:36Z",
+  "features": {
+    "advancedAI": true,
+    "voiceCommentary": true,
+    "tournamentMode": true,
+    "seasonMode": true,
+    "replaySystem": true,
+    "mlbIntegration": true,
+    "multiplayer": true,
+    "cardCollection": true,
+    "stadiumBuilder": true,
+    "advancedStats": true
+  },
+  "deployment": {
+    "platform": "Cloudflare Pages",
+    "domain": "baseball.blaze-intelligence.com",
+    "cdn": "Cloudflare",
+    "ssl": true
+  }
+}

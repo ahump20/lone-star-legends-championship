@@ -1,0 +1,14 @@
+{
+  "sfx": [
+    "bat_ping.wav",
+    "glove_thump.wav",
+    "crowd_ooh.wav",
+    "crowd_ahh.wav",
+    "error_oops.wav"
+  ],
+  "commentary": [
+    "nice_hit_01.ogg",
+    "big_rip_02.ogg",
+    "wheels_03.ogg"
+  ]
+}

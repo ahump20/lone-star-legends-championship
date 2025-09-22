@@ -1,0 +1,508 @@
+[
+  {
+    "name": "Ace_bat_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "batting",
+      "frame": 0,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_bat_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "batting",
+      "frame": 1,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_bat_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "batting",
+      "frame": 2,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_bat_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "batting",
+      "frame": 3,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_bat_4",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "batting",
+      "frame": 4,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_bat_5",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "batting",
+      "frame": 5,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_pitch_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "pitching",
+      "frame": 0,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_pitch_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "pitching",
+      "frame": 1,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_pitch_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "pitching",
+      "frame": 2,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_pitch_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "pitching",
+      "frame": 3,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_pitch_4",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "pitching",
+      "frame": 4,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_pitch_5",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "pitching",
+      "frame": 5,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_pitch_6",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "pitching",
+      "frame": 6,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_pitch_7",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "pitching",
+      "frame": 7,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_field_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "fielding",
+      "frame": 0,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_field_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "fielding",
+      "frame": 1,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_field_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "fielding",
+      "frame": 2,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_field_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "fielding",
+      "frame": 3,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_run_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "running",
+      "frame": 0,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_run_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "running",
+      "frame": 1,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_run_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "running",
+      "frame": 2,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ace_run_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ace",
+      "animation": "running",
+      "frame": 3,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 8,
+        "contact": 6,
+        "power": 5,
+        "arm": 7,
+        "fielding": 6
+      }
+    }
+  }
+]

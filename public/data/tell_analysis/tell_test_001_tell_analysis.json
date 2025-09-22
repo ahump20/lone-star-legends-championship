@@ -1,0 +1,1047 @@
+{
+  "session_id": "tell_test_001",
+  "timestamp": "2025-08-24T15:38:23.098854",
+  "video_metadata": {
+    "session_id": "tell_test_001",
+    "player_id": "test_player_001",
+    "sport": "baseball",
+    "action_type": "batting",
+    "frame_count": 60,
+    "duration": 2.0
+  },
+  "tell_detector_results": {
+    "character_profile": {
+      "overall_grit_score": 84.81,
+      "grit_consistency": 48.45,
+      "pressure_handling": 84.81,
+      "mental_toughness_grade": "A-",
+      "character_traits": [
+        "strong_character",
+        "reliable_under_pressure"
+      ],
+      "competitive_drive": 93.29,
+      "clutch_factor": 84.81,
+      "leadership_potential": 66.63
+    },
+    "micro_expressions": {
+      "dominant_expression": "slight_stress",
+      "expression_distribution": {
+        "slight_stress": {
+          "count": 2,
+          "total_intensity": 0.776
+        },
+        "determination": {
+          "count": 2,
+          "total_intensity": 1.076
+        },
+        "focus": {
+          "count": 2,
+          "total_intensity": 0.963
+        }
+      },
+      "average_intensity": 0.469,
+      "micro_expression_stability": 0.765,
+      "character_indicators": [
+        "manages_pressure",
+        "shows_effort"
+      ]
+    },
+    "composite_scores": {
+      "tell_detector_composite": 84.81,
+      "character_consistency": 48.45,
+      "pressure_resilience": 75.19,
+      "peak_performance_indicator": 93.79,
+      "mental_game_grade": "A-"
+    },
+    "pressure_analysis": [
+      {
+        "timestamp": 0.0,
+        "pressure_score": 10.58,
+        "breakdown_risk": 0.10584906763190276,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.03333333333333333,
+        "pressure_score": 6.32,
+        "breakdown_risk": 0.06323525120792738,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.06666666666666667,
+        "pressure_score": 10.62,
+        "breakdown_risk": 0.10621096579790802,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.1,
+        "pressure_score": 9.2,
+        "breakdown_risk": 0.09199713141809497,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.13333333333333333,
+        "pressure_score": 6.74,
+        "breakdown_risk": 0.06735870062504418,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.16666666666666666,
+        "pressure_score": 12.73,
+        "breakdown_risk": 0.12726782131063885,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.2,
+        "pressure_score": 6.21,
+        "breakdown_risk": 0.06211764253714435,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.23333333333333334,
+        "pressure_score": 15.77,
+        "breakdown_risk": 0.15770040560295498,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.26666666666666666,
+        "pressure_score": 8.63,
+        "breakdown_risk": 0.08628232980130378,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.3,
+        "pressure_score": 18.43,
+        "breakdown_risk": 0.18428403150927353,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.3333333333333333,
+        "pressure_score": 16.0,
+        "breakdown_risk": 0.16003270643836628,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.36666666666666664,
+        "pressure_score": 13.82,
+        "breakdown_risk": 0.13823267820853202,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.4,
+        "pressure_score": 8.25,
+        "breakdown_risk": 0.08250766674009029,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.43333333333333335,
+        "pressure_score": 16.18,
+        "breakdown_risk": 0.16181442953523487,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.4666666666666667,
+        "pressure_score": 11.06,
+        "breakdown_risk": 0.11064870332789013,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.5,
+        "pressure_score": 9.09,
+        "breakdown_risk": 0.09085275741311094,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.5333333333333333,
+        "pressure_score": 8.19,
+        "breakdown_risk": 0.08188838531481793,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.5666666666666667,
+        "pressure_score": 9.02,
+        "breakdown_risk": 0.09024546967836528,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.6,
+        "pressure_score": 11.12,
+        "breakdown_risk": 0.11121424909367007,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.6333333333333333,
+        "pressure_score": 16.99,
+        "breakdown_risk": 0.16990179861273774,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.6666666666666666,
+        "pressure_score": 8.27,
+        "breakdown_risk": 0.08270032127834483,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.7,
+        "pressure_score": 9.72,
+        "breakdown_risk": 0.09719113334237008,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.7333333333333333,
+        "pressure_score": 18.17,
+        "breakdown_risk": 0.18166125179269968,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.7666666666666667,
+        "pressure_score": 9.44,
+        "breakdown_risk": 0.09435815551589954,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.8,
+        "pressure_score": 21.22,
+        "breakdown_risk": 0.21216996354972395,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.8333333333333334,
+        "pressure_score": 9.04,
+        "breakdown_risk": 0.0903582601336626,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.8666666666666667,
+        "pressure_score": 11.11,
+        "breakdown_risk": 0.1110777095407434,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.9,
+        "pressure_score": 12.99,
+        "breakdown_risk": 0.1299172570273943,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.9333333333333333,
+        "pressure_score": 21.5,
+        "breakdown_risk": 0.21495244764254082,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 0.9666666666666667,
+        "pressure_score": 10.66,
+        "breakdown_risk": 0.10655397357544913,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.0,
+        "pressure_score": 19.4,
+        "breakdown_risk": 0.19397313167233363,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.0333333333333334,
+        "pressure_score": 12.66,
+        "breakdown_risk": 0.12655337886805426,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.0666666666666667,
+        "pressure_score": 18.18,
+        "breakdown_risk": 0.1818012558332677,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.1,
+        "pressure_score": 15.4,
+        "breakdown_risk": 0.15401929867790032,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.1333333333333333,
+        "pressure_score": 18.71,
+        "breakdown_risk": 0.18711136731378417,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.1666666666666667,
+        "pressure_score": 12.13,
+        "breakdown_risk": 0.12131051362681802,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.2,
+        "pressure_score": 21.31,
+        "breakdown_risk": 0.2131239766793348,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.2333333333333334,
+        "pressure_score": 15.37,
+        "breakdown_risk": 0.1537156808775468,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.2666666666666666,
+        "pressure_score": 12.19,
+        "breakdown_risk": 0.12186074145935394,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.3,
+        "pressure_score": 22.6,
+        "breakdown_risk": 0.22596023577486193,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.3333333333333333,
+        "pressure_score": 11.78,
+        "breakdown_risk": 0.11781147850562675,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.3666666666666667,
+        "pressure_score": 16.06,
+        "breakdown_risk": 0.16058103763388756,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.4,
+        "pressure_score": 14.84,
+        "breakdown_risk": 0.14838888396535752,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.4333333333333333,
+        "pressure_score": 19.11,
+        "breakdown_risk": 0.19111022262973407,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.4666666666666666,
+        "pressure_score": 19.32,
+        "breakdown_risk": 0.1932089087504339,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.5,
+        "pressure_score": 17.54,
+        "breakdown_risk": 0.1753941614920386,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.5333333333333334,
+        "pressure_score": 17.91,
+        "breakdown_risk": 0.17909187348774636,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.5666666666666667,
+        "pressure_score": 15.76,
+        "breakdown_risk": 0.15758889248477687,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.6,
+        "pressure_score": 24.16,
+        "breakdown_risk": 0.2416491527526388,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.6333333333333333,
+        "pressure_score": 22.22,
+        "breakdown_risk": 0.22217823468223385,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.6666666666666667,
+        "pressure_score": 22.28,
+        "breakdown_risk": 0.22275775789303423,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.7,
+        "pressure_score": 20.52,
+        "breakdown_risk": 0.2052093244442402,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.7333333333333334,
+        "pressure_score": 14.44,
+        "breakdown_risk": 0.14442934277572492,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.7666666666666666,
+        "pressure_score": 17.66,
+        "breakdown_risk": 0.17664341328541824,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.8,
+        "pressure_score": 24.81,
+        "breakdown_risk": 0.2481245297511262,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.8333333333333333,
+        "pressure_score": 23.77,
+        "breakdown_risk": 0.23772170667109008,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.8666666666666667,
+        "pressure_score": 21.45,
+        "breakdown_risk": 0.2144872494034523,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.9,
+        "pressure_score": 20.42,
+        "breakdown_risk": 0.2042348293033153,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.9333333333333333,
+        "pressure_score": 20.31,
+        "breakdown_risk": 0.2031183043077867,
+        "recovery_trajectory": "stable"
+      },
+      {
+        "timestamp": 1.9666666666666666,
+        "pressure_score": 22.15,
+        "breakdown_risk": 0.2215029467095998,
+        "recovery_trajectory": "stable"
+      }
+    ],
+    "grit_timeline": [
+      {
+        "timestamp": 0.0,
+        "frame": 0,
+        "grit_index": 89.42,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.03333333333333333,
+        "frame": 1,
+        "grit_index": 93.68,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.06666666666666667,
+        "frame": 2,
+        "grit_index": 89.38,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.1,
+        "frame": 3,
+        "grit_index": 90.8,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.13333333333333333,
+        "frame": 4,
+        "grit_index": 93.26,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.16666666666666666,
+        "frame": 5,
+        "grit_index": 87.27,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.2,
+        "frame": 6,
+        "grit_index": 93.79,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.23333333333333334,
+        "frame": 7,
+        "grit_index": 84.23,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.26666666666666666,
+        "frame": 8,
+        "grit_index": 91.37,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.3,
+        "frame": 9,
+        "grit_index": 81.57,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.3333333333333333,
+        "frame": 10,
+        "grit_index": 84.0,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.36666666666666664,
+        "frame": 11,
+        "grit_index": 86.18,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.4,
+        "frame": 12,
+        "grit_index": 91.75,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.43333333333333335,
+        "frame": 13,
+        "grit_index": 83.82,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.4666666666666667,
+        "frame": 14,
+        "grit_index": 88.94,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.5,
+        "frame": 15,
+        "grit_index": 90.91,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.5333333333333333,
+        "frame": 16,
+        "grit_index": 91.81,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.5666666666666667,
+        "frame": 17,
+        "grit_index": 90.98,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.6,
+        "frame": 18,
+        "grit_index": 88.88,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.6333333333333333,
+        "frame": 19,
+        "grit_index": 83.01,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.6666666666666666,
+        "frame": 20,
+        "grit_index": 91.73,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.7,
+        "frame": 21,
+        "grit_index": 90.28,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.7333333333333333,
+        "frame": 22,
+        "grit_index": 81.83,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.7666666666666667,
+        "frame": 23,
+        "grit_index": 90.56,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.8,
+        "frame": 24,
+        "grit_index": 78.78,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 0.8333333333333334,
+        "frame": 25,
+        "grit_index": 90.96,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "optimal_focus",
+          "controlled_breathing"
+        ]
+      },
+      {
+        "timestamp": 0.8666666666666667,
+        "frame": 26,
+        "grit_index": 88.89,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.9,
+        "frame": 27,
+        "grit_index": 87.01,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 0.9333333333333333,
+        "frame": 28,
+        "grit_index": 78.5,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 0.9666666666666667,
+        "frame": 29,
+        "grit_index": 89.34,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.0,
+        "frame": 30,
+        "grit_index": 80.6,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.0333333333333334,
+        "frame": 31,
+        "grit_index": 87.34,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.0666666666666667,
+        "frame": 32,
+        "grit_index": 81.82,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.1,
+        "frame": 33,
+        "grit_index": 84.6,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.1333333333333333,
+        "frame": 34,
+        "grit_index": 81.29,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.1666666666666667,
+        "frame": 35,
+        "grit_index": 87.87,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.2,
+        "frame": 36,
+        "grit_index": 78.69,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 1.2333333333333334,
+        "frame": 37,
+        "grit_index": 84.63,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.2666666666666666,
+        "frame": 38,
+        "grit_index": 87.81,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.3,
+        "frame": 39,
+        "grit_index": 77.4,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 1.3333333333333333,
+        "frame": 40,
+        "grit_index": 88.22,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.3666666666666667,
+        "frame": 41,
+        "grit_index": 83.94,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.4,
+        "frame": 42,
+        "grit_index": 85.16,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.4333333333333333,
+        "frame": 43,
+        "grit_index": 80.89,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.4666666666666666,
+        "frame": 44,
+        "grit_index": 80.68,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.5,
+        "frame": 45,
+        "grit_index": 82.46,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.5333333333333334,
+        "frame": 46,
+        "grit_index": 82.09,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.5666666666666667,
+        "frame": 47,
+        "grit_index": 84.24,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.6,
+        "frame": 48,
+        "grit_index": 75.84,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 1.6333333333333333,
+        "frame": 49,
+        "grit_index": 77.78,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 1.6666666666666667,
+        "frame": 50,
+        "grit_index": 77.72,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 1.7,
+        "frame": 51,
+        "grit_index": 79.48,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 1.7333333333333334,
+        "frame": 52,
+        "grit_index": 85.56,
+        "pressure_level": "green",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.7666666666666666,
+        "frame": 53,
+        "grit_index": 82.34,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "slight_tension",
+          "maintained_composure"
+        ]
+      },
+      {
+        "timestamp": 1.8,
+        "frame": 54,
+        "grit_index": 75.19,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 1.8333333333333333,
+        "frame": 55,
+        "grit_index": 76.23,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 1.8666666666666667,
+        "frame": 56,
+        "grit_index": 78.55,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 1.9,
+        "frame": 57,
+        "grit_index": 79.58,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 1.9333333333333333,
+        "frame": 58,
+        "grit_index": 79.69,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      },
+      {
+        "timestamp": 1.9666666666666666,
+        "frame": 59,
+        "grit_index": 77.85,
+        "pressure_level": "yellow",
+        "primary_indicators": [
+          "elevated_stress",
+          "performance_concern"
+        ]
+      }
+    ],
+    "breakdown_risk_assessment": {
+      "max_risk": 0.2481245297511262,
+      "avg_risk": 0.15192074161527255,
+      "risk_trend": "stable"
+    }
+  },
+  "coaching_recommendations": {
+    "mental_training": [
+      "Implement visualization training sessions",
+      "Practice breathing techniques for pressure situations",
+      "Work with sports psychologist on mental toughness",
+      "Focus on routine consistency to improve mental stability"
+    ],
+    "pressure_situations": [],
+    "character_development": [],
+    "performance_optimization": []
+  },
+  "performance_correlation": {
+    "grit_performance_correlation": 0.789,
+    "character_impact_on_results": "moderate",
+    "mental_game_contribution": "29.6% of overall performance",
+    "pressure_response_analysis": {
+      "handles_pressure_well": true,
+      "maintains_form_under_stress": false,
+      "clutch_performer_potential": false
+    }
+  }
+}

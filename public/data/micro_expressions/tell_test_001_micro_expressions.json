@@ -1,0 +1,128 @@
+{
+  "session_id": "tell_test_001",
+  "micro_expressions": {
+    "dominant_expression": "slight_stress",
+    "expression_distribution": {
+      "slight_stress": {
+        "count": 2,
+        "total_intensity": 0.776
+      },
+      "determination": {
+        "count": 2,
+        "total_intensity": 1.076
+      },
+      "focus": {
+        "count": 2,
+        "total_intensity": 0.963
+      }
+    },
+    "average_intensity": 0.469,
+    "micro_expression_stability": 0.765,
+    "character_indicators": [
+      "manages_pressure",
+      "shows_effort"
+    ]
+  },
+  "timeline": [
+    {
+      "timestamp": 0.0,
+      "frame": 0,
+      "grit_index": 89.42,
+      "pressure_level": "green",
+      "primary_indicators": [
+        "slight_tension",
+        "maintained_composure"
+      ]
+    },
+    {
+      "timestamp": 0.03333333333333333,
+      "frame": 1,
+      "grit_index": 93.68,
+      "pressure_level": "green",
+      "primary_indicators": [
+        "optimal_focus",
+        "controlled_breathing"
+      ]
+    },
+    {
+      "timestamp": 0.06666666666666667,
+      "frame": 2,
+      "grit_index": 89.38,
+      "pressure_level": "green",
+      "primary_indicators": [
+        "slight_tension",
+        "maintained_composure"
+      ]
+    },
+    {
+      "timestamp": 0.1,
+      "frame": 3,
+      "grit_index": 90.8,
+      "pressure_level": "green",
+      "primary_indicators": [
+        "optimal_focus",
+        "controlled_breathing"
+      ]
+    },
+    {
+      "timestamp": 0.13333333333333333,
+      "frame": 4,
+      "grit_index": 93.26,
+      "pressure_level": "green",
+      "primary_indicators": [
+        "optimal_focus",
+        "controlled_breathing"
+      ]
+    },
+    {
+      "timestamp": 0.16666666666666666,
+      "frame": 5,
+      "grit_index": 87.27,
+      "pressure_level": "green",
+      "primary_indicators": [
+        "slight_tension",
+        "maintained_composure"
+      ]
+    },
+    {
+      "timestamp": 0.2,
+      "frame": 6,
+      "grit_index": 93.79,
+      "pressure_level": "green",
+      "primary_indicators": [
+        "optimal_focus",
+        "controlled_breathing"
+      ]
+    },
+    {
+      "timestamp": 0.23333333333333334,
+      "frame": 7,
+      "grit_index": 84.23,
+      "pressure_level": "yellow",
+      "primary_indicators": [
+        "slight_tension",
+        "maintained_composure"
+      ]
+    },
+    {
+      "timestamp": 0.26666666666666666,
+      "frame": 8,
+      "grit_index": 91.37,
+      "pressure_level": "green",
+      "primary_indicators": [
+        "optimal_focus",
+        "controlled_breathing"
+      ]
+    },
+    {
+      "timestamp": 0.3,
+      "frame": 9,
+      "grit_index": 81.57,
+      "pressure_level": "yellow",
+      "primary_indicators": [
+        "slight_tension",
+        "maintained_composure"
+      ]
+    }
+  ]
+}

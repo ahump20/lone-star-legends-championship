@@ -1,0 +1,143 @@
+{
+  "timestamp": "2025-08-24T13:59:59.029910",
+  "version": "1.0",
+  "models": {
+    "MLB": {
+      "type": "regression_ensemble",
+      "features": [
+        "age",
+        "games_played",
+        "at_bats",
+        "hits",
+        "runs",
+        "rbi",
+        "stolen_bases"
+      ],
+      "targets": [
+        "avg",
+        "ops",
+        "war",
+        "hr"
+      ],
+      "aging_curve": {
+        "peak_age": 27,
+        "decline_start": 30,
+        "annual_decline_rate": 0.03,
+        "position_adjustments": {
+          "C": {
+            "peak_age": 28,
+            "decline_rate": 0.04
+          },
+          "P": {
+            "peak_age": 29,
+            "decline_rate": 0.02
+          }
+        }
+      },
+      "league_adjustments": {
+        "AL": 1.02,
+        "NL": 0.98
+      }
+    },
+    "NFL": {
+      "type": "position_specific",
+      "features": [
+        "age",
+        "games",
+        "snaps",
+        "targets",
+        "carries"
+      ],
+      "targets": [
+        "yards",
+        "touchdowns",
+        "rating",
+        "yards_per_attempt"
+      ],
+      "aging_curve": {
+        "peak_age": 27,
+        "decline_start": 29,
+        "annual_decline_rate": 0.05,
+        "position_specific": true
+      },
+      "position_adjustments": {
+        "QB": {
+          "peak_age": 30,
+          "decline_rate": 0.02
+        },
+        "RB": {
+          "peak_age": 26,
+          "decline_rate": 0.08
+        },
+        "WR": {
+          "peak_age": 28,
+          "decline_rate": 0.04
+        },
+        "TE": {
+          "peak_age": 29,
+          "decline_rate": 0.03
+        }
+      }
+    },
+    "NCAA": {
+      "type": "development_trajectory",
+      "features": [
+        "class_year",
+        "games",
+        "conference_strength",
+        "recruiting_rank"
+      ],
+      "targets": [
+        "completion_pct",
+        "yards_per_game",
+        "qbr",
+        "draft_projection"
+      ],
+      "development_curve": {
+        "freshman": 0.7,
+        "sophomore": 0.85,
+        "junior": 0.95,
+        "senior": 1.0
+      }
+    },
+    "NPB": {
+      "type": "translation_model",
+      "features": [
+        "age",
+        "league_level",
+        "games",
+        "avg",
+        "ops"
+      ],
+      "targets": [
+        "mlb_equivalent_ops",
+        "posting_likelihood",
+        "success_probability"
+      ],
+      "league_factors": {
+        "NPB": 0.92,
+        "KBO": 0.88
+      }
+    },
+    "KBO": {
+      "type": "translation_model",
+      "features": [
+        "age",
+        "league_level",
+        "games",
+        "avg",
+        "ops"
+      ],
+      "targets": [
+        "mlb_equivalent_ops",
+        "posting_likelihood",
+        "success_probability"
+      ],
+      "league_factors": {
+        "NPB": 0.92,
+        "KBO": 0.88
+      }
+    }
+  },
+  "description": "Blaze Intelligence AI prediction models for 2025 performance forecasting"
+}

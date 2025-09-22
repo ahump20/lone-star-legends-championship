@@ -1,0 +1,104 @@
+{
+  "client_id": "8b32b86edbf0",
+  "organization_name": "Texas Rangers",
+  "sport": "baseball",
+  "league": "MLB",
+  "created_at": "2025-08-24T14:30:10.228959",
+  "team_archetype": "win_now",
+  "customization_profile": {},
+  "enabled_modules": [
+    "player_evaluation",
+    "market_intelligence",
+    "video_biomechanics",
+    "betting_insights"
+  ],
+  "dashboard_configuration": {
+    "layout_style": "urgency",
+    "primary_widgets": [
+      "executive_summary",
+      "market_opportunities",
+      "competitive_intelligence",
+      "performance_tracking"
+    ],
+    "secondary_widgets": [
+      "video_analysis_widget",
+      "market_intelligence_widget"
+    ],
+    "refresh_frequency": "hourly",
+    "alert_settings": {
+      "injury_alerts": true,
+      "performance_alerts": true,
+      "market_alerts": false,
+      "development_milestones": true,
+      "alert_delivery": "dashboard"
+    },
+    "customization_options": {}
+  },
+  "user_roles": [
+    {
+      "role_name": "front_office_executive",
+      "user_count": 3,
+      "permissions": [
+        "view_all",
+        "export_reports",
+        "configure_alerts"
+      ],
+      "dashboard_template": "executive",
+      "data_access_level": "summary",
+      "report_frequency": "weekly",
+      "alert_threshold": "high_priority_only"
+    },
+    {
+      "role_name": "scouting_director",
+      "user_count": 2,
+      "permissions": [
+        "view_scouting",
+        "edit_watchlists",
+        "add_notes",
+        "export_reports"
+      ],
+      "dashboard_template": "scouting_focused",
+      "data_access_level": "detailed",
+      "report_frequency": "daily",
+      "alert_threshold": "medium"
+    },
+    {
+      "role_name": "analytics_team",
+      "user_count": 4,
+      "permissions": [
+        "view_all",
+        "raw_data_access",
+        "create_custom_reports",
+        "api_access"
+      ],
+      "dashboard_template": "data_heavy",
+      "data_access_level": "raw_data_access",
+      "report_frequency": "real_time",
+      "alert_threshold": "custom"
+    }
+  ],
+  "data_preferences": {
+    "report_format": "urgency",
+    "data_granularity": "standard",
+    "historical_depth": 3,
+    "update_frequency": "daily",
+    "export_formats": [
+      "pdf",
+      "excel",
+      "json"
+    ],
+    "language": "english",
+    "timezone": "ET",
+    "metric_units": "imperial"
+  },
+  "integration_settings": {
+    "existing_systems": [],
+    "api_endpoints": false,
+    "webhook_notifications": false,
+    "single_sign_on": false,
+    "data_warehouse_sync": false,
+    "mobile_app_access": true,
+    "slack_integration": false,
+    "email_reports": true
+  }
+}

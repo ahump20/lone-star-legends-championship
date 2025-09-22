@@ -1,0 +1,19 @@
+{
+  "xp_earned": 1072,
+  "new_achievements": [
+    {
+      "name": "Elite Performer",
+      "description": "Achieve 90+ overall score",
+      "rarity": "rare",
+      "xp_bonus": 500
+    },
+    {
+      "name": "Breakthrough Moment",
+      "description": "Multiple personal bests in one session",
+      "rarity": "uncommon",
+      "xp_bonus": 300
+    }
+  ],
+  "level_progress": 82.19999999999999,
+  "streak_maintained": true
+}

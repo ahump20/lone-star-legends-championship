@@ -1,0 +1,99 @@
+/* Generated Character Color Tokens */
+
+:root {
+  --character-burnt-orange-primary: #BF5700;
+  --character-burnt-orange-secondary: #E5E4E2;
+  --character-burnt-orange-accent: #FF8C00;
+}
+
+:root {
+  --character-sky-blue-primary: #9BCBEB;
+  --character-sky-blue-secondary: #36454F;
+  --character-sky-blue-accent: #87CEEB;
+}
+
+:root {
+  --character-navy-primary: #002244;
+  --character-navy-secondary: #FAFAFA;
+  --character-navy-accent: #4682B4;
+}
+
+:root {
+  --character-teal-primary: #00B2A9;
+  --character-teal-secondary: #FAFAFA;
+  --character-teal-accent: #20B2AA;
+}
+
+/* Character-specific classes */
+.character-ace {
+  --primary: var(--character-burnt-orange-primary);
+  --secondary: var(--character-burnt-orange-secondary);
+  --accent: var(--character-burnt-orange-accent);
+}
+
+.character-skye {
+  --primary: var(--character-sky-blue-primary);
+  --secondary: var(--character-sky-blue-secondary);
+  --accent: var(--character-sky-blue-accent);
+}
+
+.character-tex {
+  --primary: var(--character-navy-primary);
+  --secondary: var(--character-navy-secondary);
+  --accent: var(--character-navy-accent);
+}
+
+.character-nova {
+  --primary: var(--character-teal-primary);
+  --secondary: var(--character-teal-secondary);
+  --accent: var(--character-teal-accent);
+}
+
+.character-blaze {
+  --primary: var(--character-burnt-orange-primary);
+  --secondary: var(--character-burnt-orange-secondary);
+  --accent: var(--character-burnt-orange-accent);
+}
+
+.character-scout {
+  --primary: var(--character-sky-blue-primary);
+  --secondary: var(--character-sky-blue-secondary);
+  --accent: var(--character-sky-blue-accent);
+}
+
+.character-ranger {
+  --primary: var(--character-navy-primary);
+  --secondary: var(--character-navy-secondary);
+  --accent: var(--character-navy-accent);
+}
+
+.character-river {
+  --primary: var(--character-teal-primary);
+  --secondary: var(--character-teal-secondary);
+  --accent: var(--character-teal-accent);
+}
+
+.character-sage {
+  --primary: var(--character-burnt-orange-primary);
+  --secondary: var(--character-burnt-orange-secondary);
+  --accent: var(--character-burnt-orange-accent);
+}
+
+.character-storm {
+  --primary: var(--character-sky-blue-primary);
+  --secondary: var(--character-sky-blue-secondary);
+  --accent: var(--character-sky-blue-accent);
+}
+
+.character-ridge {
+  --primary: var(--character-navy-primary);
+  --secondary: var(--character-navy-secondary);
+  --accent: var(--character-navy-accent);
+}
+
+.character-bay {
+  --primary: var(--character-teal-primary);
+  --secondary: var(--character-teal-secondary);
+  --accent: var(--character-teal-accent);
+}
+

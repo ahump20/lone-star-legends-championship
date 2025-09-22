@@ -1,0 +1,508 @@
+[
+  {
+    "name": "Ranger_bat_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "batting",
+      "frame": 0,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_bat_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "batting",
+      "frame": 1,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_bat_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "batting",
+      "frame": 2,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_bat_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "batting",
+      "frame": 3,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_bat_4",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "batting",
+      "frame": 4,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_bat_5",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "batting",
+      "frame": 5,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_pitch_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "pitching",
+      "frame": 0,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_pitch_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "pitching",
+      "frame": 1,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_pitch_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "pitching",
+      "frame": 2,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_pitch_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "pitching",
+      "frame": 3,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_pitch_4",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "pitching",
+      "frame": 4,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_pitch_5",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "pitching",
+      "frame": 5,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_pitch_6",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "pitching",
+      "frame": 6,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_pitch_7",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "pitching",
+      "frame": 7,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_field_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "fielding",
+      "frame": 0,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_field_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "fielding",
+      "frame": 1,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_field_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "fielding",
+      "frame": 2,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_field_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "fielding",
+      "frame": 3,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_run_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "running",
+      "frame": 0,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_run_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "running",
+      "frame": 1,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_run_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "running",
+      "frame": 2,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Ranger_run_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Ranger",
+      "animation": "running",
+      "frame": 3,
+      "colors": {
+        "primary": "#002244",
+        "secondary": "#FAFAFA",
+        "accent": "#4682B4",
+        "name": "Tennessee Deep"
+      },
+      "stats": {
+        "speed": 6,
+        "contact": 4,
+        "power": 9,
+        "arm": 9,
+        "fielding": 6
+      }
+    }
+  }
+]

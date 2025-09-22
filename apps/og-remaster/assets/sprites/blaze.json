@@ -1,0 +1,508 @@
+[
+  {
+    "name": "Blaze_bat_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "batting",
+      "frame": 0,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_bat_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "batting",
+      "frame": 1,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_bat_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "batting",
+      "frame": 2,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_bat_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "batting",
+      "frame": 3,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_bat_4",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "batting",
+      "frame": 4,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_bat_5",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "batting",
+      "frame": 5,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_pitch_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "pitching",
+      "frame": 0,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_pitch_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "pitching",
+      "frame": 1,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_pitch_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "pitching",
+      "frame": 2,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_pitch_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "pitching",
+      "frame": 3,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_pitch_4",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "pitching",
+      "frame": 4,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_pitch_5",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "pitching",
+      "frame": 5,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_pitch_6",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "pitching",
+      "frame": 6,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_pitch_7",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "pitching",
+      "frame": 7,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_field_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "fielding",
+      "frame": 0,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_field_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "fielding",
+      "frame": 1,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_field_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "fielding",
+      "frame": 2,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_field_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "fielding",
+      "frame": 3,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_run_0",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "running",
+      "frame": 0,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_run_1",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "running",
+      "frame": 1,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_run_2",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "running",
+      "frame": 2,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  },
+  {
+    "name": "Blaze_run_3",
+    "width": 32,
+    "height": 32,
+    "data": {
+      "character": "Blaze",
+      "animation": "running",
+      "frame": 3,
+      "colors": {
+        "primary": "#BF5700",
+        "secondary": "#E5E4E2",
+        "accent": "#FF8C00",
+        "name": "Texas Heritage"
+      },
+      "stats": {
+        "speed": 9,
+        "contact": 7,
+        "power": 3,
+        "arm": 5,
+        "fielding": 6
+      }
+    }
+  }
+]
