@@ -1,0 +1,747 @@
+/**
+ * UI Manager Styles
+ * Comprehensive styling for all game UI elements
+ */
+
+/* ==========================================================================
+   Variables & Base Styles
+   ========================================================================== */
+
+:root {
+    --color-primary: #FF6B35;
+    --color-primary-dark: #CC5500;
+    --color-secondary: #0A0E27;
+    --color-accent: #FFD700;
+    --color-success: #00C853;
+    --color-error: #FF1744;
+    --color-bg: #0A0A0A;
+    --color-bg-light: #1a1a1a;
+    --color-text: #FFFFFF;
+    --color-text-muted: #888888;
+    --border-radius: 10px;
+    --transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   UI Container
+   ========================================================================== */
+
+.ui-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.ui-container > * {
+    pointer-events: auto;
+}
+
+/* ==========================================================================
+   Screens
+   ========================================================================== */
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-secondary) 100%);
+    color: var(--color-text);
+    overflow-y: auto;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.screen-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.screen-header h2 {
+    font-size: 32px;
+    margin: 0;
+    color: var(--color-primary);
+}
+
+.back-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-primary);
+    color: var(--color-text);
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+.back-btn:hover {
+    background: var(--color-primary);
+    transform: translateX(-5px);
+}
+
+/* ==========================================================================
+   Main Menu
+   ========================================================================== */
+
+.main-menu-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.game-logo {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.logo-text {
+    font-size: 48px;
+    font-weight: 900;
+    margin: 0;
+    color: var(--color-primary);
+    text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.logo-subtitle {
+    font-size: 18px;
+    color: var(--color-text-muted);
+    margin: 10px 0 0 0;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.menu-btn {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(10, 14, 39, 0.5) 100%);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-align: left;
+}
+
+.menu-btn:hover {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    transform: translateX(10px);
+    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+}
+
+.menu-icon {
+    font-size: 40px;
+    flex-shrink: 0;
+}
+
+.menu-text {
+    flex: 1;
+}
+
+.menu-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--color-text);
+    margin-bottom: 5px;
+}
+
+.menu-desc {
+    font-size: 14px;
+    color: var(--color-text-muted);
+}
+
+.menu-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.version-info {
+    color: var(--color-text-muted);
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.player-stats {
+    color: var(--color-accent);
+    font-size: 14px;
+}
+
+/* ==========================================================================
+   Achievements
+   ========================================================================== */
+
+.achievement-filter {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 107, 53, 0.3);
+    color: var(--color-text);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 14px;
+}
+
+.filter-btn:hover {
+    background: rgba(255, 107, 53, 0.3);
+}
+
+.filter-btn.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.achievement-progress {
+    color: var(--color-accent);
+    font-size: 14px;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.achievement-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 107, 53, 0.3);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    transition: var(--transition);
+}
+
+.achievement-card.unlocked {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(10, 14, 39, 0.3) 100%);
+}
+
+.achievement-card.locked {
+    opacity: 0.5;
+}
+
+.achievement-card:hover.unlocked {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+}
+
+.achievement-icon {
+    font-size: 48px;
+    flex-shrink: 0;
+}
+
+.achievement-info {
+    flex: 1;
+}
+
+.achievement-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-text);
+    margin-bottom: 5px;
+}
+
+.achievement-description {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin-bottom: 10px;
+}
+
+.achievement-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.achievement-points {
+    color: var(--color-accent);
+    font-weight: bold;
+}
+
+.achievement-date {
+    color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Statistics
+   ========================================================================== */
+
+.stats-container {
+    display: grid;
+    gap: 30px;
+}
+
+.stats-section h3 {
+    color: var(--color-primary);
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.stat-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 107, 53, 0.3);
+    border-radius: var(--border-radius);
+    padding: 15px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--color-accent);
+}
+
+/* ==========================================================================
+   Settings
+   ========================================================================== */
+
+.settings-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.setting-group {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 107, 53, 0.3);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.setting-group h3 {
+    color: var(--color-primary);
+    margin: 0 0 15px 0;
+    font-size: 20px;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+.setting-item label {
+    font-size: 16px;
+    color: var(--color-text);
+}
+
+.setting-item input[type="range"] {
+    flex: 1;
+    margin: 0 15px;
+}
+
+.setting-item select {
+    background: var(--color-bg-light);
+    border: 1px solid var(--color-primary);
+    color: var(--color-text);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.setting-value {
+    min-width: 50px;
+    text-align: right;
+    color: var(--color-accent);
+}
+
+.setting-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.btn {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    border: none;
+    color: var(--color-text);
+    padding: 12px 24px;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--color-error) 0%, #CC0000 100%);
+}
+
+/* ==========================================================================
+   Notifications
+   ========================================================================== */
+
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+}
+
+.notification {
+    background: var(--color-bg-light);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    transform: translateX(450px);
+    transition: transform 0.3s ease;
+}
+
+.notification.notification-show {
+    transform: translateX(0);
+}
+
+.notification-achievement {
+    text-align: center;
+}
+
+.achievement-header {
+    color: var(--color-accent);
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.achievement-sparkle {
+    animation: sparkle 1s infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.achievement-content {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.achievement-icon {
+    font-size: 48px;
+}
+
+.achievement-details {
+    flex: 1;
+    text-align: left;
+}
+
+.achievement-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-primary);
+    margin-bottom: 5px;
+}
+
+.achievement-description {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin-bottom: 8px;
+}
+
+.achievement-points {
+    color: var(--color-accent);
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.notification-content {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.notification-icon {
+    font-size: 32px;
+}
+
+.notification-text {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--color-primary);
+}
+
+.notification-message {
+    font-size: 14px;
+    color: var(--color-text-muted);
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+.notification-close:hover {
+    color: var(--color-text);
+}
+
+.notification-success {
+    border-color: var(--color-success);
+}
+
+.notification-error {
+    border-color: var(--color-error);
+}
+
+/* ==========================================================================
+   Modal
+   ========================================================================== */
+
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: auto;
+}
+
+.modal-overlay.modal-show {
+    opacity: 1;
+}
+
+.modal-dialog {
+    background: var(--color-bg-light);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal-show .modal-dialog {
+    transform: scale(1);
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: 24px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 32px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+.modal-close:hover {
+    color: var(--color-text);
+}
+
+.modal-body {
+    padding: 20px;
+    color: var(--color-text);
+    font-size: 16px;
+}
+
+.modal-footer {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* ==========================================================================
+   Loading
+   ========================================================================== */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 107, 53, 0.2);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-message {
+    color: var(--color-text);
+    font-size: 18px;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .logo-text {
+        font-size: 32px;
+    }
+
+    .menu-btn {
+        padding: 15px;
+    }
+
+    .menu-title {
+        font-size: 18px;
+    }
+
+    .menu-icon {
+        font-size: 32px;
+    }
+
+    .achievements-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .notification-container {
+        left: 10px;
+        right: 10px;
+        max-width: none;
+    }
+
+    .screen-header h2 {
+        font-size: 24px;
+    }
+}

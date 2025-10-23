@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandlot Superstars - UI Integration Example</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/ui-manager.css">
+    <link rel="stylesheet" href="/css/ui-game-modes.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0A0A0A;
+            color: white;
+        }
+
+        #game-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0A0A0A 0%, #1a1a2e 100%);
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Game Canvas (3D rendering would go here) -->
+    <div id="game-canvas"></div>
+
+    <!-- All UI will be dynamically created here by UIManager -->
+
+    <!-- Core Systems -->
+    <script src="/js/game-state-manager.js"></script>
+    <script src="/js/achievement-system.js"></script>
+    <script src="/js/full-game-engine.js"></script>
+    <script src="/js/season-manager.js"></script>
+    <script src="/js/game-modes.js"></script>
+    <script src="/js/analytics-manager.js"></script>
+
+    <!-- UI System -->
+    <script src="/js/ui-manager.js"></script>
+    <script src="/js/ui-screens.js"></script>
+    <script src="/js/ui-game-modes.js"></script>
+
+    <script>
+        /**
+         * SANDLOT SUPERSTARS - UI INTEGRATION EXAMPLE
+         * This demonstrates how to use the complete UI system
+         */
+
+        // ==========================================================================
+        // Initialize Core Systems
+        // ==========================================================================
+
+        console.log('🎮 Initializing Sandlot Superstars...');
+
+        // 1. Game State Manager (handles saves, settings, statistics)
+        window.gameStateManager = new GameStateManager();
+        console.log('✅ Game State Manager initialized');
+
+        // 2. Achievement System (25+ achievements)
+        window.achievementSystem = new AchievementSystem(window.gameStateManager);
+        console.log('✅ Achievement System initialized');
+
+        // 3. Analytics (track user behavior)
+        window.analytics = new AnalyticsManager({ enabled: true, debug: true });
+        console.log('✅ Analytics initialized');
+
+        // 4. Game Modes Manager (Derby, Season, etc.)
+        window.gameModesManager = new GameModesManager();
+        console.log('✅ Game Modes Manager initialized');
+
+        // 5. Season Manager (would be initialized when starting season)
+        // window.seasonManager = new SeasonManager(teams);
+
+        // ==========================================================================
+        // Initialize UI System
+        // ==========================================================================
+
+        // Create UI Manager
+        window.uiManager = new UIManager({
+            container: document.body,
+            theme: 'default'
+        });
+
+        // Register all screens
+        window.uiManager.registerScreen('main-menu', MainMenuScreen);
+        window.uiManager.registerScreen('achievements', AchievementsScreen);
+        window.uiManager.registerScreen('statistics', StatisticsScreen);
+        window.uiManager.registerScreen('settings', SettingsScreen);
+        window.uiManager.registerScreen('derby-screen', DerbyScreen);
+        window.uiManager.registerScreen('season-screen', SeasonDashboardScreen);
+
+        console.log('✅ UI Manager initialized with all screens');
+
+        // ==========================================================================
+        // Setup Achievement Notifications
+        // ==========================================================================
+
+        // Listen for achievement unlocks
+        window.achievementSystem.onAchievementUnlocked((achievement) => {
+            // Show notification
+            window.uiManager.showAchievement(achievement);
+
+            // Track in analytics
+            window.analytics.trackEvent('achievement_unlocked', {
+                achievementId: achievement.id,
+                points: achievement.points
+            });
+
+            // Play sound effect (if audio manager exists)
+            if (window.audioManager) {
+                window.audioManager.play('achievement_unlock');
+            }
+        });
+
+        // ==========================================================================
+        // Demo Functions (for testing)
+        // ==========================================================================
+
+        // Demo: Unlock a random achievement
+        window.demoUnlockAchievement = function() {
+            const allAchievements = Object.keys(window.achievementSystem.achievements);
+            const unlockedIds = Object.keys(window.achievementSystem.unlockedAchievements);
+            const locked = allAchievements.filter(id => !unlockedIds.includes(id));
+
+            if (locked.length > 0) {
+                const randomId = locked[Math.floor(Math.random() * locked.length)];
+                window.achievementSystem.unlockAchievement(randomId);
+                console.log('🏆 Demo: Unlocked achievement:', randomId);
+            } else {
+                console.log('All achievements already unlocked!');
+            }
+        };
+
+        // Demo: Add some statistics
+        window.demoAddStats = function() {
+            window.gameStateManager.updateStatistics({
+                wins: 1,
+                totalHits: 5,
+                totalHomeRuns: 2,
+                totalRuns: 3
+            });
+
+            // Check for new achievements
+            const stats = window.gameStateManager.getStatistics();
+            const newAchievements = window.achievementSystem.checkAchievements(stats);
+
+            console.log('📊 Demo: Updated stats, unlocked', newAchievements.length, 'achievements');
+        };
+
+        // Demo: Show notification
+        window.demoNotification = function(type = 'success') {
+            const messages = {
+                success: 'Game saved successfully!',
+                error: 'Failed to connect to server',
+                info: 'New update available'
+            };
+
+            window.uiManager.showNotification({
+                type: type,
+                title: type.charAt(0).toUpperCase() + type.slice(1),
+                message: messages[type] || 'This is a test notification',
+                duration: 5000
+            });
+        };
+
+        // Demo: Show modal
+        window.demoModal = function() {
+            window.uiManager.showModal({
+                title: 'Welcome!',
+                content: 'This is a demo modal. Click a button below:',
+                buttons: [
+                    {
+                        text: 'Cancel',
+                        class: 'btn-secondary',
+                        onClick: function() {
+                            console.log('Cancelled');
+                        }
+                    },
+                    {
+                        text: 'Confirm',
+                        class: 'btn-primary',
+                        onClick: function() {
+                            console.log('Confirmed!');
+                            window.uiManager.showSuccess('Action confirmed!');
+                        }
+                    }
+                ]
+            });
+        };
+
+        // Demo: Show loading
+        window.demoLoading = function() {
+            window.uiManager.showLoading('Loading game assets...');
+
+            setTimeout(() => {
+                window.uiManager.hideLoading();
+                window.uiManager.showSuccess('Loading complete!');
+            }, 3000);
+        };
+
+        // ==========================================================================
+        // Start Application
+        // ==========================================================================
+
+        // Track page load
+        window.analytics.trackPageView('main');
+        window.analytics.trackPerformance({
+            loadTime: performance.now(),
+            fps: 60
+        });
+
+        // Check for saved game
+        if (window.gameStateManager.hasSavedGame()) {
+            console.log('💾 Saved game found');
+        }
+
+        // Show main menu
+        window.uiManager.showScreen('main-menu');
+
+        console.log('🎮 Sandlot Superstars ready!');
+        console.log('');
+        console.log('💡 TRY THESE DEMO FUNCTIONS:');
+        console.log('  demoUnlockAchievement() - Unlock a random achievement');
+        console.log('  demoAddStats() - Add some stats and check achievements');
+        console.log('  demoNotification("success") - Show notification');
+        console.log('  demoModal() - Show modal dialog');
+        console.log('  demoLoading() - Show loading screen');
+        console.log('');
+        console.log('📺 AVAILABLE SCREENS:');
+        console.log('  main-menu, achievements, statistics, settings');
+        console.log('  derby-screen, season-screen');
+        console.log('');
+        console.log('🎮 Try: uiManager.showScreen("achievements")');
+
+        // ==========================================================================
+        // Auto-save every 30 seconds
+        // ==========================================================================
+
+        setInterval(() => {
+            if (window.currentGameState) {
+                window.gameStateManager.saveGame(window.currentGameState);
+                console.log('💾 Auto-saved');
+            }
+        }, 30000);
+
+        // ==========================================================================
+        // Save on page unload
+        // ==========================================================================
+
+        window.addEventListener('beforeunload', () => {
+            // Save current game if active
+            if (window.currentGameState) {
+                window.gameStateManager.saveGame(window.currentGameState);
+            }
+
+            // Persist analytics
+            window.analytics.persistEvents();
+
+            console.log('👋 Goodbye!');
+        });
+    </script>
+</body>
+</html>

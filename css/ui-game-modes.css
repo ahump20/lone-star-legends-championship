@@ -1,0 +1,506 @@
+/**
+ * Game Mode UI Styles
+ * Styles for Derby, Season, Practice, Tournament modes
+ */
+
+/* ==========================================================================
+   Home Run Derby
+   ========================================================================== */
+
+.derby-screen {
+    background: radial-gradient(circle at top, #1a1a2e 0%, #0a0a0a 100%);
+}
+
+.game-hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.game-hud > * {
+    pointer-events: auto;
+}
+
+.hud-top {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 900px;
+}
+
+.derby-stats {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.3) 0%, rgba(10, 14, 39, 0.8) 100%);
+    border: 2px solid rgba(255, 107, 53, 0.5);
+    border-radius: 10px;
+    padding: 15px;
+    flex: 1;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.stat-box.highlight {
+    border-color: var(--color-accent);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 107, 53, 0.3) 100%);
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--color-accent);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.combo-display {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, rgba(255, 107, 53, 0.4) 100%);
+    border: 3px solid var(--color-accent);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    animation: comboAnimation 1s ease;
+}
+
+@keyframes comboAnimation {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.combo-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.combo-count {
+    font-size: 48px;
+    font-weight: bold;
+    color: var(--color-accent);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+}
+
+.hud-bottom {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    gap: 10px;
+}
+
+.hud-btn {
+    background: rgba(10, 14, 39, 0.8);
+    border: 2px solid var(--color-primary);
+    color: var(--color-text);
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+}
+
+.hud-btn:hover {
+    background: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.derby-results {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.results-panel {
+    background: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-secondary) 100%);
+    border: 3px solid var(--color-primary);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+}
+
+.results-panel h2 {
+    font-size: 36px;
+    color: var(--color-accent);
+    margin: 0 0 30px 0;
+}
+
+.final-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.final-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.final-label {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+}
+
+.final-value {
+    font-size: 48px;
+    font-weight: bold;
+    color: var(--color-accent);
+}
+
+.leaderboard {
+    margin: 30px 0;
+}
+
+.leaderboard h3 {
+    color: var(--color-primary);
+    margin-bottom: 15px;
+}
+
+.leaderboard-list {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.leaderboard-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leaderboard-item:last-child {
+    border-bottom: none;
+}
+
+.rank {
+    font-weight: bold;
+    color: var(--color-accent);
+}
+
+.player {
+    flex: 1;
+    text-align: left;
+    margin-left: 15px;
+}
+
+.score {
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.no-entries {
+    color: var(--color-text-muted);
+    font-style: italic;
+    padding: 20px;
+}
+
+.results-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* ==========================================================================
+   Season Mode
+   ========================================================================== */
+
+.season-container {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.season-main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.standings-panel,
+.schedule-panel {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 107, 53, 0.3);
+    border-radius: var(--border-radius);
+    padding: 20px;
+}
+
+.standings-panel h3,
+.schedule-panel h3 {
+    color: var(--color-primary);
+    margin: 0 0 20px 0;
+    font-size: 24px;
+}
+
+.standings-table {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.standings-header,
+.standings-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 80px 80px 80px;
+    gap: 15px;
+    padding: 10px 15px;
+    align-items: center;
+}
+
+.standings-header {
+    background: rgba(255, 107, 53, 0.2);
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.standings-row {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 5px;
+    transition: var(--transition);
+}
+
+.standings-row:hover {
+    background: rgba(255, 107, 53, 0.1);
+}
+
+.standings-row.player-team {
+    background: linear-gradient(90deg, rgba(255, 107, 53, 0.3) 0%, rgba(255, 107, 53, 0.1) 100%);
+    border-left: 3px solid var(--color-primary);
+    font-weight: bold;
+}
+
+.diff.positive {
+    color: var(--color-success);
+}
+
+.diff.negative {
+    color: var(--color-error);
+}
+
+.game-card {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(10, 14, 39, 0.3) 100%);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.game-card.next {
+    border-color: var(--color-accent);
+}
+
+.game-label {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.game-matchup {
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.vs {
+    color: var(--color-text-muted);
+    font-size: 14px;
+}
+
+.game-stadium {
+    color: var(--color-text-muted);
+    font-size: 14px;
+}
+
+.game-mini {
+    font-size: 14px;
+    color: var(--color-text-muted);
+}
+
+.season-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.team-card {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(10, 14, 39, 0.5) 100%);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    padding: 20px;
+}
+
+.team-card h3 {
+    color: var(--color-primary);
+    margin: 0 0 20px 0;
+    font-size: 24px;
+    text-align: center;
+}
+
+.team-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.team-stat {
+    text-align: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+
+.team-stat .stat-label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.team-stat .stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--color-accent);
+}
+
+.team-stat .stat-value.positive {
+    color: var(--color-success);
+}
+
+.team-stat .stat-value.negative {
+    color: var(--color-error);
+}
+
+.action-panel {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 107, 53, 0.3);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-large {
+    padding: 20px;
+    font-size: 18px;
+}
+
+.btn-large:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.playoff-bracket {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: var(--border-radius);
+    padding: 20px;
+}
+
+.bracket-placeholder {
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: 40px 20px;
+    font-style: italic;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .season-container {
+        grid-template-columns: 1fr;
+    }
+
+    .season-sidebar {
+        order: -1;
+    }
+
+    .derby-stats {
+        flex-wrap: wrap;
+    }
+
+    .stat-box {
+        min-width: calc(50% - 10px);
+    }
+}
+
+@media (max-width: 768px) {
+    .standings-header,
+    .standings-row {
+        grid-template-columns: 50px 1fr 60px;
+        font-size: 12px;
+    }
+
+    .standings-header span:nth-child(4),
+    .standings-header span:nth-child(5),
+    .standings-row span:nth-child(4),
+    .standings-row span:nth-child(5) {
+        display: none;
+    }
+
+    .hud-bottom {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .results-panel {
+        padding: 20px;
+    }
+
+    .final-value {
+        font-size: 36px;
+    }
+}
