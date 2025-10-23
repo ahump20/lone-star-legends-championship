@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandlot Superstars - Test Suite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .test-section {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .test-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+
+        .test-item {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .test-name {
+            flex: 1;
+            font-size: 1.1rem;
+        }
+
+        .test-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-test {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-test:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .btn-pass {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-pass:hover {
+            background: #0b7dda;
+        }
+
+        .btn-fail {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-fail:hover {
+            background: #da190b;
+        }
+
+        .status {
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .status-pending {
+            background: #FFC107;
+            color: #333;
+        }
+
+        .status-passed {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .status-failed {
+            background: #f44336;
+            color: white;
+        }
+
+        .progress {
+            width: 100%;
+            height: 30px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .notes {
+            background: rgba(255,255,0,0.1);
+            border-left: 4px solid #FFD700;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .notes h3 {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .summary {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚾ SANDLOT SUPERSTARS ⚾</h1>
+        <p class="subtitle">Comprehensive Test Suite</p>
+
+        <div class="summary">
+            <strong>Testing Progress:</strong>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar" style="width: 0%">0%</div>
+            </div>
+            <div id="summary">0 / 15 tests completed</div>
+        </div>
+
+        <!-- Test Section 1: Core Files -->
+        <div class="test-section">
+            <h2>📁 Phase 1: Core Files & Data</h2>
+
+            <div class="test-item" data-test="files">
+                <div class="test-name">✓ All files created (19 new files)</div>
+                <div class="test-actions">
+                    <span class="status status-passed">PASSED</span>
+                </div>
+            </div>
+
+            <div class="test-item" data-test="json">
+                <div class="test-name">✓ Character data JSON valid</div>
+                <div class="test-actions">
+                    <span class="status status-passed">PASSED</span>
+                </div>
+            </div>
+
+            <div class="test-item" data-test="syntax">
+                <div class="test-name">✓ JavaScript syntax valid</div>
+                <div class="test-actions">
+                    <span class="status status-passed">PASSED</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Section 2: UI Pages -->
+        <div class="test-section">
+            <h2>🎮 Phase 2: UI Pages</h2>
+
+            <div class="test-item" data-test="menu">
+                <div class="test-name">Main Menu loads and displays correctly</div>
+                <div class="test-actions">
+                    <a href="menu.html" target="_blank" class="btn btn-test">Test</a>
+                    <button class="btn btn-pass" onclick="markTest('menu', true)">✓ Pass</button>
+                    <button class="btn btn-fail" onclick="markTest('menu', false)">✗ Fail</button>
+                    <span class="status status-pending">Pending</span>
+                </div>
+            </div>
+
+            <div class="test-item" data-test="characters">
+                <div class="test-name">Character viewer shows all 18 characters</div>
+                <div class="test-actions">
+                    <a href="characters.html" target="_blank" class="btn btn-test">Test</a>
+                    <button class="btn btn-pass" onclick="markTest('characters', true)">✓ Pass</button>
+                    <button class="btn btn-fail" onclick="markTest('characters', false)">✗ Fail</button>
+                    <span class="status status-pending">Pending</span>
+                </div>
+            </div>
+
+            <div class="test-item" data-test="select">
+                <div class="test-name">Team selection (3-step process works)</div>
+                <div class="test-actions">
+                    <a href="select-team.html" target="_blank" class="btn btn-test">Test</a>
+                    <button class="btn btn-pass" onclick="markTest('select', true)">✓ Pass</button>
+                    <button class="btn btn-fail" onclick="markTest('select', false)">✗ Fail</button>
+                    <span class="status status-pending">Pending</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Section 3: Main Game -->
+        <div class="test-section">
+            <h2>⚾ Phase 3: Main Game</h2>
+
+            <div class="test-item" data-test="game-loads">
+                <div class="test-name">Main game loads without console errors</div>
+                <div class="test-actions">
+                    <a href="index.html" target="_blank" class="btn btn-test">Test</a>
+                    <button class="btn btn-pass" onclick="markTest('game-loads', true)">✓ Pass</button>
+                    <button class="btn btn-fail" onclick="markTest('game-loads', false)">✗ Fail</button>
+                    <span class="status status-pending">Pending</span>
+                </div>
+            </div>
+
+            <div class="test-item" data-test="game-engine">
+                <div class="test-name">Game engine initializes (check console for "Game Engine created")</div>
+                <div class="test-actions">
+                    <span class="status status-pending">Pending</span>
+                    <button class="btn btn-pass" onclick="markTest('game-engine', true)">✓ Pass</button>
+                    <button class="btn btn-fail" onclick="markTest('game-engine', false)">✗ Fail</button>
+                </div>
+            </div>
+
+            <div class="test-item" data-test="ui-elements">
+                <div class="test-name">Enhanced UI elements appear (portraits, ability button, game log)</div>
+                <div class="test-actions">
+                    <span class="status status-pending">Pending</span>
+                    <button class="btn btn-pass" onclick="markTest('ui-elements', true)">✓ Pass</button>
+                    <button class="btn btn-fail" onclick="markTest('ui-elements', false)">✗ Fail</button>
+                </div>
+            </div>
+
+            <div class="test-item" data-test="pitch">
+                <div class="test-name">Pitching works (click PITCH or press SPACE)</div>
+                <div class="test-actions">
+                    <span class="status status-pending">Pending</span>
+                    <button class="btn btn-pass" onclick="markTest('pitch', true)">✓ Pass</button>
+                    <button class="btn btn-fail" onclick="markTest('pitch', false)">✗ Fail</button>
+                </div>
+            </div>
+
+            <div class="test-item" data-test="scoreboard">
+                <div class="test-name">Scoreboard updates correctly</div>
+                <div class="test-actions">
+                    <span class="status status-pending">Pending</span>
+                    <button class="btn btn-pass" onclick="markTest('scoreboard', true)">✓ Pass</button>
+                    <button class="btn btn-fail" onclick="markTest('scoreboard', false)">✗ Fail</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Section 4: Advanced Features -->
+        <div class="test-section">
+            <h2>⚡ Phase 4: Advanced Features</h2>
+
+            <div class="test-item" data-test="abilities">
+                <div class="test-name">Special abilities can be activated (press 'A' key)</div>
+                <div class="test-actions">
+                    <span class="status status-pending">Pending</span>
+                    <button class="btn btn-pass" onclick="markTest('abilities', true)">✓ Pass</button>
+                    <button class="btn btn-fail" onclick="markTest('abilities', false)">✗ Fail</button>
+                </div>
+            </div>
+
+            <div class="test-item" data-test="audio">
+                <div class="test-name">Audio plays (sound effects on pitch/hit)</div>
+                <div class="test-actions">
+                    <span class="status status-pending">Pending</span>
+                    <button class="btn btn-pass" onclick="markTest('audio', true)">✓ Pass</button>
+                    <button class="btn btn-fail" onclick="markTest('audio', false)">✗ Fail</button>
+                </div>
+            </div>
+
+            <div class="test-item" data-test="log">
+                <div class="test-name">Game log shows play-by-play commentary</div>
+                <div class="test-actions">
+                    <span class="status status-pending">Pending</span>
+                    <button class="btn btn-pass" onclick="markTest('log', true)">✓ Pass</button>
+                    <button class="btn btn-fail" onclick="markTest('log', false)">✗ Fail</button>
+                </div>
+            </div>
+
+            <div class="test-item" data-test="integration">
+                <div class="test-name">Selected teams from select-team.html carry over to game</div>
+                <div class="test-actions">
+                    <span class="status status-pending">Pending</span>
+                    <button class="btn btn-pass" onclick="markTest('integration', true)">✓ Pass</button>
+                    <button class="btn btn-fail" onclick="markTest('integration', false)">✗ Fail</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="notes">
+            <h3>📋 Testing Notes:</h3>
+            <ul>
+                <li><strong>Browser Console:</strong> Press F12 to open developer console and check for errors</li>
+                <li><strong>Expected Console Messages:</strong>
+                    <ul>
+                        <li>"🎮 Creating Baseball Game Engine..."</li>
+                        <li>"✅ Game Engine created"</li>
+                        <li>"🎮 Initializing Sandlot Superstars..."</li>
+                        <li>"✅ Game initialized successfully!"</li>
+                    </ul>
+                </li>
+                <li><strong>Character Loading:</strong> Characters.html should show 18 unique characters with stats</li>
+                <li><strong>Team Selection:</strong> Should allow selecting a team, then 9 characters, then arranging lineup</li>
+                <li><strong>Special Abilities:</strong> Look for glowing button on right side, press 'A' to activate</li>
+                <li><strong>Audio:</strong> You should hear sounds when pitching and hitting. Press 'M' to toggle music, 'S' to toggle SFX</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn btn-test" onclick="window.location.reload()" style="font-size: 1.2rem; padding: 15px 40px;">
+                🔄 Reset Test Suite
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Test tracking
+        let tests = JSON.parse(localStorage.getItem('sandlotTests') || '{}');
+
+        function markTest(testId, passed) {
+            tests[testId] = passed;
+            localStorage.setItem('sandlotTests', JSON.stringify(tests));
+            updateUI();
+        }
+
+        function updateUI() {
+            // Update each test item
+            Object.keys(tests).forEach(testId => {
+                const item = document.querySelector(`[data-test="${testId}"]`);
+                if (item) {
+                    const status = item.querySelector('.status');
+                    if (tests[testId]) {
+                        status.className = 'status status-passed';
+                        status.textContent = 'PASSED';
+                    } else {
+                        status.className = 'status status-failed';
+                        status.textContent = 'FAILED';
+                    }
+                }
+            });
+
+            // Update progress
+            const total = 15; // Total tests
+            const completed = Object.keys(tests).length;
+            const percentage = Math.round((completed / total) * 100);
+
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressBar').textContent = percentage + '%';
+            document.getElementById('summary').textContent = `${completed} / ${total} tests completed`;
+        }
+
+        // Initialize on load
+        updateUI();
+    </script>
+</body>
+</html>

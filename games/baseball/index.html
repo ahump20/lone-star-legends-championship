@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sandlot Superstars - Baseball Championship</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="js/enhanced-3d-engine.js"></script>
+    <script src="/js/enhanced-3d-engine.js"></script>
+    <script src="/js/baseball-game-engine.js"></script>
 
     <!-- Sandlot Superstars Styles -->
     <link rel="stylesheet" href="/css/game-ui.css">
@@ -190,7 +191,7 @@
     <canvas id="gameCanvas"></canvas>
     
     <div class="ui-overlay">
-        <div class="score-board">
+        <div id="scoreboard" class="score-board">
             <div class="team-score">
                 <div class="team-name">Lone Stars</div>
                 <div class="score" id="homeScore">0</div>
@@ -817,6 +818,14 @@
             
             console.log(`Game difficulty adjusted to level ${level}, pitch speed: ${pitchSpeed}ms`);
         });
+    </script>
+
+    <!-- Initialize Baseball Game Engine -->
+    <script>
+        // Create game engine instance and expose globally for integration
+        console.log('🎮 Creating Baseball Game Engine...');
+        window.gameEngine = new BaseballGameEngine();
+        console.log('✅ Game Engine created:', window.gameEngine);
     </script>
 
     <!-- Sandlot Superstars Integration -->
