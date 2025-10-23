@@ -1,8 +1,8 @@
 {
-  "name": "Blaze Intelligence - Lone Star Legends Championship",
-  "short_name": "Blaze Legends",
-  "description": "Professional baseball simulation powered by Blaze Intelligence. Play single-player or real-time multiplayer games with advanced physics and stunning graphics.",
-  "start_url": "/blaze-branded-game.html",
+  "name": "Sandlot Superstars - Baseball Championship",
+  "short_name": "Sandlot Stars",
+  "description": "Ultimate backyard baseball game! Create custom characters, play season mode, home run derby, and more. Works offline with PWA support.",
+  "start_url": "/",
   "display": "fullscreen",
   "orientation": "any",
   "theme_color": "#FF6B35",
@@ -93,8 +93,8 @@
     {
       "name": "Quick Play",
       "short_name": "Play",
-      "description": "Start a quick single-player game",
-      "url": "/blaze-branded-game.html?mode=quick",
+      "description": "Start a quick 9-inning game",
+      "url": "/games/baseball/index.html?mode=quick",
       "icons": [
         {
           "src": "/icons/play-96.png",
@@ -103,25 +103,37 @@
       ]
     },
     {
-      "name": "Multiplayer",
-      "short_name": "Online",
-      "description": "Join an online multiplayer match",
-      "url": "/blaze-branded-game.html?mode=multiplayer",
+      "name": "Home Run Derby",
+      "short_name": "Derby",
+      "description": "Hit home runs in the derby",
+      "url": "/?mode=derby",
       "icons": [
         {
-          "src": "/icons/multiplayer-96.png",
+          "src": "/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
     },
     {
-      "name": "Statistics",
-      "short_name": "Stats",
-      "description": "View your player statistics",
-      "url": "/blaze-branded-game.html?view=stats",
+      "name": "Character Creator",
+      "short_name": "Create",
+      "description": "Create custom characters",
+      "url": "/examples/character-creator-demo.html",
       "icons": [
         {
-          "src": "/icons/stats-96.png",
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Season Mode",
+      "short_name": "Season",
+      "description": "Play a full season with playoffs",
+      "url": "/?mode=season",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
