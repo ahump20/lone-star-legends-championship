@@ -16,14 +16,59 @@ class CharacterManager {
     async loadRoster() {
         try {
             const response = await fetch('/data/backyard-roster.json');
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
             const data = await response.json();
+
+            // Validate data structure
+            if (!data.characters || !Array.isArray(data.characters)) {
+                throw new Error('Invalid roster data: missing characters array');
+            }
+            if (!data.teams || !Array.isArray(data.teams)) {
+                throw new Error('Invalid roster data: missing teams array');
+            }
+
             this.characters = data.characters;
             this.teams = data.teams;
+
+            console.log(`✅ Loaded ${this.characters.length} characters and ${this.teams.length} teams`);
             return true;
         } catch (error) {
             console.error('Failed to load character roster:', error);
+            this.showUserError('Failed to load game data. Please refresh the page.');
             return false;
         }
+    }
+
+    /**
+     * Show user-friendly error message
+     */
+    showUserError(message) {
+        // Create error overlay if it doesn't exist
+        let errorDiv = document.getElementById('game-error-overlay');
+        if (!errorDiv) {
+            errorDiv = document.createElement('div');
+            errorDiv.id = 'game-error-overlay';
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(255, 0, 0, 0.9);
+                color: white;
+                padding: 20px 40px;
+                border-radius: 10px;
+                z-index: 10000;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            `;
+            document.body.appendChild(errorDiv);
+        }
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
     }
 
     /**
@@ -83,7 +128,7 @@ class CharacterManager {
             specialAbility: {
                 ...character.specialAbility,
                 available: true,
-                usesRemaining: character.specialAbility.cooldown === 99 ? 1 : Math.floor(9 / character.specialAbility.cooldown)
+                usesRemaining: this.calculateAbilityUses(character.specialAbility.cooldown)
             },
 
             // Appearance
@@ -249,6 +294,32 @@ class CharacterManager {
         if (average >= 5.5) return 'B Good Player';
         if (average >= 4.5) return 'C+ Solid Player';
         return 'C Developing Player';
+    }
+
+    /**
+     * Calculate ability uses based on cooldown
+     * Cooldown of 99 = one-time use (ultimate ability)
+     * Cooldown of 1-9 = multiple uses per game
+     * Uses formula: For 9-inning game, uses = max(1, floor(9 / cooldown))
+     */
+    calculateAbilityUses(cooldown) {
+        // Ultimate abilities (cooldown 99) get 1 use
+        if (cooldown >= 99) {
+            return 1;
+        }
+
+        // Prevent division by zero or negative cooldowns
+        if (cooldown <= 0) {
+            console.warn(`Invalid cooldown value: ${cooldown}, defaulting to 1 use`);
+            return 1;
+        }
+
+        // Calculate uses for a 9-inning game
+        // Cooldown 1 = 9 uses, Cooldown 3 = 3 uses, Cooldown 5 = 1 use, etc.
+        const uses = Math.floor(9 / cooldown);
+
+        // Ensure at least 1 use
+        return Math.max(1, uses);
     }
 }
 
