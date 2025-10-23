@@ -24,8 +24,11 @@ class AudioManager {
     initAudioContext() {
         try {
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            console.log('✅ Audio context initialized successfully');
         } catch (e) {
-            console.warn('Web Audio API not supported', e);
+            console.warn('⚠️ Web Audio API not supported - audio features disabled', e);
+            this.audioContext = null;
+            this.enabled = false;
         }
     }
 
@@ -68,6 +71,11 @@ class AudioManager {
      * Generate procedural sound effect
      */
     generateSound(soundDef, volume = 1.0) {
+        if (!this.audioContext) {
+            console.warn('Audio context not available');
+            return;
+        }
+
         const ctx = this.audioContext;
         const now = ctx.currentTime;
 

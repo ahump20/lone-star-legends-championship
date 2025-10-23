@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sandlot Superstars - Baseball Championship</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="js/enhanced-3d-engine.js"></script>
+    <script src="/js/enhanced-3d-engine.js"></script>
 
     <!-- Sandlot Superstars Styles -->
     <link rel="stylesheet" href="/css/game-ui.css">
@@ -189,19 +189,19 @@
 <body>
     <canvas id="gameCanvas"></canvas>
     
-    <div class="ui-overlay">
-        <div class="score-board">
+    <div class="ui-overlay" role="region" aria-label="Game status">
+        <div class="score-board" role="status" aria-live="polite">
             <div class="team-score">
-                <div class="team-name">Lone Stars</div>
-                <div class="score" id="homeScore">0</div>
+                <div class="team-name" id="homeTeamName" aria-label="Home team name">Home Team</div>
+                <div class="score" id="homeScore" aria-label="Home team score">0</div>
             </div>
             <div class="inning-display">
                 <div class="inning-label">Inning</div>
-                <div class="inning-number" id="inning">1</div>
+                <div class="inning-number" id="inning" aria-label="Current inning">1</div>
             </div>
             <div class="team-score">
-                <div class="team-name">Visitors</div>
-                <div class="score" id="awayScore">0</div>
+                <div class="team-name" id="awayTeamName" aria-label="Away team name">Away Team</div>
+                <div class="score" id="awayScore" aria-label="Away team score">0</div>
             </div>
         </div>
     </div>
@@ -210,10 +210,10 @@
         Use Arrow Keys or WASD to move • SPACE to swing • Click buttons on mobile
     </div>
 
-    <div class="controls">
-        <button class="control-btn" onclick="game.swing()">⚾ SWING</button>
-        <button class="control-btn" onclick="game.pitch()">🎯 PITCH</button>
-        <button class="control-btn" onclick="game.reset()">🔄 RESET</button>
+    <div class="controls" role="toolbar" aria-label="Game controls">
+        <button class="control-btn" onclick="game.swing()" aria-label="Swing bat">⚾ SWING</button>
+        <button class="control-btn" onclick="game.pitch()" aria-label="Pitch ball">🎯 PITCH</button>
+        <button class="control-btn" onclick="game.reset()" aria-label="Reset game">🔄 RESET</button>
     </div>
 
     <div class="hit-indicator" id="hitIndicator">HOME RUN!</div>
@@ -224,16 +224,48 @@
                 this.scene = new THREE.Scene();
                 this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
                 this.renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameCanvas'), antialias: true });
-                
+
                 this.homeScore = 0;
                 this.awayScore = 0;
                 this.inning = 1;
                 this.balls = [];
                 this.isSwinging = false;
                 this.batRotation = 0;
-                
+
+                // Team names (can be set externally)
+                this.homeTeamName = 'Home Team';
+                this.awayTeamName = 'Away Team';
+
                 this.init();
                 this.animate();
+            }
+
+            /**
+             * Set team names dynamically
+             */
+            setTeamNames(homeName, awayName) {
+                this.homeTeamName = this.sanitizeHTML(homeName || 'Home Team');
+                this.awayTeamName = this.sanitizeHTML(awayName || 'Away Team');
+                this.updateTeamNamesUI();
+            }
+
+            /**
+             * Sanitize HTML to prevent XSS
+             */
+            sanitizeHTML(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            /**
+             * Update team names in UI
+             */
+            updateTeamNamesUI() {
+                const homeEl = document.getElementById('homeTeamName');
+                const awayEl = document.getElementById('awayTeamName');
+                if (homeEl) homeEl.textContent = this.homeTeamName;
+                if (awayEl) awayEl.textContent = this.awayTeamName;
             }
 
             init() {
