@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blaze Intelligence - Lone Star Legends Baseball</title>
+    <title>Sandlot Superstars - Baseball Championship</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="js/enhanced-3d-engine.js"></script>
-    
+
+    <!-- Sandlot Superstars Styles -->
+    <link rel="stylesheet" href="/css/game-ui.css">
+
     <!-- Flow State Integration -->
     <link rel="stylesheet" href="/flow-styles.css" id="flow-state-styles">
     <script type="module" src="/flow-state-api.js"></script>
@@ -815,5 +818,15 @@
             console.log(`Game difficulty adjusted to level ${level}, pitch speed: ${pitchSpeed}ms`);
         });
     </script>
+
+    <!-- Sandlot Superstars Integration -->
+    <script src="/js/character-manager.js"></script>
+    <script src="/js/character-renderer.js"></script>
+    <script src="/js/special-abilities.js"></script>
+    <script src="/js/stadium-manager.js"></script>
+    <script src="/js/audio-manager.js"></script>
+    <script src="/js/enhanced-game-ui.js"></script>
+    <script src="/js/season-mode.js"></script>
+    <script src="/js/game-integration.js"></script>
 </body>
 </html>

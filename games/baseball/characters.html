@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Characters - Sandlot Superstars</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .character-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .character-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+
+        .char-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .char-number {
+            background: #667eea;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .char-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .char-nickname {
+            font-size: 1rem;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .char-position {
+            display: inline-block;
+            background: #FF9800;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .char-bio {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .stat-bars {
+            margin: 15px 0;
+        }
+
+        .stat-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            width: 70px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .stat-value-container {
+            flex: 1;
+            background: #e0e0e0;
+            height: 14px;
+            border-radius: 7px;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+
+        .stat-value {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 7px;
+            transition: width 0.8s ease;
+        }
+
+        .stat-number {
+            font-weight: bold;
+            color: #333;
+            min-width: 25px;
+        }
+
+        .special-ability {
+            background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 12px;
+        }
+
+        .ability-name {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .ability-desc {
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+
+        .overall-rating {
+            display: inline-block;
+            background: #FFD700;
+            color: #333;
+            padding: 6px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .back-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #999, #666);
+            color: white;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👥 Character Roster 👥</h1>
+            <p>Meet all 18 unique players with their special abilities!</p>
+        </div>
+
+        <div id="character-grid" class="character-grid">
+            <!-- Characters will be loaded here -->
+        </div>
+
+        <button class="back-btn" onclick="window.location.href='menu.html'">← Back to Menu</button>
+    </div>
+
+    <script src="/js/character-manager.js"></script>
+    <script>
+        async function loadCharacters() {
+            const manager = new CharacterManager();
+            await manager.loadRoster();
+            const characters = manager.getAllCharacters();
+
+            const grid = document.getElementById('character-grid');
+            grid.innerHTML = characters.map(char => {
+                const stats = manager.getCharacterStatsSummary(char);
+                return `
+                    <div class="character-card">
+                        <div class="char-header">
+                            <div>
+                                <div class="char-number">${char.favoriteNumber}</div>
+                            </div>
+                        </div>
+
+                        <div class="char-name">${char.name}</div>
+                        <div class="char-nickname">"${char.nickname}"</div>
+                        <div class="char-position">${char.position}</div>
+
+                        <div class="char-bio">${char.bio}</div>
+
+                        <div class="stat-bars">
+                            <div class="stat-bar">
+                                <span class="stat-label">Batting</span>
+                                <div class="stat-value-container">
+                                    <div class="stat-value" style="width: ${char.stats.batting * 10}%"></div>
+                                </div>
+                                <span class="stat-number">${char.stats.batting}</span>
+                            </div>
+                            <div class="stat-bar">
+                                <span class="stat-label">Power</span>
+                                <div class="stat-value-container">
+                                    <div class="stat-value" style="width: ${char.stats.power * 10}%"></div>
+                                </div>
+                                <span class="stat-number">${char.stats.power}</span>
+                            </div>
+                            <div class="stat-bar">
+                                <span class="stat-label">Speed</span>
+                                <div class="stat-value-container">
+                                    <div class="stat-value" style="width: ${char.stats.speed * 10}%"></div>
+                                </div>
+                                <span class="stat-number">${char.stats.speed}</span>
+                            </div>
+                            <div class="stat-bar">
+                                <span class="stat-label">Fielding</span>
+                                <div class="stat-value-container">
+                                    <div class="stat-value" style="width: ${char.stats.fielding * 10}%"></div>
+                                </div>
+                                <span class="stat-number">${char.stats.fielding}</span>
+                            </div>
+                            <div class="stat-bar">
+                                <span class="stat-label">Pitching</span>
+                                <div class="stat-value-container">
+                                    <div class="stat-value" style="width: ${char.stats.pitching * 10}%"></div>
+                                </div>
+                                <span class="stat-number">${char.stats.pitching}</span>
+                            </div>
+                        </div>
+
+                        <div class="overall-rating">${stats.rating}</div>
+
+                        <div class="special-ability">
+                            <div class="ability-name">⚡ ${char.specialAbility.name}</div>
+                            <div class="ability-desc">${char.specialAbility.description}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        loadCharacters();
+    </script>
+</body>
+</html>

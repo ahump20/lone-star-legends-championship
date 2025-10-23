@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Selection - Sandlot Superstars</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        .selection-phase {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .phase-header h2 {
+            color: #667eea;
+            font-size: 2rem;
+        }
+
+        .phase-indicator {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .team-card {
+            background: white;
+            border: 4px solid transparent;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+        }
+
+        .team-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            transform: scale(1.05);
+        }
+
+        .team-logo {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .team-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .team-color-bar {
+            height: 8px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .character-card {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-color: #667eea;
+        }
+
+        .character-card.selected {
+            border-color: #4CAF50;
+            background: linear-gradient(135deg, #4CAF5020 0%, #8BC34A20 100%);
+            transform: scale(1.02);
+        }
+
+        .character-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(0.5);
+        }
+
+        .character-number {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .character-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .character-nickname {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .character-position {
+            display: inline-block;
+            background: #FF9800;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .stat-bars {
+            margin: 12px 0;
+        }
+
+        .stat-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            width: 65px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .stat-value-container {
+            flex: 1;
+            background: #e0e0e0;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-right: 8px;
+        }
+
+        .stat-value {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 6px;
+            transition: width 0.6s ease;
+        }
+
+        .stat-number {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #333;
+            min-width: 20px;
+        }
+
+        .special-ability {
+            background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+            color: #333;
+            padding: 8px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        .ability-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+            font-size: 0.9rem;
+        }
+
+        .ability-desc {
+            font-size: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .selected-count {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .selected-roster {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .selected-roster h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .roster-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .roster-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .roster-position {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            min-width: 35px;
+            text-align: center;
+        }
+
+        .roster-player-name {
+            flex: 1;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .remove-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .overall-rating {
+            display: inline-block;
+            background: #FFD700;
+            color: #333;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚾ SANDLOT SUPERSTARS ⚾</h1>
+            <p>Choose Your Team & Build Your Dream Roster!</p>
+        </div>
+
+        <div id="loading" class="loading">
+            Loading characters... ⚾
+        </div>
+
+        <!-- Phase 1: Team Selection -->
+        <div id="team-selection" class="selection-phase hidden">
+            <div class="phase-header">
+                <h2>Step 1: Choose Your Team</h2>
+                <span class="phase-indicator">Phase 1 of 3</span>
+            </div>
+            <div id="team-grid" class="team-grid"></div>
+            <div class="action-buttons">
+                <button id="continue-to-players" class="btn btn-primary" disabled>
+                    Continue to Player Selection →
+                </button>
+            </div>
+        </div>
+
+        <!-- Phase 2: Player Selection -->
+        <div id="player-selection" class="selection-phase hidden">
+            <div class="phase-header">
+                <h2>Step 2: Select Your Players</h2>
+                <div>
+                    <span class="selected-count" id="selected-count">0 / 9</span>
+                    <span class="phase-indicator" style="margin-left: 20px;">Phase 2 of 3</span>
+                </div>
+            </div>
+            <div id="character-grid" class="character-grid"></div>
+            <div class="selected-roster" id="selected-roster">
+                <h3>Your Roster</h3>
+                <div id="roster-list" class="roster-list">
+                    <p style="grid-column: 1/-1; text-align: center; color: #999;">
+                        Select 9 players to build your roster...
+                    </p>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button id="back-to-teams" class="btn btn-secondary">
+                    ← Back to Teams
+                </button>
+                <button id="continue-to-lineup" class="btn btn-primary" disabled>
+                    Continue to Lineup Order →
+                </button>
+            </div>
+        </div>
+
+        <!-- Phase 3: Lineup Order -->
+        <div id="lineup-order" class="selection-phase hidden">
+            <div class="phase-header">
+                <h2>Step 3: Set Your Batting Order</h2>
+                <span class="phase-indicator">Phase 3 of 3</span>
+            </div>
+            <p style="text-align: center; margin-bottom: 20px; font-size: 1.1rem; color: #666;">
+                Drag and drop to reorder your lineup
+            </p>
+            <div id="lineup-list" class="roster-list" style="grid-template-columns: 1fr;"></div>
+            <div class="action-buttons">
+                <button id="back-to-players" class="btn btn-secondary">
+                    ← Back to Players
+                </button>
+                <button id="start-game" class="btn btn-primary">
+                    Play Ball! ⚾
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/character-manager.js"></script>
+    <script src="/js/team-selection.js"></script>
+</body>
+</html>
