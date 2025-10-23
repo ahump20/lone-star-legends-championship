@@ -1,0 +1,627 @@
+/**
+ * Enhanced Game UI Styles
+ * Comprehensive styles for the baseball game
+ */
+
+/* Enhanced Scoreboard */
+.enhanced-scoreboard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(30,30,30,0.9));
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    color: white;
+    font-family: 'Arial', sans-serif;
+    margin: 10px;
+}
+
+.team-score {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.team-logo {
+    font-size: 3rem;
+}
+
+.team-info {
+    text-align: center;
+}
+
+.team-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    opacity: 0.9;
+    margin-bottom: 5px;
+}
+
+.team-score-value {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #FFD700;
+}
+
+.game-status {
+    text-align: center;
+    padding: 0 30px;
+}
+
+.inning-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #4CAF50;
+}
+
+.count-display {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.count-label {
+    opacity: 0.7;
+}
+
+.count-value {
+    font-weight: bold;
+    color: #FFD700;
+    min-width: 20px;
+}
+
+.bases-display {
+    display: grid;
+    grid-template-columns: 30px 30px;
+    grid-template-rows: 30px 30px;
+    gap: 5px;
+    transform: rotate(45deg);
+    margin: 0 auto;
+    width: 65px;
+}
+
+.base {
+    width: 30px;
+    height: 30px;
+    background: rgba(255,255,255,0.3);
+    border: 2px solid white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transform: rotate(-45deg);
+    transition: all 0.3s ease;
+}
+
+.base.occupied {
+    background: #4CAF50;
+    box-shadow: 0 0 15px #4CAF50;
+}
+
+.base:nth-child(1) {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.base:nth-child(2) {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.base:nth-child(3) {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+/* Character Portraits */
+.character-portraits {
+    position: fixed;
+    left: 20px;
+    top: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 100;
+}
+
+.portrait-panel {
+    background: linear-gradient(135deg, rgba(0,0,0,0.85), rgba(30,30,30,0.85));
+    border-radius: 12px;
+    padding: 15px;
+    min-width: 220px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.portrait-panel.current-batter {
+    border-color: #4CAF50;
+}
+
+.portrait-panel.current-pitcher {
+    border-color: #FF6B35;
+}
+
+.portrait-header {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #FFD700;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.portrait-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.portrait-avatar {
+    font-size: 3rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+.portrait-info {
+    flex: 1;
+}
+
+.portrait-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 3px;
+}
+
+.portrait-position {
+    font-size: 0.85rem;
+    color: #FFD700;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.portrait-stats {
+    display: flex;
+    gap: 10px;
+}
+
+.stat-mini {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.8);
+}
+
+.stat-mini span {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+/* Ability UI */
+.ability-container {
+    position: fixed;
+    right: 20px;
+    bottom: 120px;
+    z-index: 100;
+}
+
+.ability-panel {
+    background: linear-gradient(135deg, rgba(75,0,130,0.9), rgba(138,43,226,0.9));
+    border-radius: 15px;
+    padding: 20px;
+    min-width: 250px;
+    box-shadow: 0 10px 30px rgba(75,0,130,0.5);
+    border: 3px solid #FFD700;
+}
+
+.ability-panel h3 {
+    color: #FFD700;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.ability-button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border: 3px solid #FF6B35;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #333;
+    font-weight: bold;
+}
+
+.ability-button:disabled {
+    background: rgba(100,100,100,0.5);
+    border-color: rgba(150,150,150,0.5);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.ability-button.ready {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255,215,0,0.5);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255,215,0,1);
+        transform: scale(1.05);
+    }
+}
+
+.ability-button:not(:disabled):hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 40px rgba(255,215,0,1);
+}
+
+.ability-icon {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+}
+
+.ability-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.ability-desc {
+    font-size: 0.85rem;
+    line-height: 1.3;
+    opacity: 0.9;
+}
+
+.ability-cooldown {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.ability-hint {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.7);
+}
+
+/* Ability Activation Overlay */
+.ability-activation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+}
+
+.ability-activation {
+    background: linear-gradient(135deg, #FFD700, #FF6B35);
+    padding: 50px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255,215,0,0.8);
+    animation: zoomIn 0.5s ease;
+}
+
+.activation-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    animation: rotate 1s ease-in-out;
+}
+
+.activation-player {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.activation-ability {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.activation-message {
+    font-size: 1.2rem;
+    font-style: italic;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Game Log */
+.game-log {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    width: 350px;
+    max-height: 300px;
+    background: rgba(0,0,0,0.85);
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.2);
+    z-index: 100;
+    overflow: hidden;
+}
+
+.log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.log-header h3 {
+    color: white;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.log-button {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.log-button:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.log-content {
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.log-entry {
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.05);
+    border-left: 3px solid;
+    font-size: 0.85rem;
+    color: white;
+    animation: slideInLeft 0.3s ease;
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.log-entry.log-info {
+    border-left-color: #2196F3;
+}
+
+.log-entry.log-success {
+    border-left-color: #4CAF50;
+}
+
+.log-entry.log-warning {
+    border-left-color: #FF9800;
+}
+
+.log-entry.log-error {
+    border-left-color: #F44336;
+}
+
+.log-entry.log-ability {
+    border-left-color: #9C27B0;
+    background: rgba(156,39,176,0.2);
+}
+
+.log-time {
+    opacity: 0.6;
+    margin-right: 8px;
+    font-size: 0.75rem;
+}
+
+.log-message {
+    font-weight: 500;
+}
+
+/* Hit Indicator */
+.hit-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    font-weight: bold;
+    text-shadow: 4px 4px 8px rgba(0,0,0,0.8);
+    z-index: 9999;
+    animation: hitPop 2s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes hitPop {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    20% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+    }
+    80% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+}
+
+.hit-indicator.homerun {
+    color: #FFD700;
+    text-shadow: 0 0 30px #FFD700;
+}
+
+.hit-indicator.triple {
+    color: #FF6B35;
+}
+
+.hit-indicator.double {
+    color: #4CAF50;
+}
+
+.hit-indicator.single {
+    color: white;
+}
+
+.hit-indicator.strikeout {
+    color: #F44336;
+}
+
+.hit-indicator.out {
+    color: #999;
+}
+
+.hit-indicator.walk {
+    color: #2196F3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .character-portraits {
+        left: 10px;
+        top: 100px;
+    }
+
+    .portrait-panel {
+        min-width: 180px;
+        padding: 10px;
+    }
+
+    .ability-container {
+        right: 10px;
+        bottom: 80px;
+    }
+
+    .ability-panel {
+        min-width: 200px;
+        padding: 15px;
+    }
+
+    .game-log {
+        width: 90%;
+        left: 5%;
+        bottom: 10px;
+    }
+
+    .enhanced-scoreboard {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .team-score {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Additional utility classes */
+.hidden {
+    display: none !important;
+}
+
+.pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.shake {
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-10px);
+    }
+    75% {
+        transform: translateX(10px);
+    }
+}
