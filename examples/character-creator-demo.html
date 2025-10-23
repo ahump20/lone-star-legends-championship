@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Creator Demo - Sandlot Superstars</title>
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../css/ui-manager.css">
+    <link rel="stylesheet" href="../css/character-creator.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0A0E27 0%, #1a1f3a 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .demo-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid var(--color-primary);
+            z-index: 10000;
+        }
+
+        .demo-controls h4 {
+            margin: 0 0 10px 0;
+            color: var(--color-primary);
+        }
+
+        .demo-controls button {
+            display: block;
+            width: 100%;
+            margin-bottom: 5px;
+            padding: 8px;
+            background: var(--color-primary);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .demo-controls button:hover {
+            background: #ff8055;
+            transform: translateX(2px);
+        }
+
+        .demo-info {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid var(--color-accent);
+            max-width: 300px;
+            z-index: 10000;
+        }
+
+        .demo-info h3 {
+            margin: 0 0 10px 0;
+            color: var(--color-accent);
+        }
+
+        .demo-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .demo-info .close-info {
+            background: var(--color-error);
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Demo Info Panel -->
+    <div class="demo-info" id="demo-info">
+        <h3>Character Creator Demo</h3>
+        <p>This demo showcases the character customization system.</p>
+        <p><strong>Features:</strong></p>
+        <ul style="font-size: 12px; line-height: 1.6;">
+            <li>200 stat points to allocate</li>
+            <li>Appearance customization</li>
+            <li>Special abilities (max 3)</li>
+            <li>Load presets (6 types)</li>
+            <li>Save/load characters</li>
+            <li>Export/import JSON</li>
+        </ul>
+        <button class="close-info" onclick="document.getElementById('demo-info').style.display='none'">Close</button>
+    </div>
+
+    <!-- Demo Controls -->
+    <div class="demo-controls">
+        <h4>Demo Controls</h4>
+        <button onclick="showCreator()">Show Character Creator</button>
+        <button onclick="showSavedCharacters()">Show Saved Characters</button>
+        <button onclick="showMainMenu()">Show Main Menu</button>
+        <button onclick="testNotification()">Test Achievement</button>
+        <button onclick="viewSavedData()">View Saved Data</button>
+        <button onclick="clearAllData()">Clear All Data</button>
+    </div>
+
+    <!-- UI Container (screens will be injected here) -->
+    <div id="ui-container"></div>
+
+    <!-- Core Scripts -->
+    <script src="../js/game-state-manager.js"></script>
+    <script src="../js/achievement-system.js"></script>
+    <script src="../js/character-creator.js"></script>
+    <script src="../js/ui-manager.js"></script>
+    <script src="../js/ui-screens.js"></script>
+    <script src="../js/ui-character-creator.js"></script>
+
+    <script>
+        // Initialize core systems
+        console.log('Initializing Character Creator Demo...');
+
+        // Create game state manager
+        window.gameStateManager = new GameStateManager();
+        console.log('✅ GameStateManager initialized');
+
+        // Create achievement system
+        window.achievementSystem = new AchievementSystem(gameStateManager);
+        console.log('✅ AchievementSystem initialized');
+
+        // Create character creator
+        window.characterCreator = new CharacterCreator(gameStateManager);
+        console.log('✅ CharacterCreator initialized');
+
+        // Create UI manager
+        window.uiManager = new UIManager({
+            container: document.getElementById('ui-container')
+        });
+        console.log('✅ UIManager initialized');
+
+        // Register screens
+        uiManager.registerScreen('main-menu', MainMenuScreen);
+        uiManager.registerScreen('character-creator', () => new CharacterCreatorScreen(uiManager, characterCreator));
+        uiManager.registerScreen('saved-characters', () => new SavedCharactersScreen(uiManager, characterCreator));
+        uiManager.registerScreen('achievements', AchievementsScreen);
+        uiManager.registerScreen('statistics', StatisticsScreen);
+        uiManager.registerScreen('settings', SettingsScreen);
+        console.log('✅ Screens registered');
+
+        // Setup achievement notifications
+        achievementSystem.onAchievementUnlocked((achievement) => {
+            uiManager.showAchievement(achievement);
+        });
+
+        // Setup character creator listeners
+        characterCreator.on('character_saved', (event, character) => {
+            console.log('Character saved:', character);
+            uiManager.showNotification({
+                type: 'success',
+                title: 'Character Saved!',
+                message: `${character.name} has been created successfully.`,
+                duration: 3000
+            });
+        });
+
+        // Show initial screen
+        uiManager.showScreen('character-creator');
+        console.log('✅ Demo ready!');
+
+        // Demo functions
+        function showCreator() {
+            uiManager.showScreen('character-creator');
+        }
+
+        function showSavedCharacters() {
+            uiManager.showScreen('saved-characters');
+        }
+
+        function showMainMenu() {
+            uiManager.showScreen('main-menu');
+        }
+
+        function testNotification() {
+            // Simulate unlocking an achievement
+            const fakeAchievement = {
+                id: 'character_creator',
+                name: 'Character Creator',
+                description: 'Created your first custom character!',
+                icon: '⚾',
+                points: 50,
+                category: 'progression'
+            };
+
+            uiManager.showAchievement(fakeAchievement);
+        }
+
+        function viewSavedData() {
+            const characters = characterCreator.getSavedCharacters();
+
+            if (characters.length === 0) {
+                uiManager.showNotification({
+                    type: 'info',
+                    title: 'No Characters',
+                    message: 'No saved characters found. Create one first!',
+                    duration: 3000
+                });
+                return;
+            }
+
+            const content = `
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <h4>Saved Characters (${characters.length})</h4>
+                    ${characters.map(char => `
+                        <div style="padding: 10px; margin: 10px 0; background: rgba(255,107,53,0.1); border-radius: 5px;">
+                            <strong>${char.name}</strong> (#${char.jerseyNumber} - ${char.position})<br>
+                            <small>Overall: ${char.ratings.overall} | Abilities: ${char.abilities.length}</small>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            uiManager.showModal({
+                title: 'Saved Characters Data',
+                content: content
+            });
+        }
+
+        async function clearAllData() {
+            const confirmed = await uiManager.confirm(
+                'Clear All Data',
+                'Are you sure? This will delete ALL custom characters. This cannot be undone!'
+            );
+
+            if (confirmed) {
+                gameStateManager.setCustomData('customCharacters', []);
+                uiManager.showNotification({
+                    type: 'success',
+                    title: 'Data Cleared',
+                    message: 'All custom characters have been deleted.',
+                    duration: 3000
+                });
+
+                // Refresh the current screen
+                if (uiManager.currentScreen === 'saved-characters') {
+                    uiManager.showScreen('saved-characters');
+                }
+            }
+        }
+
+        // Demo: Create a sample character on first load
+        window.addEventListener('load', () => {
+            const savedCharacters = characterCreator.getSavedCharacters();
+
+            if (savedCharacters.length === 0) {
+                console.log('No characters found. Creating sample character...');
+
+                // Create a sample character
+                characterCreator.startNewCharacter();
+                characterCreator.updateBasicInfo({
+                    name: 'Demo Player',
+                    position: 'CF',
+                    jerseyNumber: 42
+                });
+
+                characterCreator.updateStat('power', 70);
+                characterCreator.updateStat('contact', 50);
+                characterCreator.updateStat('speed', 30);
+                characterCreator.updateStat('defense', 25);
+                characterCreator.updateStat('arm', 15);
+                characterCreator.updateStat('accuracy', 10);
+
+                characterCreator.updateAppearance('skinTone', 'medium');
+                characterCreator.updateAppearance('jerseyColor', 'blue');
+                characterCreator.updateAppearance('battingStance', 'power');
+
+                characterCreator.addAbility('power_surge');
+                characterCreator.addAbility('home_run_king');
+
+                try {
+                    characterCreator.saveCharacter();
+                    console.log('✅ Sample character created!');
+                } catch (error) {
+                    console.log('Sample character validation failed (expected for demo)');
+                }
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + N = New Character
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                showCreator();
+            }
+
+            // Ctrl/Cmd + S = Show Saved
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                showSavedCharacters();
+            }
+
+            // Escape = Back to menu
+            if (e.key === 'Escape') {
+                showMainMenu();
+            }
+        });
+
+        console.log('Keyboard shortcuts:');
+        console.log('  Ctrl/Cmd + N: New Character');
+        console.log('  Ctrl/Cmd + S: Saved Characters');
+        console.log('  Escape: Main Menu');
+    </script>
+
+</body>
+</html>

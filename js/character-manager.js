@@ -3,11 +3,13 @@
  */
 
 class CharacterManager {
-    constructor() {
+    constructor(gameStateManager = null) {
         this.characters = [];
         this.teams = [];
         this.selectedTeam = null;
         this.opponentTeam = null;
+        this.gameStateManager = gameStateManager;
+        this.customCharacters = [];
     }
 
     /**
@@ -35,12 +37,92 @@ class CharacterManager {
             this.teams = data.teams;
 
             console.log(`✅ Loaded ${this.characters.length} characters and ${this.teams.length} teams`);
+
+            // Load custom characters if game state manager is available
+            this.loadCustomCharacters();
+
             return true;
         } catch (error) {
             console.error('Failed to load character roster:', error);
             this.showUserError('Failed to load game data. Please refresh the page.');
             return false;
         }
+    }
+
+    /**
+     * Load custom characters from game state and merge with roster
+     */
+    loadCustomCharacters() {
+        if (!this.gameStateManager) {
+            return;
+        }
+
+        try {
+            const customChars = this.gameStateManager.getCustomData('customCharacters') || [];
+
+            // Convert custom characters to roster format
+            this.customCharacters = customChars.map(custom => this.convertCustomCharacter(custom));
+
+            // Merge with main roster
+            this.characters = [...this.characters, ...this.customCharacters];
+
+            if (this.customCharacters.length > 0) {
+                console.log(`✅ Loaded ${this.customCharacters.length} custom characters`);
+            }
+        } catch (error) {
+            console.error('Failed to load custom characters:', error);
+        }
+    }
+
+    /**
+     * Convert custom character format to roster format
+     * Custom characters use 1-99 stats, roster uses 1-10 stats
+     */
+    convertCustomCharacter(customChar) {
+        return {
+            id: customChar.id,
+            name: customChar.name,
+            nickname: customChar.name,
+            age: 12,
+            position: customChar.position,
+            favoriteNumber: customChar.jerseyNumber,
+            bio: 'Custom created player',
+
+            // Convert stats from 1-99 scale to 1-10 scale
+            stats: {
+                batting: Math.round(customChar.stats.contact / 10),
+                power: Math.round(customChar.stats.power / 10),
+                speed: Math.round(customChar.stats.speed / 10),
+                pitching: Math.round((customChar.stats.arm + customChar.stats.accuracy) / 20),
+                fielding: Math.round(customChar.stats.defense / 10)
+            },
+
+            // Use first ability as special ability (or default if none)
+            specialAbility: customChar.abilities.length > 0
+                ? customChar.abilities[0]
+                : {
+                    id: 'none',
+                    name: 'No Ability',
+                    description: 'No special ability selected',
+                    cooldown: 99
+                },
+
+            // Custom appearance
+            appearance: {
+                skinTone: customChar.appearance.skinTone,
+                hairColor: 'brown',
+                eyeColor: 'brown',
+                jerseyColor: customChar.appearance.jerseyColor,
+                battingStance: customChar.appearance.battingStance,
+                pitchingMotion: customChar.appearance.pitchingMotion
+            },
+
+            personality: 'competitive',
+
+            // Mark as custom
+            custom: true,
+            customData: customChar
+        };
     }
 
     /**
@@ -76,6 +158,25 @@ class CharacterManager {
      */
     getAllCharacters() {
         return this.characters;
+    }
+
+    /**
+     * Get only custom characters
+     */
+    getCustomCharacters() {
+        return this.characters.filter(char => char.custom === true);
+    }
+
+    /**
+     * Refresh custom characters from game state
+     * Call this after creating/editing/deleting custom characters
+     */
+    refreshCustomCharacters() {
+        // Remove old custom characters
+        this.characters = this.characters.filter(char => !char.custom);
+
+        // Reload custom characters
+        this.loadCustomCharacters();
     }
 
     /**
