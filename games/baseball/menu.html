@@ -67,9 +67,15 @@
 
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             margin-bottom: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .menu-button {
@@ -314,6 +320,24 @@
                 <div class="menu-description">
                     View all players and their special abilities
                 </div>
+            </a>
+
+            <a href="character-creator.html" class="menu-button">
+                <div class="menu-icon">✨</div>
+                <div class="menu-title">Character Creator</div>
+                <div class="menu-description">
+                    Design your own custom player
+                </div>
+                <span class="badge new">New!</span>
+            </a>
+
+            <a href="stadiums.html" class="menu-button">
+                <div class="menu-icon">🏟️</div>
+                <div class="menu-title">Stadium Gallery</div>
+                <div class="menu-description">
+                    Explore unique venues and their features
+                </div>
+                <span class="badge new">New!</span>
             </a>
 
             <a href="#" class="menu-button" onclick="showOptions(); return false;">

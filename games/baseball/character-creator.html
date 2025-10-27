@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Creator - Sandlot Superstars</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .creator-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .customization-panel {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            color: #333;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .preview-panel {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            color: #333;
+            position: sticky;
+            top: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="number"],
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+        }
+
+        .color-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: #667eea;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+        }
+
+        .color-option::after {
+            content: attr(data-name);
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            white-space: nowrap;
+            color: #666;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+        }
+
+        .icon-option {
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .icon-option:hover {
+            background: #e0e0e0;
+        }
+
+        .icon-option.selected {
+            border-color: #667eea;
+            background: #e8edff;
+        }
+
+        .icon-option .icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .icon-option .name {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .stat-slider {
+            margin-bottom: 20px;
+        }
+
+        .stat-slider label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .stat-slider input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .stat-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .stat-slider input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+
+        .stat-bar {
+            display: flex;
+            gap: 2px;
+            margin-top: 5px;
+        }
+
+        .stat-bar-segment {
+            flex: 1;
+            height: 10px;
+            background: #ddd;
+            border-radius: 2px;
+        }
+
+        .stat-bar-segment.filled {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .preview-character {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .preview-avatar {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .preview-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .preview-nickname {
+            font-size: 1.2rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .preview-stats {
+            margin-top: 15px;
+        }
+
+        .preview-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .rating-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background: #FFD700;
+            color: #333;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+            grid-column: 1 / -1;
+        }
+
+        .btn-success:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .points-remaining {
+            text-align: center;
+            padding: 15px;
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #856404;
+        }
+
+        .multi-select {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .multi-select-option {
+            padding: 8px 15px;
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .multi-select-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        @media (max-width: 1024px) {
+            .creator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-panel {
+                position: static;
+            }
+        }
+
+        .ability-card {
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .ability-card:hover {
+            border-color: #667eea;
+        }
+
+        .ability-card.selected {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+
+        .ability-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .ability-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .ability-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .ability-requirements {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: rgba(0,0,0,0.5);
+        }
+
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 30px 50px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            z-index: 10000;
+            display: none;
+            text-align: center;
+        }
+
+        .notification.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translate(-50%, -60%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="goBack()">← Back to Menu</button>
+
+    <div class="container">
+        <div class="header">
+            <h1>⚾ Character Creator ⚾</h1>
+            <p>Design your perfect baseball player!</p>
+        </div>
+
+        <div class="creator-grid">
+            <!-- Customization Panel -->
+            <div class="customization-panel">
+                <!-- Basic Info -->
+                <div class="section">
+                    <div class="section-title">
+                        📋 Basic Information
+                    </div>
+                    <div class="input-group">
+                        <label>Character Name *</label>
+                        <input type="text" id="characterName" placeholder="Enter name" maxlength="30">
+                    </div>
+                    <div class="input-group">
+                        <label>Nickname</label>
+                        <input type="text" id="nickname" placeholder="e.g., The Rocket" maxlength="20">
+                    </div>
+                    <div class="input-group">
+                        <label>Age</label>
+                        <input type="number" id="age" min="8" max="15" value="12">
+                    </div>
+                    <div class="input-group">
+                        <label>Position</label>
+                        <select id="position">
+                            <option value="P">Pitcher (P)</option>
+                            <option value="C">Catcher (C)</option>
+                            <option value="1B">First Base (1B)</option>
+                            <option value="2B">Second Base (2B)</option>
+                            <option value="3B">Third Base (3B)</option>
+                            <option value="SS">Shortstop (SS)</option>
+                            <option value="LF">Left Field (LF)</option>
+                            <option value="CF" selected>Center Field (CF)</option>
+                            <option value="RF">Right Field (RF)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Jersey Number</label>
+                        <input type="number" id="jerseyNumber" min="0" max="99" value="7">
+                    </div>
+                </div>
+
+                <!-- Stats Allocation -->
+                <div class="section">
+                    <div class="section-title">
+                        📊 Stats Allocation
+                    </div>
+                    <div class="points-remaining">
+                        Points Remaining: <span id="pointsRemaining">35</span> / 35
+                    </div>
+
+                    <div class="stat-slider">
+                        <label>
+                            <span>⚾ Batting</span>
+                            <span id="battingValue">5</span>
+                        </label>
+                        <input type="range" id="batting" min="1" max="10" value="5" oninput="updateStats()">
+                        <div class="stat-bar" id="battingBar"></div>
+                    </div>
+
+                    <div class="stat-slider">
+                        <label>
+                            <span>💪 Power</span>
+                            <span id="powerValue">5</span>
+                        </label>
+                        <input type="range" id="power" min="1" max="10" value="5" oninput="updateStats()">
+                        <div class="stat-bar" id="powerBar"></div>
+                    </div>
+
+                    <div class="stat-slider">
+                        <label>
+                            <span>⚡ Speed</span>
+                            <span id="speedValue">5</span>
+                        </label>
+                        <input type="range" id="speed" min="1" max="10" value="5" oninput="updateStats()">
+                        <div class="stat-bar" id="speedBar"></div>
+                    </div>
+
+                    <div class="stat-slider">
+                        <label>
+                            <span>🎯 Pitching</span>
+                            <span id="pitchingValue">5</span>
+                        </label>
+                        <input type="range" id="pitching" min="1" max="10" value="5" oninput="updateStats()">
+                        <div class="stat-bar" id="pitchingBar"></div>
+                    </div>
+
+                    <div class="stat-slider">
+                        <label>
+                            <span>🧤 Fielding</span>
+                            <span id="fieldingValue">5</span>
+                        </label>
+                        <input type="range" id="fielding" min="1" max="10" value="5" oninput="updateStats()">
+                        <div class="stat-bar" id="fieldingBar"></div>
+                    </div>
+                </div>
+
+                <!-- Appearance -->
+                <div class="section">
+                    <div class="section-title">
+                        👤 Appearance
+                    </div>
+
+                    <div class="input-group">
+                        <label>Skin Tone</label>
+                        <div class="color-grid" id="skinToneGrid"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Hair Style</label>
+                        <div class="icon-grid" id="hairStyleGrid"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Hair Color</label>
+                        <div class="color-grid" id="hairColorGrid"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Body Type</label>
+                        <select id="bodyType">
+                            <option value="slim">Slim (+Speed, -Power)</option>
+                            <option value="athletic" selected>Athletic (Balanced)</option>
+                            <option value="muscular">Muscular (+Power, -Speed)</option>
+                            <option value="stocky">Stocky (+Power, +Fielding)</option>
+                            <option value="tall">Tall (+Pitching, -Speed)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Accessories</label>
+                        <div class="icon-grid" id="accessoriesGrid"></div>
+                    </div>
+                </div>
+
+                <!-- Uniform -->
+                <div class="section">
+                    <div class="section-title">
+                        👕 Uniform
+                    </div>
+
+                    <div class="input-group">
+                        <label>Jersey Style</label>
+                        <div class="icon-grid" id="jerseyStyleGrid"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Primary Color</label>
+                        <div class="color-grid" id="primaryColorGrid"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Secondary Color</label>
+                        <div class="color-grid" id="secondaryColorGrid"></div>
+                    </div>
+                </div>
+
+                <!-- Personality -->
+                <div class="section">
+                    <div class="section-title">
+                        😊 Personality (Select up to 2)
+                    </div>
+                    <div class="multi-select" id="personalitySelect"></div>
+                </div>
+
+                <!-- Special Ability -->
+                <div class="section">
+                    <div class="section-title">
+                        ⚡ Special Ability
+                    </div>
+                    <div id="abilitiesList"></div>
+                </div>
+
+                <!-- Stance & Style -->
+                <div class="section">
+                    <div class="section-title">
+                        🎯 Playing Style
+                    </div>
+
+                    <div class="input-group">
+                        <label>Batting Stance</label>
+                        <div class="icon-grid" id="battingStanceGrid"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Pitching Style</label>
+                        <div class="icon-grid" id="pitchingStyleGrid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <div class="preview-character">
+                    <div class="preview-avatar" id="previewAvatar">⚾</div>
+                    <div class="preview-name" id="previewName">Custom Player</div>
+                    <div class="preview-nickname" id="previewNickname">"The Rookie"</div>
+                    <div class="rating-badge" id="previewRating">B (Solid)</div>
+                </div>
+
+                <div class="preview-stats">
+                    <div class="preview-stat">
+                        <span>⚾ Batting:</span>
+                        <span id="previewBatting">5</span>
+                    </div>
+                    <div class="preview-stat">
+                        <span>💪 Power:</span>
+                        <span id="previewPower">5</span>
+                    </div>
+                    <div class="preview-stat">
+                        <span>⚡ Speed:</span>
+                        <span id="previewSpeed">5</span>
+                    </div>
+                    <div class="preview-stat">
+                        <span>🎯 Pitching:</span>
+                        <span id="previewPitching">5</span>
+                    </div>
+                    <div class="preview-stat">
+                        <span>🧤 Fielding:</span>
+                        <span id="previewFielding">5</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="randomizeCharacter()">🎲 Random</button>
+                    <button class="btn btn-secondary" onclick="resetCharacter()">🔄 Reset</button>
+                    <button class="btn btn-success" onclick="saveCharacter()">✅ Create Character</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <h2 style="color: #4CAF50; margin-bottom: 15px;">✅ Character Created!</h2>
+        <p style="color: #666; margin-bottom: 20px;">Your character has been saved successfully.</p>
+        <button class="btn btn-primary" onclick="closeNotification()">Awesome!</button>
+    </div>
+
+    <script src="/js/character-customization.js"></script>
+    <script>
+        let customizationSystem;
+        let selectedSkinTone = 'medium';
+        let selectedHairStyle = 'short_spiky';
+        let selectedHairColor = 'black';
+        let selectedBodyType = 'athletic';
+        let selectedAccessories = [];
+        let selectedJerseyStyle = 'classic';
+        let selectedPrimaryColor = 'blue';
+        let selectedSecondaryColor = 'white';
+        let selectedPersonalities = [];
+        let selectedAbility = null;
+        let selectedBattingStance = 'traditional';
+        let selectedPitchingStyle = 'overhand';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            customizationSystem = new CharacterCustomizationSystem();
+            initializeOptions();
+            updatePreview();
+            updateStats();
+        });
+
+        function initializeOptions() {
+            const options = customizationSystem.getOptions();
+
+            // Skin tones
+            const skinToneGrid = document.getElementById('skinToneGrid');
+            options.appearance.skinTones.forEach(tone => {
+                const div = document.createElement('div');
+                div.className = 'color-option' + (tone.id === selectedSkinTone ? ' selected' : '');
+                div.style.background = tone.hex;
+                div.setAttribute('data-name', tone.name);
+                div.onclick = () => selectSkinTone(tone.id);
+                skinToneGrid.appendChild(div);
+            });
+
+            // Hair styles
+            const hairStyleGrid = document.getElementById('hairStyleGrid');
+            options.appearance.hairStyles.forEach(style => {
+                const div = document.createElement('div');
+                div.className = 'icon-option' + (style.id === selectedHairStyle ? ' selected' : '');
+                div.innerHTML = `<div class="icon">${style.icon}</div><div class="name">${style.name}</div>`;
+                div.onclick = () => selectHairStyle(style.id);
+                hairStyleGrid.appendChild(div);
+            });
+
+            // Hair colors
+            const hairColorGrid = document.getElementById('hairColorGrid');
+            options.appearance.hairColors.forEach(color => {
+                const div = document.createElement('div');
+                div.className = 'color-option' + (color.id === selectedHairColor ? ' selected' : '');
+                div.style.background = color.hex;
+                div.setAttribute('data-name', color.name);
+                div.onclick = () => selectHairColor(color.id);
+                hairColorGrid.appendChild(div);
+            });
+
+            // Accessories
+            const accessoriesGrid = document.getElementById('accessoriesGrid');
+            options.appearance.accessories.forEach(acc => {
+                const div = document.createElement('div');
+                div.className = 'icon-option';
+                div.innerHTML = `<div class="icon">${acc.icon}</div><div class="name">${acc.name}</div>`;
+                div.onclick = () => toggleAccessory(acc.id, div);
+                accessoriesGrid.appendChild(div);
+            });
+
+            // Jersey styles
+            const jerseyStyleGrid = document.getElementById('jerseyStyleGrid');
+            options.uniform.jerseyStyles.forEach(style => {
+                const div = document.createElement('div');
+                div.className = 'icon-option' + (style.id === selectedJerseyStyle ? ' selected' : '');
+                div.innerHTML = `<div class="icon">${style.icon}</div><div class="name">${style.name}</div>`;
+                div.onclick = () => selectJerseyStyle(style.id);
+                jerseyStyleGrid.appendChild(div);
+            });
+
+            // Primary colors
+            const primaryColorGrid = document.getElementById('primaryColorGrid');
+            options.uniform.primaryColors.forEach(color => {
+                const div = document.createElement('div');
+                div.className = 'color-option' + (color.id === selectedPrimaryColor ? ' selected' : '');
+                div.style.background = color.hex;
+                div.setAttribute('data-name', color.name);
+                div.onclick = () => selectPrimaryColor(color.id);
+                primaryColorGrid.appendChild(div);
+            });
+
+            // Secondary colors
+            const secondaryColorGrid = document.getElementById('secondaryColorGrid');
+            options.uniform.primaryColors.forEach(color => {
+                const div = document.createElement('div');
+                div.className = 'color-option' + (color.id === selectedSecondaryColor ? ' selected' : '');
+                div.style.background = color.hex;
+                div.setAttribute('data-name', color.name);
+                div.onclick = () => selectSecondaryColor(color.id);
+                secondaryColorGrid.appendChild(div);
+            });
+
+            // Personalities
+            const personalitySelect = document.getElementById('personalitySelect');
+            options.personalities.forEach(pers => {
+                const div = document.createElement('div');
+                div.className = 'multi-select-option';
+                div.textContent = `${pers.emoji} ${pers.name}`;
+                div.onclick = () => togglePersonality(pers.id, div);
+                personalitySelect.appendChild(div);
+            });
+
+            // Batting stances
+            const battingStanceGrid = document.getElementById('battingStanceGrid');
+            options.battingStances.forEach(stance => {
+                const div = document.createElement('div');
+                div.className = 'icon-option' + (stance.id === selectedBattingStance ? ' selected' : '');
+                div.innerHTML = `<div class="icon">${stance.icon}</div><div class="name">${stance.name}</div>`;
+                div.onclick = () => selectBattingStance(stance.id);
+                battingStanceGrid.appendChild(div);
+            });
+
+            // Pitching styles
+            const pitchingStyleGrid = document.getElementById('pitchingStyleGrid');
+            options.pitchingStyles.forEach(style => {
+                const div = document.createElement('div');
+                div.className = 'icon-option' + (style.id === selectedPitchingStyle ? ' selected' : '');
+                div.innerHTML = `<div class="icon">${style.icon}</div><div class="name">${style.name}</div>`;
+                div.onclick = () => selectPitchingStyle(style.id);
+                pitchingStyleGrid.appendChild(div);
+            });
+
+            // Abilities (will update based on stats)
+            updateAbilitiesList();
+        }
+
+        function selectSkinTone(id) {
+            selectedSkinTone = id;
+            document.querySelectorAll('#skinToneGrid .color-option').forEach(el => el.classList.remove('selected'));
+            event.target.classList.add('selected');
+            updatePreview();
+        }
+
+        function selectHairStyle(id) {
+            selectedHairStyle = id;
+            document.querySelectorAll('#hairStyleGrid .icon-option').forEach(el => el.classList.remove('selected'));
+            event.target.closest('.icon-option').classList.add('selected');
+            updatePreview();
+        }
+
+        function selectHairColor(id) {
+            selectedHairColor = id;
+            document.querySelectorAll('#hairColorGrid .color-option').forEach(el => el.classList.remove('selected'));
+            event.target.classList.add('selected');
+            updatePreview();
+        }
+
+        function toggleAccessory(id, element) {
+            if (id === 'none') {
+                selectedAccessories = [];
+                document.querySelectorAll('#accessoriesGrid .icon-option').forEach(el => el.classList.remove('selected'));
+            } else {
+                const index = selectedAccessories.indexOf(id);
+                if (index > -1) {
+                    selectedAccessories.splice(index, 1);
+                    element.classList.remove('selected');
+                } else {
+                    selectedAccessories.push(id);
+                    element.classList.add('selected');
+                }
+            }
+            updatePreview();
+        }
+
+        function selectJerseyStyle(id) {
+            selectedJerseyStyle = id;
+            document.querySelectorAll('#jerseyStyleGrid .icon-option').forEach(el => el.classList.remove('selected'));
+            event.target.closest('.icon-option').classList.add('selected');
+            updatePreview();
+        }
+
+        function selectPrimaryColor(id) {
+            selectedPrimaryColor = id;
+            document.querySelectorAll('#primaryColorGrid .color-option').forEach(el => el.classList.remove('selected'));
+            event.target.classList.add('selected');
+            updatePreview();
+        }
+
+        function selectSecondaryColor(id) {
+            selectedSecondaryColor = id;
+            document.querySelectorAll('#secondaryColorGrid .color-option').forEach(el => el.classList.remove('selected'));
+            event.target.classList.add('selected');
+            updatePreview();
+        }
+
+        function togglePersonality(id, element) {
+            const index = selectedPersonalities.indexOf(id);
+            if (index > -1) {
+                selectedPersonalities.splice(index, 1);
+                element.classList.remove('selected');
+            } else {
+                if (selectedPersonalities.length < 2) {
+                    selectedPersonalities.push(id);
+                    element.classList.add('selected');
+                }
+            }
+            updatePreview();
+        }
+
+        function selectBattingStance(id) {
+            selectedBattingStance = id;
+            document.querySelectorAll('#battingStanceGrid .icon-option').forEach(el => el.classList.remove('selected'));
+            event.target.closest('.icon-option').classList.add('selected');
+            updatePreview();
+        }
+
+        function selectPitchingStyle(id) {
+            selectedPitchingStyle = id;
+            document.querySelectorAll('#pitchingStyleGrid .icon-option').forEach(el => el.classList.remove('selected'));
+            event.target.closest('.icon-option').classList.add('selected');
+            updatePreview();
+        }
+
+        function updateStats() {
+            const batting = parseInt(document.getElementById('batting').value);
+            const power = parseInt(document.getElementById('power').value);
+            const speed = parseInt(document.getElementById('speed').value);
+            const pitching = parseInt(document.getElementById('pitching').value);
+            const fielding = parseInt(document.getElementById('fielding').value);
+
+            // Update values
+            document.getElementById('battingValue').textContent = batting;
+            document.getElementById('powerValue').textContent = power;
+            document.getElementById('speedValue').textContent = speed;
+            document.getElementById('pitchingValue').textContent = pitching;
+            document.getElementById('fieldingValue').textContent = fielding;
+
+            // Update stat bars
+            updateStatBar('battingBar', batting);
+            updateStatBar('powerBar', power);
+            updateStatBar('speedBar', speed);
+            updateStatBar('pitchingBar', pitching);
+            updateStatBar('fieldingBar', fielding);
+
+            // Calculate points
+            const total = batting + power + speed + pitching + fielding;
+            const remaining = 35 - total;
+            document.getElementById('pointsRemaining').textContent = remaining;
+
+            // Update preview
+            updatePreview();
+            updateAbilitiesList();
+        }
+
+        function updateStatBar(barId, value) {
+            const bar = document.getElementById(barId);
+            bar.innerHTML = '';
+            for (let i = 0; i < 10; i++) {
+                const segment = document.createElement('div');
+                segment.className = 'stat-bar-segment' + (i < value ? ' filled' : '');
+                bar.appendChild(segment);
+            }
+        }
+
+        function updateAbilitiesList() {
+            const stats = {
+                batting: parseInt(document.getElementById('batting').value),
+                power: parseInt(document.getElementById('power').value),
+                speed: parseInt(document.getElementById('speed').value),
+                pitching: parseInt(document.getElementById('pitching').value),
+                fielding: parseInt(document.getElementById('fielding').value)
+            };
+
+            const abilitiesList = document.getElementById('abilitiesList');
+            abilitiesList.innerHTML = '';
+
+            const options = customizationSystem.getOptions();
+            const availableAbilities = customizationSystem.getAvailableAbilities(stats);
+
+            options.abilities.forEach(ability => {
+                const isAvailable = availableAbilities.includes(ability);
+                const div = document.createElement('div');
+                div.className = 'ability-card' + (!isAvailable ? ' locked' : '') + (selectedAbility === ability.id ? ' selected' : '');
+
+                let reqText = '';
+                if (ability.requirements) {
+                    reqText = Object.entries(ability.requirements).map(([stat, val]) => `${stat} ${val}+`).join(', ');
+                }
+
+                div.innerHTML = `
+                    <div class="ability-name">${ability.name} ${!isAvailable ? '🔒' : ''}</div>
+                    <div class="ability-description">${ability.description}</div>
+                    ${reqText ? `<div class="ability-requirements">Requires: ${reqText}</div>` : ''}
+                `;
+
+                if (isAvailable) {
+                    div.onclick = () => {
+                        selectedAbility = ability.id;
+                        document.querySelectorAll('.ability-card').forEach(el => el.classList.remove('selected'));
+                        div.classList.add('selected');
+                        updatePreview();
+                    };
+                }
+
+                abilitiesList.appendChild(div);
+            });
+
+            // Auto-select first available if none selected
+            if (!selectedAbility && availableAbilities.length > 0) {
+                selectedAbility = availableAbilities[0].id;
+                updateAbilitiesList();
+            }
+        }
+
+        function updatePreview() {
+            const name = document.getElementById('characterName').value || 'Custom Player';
+            const nickname = document.getElementById('nickname').value || 'The Rookie';
+            const batting = parseInt(document.getElementById('batting').value);
+            const power = parseInt(document.getElementById('power').value);
+            const speed = parseInt(document.getElementById('speed').value);
+            const pitching = parseInt(document.getElementById('pitching').value);
+            const fielding = parseInt(document.getElementById('fielding').value);
+
+            document.getElementById('previewName').textContent = name;
+            document.getElementById('previewNickname').textContent = `"${nickname}"`;
+            document.getElementById('previewBatting').textContent = batting;
+            document.getElementById('previewPower').textContent = power;
+            document.getElementById('previewSpeed').textContent = speed;
+            document.getElementById('previewPitching').textContent = pitching;
+            document.getElementById('previewFielding').textContent = fielding;
+
+            // Calculate rating
+            const avg = (batting + power + speed + pitching + fielding) / 5;
+            let rating = 'C+ (Developing)';
+            if (avg >= 9) rating = 'S+ (Legendary)';
+            else if (avg >= 8) rating = 'A+ (Star)';
+            else if (avg >= 7) rating = 'A (All-Star)';
+            else if (avg >= 6) rating = 'B+ (Great)';
+            else if (avg >= 5) rating = 'B (Solid)';
+
+            document.getElementById('previewRating').textContent = rating;
+        }
+
+        function randomizeCharacter() {
+            const character = customizationSystem.generateRandomCharacter();
+
+            // Populate fields with random character data
+            document.getElementById('characterName').value = character.name;
+            document.getElementById('nickname').value = character.nickname;
+            document.getElementById('age').value = character.age;
+            document.getElementById('position').value = character.position;
+            document.getElementById('jerseyNumber').value = character.favoriteNumber;
+
+            // Stats
+            document.getElementById('batting').value = character.stats.batting;
+            document.getElementById('power').value = character.stats.power;
+            document.getElementById('speed').value = character.stats.speed;
+            document.getElementById('pitching').value = character.stats.pitching;
+            document.getElementById('fielding').value = character.stats.fielding;
+
+            // Appearance
+            selectedSkinTone = character.appearance.skinTone;
+            selectedHairStyle = character.appearance.hairStyle;
+            selectedHairColor = character.appearance.hairColor;
+            selectedBodyType = character.appearance.bodyType;
+            selectedAccessories = character.appearance.accessories;
+
+            // Uniform
+            selectedJerseyStyle = character.uniform.style;
+            selectedPrimaryColor = character.uniform.primaryColor;
+            selectedSecondaryColor = character.uniform.secondaryColor;
+
+            // Personality
+            selectedPersonalities = character.personality;
+
+            // Ability
+            selectedAbility = character.specialAbility.id;
+
+            // Refresh UI
+            location.reload(); // Simple reload to reset all selections
+        }
+
+        function resetCharacter() {
+            location.reload();
+        }
+
+        function saveCharacter() {
+            const name = document.getElementById('characterName').value;
+            if (!name) {
+                alert('Please enter a character name!');
+                return;
+            }
+
+            const characterData = {
+                name: name,
+                nickname: document.getElementById('nickname').value,
+                age: parseInt(document.getElementById('age').value),
+                position: document.getElementById('position').value,
+                favoriteNumber: parseInt(document.getElementById('jerseyNumber').value),
+                statAllocation: {
+                    batting: parseInt(document.getElementById('batting').value),
+                    power: parseInt(document.getElementById('power').value),
+                    speed: parseInt(document.getElementById('speed').value),
+                    pitching: parseInt(document.getElementById('pitching').value),
+                    fielding: parseInt(document.getElementById('fielding').value)
+                },
+                skinTone: selectedSkinTone,
+                hairStyle: selectedHairStyle,
+                hairColor: selectedHairColor,
+                bodyType: selectedBodyType,
+                accessories: selectedAccessories,
+                uniformStyle: selectedJerseyStyle,
+                primaryColor: selectedPrimaryColor,
+                secondaryColor: selectedSecondaryColor,
+                number: parseInt(document.getElementById('jerseyNumber').value),
+                ability: customizationSystem.getOptions().abilities.find(a => a.id === selectedAbility),
+                battingStance: selectedBattingStance,
+                pitchingStyle: selectedPitchingStyle,
+                personality: selectedPersonalities
+            };
+
+            const character = customizationSystem.createCharacter(characterData);
+
+            // Show notification
+            document.getElementById('notification').classList.add('show');
+
+            // Also unlock character achievement
+            if (window.saveSystem) {
+                window.saveSystem.unlockAchievement('character_creator');
+            }
+        }
+
+        function closeNotification() {
+            document.getElementById('notification').classList.remove('show');
+            window.location.href = 'characters.html';
+        }
+
+        function goBack() {
+            window.location.href = 'menu.html';
+        }
+    </script>
+</body>
+</html>
