@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournaments - Sandlot Superstars</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .tournament-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #4CAF50;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Create Tournament */
+        .create-form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 700px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1em;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .radio-option {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .radio-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .radio-option.selected {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.2);
+        }
+
+        .radio-option input {
+            display: none;
+        }
+
+        .team-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .team-option {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .team-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .team-option.selected {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.2);
+        }
+
+        .team-count {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .create-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .create-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .create-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Tournament List */
+        .tournament-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .tournament-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .tournament-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .tournament-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .tournament-title {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .tournament-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background: rgba(76, 175, 80, 0.3);
+            border: 1px solid #4CAF50;
+        }
+
+        .status-completed {
+            background: rgba(33, 150, 243, 0.3);
+            border: 1px solid #2196F3;
+        }
+
+        .tournament-info {
+            margin-bottom: 15px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .tournament-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-view {
+            background: rgba(33, 150, 243, 0.7);
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: rgba(33, 150, 243, 1);
+        }
+
+        .btn-delete {
+            background: rgba(244, 67, 54, 0.7);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: rgba(244, 67, 54, 1);
+        }
+
+        /* Bracket View */
+        .bracket-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .bracket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .tournament-bracket {
+            overflow-x: auto;
+            padding: 20px;
+        }
+
+        .bracket-round {
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 40px;
+        }
+
+        .bracket-round h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .bracket-match {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            min-width: 250px;
+        }
+
+        .bracket-match.completed {
+            border-color: #4CAF50;
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+
+        .match-team {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        .match-team.winner {
+            background: rgba(76, 175, 80, 0.3);
+            font-weight: bold;
+        }
+
+        .play-match-btn {
+            width: 100%;
+            padding: 8px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 8px;
+            transition: all 0.3s;
+        }
+
+        .play-match-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .tournament-winner {
+            text-align: center;
+            padding: 30px;
+            margin-top: 30px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 193, 7, 0.3));
+            border-radius: 15px;
+            border: 3px solid #FFD700;
+        }
+
+        .tournament-winner h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            opacity: 0.6;
+        }
+
+        .empty-state-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-button" onclick="window.location.href='menu.html'">← Back to Menu</button>
+
+        <header>
+            <h1>🏆 Tournaments</h1>
+            <p class="subtitle">Compete in championship brackets with custom venues</p>
+        </header>
+
+        <div class="tournament-tabs">
+            <button class="tab-btn active" onclick="switchTab('create')">Create Tournament</button>
+            <button class="tab-btn" onclick="switchTab('list')">My Tournaments</button>
+        </div>
+
+        <!-- Create Tournament Tab -->
+        <div id="createTab" class="tab-content active">
+            <div class="create-form">
+                <h2 style="margin-bottom: 20px;">🎮 Create New Tournament</h2>
+
+                <div class="form-group">
+                    <label class="form-label">Tournament Name</label>
+                    <input type="text" id="tournamentName" class="form-input" placeholder="Championship Series">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tournament Type</label>
+                    <div class="radio-group">
+                        <label class="radio-option selected" onclick="selectType('single')">
+                            <input type="radio" name="type" value="single-elimination" checked>
+                            <div style="font-size: 2em; margin-bottom: 5px;">🎯</div>
+                            <strong>Single Elimination</strong>
+                            <div style="font-size: 0.85em; opacity: 0.8; margin-top: 5px;">One loss and you're out</div>
+                        </label>
+                        <label class="radio-option" onclick="selectType('double')">
+                            <input type="radio" name="type" value="double-elimination">
+                            <div style="font-size: 2em; margin-bottom: 5px;">🔄</div>
+                            <strong>Double Elimination</strong>
+                            <div style="font-size: 0.85em; opacity: 0.8; margin-top: 5px;">Get a second chance</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Number of Teams</label>
+                    <select id="teamCount" class="form-select" onchange="updateTeamSelector()">
+                        <option value="4">4 Teams</option>
+                        <option value="8" selected>8 Teams</option>
+                        <option value="16">16 Teams</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="customVenues" checked style="margin-right: 8px;">
+                        Use Custom Stadiums
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Difficulty</label>
+                    <select id="difficulty" class="form-select">
+                        <option value="easy">Rookie - Easy</option>
+                        <option value="medium" selected>All-Star - Medium</option>
+                        <option value="hard">Hall of Fame - Hard</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Select Teams/Characters</label>
+                    <div id="teamSelector" class="team-selector">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                    <div class="team-count" id="teamCountDisplay">0 teams selected (need 8)</div>
+                </div>
+
+                <button class="create-btn" id="createTournamentBtn" onclick="createTournament()" disabled>
+                    Create Tournament
+                </button>
+            </div>
+        </div>
+
+        <!-- Tournament List Tab -->
+        <div id="listTab" class="tab-content">
+            <div id="tournamentList" class="tournament-list">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Bracket View (hidden initially) -->
+        <div id="bracketView" class="tab-content">
+            <div class="bracket-container">
+                <div class="bracket-header">
+                    <button class="back-button" onclick="switchTab('list')">← Back to Tournaments</button>
+                    <h2 id="bracketTitle"></h2>
+                </div>
+                <div id="bracketContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load dependencies -->
+    <script src="/js/character-customization.js"></script>
+    <script src="/js/stadium-customization.js"></script>
+    <script src="/js/tournament-system.js"></script>
+
+    <script>
+        let selectedTeams = [];
+        let currentTournamentView = null;
+
+        // Initialize
+        window.addEventListener('load', () => {
+            updateTeamSelector();
+            loadTournamentList();
+        });
+
+        // Switch tabs
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            if (tab === 'create') {
+                document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+                document.getElementById('createTab').classList.add('active');
+            } else if (tab === 'list') {
+                document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+                document.getElementById('listTab').classList.add('active');
+                loadTournamentList();
+            } else if (tab === 'bracket') {
+                document.getElementById('bracketView').classList.add('active');
+            }
+        }
+
+        // Select tournament type
+        function selectType(type) {
+            document.querySelectorAll('.radio-option').forEach(opt => opt.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+        }
+
+        // Update team selector
+        function updateTeamSelector() {
+            const teamCount = parseInt(document.getElementById('teamCount').value);
+            const selector = document.getElementById('teamSelector');
+            selector.innerHTML = '';
+
+            // Load all available teams/characters
+            const teams = [];
+
+            // Custom characters
+            if (window.characterCustomization) {
+                const customChars = window.characterCustomization.getCustomCharacters();
+                teams.push(...customChars.map(c => ({ ...c, type: 'character' })));
+            }
+
+            // Original characters (example data)
+            const originalChars = [
+                { id: 'jack', name: 'Jack "Ace" Anderson', type: 'character' },
+                { id: 'maria', name: 'Maria "Rocket" Rodriguez', type: 'character' },
+                { id: 'tommy', name: 'Tommy "The Tank" Thompson', type: 'character' },
+                { id: 'sarah', name: 'Sarah "Swift" Stevens', type: 'character' },
+                { id: 'mike', name: 'Mike "Glove" Martinez', type: 'character' },
+                { id: 'lisa', name: 'Lisa "Lightning" Lee', type: 'character' },
+                { id: 'carlos', name: 'Carlos "Cannon" Cruz', type: 'character' },
+                { id: 'emma', name: 'Emma "Eagle Eye" Evans', type: 'character' },
+                { id: 'david', name: 'David "Diamond" Davis', type: 'character' },
+                { id: 'nina', name: 'Nina "Ninja" Nguyen', type: 'character' },
+                { id: 'alex', name: 'Alex "Ace" Anderson', type: 'character' },
+                { id: 'blake', name: 'Blake "Blaze" Brown', type: 'character' },
+                { id: 'casey', name: 'Casey "Crusher" Clark', type: 'character' },
+                { id: 'drew', name: 'Drew "Dynamo" Davis', type: 'character' },
+                { id: 'ellis', name: 'Ellis "Electric" Edwards', type: 'character' },
+                { id: 'frankie', name: 'Frankie "Flash" Foster', type: 'character' }
+            ];
+            teams.push(...originalChars);
+
+            // Custom teams
+            const customTeams = JSON.parse(localStorage.getItem('custom_teams') || '[]');
+            teams.push(...customTeams.map(t => ({ ...t, type: 'team' })));
+
+            // Render team options
+            teams.forEach(team => {
+                const option = document.createElement('div');
+                option.className = 'team-option';
+                option.onclick = () => toggleTeamSelection(team, option);
+                option.innerHTML = `
+                    <div>${team.type === 'team' ? '👥' : '⚾'}</div>
+                    <div style="font-size: 0.9em; margin-top: 5px;">${team.name}</div>
+                `;
+                selector.appendChild(option);
+            });
+
+            updateTeamCount(teamCount);
+        }
+
+        // Toggle team selection
+        function toggleTeamSelection(team, element) {
+            const teamCount = parseInt(document.getElementById('teamCount').value);
+            const index = selectedTeams.findIndex(t => t.id === team.id);
+
+            if (index >= 0) {
+                selectedTeams.splice(index, 1);
+                element.classList.remove('selected');
+            } else {
+                if (selectedTeams.length < teamCount) {
+                    selectedTeams.push(team);
+                    element.classList.add('selected');
+                } else {
+                    showNotification(`Maximum ${teamCount} teams allowed`, 'warning');
+                }
+            }
+
+            updateTeamCount(teamCount);
+        }
+
+        // Update team count display
+        function updateTeamCount(needed) {
+            const display = document.getElementById('teamCountDisplay');
+            const selected = selectedTeams.length;
+
+            display.textContent = `${selected} teams selected (need ${needed})`;
+
+            const btn = document.getElementById('createTournamentBtn');
+            btn.disabled = selected !== needed;
+        }
+
+        // Create tournament
+        function createTournament() {
+            const name = document.getElementById('tournamentName').value || 'Championship Tournament';
+            const type = document.querySelector('input[name="type"]:checked').value;
+            const customVenues = document.getElementById('customVenues').checked;
+            const difficulty = document.getElementById('difficulty').value;
+
+            if (selectedTeams.length === 0) {
+                showNotification('Please select teams', 'error');
+                return;
+            }
+
+            try {
+                const tournament = window.tournamentSystem.createTournament({
+                    name,
+                    type,
+                    teams: selectedTeams,
+                    customVenues,
+                    difficulty
+                });
+
+                window.tournamentSystem.populateBracket(tournament.id);
+
+                showNotification('Tournament created successfully!');
+
+                // Reset form
+                selectedTeams = [];
+                document.querySelectorAll('.team-option').forEach(opt => opt.classList.remove('selected'));
+                updateTeamCount(parseInt(document.getElementById('teamCount').value));
+
+                // Switch to list view
+                setTimeout(() => switchTab('list'), 1500);
+            } catch (error) {
+                showNotification(error.message, 'error');
+            }
+        }
+
+        // Load tournament list
+        function loadTournamentList() {
+            const listEl = document.getElementById('tournamentList');
+            const tournaments = window.tournamentSystem.getAllTournaments();
+
+            if (tournaments.length === 0) {
+                listEl.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🏆</div>
+                        <h2>No Tournaments Yet</h2>
+                        <p>Create your first tournament to get started!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = '';
+
+            tournaments.forEach(tournament => {
+                const card = document.createElement('div');
+                card.className = 'tournament-card';
+
+                const statusClass = tournament.status === 'active' ? 'status-active' : 'status-completed';
+                const statusText = tournament.status === 'active' ? 'In Progress' : 'Completed';
+
+                const currentRound = tournament.currentRound + 1;
+                const totalRounds = tournament.rounds.length;
+
+                card.innerHTML = `
+                    <div class="tournament-header">
+                        <div class="tournament-title">${tournament.name}</div>
+                        <div class="tournament-status ${statusClass}">${statusText}</div>
+                    </div>
+
+                    <div class="tournament-info">
+                        <div class="info-row">
+                            <span>Type:</span>
+                            <strong>${tournament.type === 'single-elimination' ? 'Single Elimination' : 'Double Elimination'}</strong>
+                        </div>
+                        <div class="info-row">
+                            <span>Teams:</span>
+                            <strong>${tournament.teams.length}</strong>
+                        </div>
+                        <div class="info-row">
+                            <span>Progress:</span>
+                            <strong>Round ${currentRound}/${totalRounds}</strong>
+                        </div>
+                        ${tournament.winner ? `
+                        <div class="info-row">
+                            <span>Champion:</span>
+                            <strong>🏆 ${tournament.winner.name || tournament.winner}</strong>
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="tournament-actions">
+                        <button class="action-btn btn-view" onclick="viewBracket('${tournament.id}')">
+                            View Bracket
+                        </button>
+                        <button class="action-btn btn-delete" onclick="deleteTournament('${tournament.id}')">
+                            Delete
+                        </button>
+                    </div>
+                `;
+
+                listEl.appendChild(card);
+            });
+        }
+
+        // View bracket
+        function viewBracket(tournamentId) {
+            const tournament = window.tournamentSystem.getTournament(tournamentId);
+            if (!tournament) return;
+
+            currentTournamentView = tournamentId;
+
+            document.getElementById('bracketTitle').textContent = tournament.name;
+            document.getElementById('bracketContent').innerHTML =
+                window.tournamentSystem.generateBracketHTML(tournamentId);
+
+            switchTab('bracket');
+        }
+
+        // Delete tournament
+        function deleteTournament(tournamentId) {
+            if (!confirm('Are you sure you want to delete this tournament?')) return;
+
+            window.tournamentSystem.deleteTournament(tournamentId);
+            showNotification('Tournament deleted');
+            loadTournamentList();
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const existing = document.querySelector('.notification');
+            if (existing) existing.remove();
+
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.style.background = type === 'error' ? 'rgba(244, 67, 54, 0.9)' :
+                                           type === 'warning' ? 'rgba(255, 152, 0, 0.9)' :
+                                           'rgba(76, 175, 80, 0.9)';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
