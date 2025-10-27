@@ -175,36 +175,359 @@ class CharacterCustomizationSystem {
                 }
             ],
 
-            // Personality traits (affect AI behavior and commentary)
+            // Personality traits (affect AI behavior, commentary, and gameplay)
             personalities: [
-                { id: 'competitive', name: 'Competitive', emoji: '🔥' },
-                { id: 'playful', name: 'Playful', emoji: '😄' },
-                { id: 'focused', name: 'Focused', emoji: '🎯' },
-                { id: 'energetic', name: 'Energetic', emoji: '⚡' },
-                { id: 'calm', name: 'Calm', emoji: '😌' },
-                { id: 'intense', name: 'Intense', emoji: '😤' },
-                { id: 'friendly', name: 'Friendly', emoji: '🤝' },
-                { id: 'confident', name: 'Confident', emoji: '😎' },
-                { id: 'humble', name: 'Humble', emoji: '🙏' },
-                { id: 'showoff', name: 'Show-off', emoji: '💫' }
+                {
+                    id: 'competitive',
+                    name: 'Competitive',
+                    emoji: '🔥',
+                    description: 'Thrives under pressure and loves tight games',
+                    effects: {
+                        clutchBonus: 1.5, // Stats increase in close games
+                        pressureResistance: 0.8,
+                        trashtalkChance: 0.3
+                    },
+                    voiceLines: [
+                        "Let's turn up the heat!",
+                        "I was born for this!",
+                        "Game on!",
+                        "You're going down!",
+                        "This is my moment!"
+                    ],
+                    celebrationStyle: 'fist_pump'
+                },
+                {
+                    id: 'playful',
+                    name: 'Playful',
+                    emoji: '😄',
+                    description: 'Keeps the mood light and fun for everyone',
+                    effects: {
+                        teamMoraleBoost: 1.2,
+                        stressReduction: 0.7,
+                        funnyPlayChance: 0.4
+                    },
+                    voiceLines: [
+                        "This is awesome!",
+                        "Haha! Did you see that?",
+                        "Having fun yet?",
+                        "Wheeee!",
+                        "Best day ever!"
+                    ],
+                    celebrationStyle: 'dance'
+                },
+                {
+                    id: 'focused',
+                    name: 'Focused',
+                    emoji: '🎯',
+                    description: 'Never loses concentration, even in chaos',
+                    effects: {
+                        accuracyBonus: 1.3,
+                        distractionResistance: 0.9,
+                        zoneChance: 0.25
+                    },
+                    voiceLines: [
+                        "Eyes on the prize.",
+                        "Stay locked in.",
+                        "One pitch at a time.",
+                        "Complete focus.",
+                        "Nothing else matters."
+                    ],
+                    celebrationStyle: 'nod'
+                },
+                {
+                    id: 'energetic',
+                    name: 'Energetic',
+                    emoji: '⚡',
+                    description: 'Boundless energy that never seems to fade',
+                    effects: {
+                        staminaBonus: 1.4,
+                        speedBoost: 1.1,
+                        fatigueResistance: 0.8
+                    },
+                    voiceLines: [
+                        "Let's go! Let's GO!",
+                        "I could do this all day!",
+                        "More! MORE!",
+                        "Can't stop, won't stop!",
+                        "Bring it ON!"
+                    ],
+                    celebrationStyle: 'jump'
+                },
+                {
+                    id: 'calm',
+                    name: 'Calm',
+                    emoji: '😌',
+                    description: 'Unshakeable composure in any situation',
+                    effects: {
+                        nerveBonus: 1.5,
+                        errorRecovery: 1.3,
+                        panicResistance: 0.95
+                    },
+                    voiceLines: [
+                        "Easy does it.",
+                        "Stay cool.",
+                        "Breathe and focus.",
+                        "No worries.",
+                        "It's all good."
+                    ],
+                    celebrationStyle: 'smile'
+                },
+                {
+                    id: 'intense',
+                    name: 'Intense',
+                    emoji: '😤',
+                    description: 'Burning determination and laser focus',
+                    effects: {
+                        powerBonus: 1.2,
+                        intimidationFactor: 1.4,
+                        angerMomentum: 1.3
+                    },
+                    voiceLines: [
+                        "I won't lose!",
+                        "Not today!",
+                        "Watch me!",
+                        "This ends NOW!",
+                        "Give me your best!"
+                    ],
+                    celebrationStyle: 'roar'
+                },
+                {
+                    id: 'friendly',
+                    name: 'Friendly',
+                    emoji: '🤝',
+                    description: 'Spreads positivity and encouragement',
+                    effects: {
+                        teamChemistry: 1.3,
+                        supportBonus: 1.2,
+                        conflictReduction: 0.6
+                    },
+                    voiceLines: [
+                        "Great job, everyone!",
+                        "We got this together!",
+                        "Nice play!",
+                        "You're awesome!",
+                        "Team work makes the dream work!"
+                    ],
+                    celebrationStyle: 'high_five'
+                },
+                {
+                    id: 'confident',
+                    name: 'Confident',
+                    emoji: '😎',
+                    description: 'Supreme self-belief that inspires others',
+                    effects: {
+                        baselineBonus: 1.1, // All stats slightly higher
+                        leadershipBonus: 1.3,
+                        doubtResistance: 0.9
+                    },
+                    voiceLines: [
+                        "Piece of cake.",
+                        "I got this.",
+                        "Easy money.",
+                        "Did you expect anything less?",
+                        "That's how it's done."
+                    ],
+                    celebrationStyle: 'cool_walk'
+                },
+                {
+                    id: 'humble',
+                    name: 'Humble',
+                    emoji: '🙏',
+                    description: 'Grateful and respectful, always improving',
+                    effects: {
+                        learningRate: 1.4, // Gains XP faster
+                        respectBonus: 1.2,
+                        comebackAbility: 1.3
+                    },
+                    voiceLines: [
+                        "Just doing my best.",
+                        "Still learning.",
+                        "Thanks for the opportunity.",
+                        "Respect to everyone.",
+                        "I appreciate it."
+                    ],
+                    celebrationStyle: 'bow'
+                },
+                {
+                    id: 'showoff',
+                    name: 'Show-off',
+                    emoji: '💫',
+                    description: 'Loves the spotlight and flashy plays',
+                    effects: {
+                        stylePoints: 1.5, // Bonus for flashy plays
+                        crowdFavorBonus: 1.4,
+                        riskyPlayChance: 0.35
+                    },
+                    voiceLines: [
+                        "Watch and learn!",
+                        "Too easy!",
+                        "I make it look good!",
+                        "Did everyone see that?",
+                        "Call me a legend!"
+                    ],
+                    celebrationStyle: 'showboat'
+                }
             ],
 
             // Batting stances
             battingStances: [
-                { id: 'traditional', name: 'Traditional', icon: '⚾', balanced: true },
-                { id: 'open', name: 'Open Stance', icon: '↔️', powerBonus: 1 },
-                { id: 'closed', name: 'Closed Stance', icon: '→', contactBonus: 1 },
-                { id: 'crouch', name: 'Crouch', icon: '⬇️', strikeZoneBonus: 1 },
-                { id: 'upright', name: 'Upright', icon: '⬆️', speedBonus: 1 }
+                {
+                    id: 'traditional',
+                    name: 'Traditional',
+                    icon: '⚾',
+                    description: 'Classic balanced stance used by professionals',
+                    balanced: true,
+                    effects: {
+                        battingBonus: 0,
+                        powerBonus: 0,
+                        contactBonus: 0
+                    },
+                    bestFor: 'All-around hitting',
+                    famousBatters: ['Babe Ruth', 'Hank Aaron']
+                },
+                {
+                    id: 'open',
+                    name: 'Open Stance',
+                    icon: '↔️',
+                    description: 'Front foot pulled back, opens up swing path for more power',
+                    effects: {
+                        powerBonus: 1.5,
+                        contactPenalty: 0.9,
+                        pullPower: 1.3
+                    },
+                    bestFor: 'Power hitters going for home runs',
+                    famousBatters: ['David Ortiz']
+                },
+                {
+                    id: 'closed',
+                    name: 'Closed Stance',
+                    icon: '→',
+                    description: 'Front foot closer to plate, better for opposite field hitting',
+                    effects: {
+                        contactBonus: 1.4,
+                        powerPenalty: 0.85,
+                        oppositeFieldBonus: 1.3
+                    },
+                    bestFor: 'Contact hitters and spray hitters',
+                    famousBatters: ['Ichiro Suzuki']
+                },
+                {
+                    id: 'crouch',
+                    name: 'Crouch',
+                    icon: '⬇️',
+                    description: 'Low stance shrinks strike zone and improves bat control',
+                    effects: {
+                        strikeZoneBonus: 1.4,
+                        walkRate: 1.3,
+                        powerPenalty: 0.8
+                    },
+                    bestFor: 'Getting on base and working counts',
+                    famousBatters: ['Joe Morgan', 'Craig Biggio']
+                },
+                {
+                    id: 'upright',
+                    name: 'Upright',
+                    icon: '⬆️',
+                    description: 'Tall stance enables quick first step and speed',
+                    effects: {
+                        speedBonus: 1.3,
+                        reactionTime: 1.2,
+                        lowPitchPenalty: 0.9
+                    },
+                    bestFor: 'Speedsters and slap hitters',
+                    famousBatters: ['Rickey Henderson']
+                },
+                {
+                    id: 'wide',
+                    name: 'Wide Stance',
+                    icon: '⬅️➡️',
+                    description: 'Feet far apart for stability and balance',
+                    effects: {
+                        balanceBonus: 1.4,
+                        strikeoutResistance: 1.2,
+                        speedPenalty: 0.85
+                    },
+                    bestFor: 'Consistent contact',
+                    famousBatters: ['Rod Carew']
+                }
             ],
 
             // Pitching styles
             pitchingStyles: [
-                { id: 'overhand', name: 'Overhand', icon: '↓', velocityBonus: 1 },
-                { id: 'sidearm', name: 'Sidearm', icon: '→', movementBonus: 1 },
-                { id: 'submarine', name: 'Submarine', icon: '↗️', deceptionBonus: 1 },
-                { id: 'three_quarter', name: '3/4 Arm', icon: '↘️', balanced: true }
-            ]
+                {
+                    id: 'overhand',
+                    name: 'Overhand',
+                    icon: '↓',
+                    description: 'Classic arm slot with maximum velocity and downward break',
+                    effects: {
+                        velocityBonus: 1.5,
+                        verticalMovement: 1.3,
+                        controlPenalty: 0.95
+                    },
+                    bestFor: 'Power pitchers',
+                    famousPitchers: ['Nolan Ryan', 'Randy Johnson'],
+                    bestPitches: ['Fastball', 'Curveball']
+                },
+                {
+                    id: 'sidearm',
+                    name: 'Sidearm',
+                    icon: '→',
+                    description: 'Low arm angle creates heavy horizontal movement',
+                    effects: {
+                        movementBonus: 1.6,
+                        horizontalMovement: 1.5,
+                        velocityPenalty: 0.9,
+                        vsOppHandBonus: 1.3
+                    },
+                    bestFor: 'Inducing ground balls',
+                    famousPitchers: ['Byung-Hyun Kim'],
+                    bestPitches: ['Slider', 'Sinker']
+                },
+                {
+                    id: 'submarine',
+                    name: 'Submarine',
+                    icon: '↗️',
+                    description: 'Underhand delivery that completely baffles hitters',
+                    effects: {
+                        deceptionBonus: 1.8,
+                        unusualMovement: 1.6,
+                        velocityPenalty: 0.75,
+                        confusionFactor: 1.7
+                    },
+                    bestFor: 'Confusing batters',
+                    famousPitchers: ['Dan Quisenberry', 'Brad Ziegler'],
+                    bestPitches: ['Sinker', 'Screwball']
+                },
+                {
+                    id: 'three_quarter',
+                    name: '3/4 Arm',
+                    icon: '↘️',
+                    description: 'Most common angle, perfect balance of velocity and movement',
+                    balanced: true,
+                    effects: {
+                        velocityBonus: 1.2,
+                        movementBonus: 1.2,
+                        controlBonus: 1.1
+                    },
+                    bestFor: 'Versatile pitching',
+                    famousPitchers: ['Greg Maddux', 'Tom Glavine'],
+                    bestPitches: ['All pitch types']
+                },
+                {
+                    id: 'high_overhand',
+                    name: 'High Overhand',
+                    icon: '⬇️',
+                    description: 'Extremely high arm angle with dramatic downward plane',
+                    effects: {
+                        verticalMovement: 1.7,
+                        strikeoutRate: 1.4,
+                        fatigueRate: 1.2
+                    },
+                    bestFor: 'Missing bats',
+                    famousPitchers: ['Max Scherzer'],
+                    bestPitches: ['Four-Seam Fastball', '12-6 Curveball']
+                }
+            ],
         };
 
         this.loadCustomCharacters();
