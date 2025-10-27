@@ -250,16 +250,21 @@
         }
 
         .preview-avatar {
-            width: 150px;
-            height: 150px;
+            width: 300px;
+            height: 300px;
             margin: 0 auto 15px;
-            border-radius: 50%;
+            border-radius: 10px;
             background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        #preview3D {
+            width: 100%;
+            height: 100%;
         }
 
         .preview-name {
@@ -679,7 +684,9 @@
             <!-- Preview Panel -->
             <div class="preview-panel">
                 <div class="preview-character">
-                    <div class="preview-avatar" id="previewAvatar">⚾</div>
+                    <div class="preview-avatar">
+                        <div id="preview3D"></div>
+                    </div>
                     <div class="preview-name" id="previewName">Custom Player</div>
                     <div class="preview-nickname" id="previewNickname">"The Rookie"</div>
                     <div class="rating-badge" id="previewRating">B (Solid)</div>
@@ -723,7 +730,11 @@
         <button class="btn btn-primary" onclick="closeNotification()">Awesome!</button>
     </div>
 
+    <!-- Three.js for 3D Preview -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
     <script src="/js/character-customization.js"></script>
+    <script src="/js/character-3d-preview.js"></script>
     <script>
         let customizationSystem;
         let selectedSkinTone = 'medium';
@@ -740,8 +751,17 @@
         let selectedPitchingStyle = 'overhand';
 
         // Initialize
+        let preview3D;
+
         document.addEventListener('DOMContentLoaded', () => {
             customizationSystem = new CharacterCustomizationSystem();
+
+            // Initialize 3D preview
+            if (typeof Character3DPreview !== 'undefined') {
+                preview3D = new Character3DPreview('preview3D');
+                updatePreview();
+            }
+
             initializeOptions();
             updatePreview();
             updateStats();
@@ -1063,6 +1083,23 @@
             else if (avg >= 5) rating = 'B (Solid)';
 
             document.getElementById('previewRating').textContent = rating;
+
+            // Update 3D preview
+            if (preview3D) {
+                const customization = {
+                    skinTone: selectedSkinTone,
+                    hairStyle: selectedHairStyle,
+                    hairColor: selectedHairColor,
+                    bodyType: selectedBodyType,
+                    accessory: selectedAccessory,
+                    jerseyNumber: parseInt(document.getElementById('jerseyNumber')?.value || 1),
+                    uniformColors: {
+                        primary: selectedUniformPrimary || '#667eea',
+                        secondary: selectedUniformSecondary || '#764ba2'
+                    }
+                };
+                preview3D.createCharacter(customization);
+            }
         }
 
         function randomizeCharacter() {
