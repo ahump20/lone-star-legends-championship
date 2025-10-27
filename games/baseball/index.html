@@ -860,5 +860,101 @@
     <script src="/js/enhanced-game-ui.js"></script>
     <script src="/js/season-mode.js"></script>
     <script src="/js/game-integration.js"></script>
+
+    <!-- New Enhancement Systems -->
+    <script src="/js/save-system.js"></script>
+    <script src="/js/particle-effects.js"></script>
+    <script src="/js/advanced-mechanics.js"></script>
+    <script src="/js/enhanced-ai.js"></script>
+    <script src="/js/mobile-optimization.js"></script>
+
+    <script>
+        // Initialize enhanced systems after game loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🎮 Initializing Enhanced Game Systems...');
+
+            // Wait for game to be ready
+            setTimeout(() => {
+                if (window.game) {
+                    // Initialize particle effects
+                    if (window.game.scene) {
+                        window.particleEffects = new ParticleEffectsSystem(window.game.scene);
+                        console.log('✨ Particle Effects: Ready');
+
+                        // Hook particle effects into game events
+                        const originalSwing = window.game.swing.bind(window.game);
+                        window.game.swing = function() {
+                            originalSwing();
+                            // Create hit impact particles on successful swing
+                            if (window.game.bat && Math.random() > 0.5) {
+                                const batPos = window.game.bat.position;
+                                window.particleEffects.createHitImpact(batPos, 1.2);
+                            }
+                        };
+                    }
+
+                    // Initialize advanced mechanics
+                    window.advancedMechanics = new AdvancedMechanicsSystem(window.game);
+                    window.advancedMechanics.initialize();
+                    window.game.advancedMechanics = window.advancedMechanics;
+
+                    // Initialize enhanced AI
+                    window.enhancedAI = new EnhancedAISystem(window.game);
+                    window.game.ai = window.enhancedAI;
+
+                    // Load saved difficulty
+                    const savedSettings = window.saveSystem.getSettings();
+                    if (savedSettings && savedSettings.difficulty) {
+                        window.enhancedAI.setDifficulty(savedSettings.difficulty);
+                    }
+
+                    // Initialize mobile optimization (if on mobile)
+                    window.mobileOptimization = new MobileOptimizationSystem(window.game);
+
+                    console.log('✅ All Enhancement Systems: Ready');
+
+                    // Show welcome notification
+                    setTimeout(() => {
+                        if (window.advancedMechanics) {
+                            window.advancedMechanics.showMechanicNotification(
+                                '⚾ Enhanced Features Loaded! Press ❓ for controls',
+                                'info'
+                            );
+                        }
+                    }, 1000);
+                }
+            }, 500);
+        });
+
+        // Track play time for save system
+        let playTimeStart = Date.now();
+        setInterval(() => {
+            if (window.saveSystem && document.hasFocus()) {
+                const elapsed = Date.now() - playTimeStart;
+                window.saveSystem.updatePlayTime(elapsed);
+                playTimeStart = Date.now();
+            }
+        }, 60000); // Update every minute
+
+        // Save game state when scoring
+        if (window.game) {
+            const originalUpdateScore = window.game.updateScore?.bind(window.game);
+            if (originalUpdateScore) {
+                window.game.updateScore = function() {
+                    originalUpdateScore();
+                    // Save current game state
+                    if (window.saveSystem) {
+                        window.saveSystem.saveCurrentGame({
+                            homeScore: window.game.homeScore,
+                            awayScore: window.game.awayScore,
+                            inning: window.game.inning,
+                            homeTeam: window.game.homeTeamName,
+                            awayTeam: window.game.awayTeamName
+                        });
+                    }
+                };
+            }
+        }
+    </script>
 </body>
 </html>
