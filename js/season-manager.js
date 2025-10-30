@@ -6,7 +6,7 @@
 class SeasonManager {
     constructor(teams, options = {}) {
         this.teams = teams;
-        this.season Length = options.seasonLength || 10;
+        this.seasonLength = options.seasonLength || 10;
         this.playoffTeams = options.playoffTeams || 4;
         this.currentSeason = null;
         this.savedSeasons = this.loadSeasons();
