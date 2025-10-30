@@ -249,7 +249,7 @@ class InboxCallPipeline {
     }
     
     extractPhone(body) {
-        const phoneMatch = body.match(/\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}/);
+        const phoneMatch = body.match(/\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/);
         return phoneMatch ? phoneMatch[0] : null;
     }
     

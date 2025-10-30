@@ -5,8 +5,12 @@
  * Comprehensive testing and validation for deployment readiness
  */
 
-const fs = require('fs').promises;
-const path = require('path');
+import { promises as fs } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class BlazeProductionValidator {
     constructor() {
@@ -483,7 +487,7 @@ class BlazeProductionValidator {
 }
 
 // Run validation if called directly
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
     const validator = new BlazeProductionValidator();
     validator.runAllTests().catch(error => {
         console.error('❌ Validation failed:', error);
@@ -491,4 +495,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = BlazeProductionValidator;
+export default BlazeProductionValidator;

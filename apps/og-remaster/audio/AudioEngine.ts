@@ -105,27 +105,28 @@ export class AudioEngine {
       }
       
       if (manifest) {
-      
-      console.log('🎵 Loading Blaze Intelligence Audio System...');
-      
-      // Load SFX
-      const sfxPromises = manifest.sfx.map(sfx => this.loadSFX(sfx));
-      await Promise.all(sfxPromises);
-      
-      // Load Commentary
-      const commentaryPromises = manifest.commentary.map(commentary => this.loadCommentary(commentary));
-      await Promise.all(commentaryPromises);
-      
-      // Load Music
-      const musicPromises = manifest.music.map(music => this.loadMusic(music));
-      await Promise.all(musicPromises);
-      
-      this.isInitialized = true;
-      console.log('🎵 Audio system ready!');
-      console.log(`   🔊 SFX: ${this.sfxBank.size} sounds`);
-      console.log(`   🎙️ Commentary: ${this.commentaryBank.size} variations`);
-      console.log(`   🎼 Music: ${this.musicBank.size} tracks`);
-      
+
+        console.log('🎵 Loading Blaze Intelligence Audio System...');
+
+        // Load SFX
+        const sfxPromises = manifest.sfx.map(sfx => this.loadSFX(sfx));
+        await Promise.all(sfxPromises);
+
+        // Load Commentary
+        const commentaryPromises = manifest.commentary.map(commentary => this.loadCommentary(commentary));
+        await Promise.all(commentaryPromises);
+
+        // Load Music
+        const musicPromises = manifest.music.map(music => this.loadMusic(music));
+        await Promise.all(musicPromises);
+
+        this.isInitialized = true;
+        console.log('🎵 Audio system ready!');
+        console.log(`   🔊 SFX: ${this.sfxBank.size} sounds`);
+        console.log(`   🎙️ Commentary: ${this.commentaryBank.size} variations`);
+        console.log(`   🎼 Music: ${this.musicBank.size} tracks`);
+      }
+
     } catch (error) {
       console.error('Failed to initialize audio system:', error);
       // Continue without audio - graceful degradation
