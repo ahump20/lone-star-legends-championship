@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blaze Intelligence Portfolio - Showcasing advanced sports analytics, gaming platforms, and AI-powered performance intelligence.">
+    <meta name="keywords" content="sports analytics portfolio, Blaze Intelligence, sports technology, AI analytics">
+
+    <title>Portfolio Showcase - Blaze Intelligence</title>
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-dark: #0A0A0A;
+            --blaze-darker: #050505;
+            --blaze-gray: #1A1A1A;
+            --blaze-text: #FFFFFF;
+            --blaze-muted: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--blaze-dark);
+            color: var(--blaze-text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--blaze-darker) 0%, var(--blaze-gray) 100%);
+            border-bottom: 3px solid var(--blaze-orange);
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 56px;
+            font-weight: 800;
+            color: var(--blaze-orange);
+            margin-bottom: 20px;
+        }
+
+        .header p {
+            font-size: 20px;
+            color: var(--blaze-muted);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .portfolio-grid {
+            max-width: 1400px;
+            margin: 80px auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .project-card {
+            background: var(--blaze-gray);
+            border: 2px solid rgba(255, 107, 53, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            border-color: var(--blaze-orange);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.3);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.3), rgba(10, 10, 10, 0.8));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            border-bottom: 2px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .project-content {
+            padding: 30px;
+        }
+
+        .project-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--blaze-orange);
+            margin-bottom: 15px;
+        }
+
+        .project-description {
+            color: var(--blaze-muted);
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--blaze-orange);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .project-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--blaze-orange);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--blaze-muted);
+            text-transform: uppercase;
+        }
+
+        .cta-section {
+            background: var(--blaze-gray);
+            padding: 80px 40px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--blaze-orange), #CC5500);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+                padding: 0 20px;
+            }
+
+            .project-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🔥 Blaze Intelligence Portfolio</h1>
+        <p>
+            Cutting-edge sports analytics, AI-powered gaming platforms, and real-time performance intelligence systems.
+            Empowering teams and athletes with data-driven insights.
+        </p>
+    </header>
+
+    <main class="portfolio-grid">
+        <!-- Sandlot Superstars -->
+        <article class="project-card" onclick="window.location.href='/blaze-branded-game.html'">
+            <div class="project-image">⚾</div>
+            <div class="project-content">
+                <h2 class="project-title">Sandlot Superstars</h2>
+                <p class="project-description">
+                    Revolutionary 3D baseball game with real-time physics simulation, 18 unique characters,
+                    14 stadiums, and advanced AI. Built with Three.js and powered by Blaze Analytics.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Three.js</span>
+                    <span class="tag">WebGL</span>
+                    <span class="tag">Real-time Physics</span>
+                    <span class="tag">Multiplayer</span>
+                </div>
+                <div class="project-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">14</div>
+                        <div class="stat-label">Stadiums</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">18</div>
+                        <div class="stat-label">Characters</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">60</div>
+                        <div class="stat-label">FPS</div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Analytics Platform -->
+        <article class="project-card" onclick="window.location.href='/blaze-analytics-integration.html'">
+            <div class="project-image">📊</div>
+            <div class="project-content">
+                <h2 class="project-title">Analytics Platform</h2>
+                <p class="project-description">
+                    Real-time sports analytics processing 2.8M+ data points per hour with 94.6% accuracy.
+                    Predictive modeling, performance tracking, and AI-driven insights for pro teams.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Machine Learning</span>
+                    <span class="tag">Real-time Processing</span>
+                    <span class="tag">Data Visualization</span>
+                </div>
+                <div class="project-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">94.6%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">2.8M+</div>
+                        <div class="stat-label">Data Points/Hr</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">&lt;100ms</div>
+                        <div class="stat-label">Response</div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Team Intelligence -->
+        <article class="project-card">
+            <div class="project-image">🏆</div>
+            <div class="project-content">
+                <h2 class="project-title">Team Intelligence Suite</h2>
+                <p class="project-description">
+                    Comprehensive performance intelligence for Cardinals (MLB), Titans (NFL),
+                    Longhorns (NCAA), and Grizzlies (NBA). Live tracking, readiness scoring, and strategic insights.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Multi-Sport</span>
+                    <span class="tag">Live Tracking</span>
+                    <span class="tag">Predictive AI</span>
+                </div>
+                <div class="project-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Teams</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Monitoring</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">Real-time</div>
+                        <div class="stat-label">Updates</div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- 3D Graphics Engine -->
+        <article class="project-card">
+            <div class="project-image">🎨</div>
+            <div class="project-content">
+                <h2 class="project-title">Blaze Graphics Engine</h2>
+                <p class="project-description">
+                    Custom Three.js-based graphics engine with advanced lighting, particle effects,
+                    weather simulation, and performance optimization. Powers all Blaze gaming experiences.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">WebGL 2.0</span>
+                    <span class="tag">Shaders</span>
+                    <span class="tag">Particle Systems</span>
+                    <span class="tag">Optimization</span>
+                </div>
+                <div class="project-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">2000+</div>
+                        <div class="stat-label">Particles</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">60</div>
+                        <div class="stat-label">FPS Target</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">&lt;2s</div>
+                        <div class="stat-label">Load Time</div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Multiplayer Infrastructure -->
+        <article class="project-card">
+            <div class="project-image">🌐</div>
+            <div class="project-content">
+                <h2 class="project-title">Multiplayer Infrastructure</h2>
+                <p class="project-description">
+                    WebSocket-based real-time multiplayer system with room management, matchmaking,
+                    and low-latency synchronization. Supports competitive tournaments and leaderboards.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">WebSockets</span>
+                    <span class="tag">Redis</span>
+                    <span class="tag">Matchmaking</span>
+                    <span class="tag">Low Latency</span>
+                </div>
+                <div class="project-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">&lt;50ms</div>
+                        <div class="stat-label">Latency</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">100+</div>
+                        <div class="stat-label">Concurrent</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">99.9%</div>
+                        <div class="stat-label">Uptime</div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- PWA & Mobile -->
+        <article class="project-card">
+            <div class="project-image">📱</div>
+            <div class="project-content">
+                <h2 class="project-title">Mobile-First PWA</h2>
+                <p class="project-description">
+                    Progressive Web App with offline support, service worker caching, touch controls,
+                    and responsive design. Install-able on any device with native-like performance.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">PWA</span>
+                    <span class="tag">Service Worker</span>
+                    <span class="tag">Offline Mode</span>
+                    <span class="tag">Touch UI</span>
+                </div>
+                <div class="project-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Mobile Ready</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">A+</div>
+                        <div class="stat-label">Lighthouse</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">Offline</div>
+                        <div class="stat-label">Support</div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <section class="cta-section">
+        <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 42px; margin-bottom: 20px; color: var(--blaze-text);">
+            Ready to Experience <span style="color: var(--blaze-orange);">Blaze Intelligence</span>?
+        </h2>
+        <p style="font-size: 18px; color: var(--blaze-muted); margin-bottom: 40px;">
+            Explore our gaming platforms, analytics dashboards, and AI-powered sports intelligence.
+        </p>
+        <a href="/blaze-branded-game.html" class="cta-button">🎮 Play Sandlot Superstars</a>
+        <a href="/blaze-analytics-integration.html" class="cta-button" style="background: transparent; border: 2px solid var(--blaze-orange);">
+            📊 View Analytics
+        </a>
+    </section>
+
+    <script>
+        // Track portfolio engagement
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.querySelector('.project-title').textContent;
+                console.log(`Portfolio item clicked: ${title}`);
+
+                if (window.analytics) {
+                    window.analytics.track('portfolio_item_click', {
+                        project: title,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,26 +1,699 @@
 <!DOCTYPE html>
 <html lang="en">
-        </div>
-      </main>
-    </section>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <!-- Dashboard Access Section -->
-    <section class="dashboard-section">
-      <div style="text-align: center; margin-bottom: 3rem;">
-        <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--blaze-text); margin-bottom: 1rem;">
-          Complete Intelligence Suite
-        </h2>
-        <p style="color: var(--blaze-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
-          Access all analysis dashboards, strategic frameworks, and competitive intelligence tools through our unified platform.
-        </p>
-      </div>
-      
-      <div class="dashboard-grid">
-        <a href="/statistics-dashboard-enhanced.html" class="dashboard-card">
-          <span class="card-icon">📊</span>
-          <h3>Advanced Analytics</h3>
-          <p>Real-time performance metrics, predictive modeling, and comprehensive statistical analysis for Cardinals, Titans, Longhorns, and Grizzlies.</p>
-        </a
-        </div>
-    </section>
+    <!-- Primary Meta Tags -->
+    <title>Blaze Intelligence - Advanced Sports Analytics & Performance Intelligence</title>
+    <meta name="title" content="Blaze Intelligence - Advanced Sports Analytics & Performance Intelligence">
+    <meta name="description" content="Leading sports analytics platform for Cardinals, Titans, Longhorns, and Grizzlies. Real-time performance data, predictive AI, and immersive 3D gaming experiences. 94.6% accuracy, 2.8M+ data points/hour.">
+    <meta name="keywords" content="sports analytics, Blaze Intelligence, Cardinals, Titans, Longhorns, Grizzlies, MLB analytics, NFL analytics, NCAA analytics, NBA analytics, sports AI, predictive modeling">
+    <meta name="author" content="Blaze Intelligence">
+    <meta name="robots" content="index, follow">
 
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blazesportsintel.com/">
+    <meta property="og:title" content="Blaze Intelligence - Advanced Sports Analytics Platform">
+    <meta property="og:description" content="Real-time sports analytics with 94.6% accuracy. Supporting Cardinals, Titans, Longhorns, and Grizzlies with AI-powered insights.">
+    <meta property="og:image" content="https://blazesportsintel.com/images/og-image.jpg">
+    <meta property="og:site_name" content="Blaze Intelligence">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://blazesportsintel.com/">
+    <meta name="twitter:title" content="Blaze Intelligence - Sports Analytics Platform">
+    <meta name="twitter:description" content="Real-time sports analytics with 94.6% accuracy">
+    <meta name="twitter:image" content="https://blazesportsintel.com/images/twitter-card.jpg">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://blazesportsintel.com/">
+
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#FF6B35">
+
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="/css/blaze.css" as="style">
+    <link rel="preload" href="/js/blaze-realtime.js" as="script">
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Blaze Intelligence",
+      "description": "Advanced sports analytics platform for professional teams",
+      "url": "https://blazesportsintel.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://blazesportsintel.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-dark: #0A0A0A;
+            --blaze-darker: #050505;
+            --blaze-gray: #1A1A1A;
+            --blaze-text: #FFFFFF;
+            --blaze-muted: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--blaze-dark);
+            color: var(--blaze-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .blaze-header {
+            background: linear-gradient(135deg, var(--blaze-darker) 0%, var(--blaze-gray) 100%);
+            border-bottom: 3px solid var(--blaze-orange);
+            padding: 25px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.2);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .blaze-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 48px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .logo-text h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--blaze-orange);
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--blaze-muted);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 35px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--blaze-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 15px;
+        }
+
+        .nav-link:hover {
+            color: var(--blaze-orange);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--blaze-orange), #CC5500);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1400px;
+            margin: 80px auto;
+            padding: 0 40px;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 64px;
+            font-weight: 800;
+            color: var(--blaze-text);
+            margin-bottom: 25px;
+            line-height: 1.1;
+        }
+
+        .hero .highlight {
+            color: var(--blaze-orange);
+        }
+
+        .hero p {
+            font-size: 22px;
+            color: var(--blaze-muted);
+            max-width: 900px;
+            margin: 0 auto 50px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        .hero-button {
+            background: linear-gradient(135deg, var(--blaze-orange), #CC5500);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hero-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .hero-button-secondary {
+            background: transparent;
+            border: 2px solid var(--blaze-orange);
+            color: var(--blaze-orange);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto 80px;
+            padding: 0 40px;
+        }
+
+        .stat-item {
+            background: var(--blaze-gray);
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-item:hover {
+            border-color: var(--blaze-orange);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--blaze-orange);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--blaze-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1400px;
+            margin: 100px auto;
+            padding: 0 40px;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: var(--blaze-gray);
+            border: 2px solid rgba(255, 107, 53, 0.2);
+            border-radius: 16px;
+            padding: 40px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--blaze-orange);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 56px;
+            margin-bottom: 25px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 26px;
+            color: var(--blaze-orange);
+            margin-bottom: 20px;
+        }
+
+        .feature-card p {
+            color: var(--blaze-muted);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* Teams Section */
+        .teams-section {
+            background: var(--blaze-gray);
+            padding: 80px 40px;
+            margin-top: 100px;
+        }
+
+        .teams-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .team-badge {
+            background: linear-gradient(135deg, var(--blaze-darker), rgba(255, 107, 53, 0.1));
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .team-badge:hover {
+            border-color: var(--blaze-orange);
+            transform: translateY(-3px);
+        }
+
+        .team-badge-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .team-badge h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            color: var(--blaze-text);
+            margin-bottom: 8px;
+        }
+
+        .team-badge p {
+            color: var(--blaze-muted);
+            font-size: 14px;
+        }
+
+        /* Footer */
+        .blaze-footer {
+            background: var(--blaze-darker);
+            border-top: 3px solid var(--blaze-orange);
+            padding: 60px 40px 30px;
+            margin-top: 100px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h5 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            color: var(--blaze-orange);
+            margin-bottom: 20px;
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--blaze-muted);
+            text-decoration: none;
+            margin-bottom: 12px;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--blaze-orange);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+            text-align: center;
+            color: var(--blaze-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .header-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .hero h2 {
+                font-size: 40px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+        }
+
+        /* Accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blaze-orange);
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to Content Link for Accessibility -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="blaze-header" role="banner">
+        <div class="header-content">
+            <a href="/" class="blaze-logo" aria-label="Blaze Intelligence Home">
+                <div class="logo-icon" aria-hidden="true">🔥</div>
+                <div class="logo-text">
+                    <h1>Blaze Intelligence</h1>
+                    <p>Sports Analytics</p>
+                </div>
+            </a>
+            <nav class="header-nav" role="navigation" aria-label="Main navigation">
+                <a href="/blaze-analytics-integration.html" class="nav-link">Analytics</a>
+                <a href="/blaze-branded-game.html" class="nav-link">Games</a>
+                <a href="/blaze-portfolio-showcase.html" class="nav-link">Portfolio</a>
+                <a href="/fbs-coverage-integration.html" class="nav-link">FBS Coverage</a>
+                <a href="#contact" class="cta-button">Contact Us</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h2>
+                Advanced Sports Intelligence<br>
+                Powered by <span class="highlight">Blaze Analytics</span>
+            </h2>
+            <p>
+                The most accurate sports analytics platform for professional teams.
+                Real-time performance data, predictive AI modeling, and immersive gaming experiences
+                for Cardinals, Titans, Longhorns, and Grizzlies.
+            </p>
+            <div class="hero-buttons">
+                <a href="/blaze-branded-game.html" class="hero-button">
+                    🎮 Play Sandlot Superstars
+                </a>
+                <a href="/blaze-analytics-integration.html" class="hero-button hero-button-secondary">
+                    📊 View Analytics Dashboard
+                </a>
+            </div>
+        </section>
+
+        <!-- Stats Bar -->
+        <section class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value">94.6%</div>
+                <div class="stat-label">Accuracy Benchmark</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">2.8M+</div>
+                <div class="stat-label">Data Points / Hour</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">&lt;100ms</div>
+                <div class="stat-label">Response Time</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">4 Teams</div>
+                <div class="stat-label">Active Monitoring</div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="features">
+            <h2 class="section-title">
+                Why <span style="color: var(--blaze-orange);">Blaze Intelligence</span>?
+            </h2>
+            <div class="features-grid">
+                <article class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Real-Time Analytics</h3>
+                    <p>Process millions of data points per hour with industry-leading 94.6% accuracy. Live performance tracking, predictive modeling, and AI-driven insights.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3>Immersive Gaming</h3>
+                    <p>Sandlot Superstars: Revolutionary 3D baseball game with 18 characters, 14 stadiums, and advanced AI. Built on our custom Blaze Graphics Engine.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI-Powered Predictions</h3>
+                    <p>Machine learning algorithms analyze player performance, team dynamics, and historical data to provide actionable strategic insights.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Lightning Fast</h3>
+                    <p>Sub-100ms response times with edge computing infrastructure. Cloudflare-powered CDN ensures global availability and performance.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Multi-Sport Support</h3>
+                    <p>Comprehensive analytics for MLB, NFL, NCAA, and NBA. Specialized models for each sport with league-specific insights.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile-First PWA</h3>
+                    <p>Progressive Web App with offline support, push notifications, and native-like performance on any device. Install from your browser.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Teams Section -->
+        <section class="teams-section">
+            <div class="teams-content">
+                <h2 class="section-title" style="color: var(--blaze-text);">
+                    Teams We Support
+                </h2>
+                <p style="text-align: center; color: var(--blaze-muted); font-size: 18px; margin-bottom: 40px;">
+                    Providing advanced analytics and performance intelligence for top-tier professional sports organizations
+                </p>
+
+                <div class="teams-grid">
+                    <div class="team-badge">
+                        <div class="team-badge-icon">⚾</div>
+                        <h4>Cardinals</h4>
+                        <p>MLB Baseball Analytics</p>
+                    </div>
+
+                    <div class="team-badge">
+                        <div class="team-badge-icon">🏈</div>
+                        <h4>Titans</h4>
+                        <p>NFL Football Analytics</p>
+                    </div>
+
+                    <div class="team-badge">
+                        <div class="team-badge-icon">🤘</div>
+                        <h4>Longhorns</h4>
+                        <p>NCAA Football Analytics</p>
+                    </div>
+
+                    <div class="team-badge">
+                        <div class="team-badge-icon">🏀</div>
+                        <h4>Grizzlies</h4>
+                        <p>NBA Basketball Analytics</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="blaze-footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h5>Blaze Intelligence</h5>
+                <p style="color: var(--blaze-muted); line-height: 1.6;">
+                    Advanced sports analytics and performance intelligence platform.
+                    Empowering teams with data-driven insights.
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h5>Products</h5>
+                <a href="/blaze-analytics-integration.html" class="footer-link">Analytics Dashboard</a>
+                <a href="/blaze-branded-game.html" class="footer-link">Sandlot Superstars</a>
+                <a href="/fbs-coverage-integration.html" class="footer-link">FBS Coverage</a>
+                <a href="/blaze-portfolio-showcase.html" class="footer-link">Portfolio</a>
+            </div>
+
+            <div class="footer-section">
+                <h5>Company</h5>
+                <a href="/about" class="footer-link">About Us</a>
+                <a href="/contact" class="footer-link">Contact</a>
+                <a href="/careers" class="footer-link">Careers</a>
+                <a href="/press" class="footer-link">Press Kit</a>
+            </div>
+
+            <div class="footer-section">
+                <h5>Legal</h5>
+                <a href="/privacy-policy.html" class="footer-link">Privacy Policy</a>
+                <a href="/terms" class="footer-link">Terms of Service</a>
+                <a href="/cookies" class="footer-link">Cookie Policy</a>
+                <a href="/security" class="footer-link">Security</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Blaze Intelligence. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 14px;">
+                Powered by Cloudflare • Built with Three.js • Analytics by Blaze
+            </p>
+        </div>
+    </footer>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('✅ Service Worker registered'))
+                    .catch(error => console.error('❌ Service Worker registration failed:', error));
+            });
+        }
+    </script>
+
+    <!-- Analytics Tracking -->
+    <script>
+        // Initialize analytics
+        window.blazeAnalytics = {
+            track: function(event, data) {
+                console.log('📊 Analytics Event:', event, data);
+                // Send to analytics endpoint
+                if (navigator.sendBeacon) {
+                    const payload = JSON.stringify({ event, data, timestamp: new Date().toISOString() });
+                    navigator.sendBeacon('/api/analytics', payload);
+                }
+            }
+        };
+
+        // Track page view
+        window.blazeAnalytics.track('page_view', {
+            page: 'home',
+            referrer: document.referrer,
+            userAgent: navigator.userAgent
+        });
+    </script>
+</body>
+</html>
