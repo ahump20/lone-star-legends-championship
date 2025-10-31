@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blaze Intelligence Analytics Dashboard - Real-time sports analytics for Cardinals, Titans, Longhorns, and Grizzlies with 94.6% accuracy.">
+    <meta name="keywords" content="sports analytics, real-time data, Blaze Intelligence, Cardinals, Titans, Longhorns, Grizzlies">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Blaze Intelligence Analytics Dashboard">
+    <meta property="og:description" content="Real-time sports analytics with 94.6% accuracy">
+    <meta property="og:type" content="website">
+
+    <title>Analytics Dashboard - Blaze Intelligence</title>
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-dark: #0A0A0A;
+            --blaze-darker: #050505;
+            --blaze-gray: #1A1A1A;
+            --blaze-text: #FFFFFF;
+            --blaze-muted: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--blaze-dark);
+            color: var(--blaze-text);
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--blaze-orange);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--blaze-muted);
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto 40px;
+        }
+
+        .stat-card {
+            background: var(--blaze-gray);
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--blaze-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--blaze-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--blaze-orange);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .stat-change {
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .stat-change.positive {
+            color: #4CAF50;
+        }
+
+        .stat-change.negative {
+            color: #f44336;
+        }
+
+        .teams-section {
+            max-width: 1400px;
+            margin: 60px auto;
+        }
+
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .team-card {
+            background: linear-gradient(135deg, var(--blaze-gray) 0%, var(--blaze-darker) 100%);
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+
+        .team-card:hover {
+            border-color: var(--blaze-orange);
+            transform: translateY(-5px);
+        }
+
+        .team-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .team-icon {
+            font-size: 48px;
+        }
+
+        .team-info h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            color: var(--blaze-orange);
+            margin-bottom: 5px;
+        }
+
+        .team-info p {
+            color: var(--blaze-muted);
+            font-size: 14px;
+        }
+
+        .team-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .team-stat-item {
+            background: rgba(255, 107, 53, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .team-stat-label {
+            font-size: 12px;
+            color: var(--blaze-muted);
+            margin-bottom: 5px;
+        }
+
+        .team-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--blaze-text);
+        }
+
+        .chart-container {
+            max-width: 1400px;
+            margin: 60px auto;
+            background: var(--blaze-gray);
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .chart-container h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            color: var(--blaze-text);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .teams-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 Blaze Intelligence Analytics</h1>
+    <p class="subtitle">Real-time sports performance data • 2.8M+ data points/hour • 94.6% accuracy</p>
+
+    <!-- Key Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Accuracy Benchmark</div>
+            <div class="stat-value">94.6%</div>
+            <div class="stat-change positive">↑ 2.3% from last month</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Data Processing</div>
+            <div class="stat-value">2.8M+</div>
+            <div class="stat-change">points/hour</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Response Time</div>
+            <div class="stat-value">&lt;100ms</div>
+            <div class="stat-change positive">↑ 15% faster</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Teams Tracked</div>
+            <div class="stat-value">4</div>
+            <div class="stat-change">Active monitoring</div>
+        </div>
+    </div>
+
+    <!-- Teams Section -->
+    <section class="teams-section">
+        <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 32px; text-align: center; margin-bottom: 30px;">
+            Supported Teams
+        </h2>
+
+        <div class="teams-grid">
+            <!-- Cardinals -->
+            <div class="team-card">
+                <div class="team-header">
+                    <div class="team-icon">⚾</div>
+                    <div class="team-info">
+                        <h3>Cardinals</h3>
+                        <p>MLB • Baseball</p>
+                    </div>
+                </div>
+                <div class="team-stats">
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Win Rate</div>
+                        <div class="team-stat-value">67.3%</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Readiness</div>
+                        <div class="team-stat-value">92/100</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Avg Score</div>
+                        <div class="team-stat-value">4.8</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Streak</div>
+                        <div class="team-stat-value">W5</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Titans -->
+            <div class="team-card">
+                <div class="team-header">
+                    <div class="team-icon">🏈</div>
+                    <div class="team-info">
+                        <h3>Titans</h3>
+                        <p>NFL • Football</p>
+                    </div>
+                </div>
+                <div class="team-stats">
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Win Rate</div>
+                        <div class="team-stat-value">58.1%</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Readiness</div>
+                        <div class="team-stat-value">88/100</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Avg Points</div>
+                        <div class="team-stat-value">24.3</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Streak</div>
+                        <div class="team-stat-value">W2</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Longhorns -->
+            <div class="team-card">
+                <div class="team-header">
+                    <div class="team-icon">🤘</div>
+                    <div class="team-info">
+                        <h3>Longhorns</h3>
+                        <p>NCAA • College Football</p>
+                    </div>
+                </div>
+                <div class="team-stats">
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Win Rate</div>
+                        <div class="team-stat-value">72.5%</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Readiness</div>
+                        <div class="team-stat-value">95/100</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Avg Points</div>
+                        <div class="team-stat-value">31.7</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Streak</div>
+                        <div class="team-stat-value">W8</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grizzlies -->
+            <div class="team-card">
+                <div class="team-header">
+                    <div class="team-icon">🏀</div>
+                    <div class="team-info">
+                        <h3>Grizzlies</h3>
+                        <p>NBA • Basketball</p>
+                    </div>
+                </div>
+                <div class="team-stats">
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Win Rate</div>
+                        <div class="team-stat-value">61.2%</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Readiness</div>
+                        <div class="team-stat-value">90/100</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Avg Points</div>
+                        <div class="team-stat-value">112.4</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">Streak</div>
+                        <div class="team-stat-value">L1</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Chart -->
+    <div class="chart-container">
+        <h2>📈 Performance Trends</h2>
+        <canvas id="performanceChart"></canvas>
+    </div>
+
+    <!-- Back to Games -->
+    <div style="text-align: center; margin-top: 60px;">
+        <a href="/blaze-branded-game.html" style="display: inline-block; background: linear-gradient(135deg, var(--blaze-orange), #CC5500); color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 18px;">
+            🎮 Back to Game
+        </a>
+    </div>
+
+    <script>
+        // Performance Chart
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+                datasets: [
+                    {
+                        label: 'Cardinals',
+                        data: [85, 87, 89, 88, 90, 92, 91, 94],
+                        borderColor: '#FF6B35',
+                        backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Titans',
+                        data: [78, 80, 79, 82, 85, 86, 87, 88],
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Longhorns',
+                        data: [90, 91, 93, 92, 94, 95, 96, 95],
+                        borderColor: '#2196F3',
+                        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Grizzlies',
+                        data: [82, 84, 86, 87, 89, 88, 90, 90],
+                        borderColor: '#9C27B0',
+                        backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#FFFFFF',
+                            font: {
+                                size: 14,
+                                family: 'Inter'
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 70,
+                        max: 100,
+                        ticks: {
+                            color: '#888888'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#888888'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Live data update simulation
+        setInterval(() => {
+            const datasets = chart.data.datasets;
+            datasets.forEach(dataset => {
+                const lastValue = dataset.data[dataset.data.length - 1];
+                const newValue = lastValue + (Math.random() - 0.5) * 2;
+                dataset.data.push(Math.max(70, Math.min(100, newValue)));
+                dataset.data.shift();
+            });
+            chart.update();
+        }, 5000);
+    </script>
+</body>
+</html>

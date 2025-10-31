@@ -1,26 +1,8 @@
 {
   "version": 1,
+  "description": "BlazeSportsIntel.com routing configuration",
   "include": [
-    "/",
-    "/analytics*",
-    "/games*",
-    "/capabilities*",
-    "/company*",
-    "/onboarding*",
-    "/admin*",
-    "/pricing*",
-    "/404.html",
-    "/api/*",
-    "/functions/*",
-    "/css/*",
-    "/js/*",
-    "/images/*",
-    "/videos/*",
-    "/data/*",
-    "/robots.txt",
-    "/manifest.json",
-    "/sitemap.xml",
-    "/sw.js"
+    "/*"
   ],
   "exclude": []
 }

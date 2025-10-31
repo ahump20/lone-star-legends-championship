@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sandlot Superstars - Experience the ultimate baseball gaming experience powered by Blaze Intelligence. 3D gameplay, real-time analytics, and advanced sports intelligence.">
+    <meta name="keywords" content="baseball game, sports analytics, Blaze Intelligence, 3D baseball, Cardinals, Titans, Longhorns, Grizzlies">
+    <meta name="author" content="Blaze Intelligence">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blazesportsintel.com/games/sandlot-superstars">
+    <meta property="og:title" content="Sandlot Superstars - Blaze Intelligence Baseball">
+    <meta property="og:description" content="Experience the ultimate 3D baseball game with real-time analytics and advanced sports intelligence.">
+    <meta property="og:image" content="https://blazesportsintel.com/images/sandlot-superstars-og.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sandlot Superstars - Blaze Intelligence">
+    <meta name="twitter:description" content="Ultimate 3D baseball game with real-time analytics">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+
+    <title>Sandlot Superstars - Blaze Intelligence Sports Gaming</title>
+
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="/css/blaze.css" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" as="script">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-dark: #0A0A0A;
+            --blaze-darker: #050505;
+            --blaze-gray: #1A1A1A;
+            --blaze-text: #FFFFFF;
+            --blaze-muted: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--blaze-dark);
+            color: var(--blaze-text);
+            overflow-x: hidden;
+        }
+
+        /* Blaze Intelligence Header */
+        .blaze-header {
+            background: linear-gradient(135deg, var(--blaze-darker) 0%, var(--blaze-gray) 100%);
+            border-bottom: 3px solid var(--blaze-orange);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.2);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .blaze-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 48px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .logo-text h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--blaze-orange);
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--blaze-muted);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--blaze-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+
+        .nav-link:hover {
+            color: var(--blaze-orange);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--blaze-orange), #CC5500);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 40px;
+            text-align: center;
+        }
+
+        .hero-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 56px;
+            font-weight: 800;
+            color: var(--blaze-text);
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .hero-section .highlight {
+            color: var(--blaze-orange);
+        }
+
+        .hero-section p {
+            font-size: 20px;
+            color: var(--blaze-muted);
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        /* Game Container */
+        .game-container {
+            max-width: 1600px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+
+        .game-frame {
+            background: var(--blaze-gray);
+            border: 4px solid var(--blaze-orange);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(255, 107, 53, 0.3);
+            position: relative;
+            min-height: 600px;
+        }
+
+        .game-frame iframe {
+            width: 100%;
+            height: 80vh;
+            border: none;
+            display: block;
+        }
+
+        /* Features Grid */
+        .features-section {
+            max-width: 1400px;
+            margin: 80px auto;
+            padding: 0 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: var(--blaze-gray);
+            border: 2px solid rgba(255, 107, 53, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--blaze-orange);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            color: var(--blaze-orange);
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: var(--blaze-muted);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .blaze-footer {
+            background: var(--blaze-darker);
+            border-top: 2px solid var(--blaze-orange);
+            padding: 40px 0;
+            margin-top: 100px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .teams-supported {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 10px;
+        }
+
+        .teams-supported h4 {
+            color: var(--blaze-orange);
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+                padding: 0 20px;
+            }
+
+            .header-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .hero-section h2 {
+                font-size: 36px;
+            }
+
+            .hero-section p {
+                font-size: 16px;
+            }
+
+            .game-frame iframe {
+                height: 60vh;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Blaze Intelligence Header -->
+    <header class="blaze-header" role="banner">
+        <div class="header-content">
+            <div class="blaze-logo">
+                <div class="logo-icon">🔥</div>
+                <div class="logo-text">
+                    <h1>Blaze Intelligence</h1>
+                    <p>Sports Intel Platform</p>
+                </div>
+            </div>
+            <nav class="header-nav" role="navigation" aria-label="Main navigation">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/analytics" class="nav-link">Analytics</a>
+                <a href="/games" class="nav-link">Games</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/contact" class="cta-button">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <h2>
+            <span class="highlight">Sandlot Superstars</span><br>
+            The Ultimate Baseball Experience
+        </h2>
+        <p>
+            Experience cutting-edge 3D baseball gameplay powered by Blaze Intelligence.
+            Real-time analytics, 14 unique stadiums, 18 original characters, and advanced AI.
+            Supporting Cardinals, Titans, Longhorns, and Grizzlies with live data integration.
+        </p>
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <button class="cta-button" onclick="scrollToGame()" style="font-size: 18px; padding: 16px 32px;">
+                🎮 Play Now
+            </button>
+            <a href="/analytics" class="cta-button" style="background: transparent; border: 2px solid var(--blaze-orange); font-size: 18px; padding: 16px 32px;">
+                📊 View Analytics
+            </a>
+        </div>
+    </section>
+
+    <!-- Game Container -->
+    <main class="game-container" id="gameSection">
+        <div class="game-frame">
+            <iframe
+                src="/games/baseball/index.html"
+                title="Sandlot Superstars Baseball Game"
+                allow="accelerometer; gyroscope; fullscreen"
+                loading="lazy"
+            ></iframe>
+        </div>
+    </main>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 800; color: var(--blaze-text);">
+                Powered by <span style="color: var(--blaze-orange);">Blaze Intelligence</span>
+            </h2>
+            <p style="color: var(--blaze-muted); font-size: 18px; margin-top: 15px;">
+                Advanced sports analytics meets immersive gameplay
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <h3>3D Graphics Engine</h3>
+                <p>State-of-the-art Three.js rendering with realistic physics, dynamic lighting, and weather effects. 60 FPS performance on all devices.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Real-Time Analytics</h3>
+                <p>Process 2.8M+ data points per hour with 94.6% accuracy. Live performance metrics, predictive modeling, and AI-driven insights.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🏟️</div>
+                <h3>14 Unique Stadiums</h3>
+                <p>Play across diverse venues from Lakeside Park to Desert Heat Stadium. Each with unique physics, weather patterns, and challenges.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚾</div>
+                <h3>18 Original Characters</h3>
+                <p>Unlock legendary players with unique abilities. From Big Mac the Power Hitter to Lightning Lucy's speed. Full customization available.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>Advanced AI</h3>
+                <p>Smart fielding AI with realistic player behavior. Adaptive difficulty system that learns your playstyle and keeps you challenged.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Tournament Mode</h3>
+                <p>Compete in 4, 8, or 16-team tournaments. Season mode, playoffs, championships, and global leaderboards to climb.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teams Supported -->
+    <section class="features-section">
+        <div class="teams-supported">
+            <h4>Supporting Your Favorite Teams</h4>
+            <p style="color: var(--blaze-muted);">
+                🏈 Cardinals (MLB) • 🏈 Titans (NFL) • 🏈 Longhorns (NCAA) • 🏀 Grizzlies (NBA)
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="blaze-footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/analytics" class="nav-link">Analytics Dashboard</a>
+                <a href="/games" class="nav-link">All Games</a>
+                <a href="/privacy" class="nav-link">Privacy Policy</a>
+                <a href="/terms" class="nav-link">Terms of Service</a>
+            </div>
+            <p style="color: var(--blaze-muted); margin-top: 20px;">
+                &copy; 2025 Blaze Intelligence. All rights reserved.<br>
+                Advanced Sports Analytics & Performance Intelligence
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        function scrollToGame() {
+            document.getElementById('gameSection').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Track game engagement for analytics
+        if (window.analytics) {
+            window.analytics.track('game_page_view', {
+                game: 'sandlot_superstars',
+                timestamp: new Date().toISOString()
+            });
+        }
+    </script>
+</body>
+</html>
