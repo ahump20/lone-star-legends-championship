@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backyard Legends - Championship Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Bradley Hand', cursive, sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #98D8C8 50%, #90EE90 100%);
+            overflow: hidden;
+            min-height: 100vh;
+        }
+
+        /* Game Container */
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Baseball Field */
+        #fieldCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Scoreboard */
+        .scoreboard {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            border: 5px solid #333;
+            border-radius: 20px;
+            padding: 20px 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            z-index: 100;
+            min-width: 600px;
+        }
+
+        .scoreboard-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+            margin-bottom: 15px;
+        }
+
+        .score-display {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .team-score {
+            text-align: center;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 15px;
+            border: 3px solid #333;
+        }
+
+        .team-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #FF6B6B;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .inning-box {
+            background: #4ECDC4;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            border: 3px solid #333;
+        }
+
+        .inning-label {
+            font-size: 0.9rem;
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .inning-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .half-inning {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.9);
+            margin-top: 5px;
+        }
+
+        /* Count Display */
+        .count-display {
+            position: absolute;
+            top: 170px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            border: 4px solid #333;
+            border-radius: 15px;
+            padding: 15px 25px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            z-index: 99;
+            display: flex;
+            gap: 30px;
+        }
+
+        .count-item {
+            text-align: center;
+        }
+
+        .count-label {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .count-circles {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .circle.active {
+            background: #FFE66D;
+            box-shadow: 0 0 15px #FFE66D;
+            transform: scale(1.2);
+        }
+
+        /* Bases Display */
+        .bases-display {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 160px;
+            height: 160px;
+            background: linear-gradient(135deg, #95E1D3 0%, #38CFA6 100%);
+            border: 4px solid #333;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+
+        .diamond {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            transform: rotate(45deg);
+            margin: 0 auto;
+        }
+
+        .base {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            background: rgba(255,255,255,0.4);
+            border: 3px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .base.occupied {
+            background: #FFE66D;
+            box-shadow: 0 0 20px #FFE66D;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .base.first { top: 46px; right: -5px; }
+        .base.second { top: -5px; left: 46px; }
+        .base.third { top: 46px; left: -5px; }
+        .base.home { bottom: -5px; left: 46px; }
+
+        /* Game Controls */
+        .game-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            font-family: 'Comic Sans MS', cursive;
+            border: 4px solid #333;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .btn-pitch {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            color: white;
+        }
+
+        .btn-auto {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #FFE66D 0%, #F9CA24 100%);
+            color: #333;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Play-by-Play Log */
+        .play-log {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            width: 350px;
+            max-height: 300px;
+            background: rgba(255,255,255,0.95);
+            border: 4px solid #333;
+            border-radius: 15px;
+            padding: 15px;
+            overflow-y: auto;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            z-index: 99;
+        }
+
+        .log-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 3px solid #4ECDC4;
+            padding-bottom: 5px;
+        }
+
+        .log-entry {
+            padding: 8px;
+            margin: 5px 0;
+            background: #F7F7F7;
+            border-radius: 8px;
+            border-left: 4px solid #4ECDC4;
+            font-size: 0.9rem;
+            color: #333;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .log-entry.important {
+            background: #FFE66D;
+            border-left-color: #FF6B6B;
+            font-weight: bold;
+        }
+
+        /* Current Batter Display */
+        .batter-display {
+            position: absolute;
+            bottom: 30px;
+            right: 20px;
+            width: 300px;
+            background: linear-gradient(135deg, #A8E6CF 0%, #7FD4A6 100%);
+            border: 4px solid #333;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            z-index: 99;
+        }
+
+        .batter-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .batter-info {
+            background: rgba(255,255,255,0.9);
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #333;
+        }
+
+        .batter-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #FF6B6B;
+            margin-bottom: 5px;
+        }
+
+        .batter-stats {
+            font-size: 0.9rem;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Game Over Screen */
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            border: 6px solid #333;
+            border-radius: 25px;
+            padding: 40px 60px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        .game-over.show {
+            display: block;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: translate(-50%, -50%) scale(0.3); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .game-over-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 3px 3px 6px rgba(255,255,255,0.5);
+            margin-bottom: 20px;
+        }
+
+        .winner {
+            font-size: 2rem;
+            color: #4ECDC4;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .final-score {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- Canvas for field -->
+        <canvas id="fieldCanvas"></canvas>
+
+        <!-- Scoreboard -->
+        <div class="scoreboard">
+            <div class="scoreboard-title">⚾ BACKYARD LEGENDS CHAMPIONSHIP ⚾</div>
+            <div class="score-display">
+                <div class="team-score">
+                    <div class="team-name" id="awayTeamName">Away Team</div>
+                    <div class="score-number" id="awayScore">0</div>
+                </div>
+                <div class="inning-box">
+                    <div class="inning-label">INNING</div>
+                    <div class="inning-number" id="inningNumber">1</div>
+                    <div class="half-inning" id="halfInning">Top</div>
+                </div>
+                <div class="team-score">
+                    <div class="team-name" id="homeTeamName">Home Team</div>
+                    <div class="score-number" id="homeScore">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Count Display -->
+        <div class="count-display">
+            <div class="count-item">
+                <div class="count-label">BALLS</div>
+                <div class="count-circles" id="ballCircles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="count-item">
+                <div class="count-label">STRIKES</div>
+                <div class="count-circles" id="strikeCircles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="count-item">
+                <div class="count-label">OUTS</div>
+                <div class="count-circles" id="outCircles">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bases Display -->
+        <div class="bases-display">
+            <div class="diamond">
+                <div class="base first" id="base1"></div>
+                <div class="base second" id="base2"></div>
+                <div class="base third" id="base3"></div>
+                <div class="base home" id="baseHome"></div>
+            </div>
+        </div>
+
+        <!-- Game Controls -->
+        <div class="game-controls">
+            <button class="btn btn-start" id="startBtn" onclick="startGame()">START GAME</button>
+            <button class="btn btn-pitch" id="pitchBtn" onclick="throwPitch()" disabled>PITCH!</button>
+            <button class="btn btn-auto" id="autoBtn" onclick="toggleAuto()" disabled>AUTO PLAY</button>
+        </div>
+
+        <!-- Play-by-Play Log -->
+        <div class="play-log">
+            <div class="log-title">🎮 PLAY-BY-PLAY</div>
+            <div id="logEntries"></div>
+        </div>
+
+        <!-- Current Batter -->
+        <div class="batter-display">
+            <div class="batter-title">AT BAT</div>
+            <div class="batter-info">
+                <div class="batter-name" id="batterName">---</div>
+                <div class="batter-stats">
+                    <span>AVG: <span id="batterAvg">---</span></span>
+                    <span>POS: <span id="batterPos">---</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div class="game-over" id="gameOverScreen">
+            <div class="game-over-title">🏆 GAME OVER! 🏆</div>
+            <div class="winner" id="winnerText">Winner: Team Name</div>
+            <div class="final-score" id="finalScoreText">Final Score: 0 - 0</div>
+            <button class="btn btn-start" onclick="location.reload()">PLAY AGAIN</button>
+        </div>
+    </div>
+
+    <script src="js/backyard-game-engine.js"></script>
+    <script>
+        // Canvas setup
+        const canvas = document.getElementById('fieldCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            drawField();
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Draw baseball field
+        function drawField() {
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height * 0.7;
+
+            // Grass
+            ctx.fillStyle = '#7CFC00';
+            ctx.fillRect(0, 0, width, height);
+
+            // Infield dirt
+            ctx.fillStyle = '#DEB887';
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX - 200, centerY - 200);
+            ctx.lineTo(centerX, centerY - 280);
+            ctx.lineTo(centerX + 200, centerY - 200);
+            ctx.closePath();
+            ctx.fill();
+
+            // Pitching mound
+            ctx.fillStyle = '#CD853F';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 100, 25, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Home plate
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX - 15, centerY - 10);
+            ctx.lineTo(centerX, centerY - 25);
+            ctx.lineTo(centerX + 15, centerY - 10);
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Bases
+            const baseSize = 20;
+            ctx.fillStyle = 'white';
+            
+            // First base
+            ctx.fillRect(centerX + 200 - baseSize/2, centerY - 200 - baseSize/2, baseSize, baseSize);
+            // Second base
+            ctx.fillRect(centerX - baseSize/2, centerY - 280 - baseSize/2, baseSize, baseSize);
+            // Third base
+            ctx.fillRect(centerX - 200 - baseSize/2, centerY - 200 - baseSize/2, baseSize, baseSize);
+
+            // Foul lines
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX + 300, centerY + 200);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX - 300, centerY + 200);
+            ctx.stroke();
+
+            // Outfield fence
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = 8;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 400, Math.PI, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        // Initialize field
+        drawField();
+    </script>
+</body>
+</html>
