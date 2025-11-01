@@ -158,7 +158,6 @@ class SandlotShowdown {
     this.elements = this.bindElements();
     this.meter = new TimingMeter(this.elements.meterPanel);
     this.fastForward = false;
-    this.pendingPitchType = null;
     this.keyboardHandler = this.handleKey.bind(this);
     this.init();
   }
