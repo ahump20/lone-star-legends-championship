@@ -957,11 +957,10 @@
             100% { background-position: 1000px 0; }
         }
 
-        /* Performance optimizations */
-        .blaze-header,
-        .stat-item,
-        .feature-card,
-        .team-badge {
+        /* Performance optimizations - applied during hover/interaction only */
+        .stat-item:hover,
+        .feature-card:hover,
+        .team-badge:hover {
             will-change: transform;
         }
     </style>
@@ -1281,12 +1280,7 @@
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
                     
-                    // Animate stat counters when visible
-                    if (entry.target.classList.contains('stat-item')) {
-                        const valueElement = entry.target.querySelector('.stat-value');
-                        const value = valueElement.textContent;
-                        // Animation is now visual only, no counter change needed
-                    }
+
                     
                     observer.unobserve(entry.target);
                 }
@@ -1345,26 +1339,36 @@
             });
         });
 
-        // Create floating particles
+        // Create floating particles - optimized for performance
         function createParticles() {
             const hero = document.querySelector('.hero');
             if (!hero) return;
 
-            for (let i = 0; i < 20; i++) {
+            // Reduce particle count for better performance, especially on mobile
+            const particleCount = window.innerWidth < 768 ? 10 : 15;
+            const fragment = document.createDocumentFragment();
+
+            // Create particles in a document fragment to minimize reflows
+            for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
-                particle.style.position = 'absolute';
-                particle.style.width = Math.random() * 4 + 2 + 'px';
-                particle.style.height = particle.style.width;
-                particle.style.background = `rgba(255, 107, 53, ${Math.random() * 0.5})`;
-                particle.style.borderRadius = '50%';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.pointerEvents = 'none';
-                particle.style.animation = `float ${Math.random() * 10 + 10}s ease-in-out infinite`;
-                particle.style.animationDelay = Math.random() * 5 + 's';
-                particle.style.filter = 'blur(1px)';
-                hero.appendChild(particle);
+                particle.className = 'particle';
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 4 + 2}px;
+                    height: ${Math.random() * 4 + 2}px;
+                    background: rgba(255, 107, 53, ${Math.random() * 0.5});
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    pointer-events: none;
+                    animation: float ${Math.random() * 10 + 10}s ease-in-out infinite;
+                    animation-delay: ${Math.random() * 5}s;
+                    filter: blur(1px);
+                `;
+                fragment.appendChild(particle);
             }
+            
+            hero.appendChild(fragment);
 
             // Add float animation
             const style = document.createElement('style');
