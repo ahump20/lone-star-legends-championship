@@ -346,6 +346,38 @@
             border-radius: 21px;
         }
 
+        .game-section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .game-section-description {
+            color: var(--blaze-muted);
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .game-section-buttons {
+            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .game-section-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
         .hero::before {
             content: '';
             position: absolute;
@@ -1116,11 +1148,11 @@
 
         <!-- Embedded Game Section -->
         <section class="game-container" id="gameSection">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 800; background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px;">
+            <div class="game-section-header">
+                <h3 class="game-section-title">
                     🎮 Play Sandlot Superstars Now
                 </h3>
-                <p style="color: var(--blaze-muted); font-size: 18px;">
+                <p class="game-section-description">
                     Three innings of pure baseball action. Click "Next Play / Pitch" to start playing!
                 </p>
             </div>
@@ -1129,10 +1161,11 @@
                     src="/games/baseball/index.html"
                     title="Sandlot Superstars Baseball Game"
                     allow="accelerometer; gyroscope; fullscreen"
+                    sandbox="allow-scripts allow-same-origin allow-forms"
                     loading="eager"
                 ></iframe>
             </div>
-            <div style="text-align: center; margin-top: 30px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <div class="game-section-buttons">
                 <a href="/blaze-analytics-integration.html" class="hero-button hero-button-secondary">
                     📊 View Analytics Dashboard
                 </a>
