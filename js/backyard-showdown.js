@@ -525,11 +525,6 @@ class SandlotShowdown {
   simulateAtBat(teamIndex, { turbo = false } = {}) {
     if (this.state.phase !== "playing") return;
     const { batter, pitcher } = this.bindCurrentPlayers();
-    const pitchType = weightedPick([
-      { value: "heater", weight: 4 },
-      { value: "change", weight: 3 },
-      { value: "hook", weight: 2 },
-    ]);
     const position = randomInRange(0.18, 0.82);
     const accuracy = 1 - Math.abs(position - 0.5) * 2;
     const command = ((pitcher.control ?? 75) + (pitcher.pitching ?? 75)) / 200;
