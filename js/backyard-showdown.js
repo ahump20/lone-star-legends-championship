@@ -756,7 +756,8 @@ class SandlotShowdown {
       this.elements.scoreRibbon.textContent = `Heading to the ${this.state.inning === 2 ? "second" : "third"}.`;
     }
     this.updateHUD();
-    this.state.battingIndex[this.getBattingTeam()] = this.state.battingIndex[this.getBattingTeam()] % this.teams[this.getBattingTeam()].lineup.length;
+    const battingTeam = this.getBattingTeam();
+    this.state.battingIndex[battingTeam] = this.state.battingIndex[battingTeam] % this.teams[battingTeam].lineup.length;
     if (this.state.phase === "playing") {
       this.startAtBat();
     }
