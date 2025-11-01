@@ -756,7 +756,7 @@ class SandlotShowdown {
       this.elements.scoreRibbon.textContent = `Heading to the ${this.state.inning === 2 ? "second" : "third"}.`;
     }
     this.updateHUD();
-    this.state.battingIndex[this.getBattingTeam()] = this.state.battingIndex[this.getBattingTeam()] % this.teams[this.getBattingTeam()].lineup.length;
+    // Batting index is already managed by advanceBattingOrder(); no need to reapply modulo here.
     if (this.state.phase === "playing") {
       this.startAtBat();
     }
