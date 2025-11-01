@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandlot Superstars - 3 Inning Demo Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive;
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8C8 100%);
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scoreboard */
+        .scoreboard {
+            background: linear-gradient(135deg, #2C5F2D 0%, #3D7C3E 100%);
+            border: 4px solid #FFD700;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .scoreboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .team-info {
+            flex: 1;
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 5px;
+        }
+
+        .team-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #FFFFFF;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+        }
+
+        .inning-info {
+            flex: 0.5;
+            text-align: center;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .inning-label {
+            color: #FFD700;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .inning-number {
+            color: #FFFFFF;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .half-inning {
+            color: #FFD700;
+            font-size: 12px;
+        }
+
+        /* Game Info */
+        .game-info {
+            background: rgba(255,255,255,0.9);
+            border: 3px solid #FF6B35;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 0 10px 10px 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .count-display {
+            text-align: center;
+        }
+
+        .count-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .count-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .balls { color: #4CAF50; }
+        .strikes { color: #FF5722; }
+        .outs { color: #FF9800; }
+
+        /* Field Canvas */
+        #fieldCanvas {
+            flex: 1;
+            background: linear-gradient(180deg, #87CEEB 0%, #228B22 60%);
+            border: 5px solid #8B4513;
+            margin: 0 10px 10px 10px;
+            border-radius: 10px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+            cursor: crosshair;
+        }
+
+        /* Controls */
+        .controls {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+            border-top: 4px solid #FFD700;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            box-shadow: 0 -4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border: 3px solid #8B4513;
+            color: #333;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-pitch {
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+            color: white;
+        }
+
+        .btn-swing {
+            background: linear-gradient(135deg, #2196F3 0%, #42A5F5 100%);
+            color: white;
+        }
+
+        /* Game message */
+        .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            color: #FFD700;
+            padding: 30px 50px;
+            border-radius: 20px;
+            border: 5px solid #FFD700;
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .message.show {
+            display: block;
+            animation: messagePopIn 0.3s ease-out;
+        }
+
+        @keyframes messagePopIn {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        /* Result display */
+        .result-display {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.8);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 999;
+        }
+
+        .result-display.show {
+            opacity: 1;
+        }
+
+        /* Loading screen */
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2C5F2D 0%, #87CEEB 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .loading-title {
+            font-size: 64px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+
+        .loading-subtitle {
+            font-size: 24px;
+            color: #FFFFFF;
+            margin-bottom: 40px;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border: 5px solid #8B4513;
+            color: #333;
+            padding: 20px 60px;
+            font-size: 32px;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            font-family: inherit;
+            text-transform: uppercase;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 768px) {
+            .team-name {
+                font-size: 16px;
+            }
+            .team-score {
+                font-size: 36px;
+            }
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div class="loading-screen" id="loadingScreen">
+            <div class="loading-title">⚾ Sandlot Superstars ⚾</div>
+            <div class="loading-subtitle">3 Inning Championship Game</div>
+            <button class="start-btn" onclick="startGame()">PLAY BALL!</button>
+        </div>
+
+        <div class="scoreboard">
+            <div class="scoreboard-header">
+                <div class="team-info">
+                    <div class="team-name">🔵 Backyard Blazers</div>
+                    <div class="team-score" id="awayScore">0</div>
+                </div>
+                <div class="inning-info">
+                    <div class="inning-label">INNING</div>
+                    <div class="inning-number" id="inningDisplay">1</div>
+                    <div class="half-inning" id="halfInning">⬆ TOP</div>
+                </div>
+                <div class="team-info">
+                    <div class="team-name">🔴 Sandlot Sluggers</div>
+                    <div class="team-score" id="homeScore">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-info">
+            <div class="count-display">
+                <div class="count-label">BALLS</div>
+                <div class="count-value balls" id="ballsCount">0</div>
+            </div>
+            <div class="count-display">
+                <div class="count-label">STRIKES</div>
+                <div class="count-value strikes" id="strikesCount">0</div>
+            </div>
+            <div class="count-display">
+                <div class="count-label">OUTS</div>
+                <div class="count-value outs" id="outsCount">0</div>
+            </div>
+        </div>
+
+        <canvas id="fieldCanvas"></canvas>
+
+        <div class="controls">
+            <button class="btn btn-pitch" id="pitchBtn" onclick="pitch()">⚾ PITCH</button>
+            <button class="btn btn-swing" id="swingBtn" onclick="swing()" disabled>🏏 SWING</button>
+        </div>
+
+        <div class="message" id="gameMessage">Game Message</div>
+        <div class="result-display" id="resultDisplay">HOME RUN!</div>
+    </div>
+
+    <script>
+        // Game State
+        const gameState = {
+            inning: 1,
+            halfInning: 'top', // 'top' or 'bottom'
+            balls: 0,
+            strikes: 0,
+            outs: 0,
+            awayScore: 0,
+            homeScore: 0,
+            isGameOver: false,
+            isPitching: false,
+            ballInPlay: false,
+            
+            // Teams
+            teams: {
+                away: {
+                    name: 'Backyard Blazers',
+                    color: '#2196F3',
+                    players: ['Timmy Thunder', 'Sarah Speedster', 'Billy Batter', 'Casey Catcher', 'Freddy Fastball', 'Danny Defense', 'Rita Runner', 'Max Muscle', 'Penny Pitcher']
+                },
+                home: {
+                    name: 'Sandlot Sluggers',
+                    color: '#FF5722',
+                    players: ['Johnny Rocket', 'Lisa Lightning', 'Bobby Bomber', 'Wendy Windmill', 'Tony Thunder', 'Gina Glove', 'Eddie Eagle', 'Sammy Slugger', 'Patty Powerhouse']
+                }
+            }
+        };
+
+        // Canvas setup
+        const canvas = document.getElementById('fieldCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            drawField();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        // Draw the baseball field
+        function drawField() {
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height * 0.8;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw grass (outfield)
+            ctx.fillStyle = '#228B22';
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw infield (dirt)
+            ctx.fillStyle = '#D2691E';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, Math.min(width, height) * 0.35, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw bases
+            const baseSize = 15;
+            const baseDistance = Math.min(width, height) * 0.2;
+
+            // Home plate (pentagon shape)
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX - baseSize, centerY + baseSize);
+            ctx.lineTo(centerX - baseSize, centerY + baseSize * 2);
+            ctx.lineTo(centerX + baseSize, centerY + baseSize * 2);
+            ctx.lineTo(centerX + baseSize, centerY + baseSize);
+            ctx.closePath();
+            ctx.fill();
+
+            // First base
+            ctx.fillRect(centerX + baseDistance - baseSize/2, centerY - baseDistance - baseSize/2, baseSize, baseSize);
+
+            // Second base (rotate 45 degrees)
+            ctx.save();
+            ctx.translate(centerX, centerY - baseDistance * 1.4);
+            ctx.rotate(Math.PI / 4);
+            ctx.fillRect(-baseSize/2, -baseSize/2, baseSize, baseSize);
+            ctx.restore();
+
+            // Third base
+            ctx.fillRect(centerX - baseDistance - baseSize/2, centerY - baseDistance - baseSize/2, baseSize, baseSize);
+
+            // Draw pitcher's mound
+            ctx.fillStyle = '#D2691E';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - baseDistance * 0.7, 20, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - baseDistance * 0.7, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw pitcher
+            drawPlayer(centerX, centerY - baseDistance * 0.7, gameState.halfInning === 'top' ? '#FF5722' : '#2196F3', '⚾');
+
+            // Draw batter
+            const batterX = centerX + 40;
+            const batterY = centerY + 20;
+            drawPlayer(batterX, batterY, gameState.halfInning === 'top' ? '#2196F3' : '#FF5722', '🏏');
+
+            // Draw catcher
+            const catcherX = centerX - 40;
+            const catcherY = centerY + 30;
+            drawPlayer(catcherX, catcherY, gameState.halfInning === 'top' ? '#FF5722' : '#2196F3', '🧤');
+        }
+
+        function drawPlayer(x, y, color, emoji) {
+            // Draw shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.3)';
+            ctx.beginPath();
+            ctx.ellipse(x, y + 25, 15, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw player body
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, 20, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw emoji
+            ctx.font = '25px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(emoji, x, y);
+        }
+
+        function drawBall(x, y) {
+            // Draw ball shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.3)';
+            ctx.beginPath();
+            ctx.ellipse(x, y + 5, 8, 3, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw ball
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(x, y, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw seams
+            ctx.strokeStyle = '#FF0000';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(x, y, 6, -Math.PI/4, Math.PI/4);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(x, y, 6, Math.PI*3/4, Math.PI*5/4);
+            ctx.stroke();
+        }
+
+        // Game logic
+        function startGame() {
+            document.getElementById('loadingScreen').style.display = 'none';
+            resizeCanvas();
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            document.getElementById('awayScore').textContent = gameState.awayScore;
+            document.getElementById('homeScore').textContent = gameState.homeScore;
+            document.getElementById('inningDisplay').textContent = gameState.inning;
+            document.getElementById('halfInning').textContent = gameState.halfInning === 'top' ? '⬆ TOP' : '⬇ BOTTOM';
+            document.getElementById('ballsCount').textContent = gameState.balls;
+            document.getElementById('strikesCount').textContent = gameState.strikes;
+            document.getElementById('outsCount').textContent = gameState.outs;
+
+            drawField();
+        }
+
+        function showMessage(message, duration = 2000) {
+            const messageEl = document.getElementById('gameMessage');
+            messageEl.textContent = message;
+            messageEl.classList.add('show');
+
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+            }, duration);
+        }
+
+        function showResult(message) {
+            const resultEl = document.getElementById('resultDisplay');
+            resultEl.textContent = message;
+            resultEl.classList.add('show');
+
+            setTimeout(() => {
+                resultEl.classList.remove('show');
+            }, 1500);
+        }
+
+        function pitch() {
+            if (gameState.isPitching || gameState.isGameOver) return;
+
+            gameState.isPitching = true;
+            document.getElementById('pitchBtn').disabled = true;
+            document.getElementById('swingBtn').disabled = false;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const startX = width / 2;
+            const startY = height * 0.8 - height * 0.2 * 0.7;
+            const endX = width / 2 + 40;
+            const endY = height * 0.8 + 20;
+
+            let t = 0;
+            const duration = 60; // frames
+
+            function animatePitch() {
+                if (t > duration) {
+                    gameState.isPitching = false;
+                    if (!gameState.ballInPlay) {
+                        // No swing - it's a ball or strike
+                        const isStrike = Math.random() > 0.4; // 60% strike zone
+                        if (isStrike) {
+                            strike();
+                        } else {
+                            ball();
+                        }
+                    }
+                    document.getElementById('pitchBtn').disabled = false;
+                    document.getElementById('swingBtn').disabled = true;
+                    return;
+                }
+
+                drawField();
+                const progress = t / duration;
+                const currentX = startX + (endX - startX) * progress;
+                const currentY = startY + (endY - startY) * progress;
+                drawBall(currentX, currentY);
+
+                t++;
+                requestAnimationFrame(animatePitch);
+            }
+
+            animatePitch();
+        }
+
+        function swing() {
+            if (!gameState.isPitching || gameState.ballInPlay) return;
+
+            gameState.ballInPlay = true;
+            document.getElementById('swingBtn').disabled = true;
+
+            // Determine hit quality
+            const rand = Math.random();
+            let outcome;
+
+            if (rand < 0.15) {
+                // Strikeout (swing and miss)
+                outcome = 'miss';
+                strike();
+            } else if (rand < 0.30) {
+                // Foul ball
+                outcome = 'foul';
+                foul();
+            } else if (rand < 0.50) {
+                // Ground out or fly out
+                outcome = 'out';
+                makeOut();
+            } else if (rand < 0.80) {
+                // Single or hit
+                outcome = 'hit';
+                hit();
+            } else if (rand < 0.95) {
+                // Double or Triple
+                outcome = 'extra';
+                extraBaseHit();
+            } else {
+                // Home run!
+                outcome = 'homerun';
+                homeRun();
+            }
+
+            setTimeout(() => {
+                gameState.ballInPlay = false;
+            }, 1000);
+        }
+
+        function ball() {
+            gameState.balls++;
+            showResult('BALL!');
+            
+            if (gameState.balls >= 4) {
+                showMessage('Walk! Batter takes first base!');
+                resetCount();
+            } else {
+                updateDisplay();
+            }
+        }
+
+        function strike() {
+            gameState.strikes++;
+            showResult('STRIKE!');
+            
+            if (gameState.strikes >= 3) {
+                showMessage('Strikeout! ⚾');
+                recordOut();
+            } else {
+                updateDisplay();
+            }
+        }
+
+        function foul() {
+            if (gameState.strikes < 2) {
+                gameState.strikes++;
+            }
+            showResult('FOUL BALL!');
+            updateDisplay();
+        }
+
+        function makeOut() {
+            const outs = ['Fly Out!', 'Ground Out!', 'Pop Out!', 'Line Out!'];
+            showMessage(outs[Math.floor(Math.random() * outs.length)]);
+            recordOut();
+        }
+
+        function hit() {
+            showResult('BASE HIT! 🎯');
+            showMessage('Single! Runner safe at first!');
+            addRun(0.3); // 30% chance to score
+            resetCount();
+        }
+
+        function extraBaseHit() {
+            const isTriple = Math.random() > 0.7;
+            if (isTriple) {
+                showResult('TRIPLE! 🔥');
+                showMessage('Amazing! Triple to the gap!');
+                addRun(0.7); // 70% chance to score
+            } else {
+                showResult('DOUBLE! 💪');
+                showMessage('Double down the line!');
+                addRun(0.5); // 50% chance to score
+            }
+            resetCount();
+        }
+
+        function homeRun() {
+            showResult('HOME RUN! ⚾🎆');
+            showMessage('IT\'S OUTTA HERE! Home Run!', 3000);
+            addRun(1); // Always scores
+            resetCount();
+        }
+
+        function addRun(probability) {
+            if (Math.random() < probability) {
+                if (gameState.halfInning === 'top') {
+                    gameState.awayScore++;
+                } else {
+                    gameState.homeScore++;
+                }
+                updateDisplay();
+            }
+        }
+
+        function recordOut() {
+            gameState.outs++;
+            resetCount();
+            
+            if (gameState.outs >= 3) {
+                changeHalfInning();
+            } else {
+                updateDisplay();
+            }
+        }
+
+        function resetCount() {
+            gameState.balls = 0;
+            gameState.strikes = 0;
+            updateDisplay();
+        }
+
+        function changeHalfInning() {
+            if (gameState.halfInning === 'top') {
+                gameState.halfInning = 'bottom';
+                showMessage(`Bottom of inning ${gameState.inning}`, 2000);
+            } else {
+                gameState.inning++;
+                gameState.halfInning = 'top';
+                
+                if (gameState.inning > 3) {
+                    endGame();
+                    return;
+                }
+                
+                showMessage(`Top of inning ${gameState.inning}`, 2000);
+            }
+            
+            gameState.outs = 0;
+            resetCount();
+        }
+
+        function endGame() {
+            gameState.isGameOver = true;
+            let winner, winnerScore, loserScore;
+            
+            if (gameState.awayScore > gameState.homeScore) {
+                winner = gameState.teams.away.name;
+                winnerScore = gameState.awayScore;
+                loserScore = gameState.homeScore;
+            } else if (gameState.homeScore > gameState.awayScore) {
+                winner = gameState.teams.home.name;
+                winnerScore = gameState.homeScore;
+                loserScore = gameState.awayScore;
+            } else {
+                showMessage('GAME OVER!\nIt\'s a TIE!\n' + gameState.awayScore + ' - ' + gameState.homeScore, 5000);
+                setTimeout(() => location.reload(), 5000);
+                return;
+            }
+            
+            showMessage(`GAME OVER!\n${winner} WIN!\n${winnerScore} - ${loserScore}`, 5000);
+            
+            setTimeout(() => {
+                if (confirm('Play again?')) {
+                    location.reload();
+                }
+            }, 5000);
+        }
+
+        // Initialize
+        resizeCanvas();
+    </script>
+</body>
+</html>
