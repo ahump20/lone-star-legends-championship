@@ -357,10 +357,35 @@
     </div>
 
     <script>
+        // Game Configuration Constants
+        const GAME_CONFIG = {
+            STRIKE_ZONE_PROBABILITY: 0.6,
+            PITCH_ANIMATION_FRAMES: 60,
+            BATTING_OUTCOMES: {
+                MISS_THRESHOLD: 0.15,
+                FOUL_THRESHOLD: 0.30,
+                OUT_THRESHOLD: 0.50,
+                HIT_THRESHOLD: 0.80,
+                EXTRA_THRESHOLD: 0.95
+                // Remaining probability (0.95-1.0) is home run
+            },
+            SCORING_PROBABILITIES: {
+                SINGLE: 0.3,
+                DOUBLE: 0.5,
+                TRIPLE: 0.7,
+                HOME_RUN: 1.0
+            },
+            TRIPLE_PROBABILITY: 0.7 // 70% chance a extra-base hit is a triple vs double
+        };
+
         // Sound Effects (Procedural Audio)
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioCtx = AudioContext ? new AudioContext() : null;
 
+        /**
+         * Play a procedural sound effect
+         * @param {string} type - Type of sound: 'pitch', 'hit', 'homerun', or 'strike'
+         */
         function playSound(type) {
             if (!audioCtx) return;
             
@@ -625,14 +650,14 @@
             const endY = height * 0.8 + 20;
 
             let t = 0;
-            const duration = 60; // frames
+            const duration = GAME_CONFIG.PITCH_ANIMATION_FRAMES;
 
             function animatePitch() {
                 if (t > duration) {
                     gameState.isPitching = false;
                     if (!gameState.ballInPlay) {
                         // No swing - it's a ball or strike
-                        const isStrike = Math.random() > 0.4; // 60% strike zone
+                        const isStrike = Math.random() < GAME_CONFIG.STRIKE_ZONE_PROBABILITY;
                         if (isStrike) {
                             strike();
                         } else {
@@ -663,27 +688,27 @@
             gameState.ballInPlay = true;
             document.getElementById('swingBtn').disabled = true;
 
-            // Determine hit quality
+            // Determine hit quality based on configured probabilities
             const rand = Math.random();
             let outcome;
 
-            if (rand < 0.15) {
+            if (rand < GAME_CONFIG.BATTING_OUTCOMES.MISS_THRESHOLD) {
                 // Strikeout (swing and miss)
                 outcome = 'miss';
                 strike();
-            } else if (rand < 0.30) {
+            } else if (rand < GAME_CONFIG.BATTING_OUTCOMES.FOUL_THRESHOLD) {
                 // Foul ball
                 outcome = 'foul';
                 foul();
-            } else if (rand < 0.50) {
+            } else if (rand < GAME_CONFIG.BATTING_OUTCOMES.OUT_THRESHOLD) {
                 // Ground out or fly out
                 outcome = 'out';
                 makeOut();
-            } else if (rand < 0.80) {
+            } else if (rand < GAME_CONFIG.BATTING_OUTCOMES.HIT_THRESHOLD) {
                 // Single or hit
                 outcome = 'hit';
                 hit();
-            } else if (rand < 0.95) {
+            } else if (rand < GAME_CONFIG.BATTING_OUTCOMES.EXTRA_THRESHOLD) {
                 // Double or Triple
                 outcome = 'extra';
                 extraBaseHit();
@@ -741,21 +766,21 @@
             showResult('BASE HIT! 🎯');
             showMessage('Single! Runner safe at first!');
             playSound('hit');
-            addRun(0.3); // 30% chance to score
+            addRun(GAME_CONFIG.SCORING_PROBABILITIES.SINGLE);
             resetCount();
         }
 
         function extraBaseHit() {
-            const isTriple = Math.random() > 0.7;
+            const isTriple = Math.random() < GAME_CONFIG.TRIPLE_PROBABILITY;
             playSound('hit');
             if (isTriple) {
                 showResult('TRIPLE! 🔥');
                 showMessage('Amazing! Triple to the gap!');
-                addRun(0.7); // 70% chance to score
+                addRun(GAME_CONFIG.SCORING_PROBABILITIES.TRIPLE);
             } else {
                 showResult('DOUBLE! 💪');
                 showMessage('Double down the line!');
-                addRun(0.5); // 50% chance to score
+                addRun(GAME_CONFIG.SCORING_PROBABILITIES.DOUBLE);
             }
             resetCount();
         }
@@ -764,7 +789,7 @@
             showResult('HOME RUN! ⚾🎆');
             showMessage('IT\'S OUTTA HERE! Home Run!', 3000);
             playSound('homerun');
-            addRun(1); // Always scores
+            addRun(GAME_CONFIG.SCORING_PROBABILITIES.HOME_RUN);
             resetCount();
         }
 
