@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandlot Superstars - Lone Star Legends Demo</title>
+    <meta name="description" content="Play a full 3-inning demo game with unique teams and characters. Backyard-style baseball fun!">
+    <script src="/assets/three.min.js"></script>
+    <style>
+        :root {
+            --blaze-orange: #FF6B35;
+            --blaze-dark: #0A0A0A;
+            --blaze-panel: #1A1A1A;
+            --grass-green: #2D5016;
+            --dirt-brown: #8B7355;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Marker Felt', cursive, sans-serif;
+            background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
+            color: white;
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: 100vh;
+            display: block;
+            background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 100%);
+        }
+
+        .ui-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .scoreboard {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            border: 4px solid var(--blaze-orange);
+            border-radius: 15px;
+            padding: 15px 30px;
+            min-width: 600px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .scoreboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 10px;
+        }
+
+        .team-info {
+            flex: 1;
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--blaze-orange);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .team-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .inning-info {
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--blaze-panel);
+            border-radius: 10px;
+        }
+
+        .inning-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+        }
+
+        .inning-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .game-state {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid #333;
+        }
+
+        .state-item {
+            text-align: center;
+        }
+
+        .state-label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .state-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .outs-display {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 3px;
+        }
+
+        .out-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #666;
+            background: #222;
+        }
+
+        .out-indicator.active {
+            background: var(--blaze-orange);
+            box-shadow: 0 0 10px var(--blaze-orange);
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            pointer-events: all;
+        }
+
+        .game-btn {
+            background: linear-gradient(135deg, var(--blaze-orange), #CC5500);
+            border: 3px solid #FFD700;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4),
+                        inset 0 1px 3px rgba(255, 255, 255, 0.3);
+            transition: all 0.2s;
+            font-family: 'Comic Sans MS', cursive;
+        }
+
+        .game-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6),
+                        inset 0 1px 3px rgba(255, 255, 255, 0.3);
+        }
+
+        .game-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .game-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid var(--blaze-orange);
+            border-radius: 20px;
+            padding: 40px 60px;
+            text-align: center;
+            max-width: 600px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+        }
+
+        .message-box.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .message-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .message-text {
+            font-size: 20px;
+            color: white;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .player-at-bat {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--blaze-orange);
+            border-radius: 10px;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        .player-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--blaze-orange);
+            margin-bottom: 3px;
+        }
+
+        .player-stats {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .hit-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 64px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+            z-index: 200;
+        }
+
+        .hit-indicator.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .scoreboard {
+                min-width: auto;
+                width: 90%;
+                padding: 10px 15px;
+            }
+
+            .team-name {
+                font-size: 14px;
+            }
+
+            .team-score {
+                font-size: 36px;
+            }
+
+            .inning-number {
+                font-size: 24px;
+            }
+
+            .game-btn {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+
+            .controls {
+                gap: 10px;
+                bottom: 20px;
+            }
+        }
+
+        .bases-display {
+            position: absolute;
+            top: 150px;
+            right: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            width: 80px;
+            height: 80px;
+            transform: rotate(45deg);
+        }
+
+        .base {
+            width: 25px;
+            height: 25px;
+            background: #333;
+            border: 2px solid #666;
+            transform: rotate(-45deg);
+        }
+
+        .base.occupied {
+            background: var(--blaze-orange);
+            box-shadow: 0 0 15px var(--blaze-orange);
+        }
+
+        .base:nth-child(1) { grid-column: 2; grid-row: 1; } /* 2nd base */
+        .base:nth-child(2) { grid-column: 3; grid-row: 2; } /* 1st base */
+        .base:nth-child(3) { grid-column: 2; grid-row: 3; } /* home */
+        .base:nth-child(4) { grid-column: 1; grid-row: 2; } /* 3rd base */
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <div class="ui-container">
+        <!-- Scoreboard -->
+        <div class="scoreboard">
+            <div class="scoreboard-header">
+                <div class="team-info">
+                    <div class="team-name" id="homeTeamName">Home Team</div>
+                    <div class="team-score" id="homeScore">0</div>
+                </div>
+                <div class="inning-info">
+                    <div class="inning-label">Inning</div>
+                    <div class="inning-number" id="inningDisplay">1</div>
+                    <div class="inning-label" id="halfInning">Top</div>
+                </div>
+                <div class="team-info">
+                    <div class="team-name" id="awayTeamName">Away Team</div>
+                    <div class="team-score" id="awayScore">0</div>
+                </div>
+            </div>
+            <div class="game-state">
+                <div class="state-item">
+                    <div class="state-label">Outs</div>
+                    <div class="outs-display" id="outsDisplay">
+                        <div class="out-indicator"></div>
+                        <div class="out-indicator"></div>
+                        <div class="out-indicator"></div>
+                    </div>
+                </div>
+                <div class="state-item">
+                    <div class="state-label">Balls</div>
+                    <div class="state-value" id="ballsCount">0</div>
+                </div>
+                <div class="state-item">
+                    <div class="state-label">Strikes</div>
+                    <div class="state-value" id="strikesCount">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bases Display -->
+        <div class="bases-display">
+            <div class="base" id="base2"></div>
+            <div class="base" id="base1"></div>
+            <div class="base" id="baseHome"></div>
+            <div class="base" id="base3"></div>
+        </div>
+
+        <!-- Player At Bat -->
+        <div class="player-at-bat">
+            <div class="player-name" id="batterName">Loading...</div>
+            <div class="player-stats" id="batterStats">Loading...</div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="game-btn" id="pitchBtn" onclick="game.pitch()">⚾ PITCH</button>
+            <button class="game-btn" id="swingBtn" onclick="game.swing()" disabled>🏏 SWING</button>
+        </div>
+
+        <!-- Message Box -->
+        <div class="message-box" id="messageBox">
+            <div class="message-title" id="messageTitle"></div>
+            <div class="message-text" id="messageText"></div>
+            <button class="game-btn" onclick="game.dismissMessage()">Continue</button>
+        </div>
+
+        <!-- Hit Indicator -->
+        <div class="hit-indicator" id="hitIndicator"></div>
+    </div>
+
+    <script>
+        // Game data - Two unique teams with different characters
+        const TEAMS = {
+            thunderbolts: {
+                name: "Thunder Bolts",
+                color: 0xFF6B35,
+                players: [
+                    { name: "Marcus Thunder", batting: 0.350, power: 0.40, speed: 0.9 },
+                    { name: "Sofia Martinez", batting: 0.320, power: 0.30, speed: 0.7 },
+                    { name: "Tommy Chen", batting: 0.380, power: 0.50, speed: 0.4 },
+                    { name: "Jazz Williams", batting: 0.300, power: 0.25, speed: 0.8 },
+                    { name: "Diego Rivera", batting: 0.340, power: 0.35, speed: 0.6 },
+                    { name: "Emma Stone", batting: 0.310, power: 0.28, speed: 0.7 },
+                    { name: "Kai Nakamura", batting: 0.330, power: 0.32, speed: 0.75 },
+                    { name: "Zara Johnson", batting: 0.295, power: 0.30, speed: 0.85 },
+                    { name: "Alex Rodriguez", batting: 0.315, power: 0.33, speed: 0.65 }
+                ]
+            },
+            sandstorm: {
+                name: "Sandstorm Squad",
+                color: 0xFFD700,
+                players: [
+                    { name: "Blake Rocket", batting: 0.360, power: 0.45, speed: 0.7 },
+                    { name: "Luna Garcia", batting: 0.325, power: 0.31, speed: 0.8 },
+                    { name: "Max Power", batting: 0.340, power: 0.48, speed: 0.5 },
+                    { name: "Mia Santos", batting: 0.310, power: 0.27, speed: 0.9 },
+                    { name: "Ryan Lee", batting: 0.330, power: 0.36, speed: 0.65 },
+                    { name: "Olivia Brown", batting: 0.315, power: 0.29, speed: 0.75 },
+                    { name: "Tyler Swift", batting: 0.305, power: 0.34, speed: 0.85 },
+                    { name: "Nina Patel", batting: 0.320, power: 0.30, speed: 0.7 },
+                    { name: "Jordan Kim", batting: 0.300, power: 0.35, speed: 0.6 }
+                ]
+            }
+        };
+
+        class SandlotBaseballGame {
+            constructor() {
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                this.renderer = new THREE.WebGLRenderer({ 
+                    canvas: document.getElementById('gameCanvas'), 
+                    antialias: true 
+                });
+
+                // Game state
+                this.homeTeam = TEAMS.sandstorm;
+                this.awayTeam = TEAMS.thunderbolts;
+                this.homeScore = 0;
+                this.awayScore = 0;
+                this.inning = 1;
+                this.isTopOfInning = true;
+                this.outs = 0;
+                this.balls = 0;
+                this.strikes = 0;
+                this.bases = [false, false, false]; // 1st, 2nd, 3rd
+                this.currentBatterIndex = 0;
+                this.isPitching = false;
+                this.isSwinging = false;
+                this.ball = null;
+                this.maxInnings = 3;
+                this.gameOver = false;
+
+                this.init();
+                this.updateUI();
+                this.animate();
+            }
+
+            init() {
+                // Setup renderer
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+                // Camera position - viewing from behind home plate
+                this.camera.position.set(0, 12, 25);
+                this.camera.lookAt(0, 0, -15);
+
+                // Lighting - bright sunny day
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+                this.scene.add(ambientLight);
+
+                const sunLight = new THREE.DirectionalLight(0xffffdd, 0.8);
+                sunLight.position.set(30, 50, 20);
+                sunLight.castShadow = true;
+                sunLight.shadow.camera.left = -60;
+                sunLight.shadow.camera.right = 60;
+                sunLight.shadow.camera.top = 60;
+                sunLight.shadow.camera.bottom = -60;
+                sunLight.shadow.mapSize.width = 2048;
+                sunLight.shadow.mapSize.height = 2048;
+                this.scene.add(sunLight);
+
+                // Sky color
+                this.scene.background = new THREE.Color(0x87CEEB);
+                this.scene.fog = new THREE.Fog(0x87CEEB, 100, 300);
+
+                this.createField();
+                this.createBases();
+                this.createPitchersMound();
+                this.createBatter();
+                this.createPitcher();
+                this.createFielders();
+                this.setupControls();
+
+                window.addEventListener('resize', () => this.onWindowResize());
+            }
+
+            createField() {
+                // Main grass field
+                const fieldGeometry = new THREE.CircleGeometry(150, 64);
+                const fieldMaterial = new THREE.MeshLambertMaterial({ color: 0x2D5016 });
+                const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+                field.rotation.x = -Math.PI / 2;
+                field.receiveShadow = true;
+                this.scene.add(field);
+
+                // Infield dirt
+                const infieldGeometry = new THREE.CircleGeometry(35, 32, 0, Math.PI / 2);
+                const infieldMaterial = new THREE.MeshLambertMaterial({ color: 0x8B7355 });
+                const infield = new THREE.Mesh(infieldGeometry, infieldMaterial);
+                infield.rotation.x = -Math.PI / 2;
+                infield.rotation.z = -Math.PI / 4;
+                infield.position.y = 0.05;
+                this.scene.add(infield);
+
+                // Pitcher's dirt circle
+                const moundDirtGeometry = new THREE.CircleGeometry(5, 32);
+                const moundDirt = new THREE.Mesh(moundDirtGeometry, infieldMaterial);
+                moundDirt.rotation.x = -Math.PI / 2;
+                moundDirt.position.set(0, 0.06, -18);
+                this.scene.add(moundDirt);
+
+                // Foul lines (white chalk lines)
+                const lineMaterial = new THREE.LineBasicMaterial({ color: 0xFFFFFF, linewidth: 3 });
+                
+                // First base line
+                const firstLinePoints = [
+                    new THREE.Vector3(0, 0.1, 0),
+                    new THREE.Vector3(90, 0.1, -90)
+                ];
+                const firstLineGeometry = new THREE.BufferGeometry().setFromPoints(firstLinePoints);
+                const firstLine = new THREE.Line(firstLineGeometry, lineMaterial);
+                this.scene.add(firstLine);
+
+                // Third base line
+                const thirdLinePoints = [
+                    new THREE.Vector3(0, 0.1, 0),
+                    new THREE.Vector3(-90, 0.1, -90)
+                ];
+                const thirdLineGeometry = new THREE.BufferGeometry().setFromPoints(thirdLinePoints);
+                const thirdLine = new THREE.Line(thirdLineGeometry, lineMaterial);
+                this.scene.add(thirdLine);
+
+                // Outfield fence
+                const fenceGeometry = new THREE.BoxGeometry(180, 8, 2);
+                const fenceMaterial = new THREE.MeshLambertMaterial({ color: 0x1a4d2e });
+                const backFence = new THREE.Mesh(fenceGeometry, fenceMaterial);
+                backFence.position.set(0, 4, -90);
+                backFence.castShadow = true;
+                this.scene.add(backFence);
+
+                // Side fences
+                const sideFenceGeometry = new THREE.BoxGeometry(2, 8, 90);
+                const leftFence = new THREE.Mesh(sideFenceGeometry, fenceMaterial);
+                leftFence.position.set(-90, 4, -45);
+                leftFence.castShadow = true;
+                this.scene.add(leftFence);
+
+                const rightFence = new THREE.Mesh(sideFenceGeometry, fenceMaterial);
+                rightFence.position.set(90, 4, -45);
+                rightFence.castShadow = true;
+                this.scene.add(rightFence);
+            }
+
+            createBases() {
+                const baseGeometry = new THREE.BoxGeometry(2, 0.3, 2);
+                const baseMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+
+                // Home plate (diamond shape)
+                const homePlateGeometry = new THREE.BoxGeometry(2, 0.3, 2);
+                this.homePlate = new THREE.Mesh(homePlateGeometry, baseMaterial);
+                this.homePlate.position.set(0, 0.15, 0);
+                this.homePlate.castShadow = true;
+                this.scene.add(this.homePlate);
+
+                // First base
+                this.firstBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                this.firstBase.position.set(25, 0.15, -25);
+                this.firstBase.castShadow = true;
+                this.scene.add(this.firstBase);
+
+                // Second base
+                this.secondBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                this.secondBase.position.set(0, 0.15, -50);
+                this.secondBase.castShadow = true;
+                this.scene.add(this.secondBase);
+
+                // Third base
+                this.thirdBase = new THREE.Mesh(baseGeometry, baseMaterial);
+                this.thirdBase.position.set(-25, 0.15, -25);
+                this.thirdBase.castShadow = true;
+                this.scene.add(this.thirdBase);
+            }
+
+            createPitchersMound() {
+                const moundGeometry = new THREE.CylinderGeometry(4, 5, 0.8, 32);
+                const moundMaterial = new THREE.MeshLambertMaterial({ color: 0x8B7355 });
+                const mound = new THREE.Mesh(moundGeometry, moundMaterial);
+                mound.position.set(0, 0.4, -18);
+                mound.castShadow = true;
+                this.scene.add(mound);
+
+                // Rubber (pitching plate)
+                const rubberGeometry = new THREE.BoxGeometry(2, 0.2, 0.5);
+                const rubberMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+                const rubber = new THREE.Mesh(rubberGeometry, rubberMaterial);
+                rubber.position.set(0, 0.9, -18);
+                this.scene.add(rubber);
+            }
+
+            createBatter() {
+                // Batter body (cylinder + sphere for head)
+                const currentTeam = this.isTopOfInning ? this.awayTeam : this.homeTeam;
+                const batterMaterial = new THREE.MeshLambertMaterial({ color: currentTeam.color });
+                
+                // Body
+                const bodyGeometry = new THREE.CylinderGeometry(0.6, 0.6, 2.5, 16);
+                this.batter = new THREE.Mesh(bodyGeometry, batterMaterial);
+                this.batter.position.set(2, 2, 0);
+                this.batter.castShadow = true;
+                this.scene.add(this.batter);
+                
+                // Head
+                const headGeometry = new THREE.SphereGeometry(0.5, 16, 16);
+                const head = new THREE.Mesh(headGeometry, batterMaterial);
+                head.position.set(2, 3.5, 0);
+                head.castShadow = true;
+                this.scene.add(head);
+                this.batterHead = head;
+
+                // Bat
+                const batGeometry = new THREE.CylinderGeometry(0.15, 0.2, 3, 16);
+                const batMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+                this.bat = new THREE.Mesh(batGeometry, batMaterial);
+                this.bat.position.set(3, 2, 0);
+                this.bat.rotation.z = Math.PI / 4;
+                this.bat.castShadow = true;
+                this.scene.add(this.bat);
+            }
+
+            createPitcher() {
+                const currentTeam = this.isTopOfInning ? this.homeTeam : this.awayTeam;
+                const pitcherMaterial = new THREE.MeshLambertMaterial({ color: currentTeam.color });
+                
+                // Body
+                const bodyGeometry = new THREE.CylinderGeometry(0.6, 0.6, 2.5, 16);
+                this.pitcher = new THREE.Mesh(bodyGeometry, pitcherMaterial);
+                this.pitcher.position.set(0, 2.5, -18);
+                this.pitcher.castShadow = true;
+                this.scene.add(this.pitcher);
+                
+                // Head
+                const headGeometry = new THREE.SphereGeometry(0.5, 16, 16);
+                const head = new THREE.Mesh(headGeometry, pitcherMaterial);
+                head.position.set(0, 4, -18);
+                head.castShadow = true;
+                this.scene.add(head);
+                this.pitcherHead = head;
+            }
+
+            createFielders() {
+                this.fielders = [];
+                this.fielderHeads = [];
+                const fielderPositions = [
+                    { x: 25, z: -25 }, // 1st base
+                    { x: 0, z: -50 },  // 2nd base
+                    { x: -25, z: -25 }, // 3rd base
+                    { x: 10, z: -35 },  // Shortstop
+                    { x: 0, z: -70 },   // Center field
+                    { x: -40, z: -70 }, // Left field
+                    { x: 40, z: -70 },  // Right field
+                    { x: 0, z: 5 }      // Catcher
+                ];
+
+                const currentTeam = this.isTopOfInning ? this.homeTeam : this.awayTeam;
+                const fielderMaterial = new THREE.MeshLambertMaterial({ color: currentTeam.color });
+
+                fielderPositions.forEach(pos => {
+                    // Body
+                    const bodyGeometry = new THREE.CylinderGeometry(0.5, 0.5, 2, 16);
+                    const fielder = new THREE.Mesh(bodyGeometry, fielderMaterial);
+                    fielder.position.set(pos.x, 1.5, pos.z);
+                    fielder.castShadow = true;
+                    this.scene.add(fielder);
+                    this.fielders.push(fielder);
+                    
+                    // Head
+                    const headGeometry = new THREE.SphereGeometry(0.4, 16, 16);
+                    const head = new THREE.Mesh(headGeometry, fielderMaterial);
+                    head.position.set(pos.x, 2.8, pos.z);
+                    head.castShadow = true;
+                    this.scene.add(head);
+                    this.fielderHeads.push(head);
+                });
+            }
+
+            setupControls() {
+                // Keyboard controls
+                document.addEventListener('keydown', (e) => {
+                    if (this.gameOver) return;
+                    
+                    if (e.code === 'Space') {
+                        e.preventDefault();
+                        if (!this.isPitching) {
+                            this.swing();
+                        }
+                    } else if (e.code === 'KeyP') {
+                        this.pitch();
+                    }
+                });
+            }
+
+            pitch() {
+                if (this.isPitching || this.gameOver) return;
+
+                this.isPitching = true;
+                document.getElementById('pitchBtn').disabled = true;
+                document.getElementById('swingBtn').disabled = false;
+
+                // Create ball
+                const ballGeometry = new THREE.SphereGeometry(0.3, 16, 16);
+                const ballMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+                this.ball = new THREE.Mesh(ballGeometry, ballMaterial);
+                this.ball.position.set(0, 2, -18);
+                this.ball.castShadow = true;
+                this.scene.add(this.ball);
+
+                // Ball velocity
+                this.ballVelocity = new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.5,
+                    -0.1,
+                    0.8
+                );
+
+                // Pitcher windup animation
+                this.animatePitcherWindup();
+            }
+
+            animatePitcherWindup() {
+                let windupProgress = 0;
+                const windupInterval = setInterval(() => {
+                    windupProgress += 0.1;
+                    this.pitcher.rotation.x = Math.sin(windupProgress * Math.PI) * 0.3;
+                    
+                    if (windupProgress >= 1) {
+                        clearInterval(windupInterval);
+                        this.pitcher.rotation.x = 0;
+                    }
+                }, 50);
+            }
+
+            swing() {
+                if (!this.isPitching || this.isSwinging || this.gameOver) return;
+
+                this.isSwinging = true;
+                document.getElementById('swingBtn').disabled = true;
+
+                // Bat swing animation
+                let swingProgress = 0;
+                const swingInterval = setInterval(() => {
+                    swingProgress += 0.15;
+                    this.bat.rotation.z = Math.PI / 4 - (Math.sin(swingProgress * Math.PI) * Math.PI / 2);
+                    
+                    // Check for contact
+                    if (swingProgress > 0.3 && swingProgress < 0.7 && this.ball) {
+                        const distance = this.ball.position.distanceTo(this.bat.position);
+                        if (distance < 2) {
+                            this.hitBall();
+                            clearInterval(swingInterval);
+                            return;
+                        }
+                    }
+                    
+                    if (swingProgress >= 1) {
+                        clearInterval(swingInterval);
+                        this.bat.rotation.z = Math.PI / 4;
+                        this.isSwinging = false;
+                        
+                        // Miss
+                        if (this.ball && this.ball.position.z > -1) {
+                            this.registerStrike();
+                        }
+                    }
+                }, 30);
+            }
+
+            hitBall() {
+                const currentTeam = this.isTopOfInning ? this.awayTeam : this.homeTeam;
+                const batter = currentTeam.players[this.currentBatterIndex];
+                
+                // Calculate hit quality based on batter stats
+                const hitQuality = Math.random();
+                const contactQuality = Math.random();
+                
+                if (hitQuality > (1 - batter.batting)) {
+                    // Successful hit
+                    const powerFactor = batter.power * (0.5 + Math.random() * 0.5);
+                    
+                    // Determine hit type
+                    let hitType = '';
+                    let bases = 0;
+                    
+                    if (powerFactor > 0.40 && contactQuality > 0.7) {
+                        hitType = 'HOME RUN! 🚀';
+                        bases = 4;
+                        this.ballVelocity = new THREE.Vector3(
+                            (Math.random() - 0.5) * 0.3,
+                            1.5,
+                            -2.5
+                        );
+                    } else if (powerFactor > 0.30) {
+                        hitType = 'TRIPLE! 💥';
+                        bases = 3;
+                        this.ballVelocity = new THREE.Vector3(
+                            (Math.random() - 0.5) * 1.5,
+                            0.8,
+                            -2.0
+                        );
+                    } else if (powerFactor > 0.25) {
+                        hitType = 'DOUBLE! 🔥';
+                        bases = 2;
+                        this.ballVelocity = new THREE.Vector3(
+                            (Math.random() - 0.5) * 1.2,
+                            0.5,
+                            -1.5
+                        );
+                    } else {
+                        hitType = 'SINGLE! ⚡';
+                        bases = 1;
+                        this.ballVelocity = new THREE.Vector3(
+                            (Math.random() - 0.5) * 1.0,
+                            0.3,
+                            -1.2
+                        );
+                    }
+                    
+                    this.showHitIndicator(hitType);
+                    this.advanceRunners(bases);
+                    
+                } else {
+                    // Weak contact - likely an out
+                    this.ballVelocity = new THREE.Vector3(
+                        (Math.random() - 0.5) * 0.5,
+                        0.5,
+                        -0.8
+                    );
+                    
+                    // Fielders catch it
+                    setTimeout(() => {
+                        this.registerOut('Caught!');
+                    }, 1000);
+                }
+
+                this.isSwinging = false;
+            }
+
+            advanceRunners(bases) {
+                let runsScored = 0;
+                
+                // Move existing runners
+                for (let i = 2; i >= 0; i--) {
+                    if (this.bases[i]) {
+                        const newBase = i + bases;
+                        if (newBase >= 3) {
+                            runsScored++;
+                            this.bases[i] = false;
+                        } else {
+                            this.bases[newBase] = true;
+                            this.bases[i] = false;
+                        }
+                    }
+                }
+                
+                // Place batter on base
+                if (bases < 4) {
+                    this.bases[bases - 1] = true;
+                } else {
+                    runsScored++; // Home run
+                }
+                
+                // Update score
+                if (this.isTopOfInning) {
+                    this.awayScore += runsScored;
+                } else {
+                    this.homeScore += runsScored;
+                }
+                
+                this.resetCount();
+                this.nextBatter();
+            }
+
+            registerStrike() {
+                this.strikes++;
+                if (this.strikes >= 3) {
+                    this.registerOut('Strike Out! ⚾');
+                } else {
+                    this.showHitIndicator(`Strike ${this.strikes}!`);
+                    this.resetPitch();
+                }
+                this.updateUI();
+            }
+
+            registerOut(message) {
+                this.outs++;
+                this.showHitIndicator(message);
+                
+                if (this.outs >= 3) {
+                    setTimeout(() => this.endHalfInning(), 1500);
+                } else {
+                    this.resetCount();
+                    this.nextBatter();
+                }
+                
+                this.updateUI();
+            }
+
+            resetCount() {
+                this.balls = 0;
+                this.strikes = 0;
+            }
+
+            nextBatter() {
+                this.currentBatterIndex = (this.currentBatterIndex + 1) % 9;
+                this.resetPitch();
+            }
+
+            resetPitch() {
+                if (this.ball) {
+                    this.scene.remove(this.ball);
+                    this.ball = null;
+                }
+                
+                this.isPitching = false;
+                this.isSwinging = false;
+                document.getElementById('pitchBtn').disabled = false;
+                document.getElementById('swingBtn').disabled = true;
+                
+                this.updateUI();
+            }
+
+            endHalfInning() {
+                this.outs = 0;
+                this.bases = [false, false, false];
+                this.currentBatterIndex = 0;
+                this.resetCount();
+                
+                if (this.isTopOfInning) {
+                    this.isTopOfInning = false;
+                } else {
+                    this.inning++;
+                    this.isTopOfInning = true;
+                    
+                    if (this.inning > this.maxInnings) {
+                        this.endGame();
+                        return;
+                    }
+                }
+                
+                // Recreate fielders and pitcher/batter with new team colors
+                this.updateTeamColors();
+                this.updateUI();
+                this.showMessage('Inning Change', `${this.isTopOfInning ? 'Top' : 'Bottom'} of inning ${this.inning}`);
+            }
+
+            updateTeamColors() {
+                // Update pitcher
+                const pitcherTeam = this.isTopOfInning ? this.homeTeam : this.awayTeam;
+                this.pitcher.material.color.setHex(pitcherTeam.color);
+                if (this.pitcherHead) this.pitcherHead.material.color.setHex(pitcherTeam.color);
+                
+                // Update batter
+                const batterTeam = this.isTopOfInning ? this.awayTeam : this.homeTeam;
+                this.batter.material.color.setHex(batterTeam.color);
+                if (this.batterHead) this.batterHead.material.color.setHex(batterTeam.color);
+                
+                // Update fielders
+                this.fielders.forEach((fielder, index) => {
+                    fielder.material.color.setHex(pitcherTeam.color);
+                    if (this.fielderHeads && this.fielderHeads[index]) {
+                        this.fielderHeads[index].material.color.setHex(pitcherTeam.color);
+                    }
+                });
+            }
+
+            endGame() {
+                this.gameOver = true;
+                
+                let winner = '';
+                if (this.homeScore > this.awayScore) {
+                    winner = this.homeTeam.name;
+                } else if (this.awayScore > this.homeScore) {
+                    winner = this.awayTeam.name;
+                } else {
+                    winner = 'Tie Game';
+                }
+                
+                this.showMessage('Game Over!', 
+                    `${winner} wins!\n\nFinal Score:\n${this.awayTeam.name}: ${this.awayScore}\n${this.homeTeam.name}: ${this.homeScore}\n\nThanks for playing!`
+                );
+            }
+
+            showHitIndicator(text) {
+                const indicator = document.getElementById('hitIndicator');
+                indicator.textContent = text;
+                indicator.classList.add('show');
+                
+                setTimeout(() => {
+                    indicator.classList.remove('show');
+                }, 1500);
+            }
+
+            showMessage(title, text) {
+                document.getElementById('messageTitle').textContent = title;
+                document.getElementById('messageText').textContent = text;
+                document.getElementById('messageBox').classList.add('show');
+            }
+
+            dismissMessage() {
+                document.getElementById('messageBox').classList.remove('show');
+            }
+
+            updateUI() {
+                // Team names
+                document.getElementById('homeTeamName').textContent = this.homeTeam.name;
+                document.getElementById('awayTeamName').textContent = this.awayTeam.name;
+                
+                // Scores
+                document.getElementById('homeScore').textContent = this.homeScore;
+                document.getElementById('awayScore').textContent = this.awayScore;
+                
+                // Inning
+                document.getElementById('inningDisplay').textContent = this.inning;
+                document.getElementById('halfInning').textContent = this.isTopOfInning ? 'Top' : 'Bottom';
+                
+                // Count
+                document.getElementById('ballsCount').textContent = this.balls;
+                document.getElementById('strikesCount').textContent = this.strikes;
+                
+                // Outs
+                const outIndicators = document.querySelectorAll('.out-indicator');
+                outIndicators.forEach((indicator, index) => {
+                    if (index < this.outs) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+                
+                // Bases
+                document.getElementById('base1').classList.toggle('occupied', this.bases[0]);
+                document.getElementById('base2').classList.toggle('occupied', this.bases[1]);
+                document.getElementById('base3').classList.toggle('occupied', this.bases[2]);
+                
+                // Current batter
+                const currentTeam = this.isTopOfInning ? this.awayTeam : this.homeTeam;
+                const batter = currentTeam.players[this.currentBatterIndex];
+                document.getElementById('batterName').textContent = batter.name;
+                document.getElementById('batterStats').textContent = 
+                    `AVG: ${batter.batting.toFixed(3)} | PWR: ${batter.power.toFixed(2)} | SPD: ${batter.speed.toFixed(2)}`;
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+
+                // Update ball physics
+                if (this.ball && this.isPitching) {
+                    this.ball.position.add(this.ballVelocity);
+                    this.ballVelocity.y -= 0.02; // Gravity
+                    
+                    // Check if ball hit ground or went out of bounds
+                    if (this.ball.position.y < 0.3 || Math.abs(this.ball.position.x) > 100 || this.ball.position.z < -100) {
+                        if (!this.isSwinging) {
+                            // Ball passed home plate without being hit
+                            this.balls++;
+                            if (this.balls >= 4) {
+                                this.showHitIndicator('Walk! 🚶');
+                                this.advanceRunners(1);
+                            } else {
+                                this.showHitIndicator(`Ball ${this.balls}`);
+                                this.resetPitch();
+                            }
+                        }
+                        this.updateUI();
+                        this.scene.remove(this.ball);
+                        this.ball = null;
+                        this.isPitching = false;
+                        document.getElementById('pitchBtn').disabled = false;
+                        document.getElementById('swingBtn').disabled = true;
+                    }
+                }
+
+                this.renderer.render(this.scene, this.camera);
+            }
+
+            onWindowResize() {
+                this.camera.aspect = window.innerWidth / window.innerHeight;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        }
+
+        // Start the game
+        let game;
+        window.addEventListener('load', () => {
+            game = new SandlotBaseballGame();
+        });
+    </script>
+</body>
+</html>
