@@ -1,0 +1,594 @@
+{
+    "characters": [
+        {
+            "id": "char_001",
+            "name": "Marcus Thunder",
+            "nickname": "The Bolt",
+            "age": 12,
+            "bio": "Marcus grew up watching lightning storms and decided to be just as unstoppable. Known for his electric speed and shocking power at the plate.",
+            "stats": {
+                "batting": 9,
+                "power": 8,
+                "speed": 10,
+                "pitching": 6,
+                "fielding": 8
+            },
+            "position": "CF",
+            "specialAbility": {
+                "id": "lightning_speed",
+                "name": "Lightning Speed",
+                "description": "Automatically advances an extra base on any hit",
+                "cooldown": 3,
+                "type": "PASSIVE_RUNNING"
+            },
+            "personality": ["Energetic", "Competitive", "Team Leader"],
+            "appearance": {
+                "skinTone": "medium",
+                "hairStyle": "short_spiky",
+                "hairColor": "black",
+                "accessories": ["headband"]
+            },
+            "favoriteNumber": 7
+        },
+        {
+            "id": "char_002",
+            "name": "Sofia Martinez",
+            "nickname": "The Cannon",
+            "age": 11,
+            "bio": "Sofia's arm is legendary in the neighborhood. She once threw a ball clear over the old oak tree in center field.",
+            "stats": {
+                "batting": 7,
+                "power": 6,
+                "speed": 7,
+                "pitching": 10,
+                "fielding": 9
+            },
+            "position": "P",
+            "specialAbility": {
+                "id": "rocket_arm",
+                "name": "Rocket Arm",
+                "description": "Throws an unhittable fastball (one use per game)",
+                "cooldown": 99,
+                "type": "ACTIVE_PITCH"
+            },
+            "personality": ["Determined", "Focused", "Natural Leader"],
+            "appearance": {
+                "skinTone": "tan",
+                "hairStyle": "long_ponytail",
+                "hairColor": "dark_brown",
+                "accessories": ["wristbands"]
+            },
+            "favoriteNumber": 22
+        },
+        {
+            "id": "char_003",
+            "name": "Tommy 'Tank' Chen",
+            "nickname": "Tank",
+            "age": 12,
+            "bio": "The biggest kid in the neighborhood, Tommy can hit the ball farther than anyone. He's gentle off the field but a powerhouse on it.",
+            "stats": {
+                "batting": 8,
+                "power": 10,
+                "speed": 4,
+                "pitching": 5,
+                "fielding": 7
+            },
+            "position": "1B",
+            "specialAbility": {
+                "id": "mega_blast",
+                "name": "Mega Blast",
+                "description": "Next hit has double power - guaranteed home run on contact",
+                "cooldown": 4,
+                "type": "ACTIVE_BATTING"
+            },
+            "personality": ["Gentle Giant", "Reliable", "Patient"],
+            "appearance": {
+                "skinTone": "light",
+                "hairStyle": "buzzcut",
+                "hairColor": "black",
+                "accessories": ["batting_gloves"]
+            },
+            "favoriteNumber": 88
+        },
+        {
+            "id": "char_004",
+            "name": "Jasmine 'Jazz' Williams",
+            "nickname": "Jazz",
+            "age": 10,
+            "bio": "Quick reflexes and quicker wit. Jazz can catch anything hit her way and loves to make diving plays.",
+            "stats": {
+                "batting": 6,
+                "power": 4,
+                "speed": 9,
+                "pitching": 5,
+                "fielding": 10
+            },
+            "position": "SS",
+            "specialAbility": {
+                "id": "wall_climber",
+                "name": "Super Catch",
+                "description": "Can catch any ball in her zone, even home runs",
+                "cooldown": 3,
+                "type": "ACTIVE_FIELDING"
+            },
+            "personality": ["Acrobatic", "Cheerful", "Confident"],
+            "appearance": {
+                "skinTone": "dark",
+                "hairStyle": "braids",
+                "hairColor": "black",
+                "accessories": ["sunglasses"]
+            },
+            "favoriteNumber": 3
+        },
+        {
+            "id": "char_005",
+            "name": "Lucas 'Lucky' O'Brien",
+            "nickname": "Lucky",
+            "age": 9,
+            "bio": "Some kids practice for hours. Lucas just seems to have natural talent. His teammates swear he has a lucky charm.",
+            "stats": {
+                "batting": 9,
+                "power": 7,
+                "speed": 8,
+                "pitching": 7,
+                "fielding": 8
+            },
+            "position": "RF",
+            "specialAbility": {
+                "id": "clutch_gene",
+                "name": "Clutch Gene",
+                "description": "Batting bonus in innings 7-9 or when behind",
+                "cooldown": 0,
+                "type": "PASSIVE_BATTING"
+            },
+            "personality": ["Lucky", "Laid-back", "Clutch Performer"],
+            "appearance": {
+                "skinTone": "fair",
+                "hairStyle": "messy",
+                "hairColor": "red",
+                "accessories": ["lucky_charm"]
+            },
+            "favoriteNumber": 13
+        },
+        {
+            "id": "char_006",
+            "name": "Maya Patel",
+            "nickname": "The Professor",
+            "age": 11,
+            "bio": "Maya studies every pitcher's habits and knows exactly when to swing. Her batting average speaks for itself.",
+            "stats": {
+                "batting": 10,
+                "power": 5,
+                "speed": 7,
+                "pitching": 6,
+                "fielding": 8
+            },
+            "position": "2B",
+            "specialAbility": {
+                "id": "eagle_eye",
+                "name": "Eagle Eye",
+                "description": "Perfect strike zone vision - guaranteed walk on 4 pitches",
+                "cooldown": 4,
+                "type": "ACTIVE_BATTING"
+            },
+            "personality": ["Analytical", "Smart", "Strategic"],
+            "appearance": {
+                "skinTone": "brown",
+                "hairStyle": "short_bob",
+                "hairColor": "black",
+                "accessories": ["glasses"]
+            },
+            "favoriteNumber": 42
+        },
+        {
+            "id": "char_007",
+            "name": "Diego 'Dash' Rodriguez",
+            "nickname": "Dash",
+            "age": 10,
+            "bio": "Fastest kid in three zip codes. Diego can steal bases like nobody's business and turns singles into doubles.",
+            "stats": {
+                "batting": 7,
+                "power": 3,
+                "speed": 10,
+                "pitching": 4,
+                "fielding": 8
+            },
+            "position": "LF",
+            "specialAbility": {
+                "id": "speedster",
+                "name": "Speedster",
+                "description": "Steals an extra base automatically on any hit",
+                "cooldown": 3,
+                "type": "PASSIVE_RUNNING"
+            },
+            "personality": ["Hyper", "Enthusiastic", "Never Stops Moving"],
+            "appearance": {
+                "skinTone": "tan",
+                "hairStyle": "mohawk",
+                "hairColor": "brown",
+                "accessories": ["sweatband"]
+            },
+            "favoriteNumber": 1
+        },
+        {
+            "id": "char_008",
+            "name": "Emma 'Ice' Anderson",
+            "nickname": "Ice",
+            "age": 12,
+            "bio": "Nothing rattles Emma. Down by 5 in the last inning? She'll step up and deliver. Ice in her veins.",
+            "stats": {
+                "batting": 8,
+                "power": 7,
+                "speed": 6,
+                "pitching": 9,
+                "fielding": 7
+            },
+            "position": "P",
+            "specialAbility": {
+                "id": "ice_veins",
+                "name": "Ice in Veins",
+                "description": "Massive clutch bonus in pressure situations",
+                "cooldown": 0,
+                "type": "PASSIVE_CLUTCH"
+            },
+            "personality": ["Cool Under Pressure", "Fearless", "Reliable"],
+            "appearance": {
+                "skinTone": "fair",
+                "hairStyle": "straight_long",
+                "hairColor": "blonde",
+                "accessories": ["arm_sleeve"]
+            },
+            "favoriteNumber": 99
+        },
+        {
+            "id": "char_009",
+            "name": "Jamal 'J-Rock' Jackson",
+            "nickname": "J-Rock",
+            "age": 11,
+            "bio": "Solid as a rock behind the plate. J-Rock calls the pitches and keeps everyone in line. Great hitter too.",
+            "stats": {
+                "batting": 8,
+                "power": 8,
+                "speed": 5,
+                "pitching": 3,
+                "fielding": 9
+            },
+            "position": "C",
+            "specialAbility": {
+                "id": "rally_starter",
+                "name": "Rally Starter",
+                "description": "Hits are contagious - next batter gets bonus",
+                "cooldown": 4,
+                "type": "ACTIVE_TEAM"
+            },
+            "personality": ["Steady", "Encouraging", "Team Player"],
+            "appearance": {
+                "skinTone": "dark",
+                "hairStyle": "fade",
+                "hairColor": "black",
+                "accessories": ["chain_necklace"]
+            },
+            "favoriteNumber": 24
+        },
+        {
+            "id": "char_010",
+            "name": "Olivia 'Rocket' Kim",
+            "nickname": "Rocket",
+            "age": 10,
+            "bio": "Olivia's dad is an aerospace engineer, and she's obsessed with rockets. Her hits launch like she's sending them to space.",
+            "stats": {
+                "batting": 7,
+                "power": 9,
+                "speed": 6,
+                "pitching": 5,
+                "fielding": 7
+            },
+            "position": "3B",
+            "specialAbility": {
+                "id": "moon_shot",
+                "name": "Moon Shot",
+                "description": "Hit travels twice as far - epic home runs",
+                "cooldown": 5,
+                "type": "ACTIVE_BATTING"
+            },
+            "personality": ["Science Nerd", "Ambitious", "Dreamer"],
+            "appearance": {
+                "skinTone": "light",
+                "hairStyle": "bun",
+                "hairColor": "black",
+                "accessories": ["nasa_patch"]
+            },
+            "favoriteNumber": 10
+        },
+        {
+            "id": "char_011",
+            "name": "Carter 'Wheels' Murphy",
+            "nickname": "Wheels",
+            "age": 9,
+            "bio": "Carter rides his bike everywhere and has legs like pistons. He's fast, agile, and can track down any fly ball.",
+            "stats": {
+                "batting": 6,
+                "power": 4,
+                "speed": 9,
+                "pitching": 5,
+                "fielding": 9
+            },
+            "position": "CF",
+            "specialAbility": {
+                "id": "bike_speed",
+                "name": "Bike Speed",
+                "description": "Covers entire outfield - catches everything",
+                "cooldown": 3,
+                "type": "ACTIVE_FIELDING"
+            },
+            "personality": ["Active", "Adventurous", "Positive"],
+            "appearance": {
+                "skinTone": "medium",
+                "hairStyle": "shaggy",
+                "hairColor": "brown",
+                "accessories": ["bike_helmet"]
+            },
+            "favoriteNumber": 5
+        },
+        {
+            "id": "char_012",
+            "name": "Zoe 'Zigzag' Taylor",
+            "nickname": "Zigzag",
+            "age": 11,
+            "bio": "Unpredictable and crafty, Zoe keeps everyone guessing. As a pitcher, she throws the trickiest pitches in the game.",
+            "stats": {
+                "batting": 6,
+                "power": 5,
+                "speed": 7,
+                "pitching": 9,
+                "fielding": 7
+            },
+            "position": "P",
+            "specialAbility": {
+                "id": "trick_pitch",
+                "name": "Trick Pitch",
+                "description": "Confuses batter - high strikeout chance",
+                "cooldown": 3,
+                "type": "ACTIVE_PITCH"
+            },
+            "personality": ["Creative", "Unpredictable", "Clever"],
+            "appearance": {
+                "skinTone": "fair",
+                "hairStyle": "pigtails",
+                "hairColor": "dirty_blonde",
+                "accessories": ["colorful_socks"]
+            },
+            "favoriteNumber": 33
+        },
+        {
+            "id": "char_013",
+            "name": "Andre 'The Wall' Johnson",
+            "nickname": "The Wall",
+            "age": 12,
+            "bio": "Nothing gets past Andre at first base. He's a brick wall with a glove, and his patience at the plate draws walks.",
+            "stats": {
+                "batting": 7,
+                "power": 6,
+                "speed": 4,
+                "pitching": 4,
+                "fielding": 10
+            },
+            "position": "1B",
+            "specialAbility": {
+                "id": "defensive_wall",
+                "name": "The Wall",
+                "description": "Creates an impenetrable infield defense",
+                "cooldown": 3,
+                "type": "ACTIVE_FIELDING"
+            },
+            "personality": ["Dependable", "Calm", "Protective"],
+            "appearance": {
+                "skinTone": "dark",
+                "hairStyle": "cornrows",
+                "hairColor": "black",
+                "accessories": ["armband"]
+            },
+            "favoriteNumber": 21
+        },
+        {
+            "id": "char_014",
+            "name": "Lily 'Spark' Chen",
+            "nickname": "Spark",
+            "age": 8,
+            "bio": "The youngest player but don't let that fool you. Lily's got spark and energy that ignites the whole team.",
+            "stats": {
+                "batting": 5,
+                "power": 3,
+                "speed": 8,
+                "pitching": 4,
+                "fielding": 6
+            },
+            "position": "2B",
+            "specialAbility": {
+                "id": "spark_plug",
+                "name": "Spark Plug",
+                "description": "Energizes entire team - everyone gets stat boost",
+                "cooldown": 5,
+                "type": "ACTIVE_TEAM"
+            },
+            "personality": ["Bubbly", "Inspiring", "Fearless"],
+            "appearance": {
+                "skinTone": "light",
+                "hairStyle": "short_pixie",
+                "hairColor": "black",
+                "accessories": ["ribbons"]
+            },
+            "favoriteNumber": 8
+        },
+        {
+            "id": "char_015",
+            "name": "Ryan 'Cannon' McGrath",
+            "nickname": "Cannon",
+            "age": 11,
+            "bio": "Ryan's got one of the strongest arms in right field. Runners think twice before trying to advance when he's out there.",
+            "stats": {
+                "batting": 7,
+                "power": 8,
+                "speed": 6,
+                "pitching": 7,
+                "fielding": 9
+            },
+            "position": "RF",
+            "specialAbility": {
+                "id": "laser_throw",
+                "name": "Laser Throw",
+                "description": "Perfect throw to any base - guaranteed out",
+                "cooldown": 4,
+                "type": "ACTIVE_FIELDING"
+            },
+            "personality": ["Strong", "Competitive", "Focused"],
+            "appearance": {
+                "skinTone": "fair",
+                "hairStyle": "crew_cut",
+                "hairColor": "brown",
+                "accessories": ["elbow_pad"]
+            },
+            "favoriteNumber": 44
+        },
+        {
+            "id": "char_016",
+            "name": "Keisha 'Blaze' Robinson",
+            "nickname": "Blaze",
+            "age": 10,
+            "bio": "Fast, fierce, and on fire! Keisha plays with passion and intensity that lights up the field.",
+            "stats": {
+                "batting": 8,
+                "power": 6,
+                "speed": 9,
+                "pitching": 6,
+                "fielding": 8
+            },
+            "position": "LF",
+            "specialAbility": {
+                "id": "hot_streak",
+                "name": "Hot Streak",
+                "description": "After a hit, next at-bat is boosted significantly",
+                "cooldown": 0,
+                "type": "PASSIVE_BATTING"
+            },
+            "personality": ["Passionate", "Intense", "Driven"],
+            "appearance": {
+                "skinTone": "dark",
+                "hairStyle": "afro",
+                "hairColor": "black",
+                "accessories": ["wristbands"]
+            },
+            "favoriteNumber": 11
+        },
+        {
+            "id": "char_017",
+            "name": "Alex 'Ace' Santos",
+            "nickname": "Ace",
+            "age": 12,
+            "bio": "The ultimate all-around player. Alex can pitch, hit, field - you name it. A true five-tool superstar.",
+            "stats": {
+                "batting": 9,
+                "power": 8,
+                "speed": 8,
+                "pitching": 9,
+                "fielding": 9
+            },
+            "position": "SS",
+            "specialAbility": {
+                "id": "all_star",
+                "name": "All-Star Mode",
+                "description": "All stats boosted for one full inning",
+                "cooldown": 6,
+                "type": "ACTIVE_ALL"
+            },
+            "personality": ["Talented", "Humble", "Hardworking"],
+            "appearance": {
+                "skinTone": "tan",
+                "hairStyle": "slicked_back",
+                "hairColor": "black",
+                "accessories": ["captain_band"]
+            },
+            "favoriteNumber": 1
+        },
+        {
+            "id": "char_018",
+            "name": "Mia 'Magnet' Lee",
+            "nickname": "Magnet",
+            "age": 9,
+            "bio": "It's like the ball is attracted to her glove! Mia makes impossible catches look routine.",
+            "stats": {
+                "batting": 5,
+                "power": 4,
+                "speed": 7,
+                "pitching": 5,
+                "fielding": 10
+            },
+            "position": "3B",
+            "specialAbility": {
+                "id": "magnetic_glove",
+                "name": "Magnetic Glove",
+                "description": "Attracts all balls hit near her - auto-catch",
+                "cooldown": 3,
+                "type": "ACTIVE_FIELDING"
+            },
+            "personality": ["Graceful", "Focused", "Precise"],
+            "appearance": {
+                "skinTone": "light",
+                "hairStyle": "high_ponytail",
+                "hairColor": "black",
+                "accessories": ["headband"]
+            },
+            "favoriteNumber": 9
+        }
+    ],
+    "teams": [
+        {
+            "id": "team_sandlot",
+            "name": "Sandlot Sluggers",
+            "shortName": "Sluggers",
+            "color": "#FF6B35",
+            "secondaryColor": "#004E89",
+            "logo": "⚾"
+        },
+        {
+            "id": "team_backyard",
+            "name": "Backyard Bombers",
+            "shortName": "Bombers",
+            "color": "#C41E3A",
+            "secondaryColor": "#FFD700",
+            "logo": "💥"
+        },
+        {
+            "id": "team_diamond",
+            "name": "Diamond Dogs",
+            "shortName": "Dogs",
+            "color": "#00A86B",
+            "secondaryColor": "#FFFFFF",
+            "logo": "🐕"
+        },
+        {
+            "id": "team_legends",
+            "name": "Neighborhood Legends",
+            "shortName": "Legends",
+            "color": "#8B4789",
+            "secondaryColor": "#FFA500",
+            "logo": "⭐"
+        },
+        {
+            "id": "team_rebels",
+            "name": "Rebel Runners",
+            "shortName": "Rebels",
+            "color": "#1E90FF",
+            "secondaryColor": "#FF0000",
+            "logo": "🏃"
+        },
+        {
+            "id": "team_thunder",
+            "name": "Thunder Strikers",
+            "shortName": "Thunder",
+            "color": "#FFD700",
+            "secondaryColor": "#000000",
+            "logo": "⚡"
+        }
+    ]
+}
