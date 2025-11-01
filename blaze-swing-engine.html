@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sandlot Superstars - Lone Star Legends Demo</title>
     <meta name="description" content="Play a full 3-inning demo game with unique teams and characters. Backyard-style baseball fun!">
-    <script src="/assets/three.min.js"></script>
+    <!-- Three.js library - local copy with CDN fallback -->
+    <script src="/assets/three.min.js" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js'"></script>
     <style>
         :root {
             --blaze-orange: #FF6B35;
@@ -515,21 +516,28 @@
             }
 
             createField() {
+                // Field dimensions and constants
+                const FIELD_RADIUS = 150; // Full field radius in game units
+                const INFIELD_RADIUS = 35; // Infield dirt radius
+                const QUARTER_CIRCLE = Math.PI / 2; // 90 degrees for quarter circle infield
+                const FORTY_FIVE_DEGREES = Math.PI / 4; // 45 degrees rotation
+                const NINETY_DEGREES = -Math.PI / 2; // Rotate to horizontal plane
+                
                 // Main grass field
-                const fieldGeometry = new THREE.CircleGeometry(150, 64);
+                const fieldGeometry = new THREE.CircleGeometry(FIELD_RADIUS, 64);
                 const fieldMaterial = new THREE.MeshLambertMaterial({ color: 0x2D5016 });
                 const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
-                field.rotation.x = -Math.PI / 2;
+                field.rotation.x = NINETY_DEGREES; // Lay flat on ground
                 field.receiveShadow = true;
                 this.scene.add(field);
 
-                // Infield dirt
-                const infieldGeometry = new THREE.CircleGeometry(35, 32, 0, Math.PI / 2);
+                // Infield dirt (quarter circle from home plate)
+                const infieldGeometry = new THREE.CircleGeometry(INFIELD_RADIUS, 32, 0, QUARTER_CIRCLE);
                 const infieldMaterial = new THREE.MeshLambertMaterial({ color: 0x8B7355 });
                 const infield = new THREE.Mesh(infieldGeometry, infieldMaterial);
-                infield.rotation.x = -Math.PI / 2;
-                infield.rotation.z = -Math.PI / 4;
-                infield.position.y = 0.05;
+                infield.rotation.x = NINETY_DEGREES; // Lay flat
+                infield.rotation.z = -FORTY_FIVE_DEGREES; // Rotate to align with diamond
+                infield.position.y = 0.05; // Slightly above grass to prevent z-fighting
                 this.scene.add(infield);
 
                 // Pitcher's dirt circle
