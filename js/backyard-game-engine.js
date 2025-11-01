@@ -213,10 +213,34 @@ class BackyardGameEngine {
         this.addToLog(`🚶 ${batter.name} walks to first base!`, true);
         this.stats.walks++;
         
-        // Advance runners
-        this.advanceRunners(1, false);
+        // Walk advances runners only by force
+        let runsScored = 0;
+        
+        // If bases are loaded, runner on third scores
+        if (this.bases[0] && this.bases[1] && this.bases[2]) {
+            this.bases[2].runs++;
+            runsScored++;
+            this.currentBattingTeam.score++;
+            batter.rbis++;
+            // Move everyone up
+            this.bases[2] = this.bases[1];
+            this.bases[1] = this.bases[0];
+        } else if (this.bases[0] && this.bases[1]) {
+            // First and second occupied, move to second and third
+            this.bases[2] = this.bases[1];
+            this.bases[1] = this.bases[0];
+        } else if (this.bases[0]) {
+            // Only first occupied, move to second
+            this.bases[1] = this.bases[0];
+        }
+        // Otherwise runners stay where they are (no force)
+        
         // Put batter on first
         this.bases[0] = batter;
+        
+        if (runsScored > 0) {
+            this.addToLog(`🎉 ${runsScored} run${runsScored > 1 ? 's' : ''} score!`, true);
+        }
         
         this.nextBatter();
     }
@@ -257,23 +281,25 @@ class BackyardGameEngine {
     
     processHomeRun(batter) {
         // Count runners on base
-        let runsScored = 1; // Batter scores
+        let runnersOnBase = 0;
         this.bases.forEach(runner => {
             if (runner) {
-                runsScored++;
+                runnersOnBase++;
                 runner.runs++;
             }
         });
         
+        let totalRuns = runnersOnBase + 1; // Runners + batter
+        
         this.addToLog(`🚀💥 HOME RUN!!! ${batter.name} crushes it out of the park!`, true);
-        this.addToLog(`🎊 ${runsScored} run${runsScored > 1 ? 's' : ''} score!!!`, true);
+        this.addToLog(`🎊 ${totalRuns} run${totalRuns > 1 ? 's' : ''} score!!!`, true);
         
         this.stats.homeRuns++;
         batter.hits++;
         batter.atBats++;
         batter.runs++;
-        batter.rbis += runsScored;
-        this.currentBattingTeam.score += runsScored;
+        batter.rbis += runnersOnBase; // RBIs are only for runners driven in, not the batter
+        this.currentBattingTeam.score += totalRuns;
         this.currentBattingTeam.hits++;
         
         // Clear bases
