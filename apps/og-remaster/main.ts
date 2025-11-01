@@ -3,7 +3,7 @@
  * Backyard Baseball-style game with Blaze Intelligence polish
  */
 
-import { CanvasRenderer } from './renderer/CanvasRenderer';
+import { BlazeGraphicsRenderer } from './renderer/BlazeGraphicsRenderer';
 import { GameState } from '../../packages/rules/gameState';
 import { InputManager } from './input';
 import { AudioEngine } from './audio/AudioEngine';
@@ -21,7 +21,7 @@ class OGRemasterGame {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private gameState: GameState;
-  private renderer: CanvasRenderer;
+  private renderer: BlazeGraphicsRenderer;
   private inputManager: InputManager;
   private audioEngine: AudioEngine;
   private commentaryEngine: CommentaryEngine;
@@ -54,7 +54,7 @@ class OGRemasterGame {
 
     // Initialize game systems
     this.gameState = new GameState();
-    this.renderer = new CanvasRenderer(ctx, this.gameState, config);
+    this.renderer = new BlazeGraphicsRenderer(this.canvas, this.gameState);
     this.audioEngine = new AudioEngine();
     this.inputManager = new InputManager(this.gameState);
     this.commentaryEngine = new CommentaryEngine();

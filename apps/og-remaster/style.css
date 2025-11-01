@@ -5,18 +5,120 @@
 html, body {
   margin: 0;
   height: 100%;
-  background: var(--og-bg);
+  background: linear-gradient(135deg, #0a1628 0%, #1a2640 50%, #0f1b2e 100%);
+  background-attachment: fixed;
   font-family: var(--bi-font-secondary);
   color: var(--og-ui-text);
+  overflow: hidden;
 }
 
-/* Canvas style: center and outline */
+/* Animated background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(78, 205, 196, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
+  animation: backgroundPulse 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes backgroundPulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Canvas style: center and outline with glow */
 canvas#gameCanvas {
   display: block;
   margin: 0 auto;
   max-width: 100%;
-  outline: 2px solid var(--bi-platinum);
+  border: 3px solid rgba(78, 205, 196, 0.6);
+  border-radius: 12px;
+  box-shadow:
+    0 0 30px rgba(78, 205, 196, 0.3),
+    0 0 60px rgba(78, 205, 196, 0.2),
+    0 10px 40px rgba(0, 0, 0, 0.5);
   background: radial-gradient(1200px 800px at 50% 50%, #78c261, var(--og-field));
+  position: relative;
+  z-index: 1;
+  animation: canvasGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes canvasGlow {
+  0% {
+    box-shadow:
+      0 0 30px rgba(78, 205, 196, 0.3),
+      0 0 60px rgba(78, 205, 196, 0.2),
+      0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+  100% {
+    box-shadow:
+      0 0 40px rgba(78, 205, 196, 0.5),
+      0 0 80px rgba(78, 205, 196, 0.3),
+      0 10px 50px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* Loading screen */
+#loadingScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #0a1628 0%, #1a2640 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease-out;
+}
+
+#loadingScreen.fade-out {
+  opacity: 0;
+}
+
+#loadingSpinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(78, 205, 196, 0.2);
+  border-top: 4px solid #4ecdc4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#loadingScreen div:last-child {
+  color: #4ecdc4;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* Generic UI card for future use */
@@ -24,11 +126,26 @@ canvas#gameCanvas {
   position: absolute;
   top: 20px;
   left: 20px;
-  background: var(--og-ui-bg);
+  background: rgba(10, 22, 40, 0.9);
   padding: 16px;
   border-radius: 12px;
-  border: 1px solid color-mix(in oklab, var(--bi-pearl) 30%, transparent);
-  backdrop-filter: blur(3px);
+  border: 2px solid rgba(78, 205, 196, 0.4);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: slideInLeft 0.5s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* Button styling for menus */
@@ -36,12 +153,101 @@ canvas#gameCanvas {
   font-family: var(--bi-font-primary);
   font-weight: 600;
   letter-spacing: .4px;
-  background: var(--bi-burnt-orange);
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8555 100%);
   color: white;
   border: none;
-  padding: 10px 14px;
+  padding: 12px 24px;
   border-radius: 10px;
-  transition: transform .15s var(--bi-ease), filter .2s var(--bi-ease);
+  transition: all 0.3s var(--bi-ease);
+  cursor: pointer;
+  box-shadow:
+    0 4px 15px rgba(255, 107, 53, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
 }
-.button:hover { filter: brightness(1.1); transform: translateY(-1px); }
-.button:active { transform: translateY(0); }
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 20px rgba(255, 107, 53, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.button:hover::before {
+  left: 100%;
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow:
+    0 2px 10px rgba(255, 107, 53, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile controls */
+#mobileControls {
+  animation: slideInUp 0.5s ease-out 0.5s both;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+#mobileControls button {
+  font-family: var(--bi-font-primary);
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 18px 36px;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+#swingBtn {
+  background: linear-gradient(135deg, #BF5700 0%, #D66B00 100%);
+  color: white;
+}
+
+#advanceBtn {
+  background: linear-gradient(135deg, #00B2A9 0%, #00D4C8 100%);
+  color: white;
+}
+
+#mobileControls button:active {
+  transform: scale(0.95);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Utility class */
+.hidden {
+  display: none !important;
+}
