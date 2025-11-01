@@ -295,6 +295,89 @@
             position: relative;
         }
 
+        /* Game Container Styles */
+        .game-container {
+            max-width: 1400px;
+            margin: 40px auto 80px;
+            padding: 0 40px;
+        }
+
+        .game-frame {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 75%; /* 4:3 aspect ratio */
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(10, 10, 10, 0.95) 100%);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3), 0 0 40px rgba(255, 107, 53, 0.1);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .game-frame::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--blaze-orange), var(--blaze-purple), var(--blaze-blue), var(--blaze-orange));
+            background-size: 200% 200%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: borderGlow 3s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .game-frame iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 21px;
+        }
+
+        .game-section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--blaze-orange) 0%, var(--blaze-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .game-section-description {
+            color: var(--blaze-muted);
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .game-section-buttons {
+            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .game-section-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
         .hero::before {
             content: '';
             position: absolute;
@@ -1061,12 +1144,33 @@
                 Real-time performance data, predictive AI modeling, and immersive gaming experiences
                 for Cardinals, Titans, Longhorns, and Grizzlies.
             </p>
-            <div class="hero-buttons">
-                <a href="/blaze-branded-game.html" class="hero-button">
-                    🎮 Play Sandlot Superstars
-                </a>
+        </section>
+
+        <!-- Embedded Game Section -->
+        <section class="game-container" id="gameSection">
+            <div class="game-section-header">
+                <h3 class="game-section-title">
+                    🎮 Play Sandlot Superstars Now
+                </h3>
+                <p class="game-section-description">
+                    Three innings of pure baseball action. Click "Next Play / Pitch" to start playing!
+                </p>
+            </div>
+            <div class="game-frame">
+                <iframe
+                    src="/games/baseball/index.html"
+                    title="Sandlot Superstars Baseball Game"
+                    allow="accelerometer; gyroscope; fullscreen"
+                    sandbox="allow-scripts allow-same-origin allow-forms"
+                    loading="eager"
+                ></iframe>
+            </div>
+            <div class="game-section-buttons">
                 <a href="/blaze-analytics-integration.html" class="hero-button hero-button-secondary">
                     📊 View Analytics Dashboard
+                </a>
+                <a href="/blaze-branded-game.html" class="hero-button hero-button-secondary">
+                    🎮 More Games & Info
                 </a>
             </div>
         </section>
