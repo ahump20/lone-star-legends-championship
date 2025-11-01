@@ -784,7 +784,7 @@ class SandlotShowdown {
     this.elements.modalTitle.textContent = homeRuns > visitorRuns ? "Roadrunners Win!" : homeRuns < visitorRuns ? "Orbiters Triumph" : "Sandlot Tie";
     this.elements.modalSummary.textContent = `${this.state.scoreboard[CPU_TEAM_INDEX].runs}-${this.state.scoreboard[USER_TEAM_INDEX].runs} final. ${summary}`;
     this.showModal();
-    this.logMoment({ title: "Game Over", detail: `${visitorRuns}-${homeRuns} final. ${summary}`, tag: "highlight" });
+    this.logMoment({ title: "Game Over", detail: `${this.state.scoreboard[CPU_TEAM_INDEX].runs}-${this.state.scoreboard[USER_TEAM_INDEX].runs} final. ${summary}`, tag: "highlight" });
   }
 
   showModal() {
