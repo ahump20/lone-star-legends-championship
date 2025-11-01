@@ -348,6 +348,60 @@
     </div>
 
     <script>
+        // Sound Effects (Procedural Audio)
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = AudioContext ? new AudioContext() : null;
+
+        function playSound(type) {
+            if (!audioCtx) return;
+            
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            switch(type) {
+                case 'pitch':
+                    oscillator.frequency.setValueAtTime(200, audioCtx.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+                    gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    oscillator.start(audioCtx.currentTime);
+                    oscillator.stop(audioCtx.currentTime + 0.3);
+                    break;
+                case 'hit':
+                    oscillator.frequency.setValueAtTime(300, audioCtx.currentTime);
+                    gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                    oscillator.start(audioCtx.currentTime);
+                    oscillator.stop(audioCtx.currentTime + 0.2);
+                    break;
+                case 'homerun':
+                    for (let i = 0; i < 3; i++) {
+                        setTimeout(() => {
+                            const osc = audioCtx.createOscillator();
+                            const gain = audioCtx.createGain();
+                            osc.connect(gain);
+                            gain.connect(audioCtx.destination);
+                            osc.frequency.setValueAtTime(400 + i * 100, audioCtx.currentTime);
+                            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                            osc.start(audioCtx.currentTime);
+                            osc.stop(audioCtx.currentTime + 0.3);
+                        }, i * 100);
+                    }
+                    break;
+                case 'strike':
+                    oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                    oscillator.start(audioCtx.currentTime);
+                    oscillator.stop(audioCtx.currentTime + 0.15);
+                    break;
+            }
+        }
+
         // Game State
         const gameState = {
             inning: 1,
@@ -550,6 +604,9 @@
             gameState.isPitching = true;
             document.getElementById('pitchBtn').disabled = true;
             document.getElementById('swingBtn').disabled = false;
+            
+            // Play pitch sound
+            playSound('pitch');
 
             const width = canvas.width;
             const height = canvas.height;
@@ -647,6 +704,7 @@
         function strike() {
             gameState.strikes++;
             showResult('STRIKE!');
+            playSound('strike');
             
             if (gameState.strikes >= 3) {
                 showMessage('Strikeout! ⚾');
@@ -673,12 +731,14 @@
         function hit() {
             showResult('BASE HIT! 🎯');
             showMessage('Single! Runner safe at first!');
+            playSound('hit');
             addRun(0.3); // 30% chance to score
             resetCount();
         }
 
         function extraBaseHit() {
             const isTriple = Math.random() > 0.7;
+            playSound('hit');
             if (isTriple) {
                 showResult('TRIPLE! 🔥');
                 showMessage('Amazing! Triple to the gap!');
@@ -694,6 +754,7 @@
         function homeRun() {
             showResult('HOME RUN! ⚾🎆');
             showMessage('IT\'S OUTTA HERE! Home Run!', 3000);
+            playSound('homerun');
             addRun(1); // Always scores
             resetCount();
         }
@@ -772,6 +833,23 @@
                 }
             }, 5000);
         }
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (gameState.isGameOver) return;
+            
+            if (e.key === 'p' || e.key === 'P') {
+                const pitchBtn = document.getElementById('pitchBtn');
+                if (!pitchBtn.disabled) {
+                    pitch();
+                }
+            } else if (e.key === 's' || e.key === 'S' || e.key === ' ') {
+                const swingBtn = document.getElementById('swingBtn');
+                if (!swingBtn.disabled) {
+                    swing();
+                }
+            }
+        });
 
         // Initialize
         resizeCanvas();
