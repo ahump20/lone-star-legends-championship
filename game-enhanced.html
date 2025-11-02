@@ -1097,12 +1097,21 @@
             scoreboardTexture.needsUpdate = true;
         }
 
+        // Track previous base occupation states to avoid unnecessary updates
+        let previousBaseStates = [];
         function update3DBases(bases) {
             if (!baseMeshes || !baseMeshes.length) return;
+            // Initialize previousBaseStates if needed
+            if (previousBaseStates.length !== baseMeshes.length) {
+                previousBaseStates = new Array(baseMeshes.length).fill(null);
+            }
             baseMeshes.forEach((mesh, index) => {
                 const occupied = !!bases[index];
-                mesh.material.emissiveIntensity = occupied ? 0.85 : 0;
-                mesh.material.color.setHex(occupied ? 0xfff0d2 : 0xffffff);
+                if (previousBaseStates[index] !== occupied) {
+                    mesh.material.emissiveIntensity = occupied ? 0.85 : 0;
+                    mesh.material.color.setHex(occupied ? 0xfff0d2 : 0xffffff);
+                    previousBaseStates[index] = occupied;
+                }
             });
         }
 
