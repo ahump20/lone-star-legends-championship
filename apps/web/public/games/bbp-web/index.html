@@ -1,26 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>BlazeSportsIntel Sandlot Sluggers</title>
-    <link rel="preload" href="data:image/svg+xml,%3csvg%20width='512'%20height='512'%20viewBox='0%200%20512%20512'%20xmlns='http://www.w3.org/2000/svg'%3e%3cdefs%3e%3clinearGradient%20id='g'%20x1='0%25'%20y1='0%25'%20x2='100%25'%20y2='100%25'%3e%3cstop%20offset='0%25'%20stop-color='%231f5f4a'%20/%3e%3cstop%20offset='100%25'%20stop-color='%230d2f28'%20/%3e%3c/linearGradient%3e%3c/defs%3e%3crect%20width='512'%20height='512'%20fill='url(%23g)'%20rx='32'%20/%3e%3cpolygon%20points='256,120%20392,256%20256,392%20120,256'%20fill='%232e8c5c'%20opacity='0.9'%20/%3e%3ccircle%20cx='256'%20cy='256'%20r='70'%20fill='%23f9e3c7'%20/%3e%3crect%20x='248'%20y='150'%20width='16'%20height='70'%20fill='%23f9e3c7'%20/%3e%3crect%20x='248'%20y='292'%20width='16'%20height='70'%20fill='%23f9e3c7'%20/%3e%3crect%20x='150'%20y='248'%20width='70'%20height='16'%20fill='%23f9e3c7'%20/%3e%3crect%20x='292'%20y='248'%20width='70'%20height='16'%20fill='%23f9e3c7'%20/%3e%3c/svg%3e" as="image" type="image/svg+xml" />
-    <link rel="preload" href="data:image/svg+xml,%3csvg%20width='256'%20height='128'%20viewBox='0%200%20256%20128'%20xmlns='http://www.w3.org/2000/svg'%3e%3crect%20width='256'%20height='128'%20rx='16'%20fill='%23121620'%20/%3e%3cg%20transform='translate(32%2024)'%3e%3ccircle%20cx='24'%20cy='24'%20r='20'%20fill='%23ffb347'%20/%3e%3crect%20x='4'%20y='40'%20width='40'%20height='32'%20rx='10'%20fill='%233478ff'%20/%3e%3crect%20x='16'%20y='72'%20width='16'%20height='24'%20rx='6'%20fill='%23ffd166'%20/%3e%3ccircle%20cx='24'%20cy='24'%20r='6'%20fill='%23262b3a'%20/%3e%3c/g%3e%3cg%20transform='translate(112%2018)'%3e%3ccircle%20cx='24'%20cy='24'%20r='20'%20fill='%23ff6b6b'%20/%3e%3crect%20x='6'%20y='40'%20width='36'%20height='32'%20rx='10'%20fill='%2306d6a0'%20/%3e%3crect%20x='16'%20y='72'%20width='16'%20height='24'%20rx='6'%20fill='%23ffd166'%20/%3e%3ccircle%20cx='24'%20cy='24'%20r='6'%20fill='%23262b3a'%20/%3e%3c/g%3e%3cg%20transform='translate(184%2030)'%3e%3ccircle%20cx='24'%20cy='24'%20r='20'%20fill='%23ffd166'%20/%3e%3crect%20x='8'%20y='40'%20width='32'%20height='32'%20rx='10'%20fill='%23ef476f'%20/%3e%3crect%20x='16'%20y='72'%20width='16'%20height='24'%20rx='6'%20fill='%23ffd166'%20/%3e%3ccircle%20cx='24'%20cy='24'%20r='6'%20fill='%23262b3a'%20/%3e%3c/g%3e%3c/svg%3e" as="image" type="image/svg+xml" />
-    <link rel="preload" href="data:image/svg+xml,%3csvg%20width='256'%20height='128'%20viewBox='0%200%20256%20128'%20xmlns='http://www.w3.org/2000/svg'%3e%3crect%20width='256'%20height='128'%20rx='20'%20fill='%230f172a'%20/%3e%3cg%20stroke='%2364d7ff'%20stroke-width='3'%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'%3e%3crect%20x='28'%20y='28'%20width='40'%20height='40'%20rx='12'%20/%3e%3cpolyline%20points='48%2036%2040%2048%2056%2048'%20/%3e%3crect%20x='108'%20y='24'%20width='120'%20height='24'%20rx='12'%20/%3e%3crect%20x='108'%20y='68'%20width='120'%20height='24'%20rx='12'%20/%3e%3ccircle%20cx='48'%20cy='88'%20r='20'%20/%3e%3cline%20x1='48'%20y1='78'%20x2='48'%20y2='98'%20/%3e%3cline%20x1='38'%20y1='88'%20x2='58'%20y2='88'%20/%3e%3c/g%3e%3c/svg%3e" as="image" type="image/svg+xml" />
-    <script type="module" crossorigin src="./assets/index-B94SDg9w.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CF5joH6E.css">
-  </head>
-  <body>
-    <main id="shell">
-      <div class="hud">
-        <h1>Sandlot Sluggers</h1>
-        <p class="subtitle">Original, mobile-first baseball challenge</p>
-      </div>
-      <div id="game-root" aria-label="Baseball game canvas" role="application"></div>
-      <aside class="tutorial" aria-live="polite">
-        <strong>How to play</strong>
-        <p>Tap once to ready, tap again when the ball crosses the plate. Time your swing to send the ball flying!</p>
-      </aside>
-    </main>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#BF5700">
+  <title>Backyard Play - Original Baseball Game</title>
+  <meta name="description" content="Original kid-friendly baseball game - no IP infringement">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow: hidden;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    #game-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 10px;
+    }
+
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 24px;
+      z-index: 1000;
+      transition: opacity 0.5s;
+    }
+
+    #loading.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #BF5700;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    canvas {
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      max-width: 100%;
+      max-height: 100vh;
+      display: block;
+    }
+
+    #legal-notice {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      max-width: 300px;
+    }
+
+    #legal-notice a {
+      color: #BF5700;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      #legal-notice {
+        font-size: 9px;
+        padding: 6px 10px;
+        bottom: 5px;
+        right: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <div class="spinner"></div>
+    <div>Loading Backyard Play...</div>
+  </div>
+
+  <div id="game-container">
+    <!-- Phaser will inject the canvas here -->
+  </div>
+
+  <div id="legal-notice">
+    Original content - No IP infringement.
+    <a href="../../LEGAL_COMPLIANCE.md" target="_blank">Legal Info</a>
+  </div>
+
+  <!-- Phaser 3.85 from CDN for quick setup -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.85.2/dist/phaser.min.js"></script>
+
+  <!-- Game code -->
+  <script src="./src/config.js"></script>
+  <script src="./src/scenes/BootScene.js"></script>
+  <script src="./src/scenes/MenuScene.js"></script>
+  <script src="./src/scenes/GameScene.js"></script>
+  <script src="./src/scenes/UIScene.js"></script>
+  <script src="./src/systems/BattingSystem.js"></script>
+  <script src="./src/systems/PitchingSystem.js"></script>
+  <script src="./src/main.js"></script>
+</body>
 </html>
