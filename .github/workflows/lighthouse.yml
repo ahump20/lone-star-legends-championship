@@ -1,0 +1,33 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+  push:
+    branches: [work]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8.15.8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build Phaser game
+        run: pnpm build:games
+      - name: Build Next.js site
+        run: pnpm --filter web build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+      - name: Start Next.js server
+        run: pnpm --filter web start &
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000
+      - name: Run Lighthouse CI
+        run: pnpm ci:lighthouse

@@ -38,6 +38,10 @@
 /images/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Phaser bundle
+/games/bbp-web/*
+  Cache-Control: public, max-age=31536000, immutable
+
 # Service Worker - No Cache
 /sw.js
   Cache-Control: public, max-age=0, must-revalidate

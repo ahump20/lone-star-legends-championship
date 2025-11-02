@@ -1,0 +1,11 @@
+[application]
+config/name="BSI Sandlot Sluggers Native"
+config/icon="res://scenes/icon.svg"
+run/main_scene="res://scenes/Menu.tscn"
+
+[display]
+window/size/viewport_width=720
+window/size/viewport_height=1280
+
+[rendering]
+quality/intended_usage/framebuffer_allocation=2
