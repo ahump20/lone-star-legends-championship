@@ -1,14 +1,13 @@
 {
   "name": "phaser-bbp-web",
-  "private": true,
-  "type": "module",
   "version": "1.0.0",
   "description": "Original kid-friendly baseball game built with Phaser 3 - no IP infringement",
   "main": "src/main.js",
   "scripts": {
-    "dev": "vite --host 0.0.0.0 --port 4173",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "npx http-server . -p 8080 -o",
+    "build": "echo 'Copying game to public directory...' && mkdir -p ../../../public/games/bbp-web && cp -r . ../../../public/games/bbp-web/ && echo 'Build complete!'",
+    "serve": "python3 -m http.server 8080",
+    "test": "echo 'No automated tests yet' && exit 0"
   },
   "keywords": [
     "baseball",
@@ -20,12 +19,10 @@
   ],
   "author": "Blaze Sports Intelligence",
   "license": "MIT",
-  "dependencies": {
-    "phaser": "^3.80.1"
-  },
-  "devDependencies": {
-    "typescript": "^5.5.4",
-    "vite": "^5.4.10"
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {
+    "phaser": "^3.85.0"
   },
   "engines": {
     "node": ">=18.0.0"

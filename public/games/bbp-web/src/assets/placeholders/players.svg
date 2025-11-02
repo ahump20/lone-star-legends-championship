@@ -1,0 +1,21 @@
+<svg width="256" height="128" viewBox="0 0 256 128" xmlns="http://www.w3.org/2000/svg">
+  <rect width="256" height="128" rx="16" fill="#121620" />
+  <g transform="translate(32 24)">
+    <circle cx="24" cy="24" r="20" fill="#ffb347" />
+    <rect x="4" y="40" width="40" height="32" rx="10" fill="#3478ff" />
+    <rect x="16" y="72" width="16" height="24" rx="6" fill="#ffd166" />
+    <circle cx="24" cy="24" r="6" fill="#262b3a" />
+  </g>
+  <g transform="translate(112 18)">
+    <circle cx="24" cy="24" r="20" fill="#ff6b6b" />
+    <rect x="6" y="40" width="36" height="32" rx="10" fill="#06d6a0" />
+    <rect x="16" y="72" width="16" height="24" rx="6" fill="#ffd166" />
+    <circle cx="24" cy="24" r="6" fill="#262b3a" />
+  </g>
+  <g transform="translate(184 30)">
+    <circle cx="24" cy="24" r="20" fill="#ffd166" />
+    <rect x="8" y="40" width="32" height="32" rx="10" fill="#ef476f" />
+    <rect x="16" y="72" width="16" height="24" rx="6" fill="#ffd166" />
+    <circle cx="24" cy="24" r="6" fill="#262b3a" />
+  </g>
+</svg>
