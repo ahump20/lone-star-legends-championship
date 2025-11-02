@@ -1,0 +1,106 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build games
+        run: |
+          # Copy Phaser game to public directory
+          mkdir -p public/games
+          cp -r apps/games/phaser-bbp-web public/games/bbp-web
+
+          # Generate sprites for OG Remaster (if needed)
+          if [ -f tools/sprites/generate.ts ]; then
+            npx tsx tools/sprites/generate.ts || echo "Sprite generation skipped"
+          fi
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli@0.13.x
+
+      - name: Run Lighthouse CI
+        run: lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Upload Lighthouse reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/
+          retention-days: 7
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // Read Lighthouse results
+            const resultsPath = '.lighthouseci';
+            if (!fs.existsSync(resultsPath)) {
+              console.log('No Lighthouse results found');
+              return;
+            }
+
+            // Find the latest manifest
+            const manifestPath = path.join(resultsPath, 'manifest.json');
+            if (!fs.existsSync(manifestPath)) {
+              console.log('No manifest found');
+              return;
+            }
+
+            const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+
+            // Create comment body
+            let comment = '## ⚡ Lighthouse CI Results\n\n';
+            comment += '| URL | Performance | Accessibility | Best Practices | SEO |\n';
+            comment += '|-----|-------------|---------------|----------------|-----|\n';
+
+            for (const result of manifest) {
+              const url = result.url.replace('http://localhost:8080', '');
+              const scores = result.summary;
+
+              const perf = (scores.performance * 100).toFixed(0);
+              const a11y = (scores.accessibility * 100).toFixed(0);
+              const bp = (scores['best-practices'] * 100).toFixed(0);
+              const seo = (scores.seo * 100).toFixed(0);
+
+              const perfEmoji = perf >= 90 ? '🟢' : perf >= 50 ? '🟡' : '🔴';
+              const a11yEmoji = a11y >= 90 ? '🟢' : a11y >= 50 ? '🟡' : '🔴';
+              const bpEmoji = bp >= 90 ? '🟢' : bp >= 50 ? '🟡' : '🔴';
+              const seoEmoji = seo >= 90 ? '🟢' : seo >= 50 ? '🟡' : '🔴';
+
+              comment += `| ${url} | ${perfEmoji} ${perf} | ${a11yEmoji} ${a11y} | ${bpEmoji} ${bp} | ${seoEmoji} ${seo} |\n`;
+            }
+
+            comment += '\n📊 [View detailed reports](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n';
+
+            // Post comment
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
