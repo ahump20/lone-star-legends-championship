@@ -1006,7 +1006,7 @@
             drawScoreboardCanvas(state);
 
             scoreboardTexture = new THREE.CanvasTexture(scoreboardCanvas);
-            scoreboardTexture.anisotropy = renderer.capabilities.getMaxAnisotropy?.() || 1;
+            scoreboardTexture.anisotropy = renderer.capabilities.getMaxAnisotropy() || 1;
             scoreboardTexture.needsUpdate = true;
 
             const screen = new THREE.Mesh(
