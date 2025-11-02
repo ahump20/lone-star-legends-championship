@@ -176,5 +176,14 @@
     </div>
 
     <script src="/js/backyard-showdown.js" type="module" defer></script>
+    <script type="module">
+        // Initialize stadium integration when page loads
+        import { initStadiumIntegration } from '/js/stadium-integration.js';
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            // Initialize stadium visuals and info
+            initStadiumIntegration();
+        });
+    </script>
 </body>
 </html>
