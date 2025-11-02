@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Your Stadium - Sandlot Superstars</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #0a1628 0%, #1a2f4f 50%, #2a4f7f 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+
+        .header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3.5rem;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ffd700, #ff6b35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        .stadium-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .stadium-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .stadium-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(255,107,53,0.6);
+        }
+
+        .stadium-header {
+            height: 180px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .stadium-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 120%, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .stadium-icon {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            z-index: 1;
+        }
+
+        .stadium-location {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            z-index: 1;
+        }
+
+        .stadium-body {
+            padding: 25px;
+            color: #333;
+        }
+
+        .stadium-name {
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: #1e3c72;
+        }
+
+        .stadium-description {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            min-height: 48px;
+        }
+
+        .stadium-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .info-label {
+            font-weight: 700;
+            color: #555;
+        }
+
+        .info-value {
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .stadium-features {
+            margin-bottom: 15px;
+        }
+
+        .features-title {
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .feature-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .feature-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: linear-gradient(135deg, #e8edff, #f0f4ff);
+            border: 1px solid #667eea;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .stadium-dimensions {
+            background: linear-gradient(135deg, #fff8e1, #fff3cd);
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .dimensions-title {
+            font-weight: 900;
+            color: #f57c00;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            font-size: 0.8rem;
+        }
+
+        .dimension-item {
+            text-align: center;
+            padding: 4px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 6px;
+        }
+
+        .dimension-label {
+            font-weight: 700;
+            color: #666;
+            display: block;
+            font-size: 0.75rem;
+        }
+
+        .dimension-value {
+            color: #f57c00;
+            font-weight: 900;
+            font-size: 1rem;
+        }
+
+        .select-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 900;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .select-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(0,0,0,0.6);
+            border-color: rgba(255,255,255,0.5);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .stadium-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .back-button {
+                position: static;
+                margin-bottom: 20px;
+                width: 100%;
+            }
+        }
+
+        .stadium-type-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 2;
+        }
+
+        .badge-hitters { background: linear-gradient(135deg, #ff6b35, #f77f00); }
+        .badge-pitchers { background: linear-gradient(135deg, #4361ee, #3a0ca3); }
+        .badge-balanced { background: linear-gradient(135deg, #52b788, #2d6a4f); }
+        .badge-quirky { background: linear-gradient(135deg, #e63946, #a4161a); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-button" onclick="window.location.href='./menu.html'">← Back to Menu</button>
+
+        <div class="header">
+            <h1>⚾ Choose Your Ballpark</h1>
+            <p>Each stadium has unique dimensions and characteristics inspired by MLB's finest</p>
+        </div>
+
+        <div class="stadium-grid" id="stadiumGrid">
+            <!-- Stadiums will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <script type="module">
+        import { MLB_STADIUMS, getStadiumList } from '/js/mlb-stadiums.js';
+
+        const stadiumIcons = {
+            'green_monster': '🏛️',
+            'bronx_cathedral': '🗽',
+            'ivy_walls': '🌿',
+            'chavez_ravine': '🌴',
+            'bay_winds': '🌊',
+            'mile_high': '⛰️',
+            'downtown_classic': '🏢',
+            'retractable_dome': '🏟️',
+            'beach_breeze': '🏖️',
+            'texas_heat': '🤠'
+        };
+
+        const stadiumTypes = {
+            'green_monster': 'quirky',
+            'bronx_cathedral': 'hitters',
+            'ivy_walls': 'quirky',
+            'chavez_ravine': 'pitchers',
+            'bay_winds': 'pitchers',
+            'mile_high': 'hitters',
+            'downtown_classic': 'balanced',
+            'retractable_dome': 'balanced',
+            'beach_breeze': 'pitchers',
+            'texas_heat': 'balanced'
+        };
+
+        const typeLabels = {
+            'hitters': 'Hitters Park',
+            'pitchers': 'Pitchers Park',
+            'balanced': 'Balanced',
+            'quirky': 'Unique Quirks'
+        };
+
+        function renderStadiums() {
+            const grid = document.getElementById('stadiumGrid');
+            
+            Object.values(MLB_STADIUMS).forEach(stadium => {
+                const card = document.createElement('div');
+                card.className = 'stadium-card';
+                card.onclick = () => selectStadium(stadium.id);
+
+                const type = stadiumTypes[stadium.id] || 'balanced';
+                const icon = stadiumIcons[stadium.id] || '⚾';
+
+                card.innerHTML = `
+                    <div class="stadium-header">
+                        <span class="stadium-type-badge badge-${type}">${typeLabels[type]}</span>
+                        <div class="stadium-icon">${icon}</div>
+                        <div class="stadium-location">${stadium.location}</div>
+                    </div>
+                    <div class="stadium-body">
+                        <div class="stadium-name">${stadium.name}</div>
+                        <div class="stadium-description">${stadium.description}</div>
+                        
+                        <div class="stadium-info">
+                            <div class="info-item">
+                                <span class="info-label">Opened</span>
+                                <span class="info-value">${stadium.opened}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Capacity</span>
+                                <span class="info-value">${stadium.capacity.toLocaleString()}</span>
+                            </div>
+                        </div>
+
+                        <div class="stadium-dimensions">
+                            <div class="dimensions-title">⚾ Field Dimensions</div>
+                            <div class="dimensions-grid">
+                                <div class="dimension-item">
+                                    <span class="dimension-label">LF</span>
+                                    <span class="dimension-value">${stadium.dimensions.leftField}'</span>
+                                </div>
+                                <div class="dimension-item">
+                                    <span class="dimension-label">CF</span>
+                                    <span class="dimension-value">${stadium.dimensions.center}'</span>
+                                </div>
+                                <div class="dimension-item">
+                                    <span class="dimension-label">RF</span>
+                                    <span class="dimension-value">${stadium.dimensions.rightField}'</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stadium-features">
+                            <div class="features-title">🎯 Special Features</div>
+                            <div class="feature-tags">
+                                ${stadium.characteristics.quirks.map(quirk => 
+                                    `<span class="feature-tag">${quirk.replace(/_/g, ' ')}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+
+                        <button class="select-button">Play at ${stadium.name}</button>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function selectStadium(stadiumId) {
+            // Store selected stadium in sessionStorage
+            sessionStorage.setItem('selectedStadium', stadiumId);
+            
+            // Navigate to the game with the selected stadium
+            window.location.href = `./index.html?stadium=${stadiumId}`;
+        }
+
+        // Initialize
+        renderStadiums();
+    </script>
+</body>
+</html>
