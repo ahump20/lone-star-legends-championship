@@ -1,0 +1,106 @@
+# Cloudflare Pages Headers Configuration
+# https://developers.cloudflare.com/pages/platform/headers
+
+# Global headers for all routes
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+
+# Cache headers for static assets
+/games/bbp-web/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/games/bbp-web/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/games/bbp-web/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Game sprites and images (long-lived)
+/apps/og-remaster/assets/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# Optimized images (immutable with hash in filename)
+/images/optimized/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Regular images (shorter cache)
+/images/*.png
+  Cache-Control: public, max-age=86400
+
+/images/*.jpg
+  Cache-Control: public, max-age=86400
+
+/images/*.webp
+  Cache-Control: public, max-age=604800
+
+# HTML files (no cache, always fetch fresh)
+/*.html
+  Cache-Control: no-cache, must-revalidate
+
+/apps/og-remaster/*.html
+  Cache-Control: no-cache, must-revalidate
+
+/games/*.html
+  Cache-Control: no-cache, must-revalidate
+
+/games/bbp-web/*.html
+  Cache-Control: no-cache, must-revalidate
+
+# Fonts (long-lived cache)
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+# API endpoints (no cache)
+/api/*
+  Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# Service Worker (always fresh)
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/sw-enhanced.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Manifest files
+/manifest.json
+  Cache-Control: public, max-age=3600
+  Content-Type: application/manifest+json
+
+/apps/og-remaster/manifest.json
+  Cache-Control: public, max-age=3600
+  Content-Type: application/manifest+json
+
+# Security headers for game routes
+/games/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' fonts.gstatic.com; connect-src 'self' https://api.blaze-intelligence.com
+
+# CORS for game assets
+/games/bbp-web/assets/*
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, OPTIONS
+  Access-Control-Allow-Headers: Content-Type
+
+# Analytics endpoints
+/analytics/*
+  Cache-Control: no-store
+  Access-Control-Allow-Origin: *
+
+# Preload hints for critical resources
+/
+  Link: </css/blaze.css>; rel=preload; as=style
+  Link: <https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap>; rel=preconnect
+
+/apps/og-remaster/
+  Link: </apps/og-remaster/main.ts>; rel=modulepreload
+  Link: </apps/og-remaster/style.css>; rel=preload; as=style
+
+/games/bbp-web/
+  Link: <https://cdn.jsdelivr.net/npm/phaser@3.85.2/dist/phaser.min.js>; rel=preload; as=script
+  Link: </games/bbp-web/src/main.js>; rel=modulepreload
