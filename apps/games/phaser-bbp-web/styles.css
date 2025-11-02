@@ -1,0 +1,69 @@
+:root {
+  color-scheme: dark;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at 50% -40%, rgba(255, 107, 53, 0.25), transparent 60%), #060b16;
+  color: #f8fafc;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+#shell {
+  width: min(420px, 100%);
+  display: grid;
+  gap: 16px;
+}
+
+.hud {
+  text-align: center;
+}
+
+.hud h1 {
+  margin: 0;
+  font-size: clamp(24px, 6vw, 34px);
+  letter-spacing: 0.08em;
+}
+
+.hud .subtitle {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+}
+
+#game-root {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(6, 11, 22, 0.55);
+}
+
+.tutorial {
+  background: rgba(8, 12, 24, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  padding: 12px 16px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.tutorial strong {
+  display: block;
+  margin-bottom: 4px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: #64d7ff;
+}
+
+@media (min-width: 768px) {
+  #shell {
+    width: 480px;
+  }
+}

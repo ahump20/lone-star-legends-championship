@@ -1,0 +1,32 @@
+{
+  "ci": {
+    "collect": {
+      "url": [
+        "http://localhost:3000/",
+        "http://localhost:3000/games",
+        "http://localhost:3000/games/bbp"
+      ],
+      "numberOfRuns": 1,
+      "settings": {
+        "preset": "mobile",
+        "throttling": {
+          "rttMs": 150,
+          "throughputKbps": 1638.4,
+          "cpuSlowdownMultiplier": 4,
+          "requestLatencyMs": 150,
+          "downloadThroughputKbps": 1638.4,
+          "uploadThroughputKbps": 750
+        }
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["error", { "minScore": 0.8 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "interactive": ["error", { "maxNumericValue": 4000 }],
+        "total-blocking-time": ["error", { "maxNumericValue": 400 }]
+      }
+    }
+  }
+}
