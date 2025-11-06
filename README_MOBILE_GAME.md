@@ -471,7 +471,7 @@ For questions, feedback, or support:
 
 ## 🎉 Credits
 
-**Game Design & Development**: [Your Name/Team]
+**Game Design & Development**: Lone Star Legends Dev Team
 
 **Inspired By**: The spirit of accessible, family-friendly baseball games
 
