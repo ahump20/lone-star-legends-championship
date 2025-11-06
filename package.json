@@ -44,7 +44,10 @@
     "mp:probe": "node scripts/test-multiplayer-connection.js",
     "pages": "npx wrangler pages deploy ./dist -p",
     "reset": "node scripts/reset-workspace.js",
-    "logs": "npx wrangler tail --format pretty"
+    "logs": "npx wrangler tail --format pretty",
+    "dev:next": "cd apps/blaze-sports-intel && next dev",
+    "build:next": "cd apps/blaze-sports-intel && next build",
+    "start:next": "cd apps/blaze-sports-intel && next start"
   },
   "dependencies": {
     "@hono/zod-openapi": "^1.1.0",
@@ -58,8 +61,11 @@
     "drizzle-orm": "^0.44.4",
     "hono": "^4.9.4",
     "ioredis": "^5.7.0",
+    "next": "^14.2.5",
     "openapi-typescript": "^7.9.1",
     "pg": "^8.16.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "ws": "^8.18.3",
     "zod": "^4.1.1"
   },
@@ -68,9 +74,12 @@
     "@babel/preset-env": "^7.23.0",
     "@biomejs/biome": "^2.2.2",
     "@types/node": "^24.3.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-jest": "^27.4.0",
+    "eslint-plugin-jest": "^28.9.0",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
     "http-server": "^14.1.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022"],
+    "lib": ["ES2022", "DOM"],
     "module": "ESNext",
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
@@ -11,6 +11,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
+    "jsx": "react-jsx",
     "isolatedModules": true,
     "noEmit": true,
     "declaration": false,
@@ -21,15 +22,19 @@
       "@/*": ["./*"],
       "@/schema": ["./packages/schema/*"],
       "@/contracts": ["./packages/contracts/*"]
-    }
+    },
+    "types": ["@types/node", "@types/react", "@types/react-dom"]
   },
   "include": [
     "**/*.ts",
-    "**/*.js"
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx"
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "**/*.test.ts"
+    "**/*.test.ts",
+    "apps/og-remaster/demo.bundle.js"
   ]
 }
