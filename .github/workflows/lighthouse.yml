@@ -3,7 +3,7 @@ name: Lighthouse CI
 on:
   pull_request:
   push:
-    branches: [work]
+    branches: [main]
 
 jobs:
   lighthouse:
