@@ -463,9 +463,9 @@ Please open issues or pull requests on GitHub.
 ## 📞 Contact
 
 For questions, feedback, or support:
-- Email: [your-email]
-- Discord: [your-discord]
-- GitHub Issues: [repository-issues]
+- Email: lone.star.legends@gmail.com
+- Discord: https://discord.gg/lonestarlegends
+- GitHub Issues: https://github.com/yourusername/lone-star-legends-championship/issues
 
 ---
 
