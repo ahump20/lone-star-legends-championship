@@ -116,3 +116,4 @@ team-stats-cache/
 # Generated analytics
 analytics-reports/
 performance-logs/
+*.tsbuildinfo
