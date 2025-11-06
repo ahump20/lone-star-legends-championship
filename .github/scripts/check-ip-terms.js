@@ -88,7 +88,7 @@ const EXCLUDE_PATTERNS = [
   '.git',
   'dist',
   'build',
-  'assets',  // Third-party libraries
+  'assets/third-party',  // Third-party libraries
   '.github/scripts/check-ip-terms.js',  // Don't flag ourselves
   'LEGAL_COMPLIANCE.md',                 // Legal docs can mention terms
   'assets/LICENSES.md',                  // License docs can mention terms
