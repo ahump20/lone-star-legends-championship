@@ -231,6 +231,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private simulateCpuHalfInning() {
+    // TODO: Simplified MVP placeholder. Replace with actual CPU batting logic to match player mechanics.
     const runs = Phaser.Math.Between(0, 2);
     if (runs > 0) {
       this.data.score.cpu += runs;
