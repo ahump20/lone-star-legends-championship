@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busch Stadium II - 3D Recreation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { width: 100%; height: 100vh; overflow: hidden; background: #1a1a1a; }
+        canvas { width: 100%; height: 100%; touch-action: none; display: block; }
+        #info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 8px;
+            pointer-events: none;
+            z-index: 100;
+        }
+        #info h1 { font-size: 18px; margin-bottom: 8px; color: #c41e3a; }
+        #info p { margin: 4px 0; font-size: 12px; }
+    </style>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+</head>
+<body>
+    <div id="info">
+        <h1>Busch Stadium II (1966-2005)</h1>
+        <p>Downtown St. Louis, Missouri</p>
+        <p>Capacity: 50,345</p>
+        <p>LF: 330' | CF: 414' | RF: 330'</p>
+    </div>
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("renderCanvas");
+        const engine = new BABYLON.Engine(canvas, true, {
+            preserveDrawingBuffer: true,
+            stencil: true,
+            disableWebGL2Support: false
+        });
+
+        const createScene = () => {
+            const scene = new BABYLON.Scene(engine);
+            scene.clearColor = new BABYLON.Color4(0.53, 0.81, 0.92, 1.0);
+
+            // Camera - aerial view typical of stadium shots
+            const camera = new BABYLON.ArcRotateCamera(
+                "camera",
+                -Math.PI / 2,
+                Math.PI / 3,
+                450,
+                new BABYLON.Vector3(0, 0, 0),
+                scene
+            );
+            camera.lowerRadiusLimit = 200;
+            camera.upperRadiusLimit = 800;
+            camera.lowerBetaLimit = 0.1;
+            camera.upperBetaLimit = Math.PI / 2.1;
+            camera.attachControl(canvas, true);
+            camera.wheelPrecision = 50;
+            camera.panningSensibility = 50;
+
+            // Hemispheric light for ambient
+            const ambientLight = new BABYLON.HemisphericLight(
+                "ambient",
+                new BABYLON.Vector3(0, 1, 0),
+                scene
+            );
+            ambientLight.intensity = 0.6;
+            ambientLight.groundColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+
+            // Directional sun light (afternoon game lighting)
+            const sunLight = new BABYLON.DirectionalLight(
+                "sun",
+                new BABYLON.Vector3(-0.5, -1, 0.3),
+                scene
+            );
+            sunLight.intensity = 0.8;
+            sunLight.position = new BABYLON.Vector3(200, 300, -100);
+
+            // Shadows
+            const shadowGenerator = new BABYLON.ShadowGenerator(2048, sunLight);
+            shadowGenerator.useBlurExponentialShadowMap = true;
+            shadowGenerator.blurKernel = 32;
+
+            // Materials
+            const createStadiumMaterials = () => {
+                // Concrete exterior
+                const concreteMat = new BABYLON.StandardMaterial("concrete", scene);
+                concreteMat.diffuseColor = new BABYLON.Color3(0.65, 0.65, 0.65);
+                concreteMat.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+                concreteMat.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+
+                // Red seats (Cardinals red)
+                const seatMat = new BABYLON.StandardMaterial("seats", scene);
+                seatMat.diffuseColor = new BABYLON.Color3(0.77, 0.12, 0.23);
+                seatMat.specularColor = new BABYLON.Color3(0.2, 0.05, 0.05);
+                seatMat.ambientColor = new BABYLON.Color3(0.3, 0.05, 0.08);
+
+                // Artificial turf (bright green, typical of 1980s-2000s)
+                const turfMat = new BABYLON.StandardMaterial("turf", scene);
+                turfMat.diffuseColor = new BABYLON.Color3(0.2, 0.65, 0.2);
+                turfMat.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+                turfMat.ambientColor = new BABYLON.Color3(0.1, 0.3, 0.1);
+
+                // Dirt (infield)
+                const dirtMat = new BABYLON.StandardMaterial("dirt", scene);
+                dirtMat.diffuseColor = new BABYLON.Color3(0.65, 0.45, 0.3);
+                dirtMat.specularColor = new BABYLON.Color3(0.15, 0.1, 0.05);
+                dirtMat.ambientColor = new BABYLON.Color3(0.25, 0.18, 0.12);
+
+                // Warning track
+                const warningMat = new BABYLON.StandardMaterial("warning", scene);
+                warningMat.diffuseColor = new BABYLON.Color3(0.55, 0.38, 0.25);
+                warningMat.specularColor = new BABYLON.Color3(0.1, 0.08, 0.05);
+
+                // Outfield wall padding (dark blue)
+                const wallMat = new BABYLON.StandardMaterial("wall", scene);
+                wallMat.diffuseColor = new BABYLON.Color3(0.1, 0.15, 0.35);
+                wallMat.specularColor = new BABYLON.Color3(0.05, 0.05, 0.1);
+
+                // Foul poles (yellow)
+                const poleMat = new BABYLON.StandardMaterial("pole", scene);
+                poleMat.diffuseColor = new BABYLON.Color3(0.95, 0.85, 0.1);
+                poleMat.emissiveColor = new BABYLON.Color3(0.2, 0.18, 0.02);
+
+                return { concreteMat, seatMat, turfMat, dirtMat, warningMat, wallMat, poleMat };
+            };
+
+            const materials = createStadiumMaterials();
+
+            // Build playing field
+            const buildField = () => {
+                // Field dimensions (scaled, 1 unit ≈ 1 foot)
+                const baseDistance = 90; // 90 feet between bases
+
+                // Outfield turf (circular sector approximation)
+                const outfield = BABYLON.MeshBuilder.CreateDisc(
+                    "outfield",
+                    { radius: 414, tessellation: 64 },
+                    scene
+                );
+                outfield.rotation.x = Math.PI / 2;
+                outfield.position.y = 0.1;
+                outfield.material = materials.turfMat;
+                outfield.receiveShadows = true;
+
+                // Infield dirt (includes base paths and mound)
+                const infieldDirt = BABYLON.MeshBuilder.CreateDisc(
+                    "infield",
+                    { radius: 95, tessellation: 64 },
+                    scene
+                );
+                infieldDirt.rotation.x = Math.PI / 2;
+                infieldDirt.position.y = 0.2;
+                infieldDirt.material = materials.dirtMat;
+
+                // Home plate area
+                const homePlate = BABYLON.MeshBuilder.CreateBox(
+                    "homePlate",
+                    { width: 3, height: 0.3, depth: 3 },
+                    scene
+                );
+                homePlate.position = new BABYLON.Vector3(0, 0.25, 0);
+                homePlate.material = materials.dirtMat;
+
+                // Pitcher's mound
+                const mound = BABYLON.MeshBuilder.CreateCylinder(
+                    "mound",
+                    { diameter: 18, height: 1, tessellation: 32 },
+                    scene
+                );
+                mound.position = new BABYLON.Vector3(0, 0.5, -60.5);
+                mound.material = materials.dirtMat;
+
+                // Bases
+                const createBase = (name, x, z) => {
+                    const base = BABYLON.MeshBuilder.CreateBox(
+                        name,
+                        { width: 1.5, height: 0.4, depth: 1.5 },
+                        scene
+                    );
+                    base.position = new BABYLON.Vector3(x, 0.4, z);
+                    const baseMat = new BABYLON.StandardMaterial(name + "Mat", scene);
+                    baseMat.diffuseColor = new BABYLON.Color3(0.95, 0.95, 0.95);
+                    base.material = baseMat;
+                    return base;
+                };
+
+                createBase("first", 63.6, -63.6);
+                createBase("second", 0, -127.3);
+                createBase("third", -63.6, -63.6);
+
+                // Warning track
+                const warningTrack = BABYLON.MeshBuilder.CreateTorus(
+                    "warning",
+                    { diameter: 800, thickness: 15, tessellation: 96 },
+                    scene
+                );
+                warningTrack.rotation.x = Math.PI / 2;
+                warningTrack.position.y = 0.15;
+                warningTrack.material = materials.warningMat;
+
+                // Outfield wall (8 feet high, symmetrical)
+                const wallHeight = 8;
+                const wallPath = [];
+                for (let i = 0; i <= 180; i += 2) {
+                    const angle = (i - 90) * Math.PI / 180;
+                    const radius = i <= 45 || i >= 135 ? 330 : 414;
+                    wallPath.push(new BABYLON.Vector3(
+                        Math.cos(angle) * radius,
+                        0,
+                        -Math.abs(Math.sin(angle) * radius)
+                    ));
+                }
+
+                const wall = BABYLON.MeshBuilder.CreateTube(
+                    "wall",
+                    {
+                        path: wallPath,
+                        radius: 1.5,
+                        tessellation: 8,
+                        cap: BABYLON.Mesh.CAP_ALL
+                    },
+                    scene
+                );
+                wall.position.y = wallHeight / 2;
+                wall.material = materials.wallMat;
+                shadowGenerator.addShadowCaster(wall);
+
+                // Foul poles
+                const createFoulPole = (x, z) => {
+                    const pole = BABYLON.MeshBuilder.CreateCylinder(
+                        "foulPole",
+                        { diameter: 0.5, height: 40, tessellation: 16 },
+                        scene
+                    );
+                    pole.position = new BABYLON.Vector3(x, 20, z);
+                    pole.material = materials.poleMat;
+                    shadowGenerator.addShadowCaster(pole);
+                    return pole;
+                };
+
+                createFoulPole(330, 0);
+                createFoulPole(-330, 0);
+            };
+
+            // Build seating bowl (circular, multi-deck)
+            const buildSeatingBowl = () => {
+                const createSeatingDeck = (name, innerRadius, outerRadius, height, yPos, rows) => {
+                    const deckMesh = new BABYLON.Mesh(name, scene);
+
+                    // Create stepped seating sections
+                    for (let row = 0; row < rows; row++) {
+                        const rowRadius = innerRadius + (outerRadius - innerRadius) * (row / rows);
+                        const rowY = yPos + (height / rows) * row;
+                        const rowDepth = (outerRadius - innerRadius) / rows;
+
+                        const seatSection = BABYLON.MeshBuilder.CreateTorus(
+                            `${name}_row${row}`,
+                            {
+                                diameter: rowRadius * 2,
+                                thickness: rowDepth,
+                                tessellation: 96
+                            },
+                            scene
+                        );
+                        seatSection.rotation.x = Math.PI / 2;
+                        seatSection.position.y = rowY;
+                        seatSection.material = materials.seatMat;
+                        seatSection.parent = deckMesh;
+                        shadowGenerator.addShadowCaster(seatSection);
+                    }
+
+                    return deckMesh;
+                };
+
+                // Lower deck (close to field)
+                const lowerDeck = createSeatingDeck("lowerDeck", 420, 500, 40, 5, 25);
+
+                // Club level
+                const clubLevel = createSeatingDeck("clubLevel", 500, 530, 15, 48, 8);
+
+                // Upper deck
+                const upperDeck = createSeatingDeck("upperDeck", 530, 620, 60, 65, 35);
+
+                // Exterior concrete structure
+                const exterior = BABYLON.MeshBuilder.CreateCylinder(
+                    "exterior",
+                    {
+                        diameter: 650,
+                        height: 130,
+                        tessellation: 96
+                    },
+                    scene
+                );
+                exterior.position.y = 65;
+                exterior.material = materials.concreteMat;
+                shadowGenerator.addShadowCaster(exterior);
+
+                // Cut out the interior
+                const interiorCutout = BABYLON.MeshBuilder.CreateCylinder(
+                    "cutout",
+                    {
+                        diameter: 630,
+                        height: 135,
+                        tessellation: 96
+                    },
+                    scene
+                );
+                interiorCutout.position.y = 65;
+
+                // CSG subtraction for hollow stadium
+                const exteriorCSG = BABYLON.CSG.FromMesh(exterior);
+                const cutoutCSG = BABYLON.CSG.FromMesh(interiorCutout);
+                const hollowStadium = exteriorCSG.subtract(cutoutCSG);
+
+                const finalExterior = hollowStadium.toMesh("stadiumShell", materials.concreteMat, scene);
+                shadowGenerator.addShadowCaster(finalExterior);
+
+                interiorCutout.dispose();
+                exterior.dispose();
+
+                // Roof structure (partial, typical of Busch II)
+                const roofSupports = [];
+                for (let i = 0; i < 12; i++) {
+                    const angle = (i * 30) * Math.PI / 180;
+                    const support = BABYLON.MeshBuilder.CreateBox(
+                        `roofSupport${i}`,
+                        { width: 8, height: 80, depth: 8 },
+                        scene
+                    );
+                    support.position = new BABYLON.Vector3(
+                        Math.cos(angle) * 615,
+                        95,
+                        Math.sin(angle) * 615
+                    );
+                    support.material = materials.concreteMat;
+                    roofSupports.push(support);
+                    shadowGenerator.addShadowCaster(support);
+                }
+            };
+
+            // Scoreboard (center field)
+            const buildScoreboard = () => {
+                const scoreboard = BABYLON.MeshBuilder.CreateBox(
+                    "scoreboard",
+                    { width: 80, height: 40, depth: 5 },
+                    scene
+                );
+                scoreboard.position = new BABYLON.Vector3(0, 85, -420);
+
+                const scoreboardMat = new BABYLON.StandardMaterial("scoreboardMat", scene);
+                scoreboardMat.diffuseColor = new BABYLON.Color3(0.1, 0.1, 0.15);
+                scoreboardMat.emissiveColor = new BABYLON.Color3(0.05, 0.05, 0.08);
+                scoreboard.material = scoreboardMat;
+                shadowGenerator.addShadowCaster(scoreboard);
+
+                // LED panels (simulated)
+                const ledPanel = BABYLON.MeshBuilder.CreatePlane(
+                    "ledPanel",
+                    { width: 70, height: 30 },
+                    scene
+                );
+                ledPanel.position = new BABYLON.Vector3(0, 85, -417);
+
+                const ledMat = new BABYLON.StandardMaterial("ledMat", scene);
+                ledMat.diffuseColor = new BABYLON.Color3(0.1, 0.3, 0.1);
+                ledMat.emissiveColor = new BABYLON.Color3(0.05, 0.15, 0.05);
+                ledPanel.material = ledMat;
+            };
+
+            // Stadium lights (light standards)
+            const buildLights = () => {
+                const lightPositions = [
+                    { x: 450, z: -450 },
+                    { x: -450, z: -450 },
+                    { x: 450, z: 100 },
+                    { x: -450, z: 100 }
+                ];
+
+                lightPositions.forEach((pos, idx) => {
+                    // Light tower
+                    const tower = BABYLON.MeshBuilder.CreateCylinder(
+                        `lightTower${idx}`,
+                        { diameter: 12, height: 180, tessellation: 16 },
+                        scene
+                    );
+                    tower.position = new BABYLON.Vector3(pos.x, 90, pos.z);
+                    tower.material = materials.concreteMat;
+                    shadowGenerator.addShadowCaster(tower);
+
+                    // Light rack
+                    const lightRack = BABYLON.MeshBuilder.CreateBox(
+                        `lightRack${idx}`,
+                        { width: 40, height: 8, depth: 20 },
+                        scene
+                    );
+                    lightRack.position = new BABYLON.Vector3(pos.x, 180, pos.z);
+                    lightRack.material = materials.concreteMat;
+
+                    // Point light for illumination
+                    const stadiumLight = new BABYLON.PointLight(
+                        `stadLight${idx}`,
+                        new BABYLON.Vector3(pos.x, 180, pos.z),
+                        scene
+                    );
+                    stadiumLight.intensity = 0.4;
+                    stadiumLight.range = 600;
+                });
+            };
+
+            // Ground plane (surrounding area)
+            const ground = BABYLON.MeshBuilder.CreateGround(
+                "ground",
+                { width: 2000, height: 2000 },
+                scene
+            );
+            ground.position.y = -1;
+            const groundMat = new BABYLON.StandardMaterial("groundMat", scene);
+            groundMat.diffuseColor = new BABYLON.Color3(0.35, 0.35, 0.35);
+            groundMat.specularColor = new BABYLON.Color3(0.05, 0.05, 0.05);
+            ground.material = groundMat;
+            ground.receiveShadows = true;
+
+            // Build all stadium components
+            buildField();
+            buildSeatingBowl();
+            buildScoreboard();
+            buildLights();
+
+            // Skybox (St. Louis sky)
+            const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", { size: 5000 }, scene);
+            const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+            skyboxMaterial.backFaceCulling = false;
+            skyboxMaterial.disableLighting = true;
+            skybox.material = skyboxMaterial;
+            skybox.infiniteDistance = true;
+            skyboxMaterial.diffuseColor = new BABYLON.Color3(0.53, 0.81, 0.92);
+            skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+
+            // Fog for atmosphere
+            scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
+            scene.fogDensity = 0.0003;
+            scene.fogColor = new BABYLON.Color3(0.7, 0.8, 0.9);
+
+            return scene;
+        };
+
+        const scene = createScene();
+
+        engine.runRenderLoop(() => {
+            scene.render();
+        });
+
+        window.addEventListener("resize", () => {
+            engine.resize();
+        });
+
+        // Performance monitoring
+        scene.onReadyObservable.add(() => {
+            console.log("Busch Stadium II loaded");
+            console.log(`FPS: ${engine.getFps().toFixed()} | Draw calls: ${scene.getActiveMeshes().length}`);
+        });
+    </script>
+</body>
+</html>
