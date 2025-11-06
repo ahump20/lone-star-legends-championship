@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busch Stadium II - Playable</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { width: 100%; height: 100vh; overflow: hidden; background: #1a1a1a; font-family: 'Arial', sans-serif; }
+        canvas { width: 100%; height: 100%; touch-action: none; display: block; }
+
+        /* Game UI Overlay */
+        #gameUI {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Stadium Info */
+        #stadiumInfo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(196, 30, 58, 0.9);
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: #fff;
+            pointer-events: auto;
+        }
+        #stadiumInfo h1 { font-size: 20px; margin-bottom: 5px; font-weight: bold; }
+        #stadiumInfo p { font-size: 12px; margin: 2px 0; opacity: 0.9; }
+
+        /* Scoreboard */
+        #scoreboard {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: #fff;
+            min-width: 280px;
+        }
+        #scoreboard h2 {
+            font-size: 18px;
+            color: #FFD700;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 5px;
+        }
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 16px;
+            align-items: center;
+        }
+        .team-name { font-weight: bold; flex: 1; }
+        .team-score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FFD700;
+            min-width: 40px;
+            text-align: right;
+        }
+        .inning-display {
+            text-align: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #444;
+            color: #FFD700;
+            font-size: 14px;
+        }
+
+        /* Count Display */
+        #countDisplay {
+            position: absolute;
+            top: 170px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: #fff;
+            min-width: 200px;
+        }
+        #countDisplay h3 {
+            font-size: 16px;
+            color: #FFD700;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #FFD700;
+            padding-bottom: 5px;
+        }
+        .count-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 6px 0;
+            font-size: 14px;
+        }
+        .count-value { font-weight: bold; color: #FFD700; }
+
+        /* Batter Info */
+        #batterInfo {
+            position: absolute;
+            top: 320px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: #fff;
+            min-width: 250px;
+        }
+        #batterInfo h3 {
+            font-size: 16px;
+            color: #FFD700;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #FFD700;
+            padding-bottom: 5px;
+        }
+        .batter-name { font-size: 16px; font-weight: bold; margin: 4px 0; }
+        .batter-nickname { font-size: 13px; font-style: italic; opacity: 0.8; }
+        .batter-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+        .stat-item { display: flex; justify-content: space-between; }
+
+        /* Base Display */
+        #baseDisplay {
+            position: absolute;
+            bottom: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 140px;
+            pointer-events: none;
+        }
+        .diamond-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .base {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 3px solid #fff;
+            transform: rotate(45deg);
+            transition: all 0.3s;
+        }
+        .base.occupied {
+            background: #FFD700;
+            box-shadow: 0 0 20px #FFD700;
+        }
+        .base.first { top: 50%; right: 0; transform: translate(50%, -50%) rotate(45deg); }
+        .base.second { top: 0; left: 50%; transform: translate(-50%, -50%) rotate(45deg); }
+        .base.third { top: 50%; left: 0; transform: translate(-50%, -50%) rotate(45deg); }
+        .base.home {
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 50%) rotate(45deg);
+            background: rgba(196, 30, 58, 0.5);
+            border-color: #C41E3A;
+        }
+
+        /* Controls */
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            pointer-events: auto;
+        }
+        .control-btn {
+            background: linear-gradient(135deg, #C41E3A 0%, #8B1528 100%);
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(196, 30, 58, 0.6);
+            background: linear-gradient(135deg, #E41E3A 0%, #A01528 100%);
+        }
+        .control-btn:active {
+            transform: translateY(0);
+        }
+        .control-btn.secondary {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #000;
+        }
+        .control-btn.secondary:hover {
+            background: linear-gradient(135deg, #FFE44D 0%, #FFB700 100%);
+        }
+
+        /* Game Status Messages */
+        #gameMessage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px 60px;
+            border-radius: 15px;
+            color: #fff;
+            text-align: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 3px solid #FFD700;
+            max-width: 600px;
+        }
+        #gameMessage.show { opacity: 1; pointer-events: auto; }
+        #gameMessage h2 { font-size: 48px; color: #FFD700; margin-bottom: 20px; }
+        #gameMessage p { font-size: 24px; margin: 10px 0; }
+
+        /* Play Result Display */
+        #playResult {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 36px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 40px;
+            border-radius: 10px;
+        }
+        #playResult.show { opacity: 1; }
+
+        /* Instructions */
+        #instructions {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            max-width: 250px;
+        }
+        #instructions h4 { color: #FFD700; margin-bottom: 8px; font-size: 14px; }
+        #instructions p { margin: 4px 0; opacity: 0.9; }
+
+        /* Loading Screen */
+        #loadingScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+        #loadingScreen.hidden { opacity: 0; pointer-events: none; }
+        .loading-content { text-align: center; color: #fff; }
+        .loading-content h2 { font-size: 36px; color: #FFD700; margin-bottom: 20px; }
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255, 215, 0, 0.3);
+            border-top: 6px solid #FFD700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loading-content">
+            <h2>⚾ Busch Stadium II</h2>
+            <div class="loading-spinner"></div>
+            <p style="margin-top: 20px; font-size: 18px;">Loading ballpark...</p>
+        </div>
+    </div>
+
+    <!-- Game UI Overlay -->
+    <div id="gameUI">
+        <!-- Stadium Info -->
+        <div id="stadiumInfo">
+            <h1>Busch Stadium II</h1>
+            <p>Downtown St. Louis, Missouri</p>
+            <p>Capacity: 50,345 | LF: 330' | CF: 414' | RF: 330'</p>
+        </div>
+
+        <!-- Scoreboard -->
+        <div id="scoreboard">
+            <h2>SCOREBOARD</h2>
+            <div class="score-row">
+                <span class="team-name" id="awayTeamName">-</span>
+                <span class="team-score" id="awayScore">0</span>
+            </div>
+            <div class="score-row">
+                <span class="team-name" id="homeTeamName">-</span>
+                <span class="team-score" id="homeScore">0</span>
+            </div>
+            <div class="inning-display" id="inningDisplay">-</div>
+        </div>
+
+        <!-- Count Display -->
+        <div id="countDisplay">
+            <h3>COUNT</h3>
+            <div class="count-item">
+                <span>Balls:</span>
+                <span class="count-value" id="ballsCount">0</span>
+            </div>
+            <div class="count-item">
+                <span>Strikes:</span>
+                <span class="count-value" id="strikesCount">0</span>
+            </div>
+            <div class="count-item">
+                <span>Outs:</span>
+                <span class="count-value" id="outsCount">0</span>
+            </div>
+        </div>
+
+        <!-- Batter Info -->
+        <div id="batterInfo">
+            <h3>AT BAT</h3>
+            <div class="batter-name" id="batterName">-</div>
+            <div class="batter-nickname" id="batterNickname">-</div>
+            <div class="batter-stats" id="batterStats"></div>
+        </div>
+
+        <!-- Base Display -->
+        <div id="baseDisplay">
+            <div class="diamond-container">
+                <div class="base second" id="base2"></div>
+                <div class="base third" id="base3"></div>
+                <div class="base first" id="base1"></div>
+                <div class="base home"></div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div id="controls">
+            <button class="control-btn" id="swingBtn" onclick="game.swing()">
+                SWING (SPACE)
+            </button>
+            <button class="control-btn secondary" id="autoBtn" onclick="game.toggleAuto()">
+                AUTO-PLAY (A)
+            </button>
+        </div>
+
+        <!-- Instructions -->
+        <div id="instructions">
+            <h4>CONTROLS</h4>
+            <p><strong>SPACE / Click Swing:</strong> Swing bat</p>
+            <p><strong>A:</strong> Toggle auto-play</p>
+            <p><strong>Camera:</strong> Click + drag to orbit</p>
+            <p><strong>Zoom:</strong> Mouse wheel</p>
+        </div>
+
+        <!-- Game Messages -->
+        <div id="gameMessage"></div>
+        <div id="playResult"></div>
+    </div>
+
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+        // Game State Management - Simplified inline version
+        class SimpleGameState {
+            constructor() {
+                this.inning = 1;
+                this.inningHalf = 'top';
+                this.balls = 0;
+                this.strikes = 0;
+                this.outs = 0;
+                this.maxInnings = 9;
+                this.homeTeam = null;
+                this.awayTeam = null;
+                this.bases = { 1: null, 2: null, 3: null };
+                this.currentBatterIndex = 0;
+                this.currentBatter = null;
+                this.currentPitcher = null;
+                this.gameOver = false;
+                this.winner = null;
+            }
+
+            initializeGame(homeTeam, awayTeam) {
+                this.homeTeam = homeTeam;
+                this.awayTeam = awayTeam;
+                this.homeTeam.score = 0;
+                this.awayTeam.score = 0;
+                this.updateCurrentPlayers();
+            }
+
+            updateCurrentPlayers() {
+                const battingTeam = this.inningHalf === 'top' ? this.awayTeam : this.homeTeam;
+                const fieldingTeam = this.inningHalf === 'top' ? this.homeTeam : this.awayTeam;
+
+                if (battingTeam && fieldingTeam) {
+                    this.currentBatter = battingTeam.roster[this.currentBatterIndex % battingTeam.roster.length];
+                    this.currentPitcher = fieldingTeam.roster.find(p => p.position === 'P') || fieldingTeam.roster[0];
+                }
+            }
+
+            swingBat(timing = 0.5, power = 0.5) {
+                if (!this.currentBatter || !this.currentPitcher || this.gameOver) {
+                    return { type: 'strike' };
+                }
+
+                const batter = this.currentBatter;
+                const pitcher = this.currentPitcher;
+
+                const battingSkill = batter.stats.batting / 10;
+                const pitchingSkill = pitcher.stats.pitching / 10;
+                const timingBonus = 1 - Math.abs(timing - 0.5) * 2;
+
+                const hitChance = (battingSkill * 0.5 + timingBonus * 0.3 - pitchingSkill * 0.2);
+                const roll = Math.random();
+
+                let result;
+
+                if (roll < hitChance * 0.3) {
+                    result = this.determineHitType(batter, power);
+                    this.handleHit(result);
+                } else if (roll < hitChance * 0.5) {
+                    result = { type: 'foul' };
+                    if (this.strikes < 2) this.strikes++;
+                } else if (roll < hitChance) {
+                    result = this.determineOutType();
+                    this.handleOut(result);
+                } else {
+                    result = { type: 'strike' };
+                    this.strikes++;
+                    if (this.strikes >= 3) this.handleStrikeout();
+                }
+
+                return result;
+            }
+
+            determineHitType(batter, power) {
+                const powerStat = batter.stats.power / 10;
+                const combinedPower = (powerStat * 0.7 + power * 0.3);
+                const roll = Math.random();
+
+                if (roll < combinedPower * 0.15) {
+                    return { type: 'hit', hitType: 'homerun', power: combinedPower };
+                } else if (roll < combinedPower * 0.3) {
+                    return { type: 'hit', hitType: 'triple', power: combinedPower };
+                } else if (roll < combinedPower * 0.5) {
+                    return { type: 'hit', hitType: 'double', power: combinedPower };
+                } else {
+                    return { type: 'hit', hitType: 'single', power: combinedPower };
+                }
+            }
+
+            determineOutType() {
+                const roll = Math.random();
+                if (roll < 0.4) return { type: 'hit', hitType: 'groundout' };
+                else if (roll < 0.8) return { type: 'hit', hitType: 'flyout' };
+                else return { type: 'hit', hitType: 'lineout' };
+            }
+
+            handleHit(result) {
+                const basesToAdvance = {
+                    'single': 1, 'double': 2, 'triple': 3, 'homerun': 4
+                }[result.hitType] || 0;
+
+                this.advanceRunners(basesToAdvance);
+                this.balls = 0;
+                this.strikes = 0;
+                this.nextBatter();
+            }
+
+            handleOut(result) {
+                this.outs++;
+                this.balls = 0;
+                this.strikes = 0;
+                if (this.outs >= 3) this.endInning();
+                else this.nextBatter();
+            }
+
+            handleStrikeout() {
+                this.outs++;
+                this.balls = 0;
+                this.strikes = 0;
+                if (this.outs >= 3) this.endInning();
+                else this.nextBatter();
+            }
+
+            advanceRunners(bases) {
+                const battingTeam = this.inningHalf === 'top' ? this.awayTeam : this.homeTeam;
+                if (!battingTeam || !this.currentBatter) return;
+
+                let runsScored = 0;
+
+                if (this.bases[3] && bases >= 1) {
+                    runsScored++;
+                    this.bases[3] = null;
+                }
+
+                if (this.bases[2]) {
+                    if (bases >= 2) {
+                        runsScored++;
+                        this.bases[2] = null;
+                    } else if (bases === 1) {
+                        this.bases[3] = this.bases[2];
+                        this.bases[2] = null;
+                    }
+                }
+
+                if (this.bases[1]) {
+                    if (bases >= 3) {
+                        runsScored++;
+                    } else if (bases === 2) {
+                        this.bases[3] = this.bases[1];
+                    } else if (bases === 1) {
+                        this.bases[2] = this.bases[1];
+                    }
+                    this.bases[1] = null;
+                }
+
+                if (bases === 4) {
+                    runsScored++;
+                } else if (bases > 0) {
+                    this.bases[bases] = this.currentBatter;
+                }
+
+                battingTeam.score += runsScored;
+            }
+
+            nextBatter() {
+                this.currentBatterIndex++;
+                this.updateCurrentPlayers();
+            }
+
+            endInning() {
+                this.bases = { 1: null, 2: null, 3: null };
+                this.outs = 0;
+                this.balls = 0;
+                this.strikes = 0;
+
+                if (this.inningHalf === 'top') {
+                    this.inningHalf = 'bottom';
+                } else {
+                    this.inning++;
+                    this.inningHalf = 'top';
+
+                    if (this.inning > this.maxInnings) {
+                        this.endGame();
+                        return;
+                    }
+                }
+
+                this.updateCurrentPlayers();
+            }
+
+            endGame() {
+                this.gameOver = true;
+
+                if (this.homeTeam && this.awayTeam) {
+                    if (this.homeTeam.score > this.awayTeam.score) {
+                        this.winner = this.homeTeam;
+                    } else if (this.awayTeam.score > this.homeTeam.score) {
+                        this.winner = this.awayTeam;
+                    } else {
+                        this.gameOver = false;
+                        this.maxInnings++;
+                        return;
+                    }
+                }
+            }
+        }
+
+        // Quick team builder with simplified roster
+        const createQuickTeams = () => {
+            const createTeam = (id, name, shortName, color, players) => ({
+                id, name, shortName, color,
+                score: 0,
+                roster: players,
+                battingOrder: players.map((_, i) => i)
+            });
+
+            const createPlayer = (id, name, nickname, position, batting, power, speed, pitching, fielding) => ({
+                id, name, nickname, position,
+                stats: { batting, power, speed, pitching, fielding }
+            });
+
+            const homeRoster = [
+                createPlayer('p1', 'Sofia Martinez', 'The Cannon', 'P', 7, 6, 7, 10, 9),
+                createPlayer('p2', 'Jamal Jackson', 'J-Rock', 'C', 8, 8, 5, 3, 9),
+                createPlayer('p3', 'Tommy Chen', 'Tank', '1B', 8, 10, 4, 5, 7),
+                createPlayer('p4', 'Maya Patel', 'The Professor', '2B', 10, 5, 7, 6, 8),
+                createPlayer('p5', 'Olivia Kim', 'Rocket', '3B', 7, 9, 6, 5, 7),
+                createPlayer('p6', 'Jasmine Williams', 'Jazz', 'SS', 6, 4, 9, 5, 10),
+                createPlayer('p7', 'Diego Rodriguez', 'Dash', 'LF', 7, 3, 10, 4, 8),
+                createPlayer('p8', 'Marcus Thunder', 'The Bolt', 'CF', 9, 8, 10, 6, 8),
+                createPlayer('p9', 'Lucas O\'Brien', 'Lucky', 'RF', 9, 7, 8, 7, 8)
+            ];
+
+            const awayRoster = [
+                createPlayer('p10', 'Emma Anderson', 'Ice', 'P', 8, 7, 6, 9, 7),
+                createPlayer('p11', 'Carter Murphy', 'Wheels', 'C', 6, 4, 9, 5, 9),
+                createPlayer('p12', 'Andre Johnson', 'The Wall', '1B', 7, 6, 4, 4, 10),
+                createPlayer('p13', 'Lily Chen', 'Spark', '2B', 5, 3, 8, 4, 6),
+                createPlayer('p14', 'Mia Lee', 'Magnet', '3B', 5, 4, 7, 5, 10),
+                createPlayer('p15', 'Alex Santos', 'Ace', 'SS', 9, 8, 8, 9, 9),
+                createPlayer('p16', 'Keisha Robinson', 'Blaze', 'LF', 8, 6, 9, 6, 8),
+                createPlayer('p17', 'Zoe Taylor', 'Zigzag', 'CF', 6, 5, 7, 9, 7),
+                createPlayer('p18', 'Ryan McGrath', 'Cannon', 'RF', 7, 8, 6, 7, 9)
+            ];
+
+            return {
+                homeTeam: createTeam('home', 'Sandlot Sluggers', 'Sluggers', '#FF6B35', homeRoster),
+                awayTeam: createTeam('away', 'Thunder Strikers', 'Thunder', '#FFD700', awayRoster)
+            };
+        };
+
+        // Main Game Class
+        class BuschStadiumGame {
+            constructor() {
+                this.canvas = document.getElementById("renderCanvas");
+                this.engine = new BABYLON.Engine(this.canvas, true, {
+                    preserveDrawingBuffer: true,
+                    stencil: true
+                });
+
+                this.scene = null;
+                this.camera = null;
+                this.gameState = new SimpleGameState();
+                this.autoPlay = false;
+                this.autoPlayTimer = null;
+                this.ballMesh = null;
+                this.playerMeshes = [];
+
+                this.init();
+            }
+
+            async init() {
+                await this.createScene();
+                this.startGame();
+                this.setupInput();
+                this.engine.runRenderLoop(() => {
+                    this.update();
+                    this.scene.render();
+                });
+
+                window.addEventListener("resize", () => {
+                    this.engine.resize();
+                });
+
+                // Hide loading screen
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                }, 1000);
+            }
+
+            async createScene() {
+                const scene = new BABYLON.Scene(this.engine);
+                scene.clearColor = new BABYLON.Color4(0.53, 0.81, 0.92, 1.0);
+
+                // Camera
+                const camera = new BABYLON.ArcRotateCamera(
+                    "camera",
+                    -Math.PI / 2,
+                    Math.PI / 3.5,
+                    400,
+                    new BABYLON.Vector3(0, 0, -50),
+                    scene
+                );
+                camera.lowerRadiusLimit = 150;
+                camera.upperRadiusLimit = 700;
+                camera.lowerBetaLimit = 0.1;
+                camera.upperBetaLimit = Math.PI / 2.1;
+                camera.attachControl(this.canvas, true);
+                camera.wheelPrecision = 50;
+                camera.panningSensibility = 50;
+
+                // Lighting
+                const ambientLight = new BABYLON.HemisphericLight(
+                    "ambient",
+                    new BABYLON.Vector3(0, 1, 0),
+                    scene
+                );
+                ambientLight.intensity = 0.6;
+
+                const sunLight = new BABYLON.DirectionalLight(
+                    "sun",
+                    new BABYLON.Vector3(-0.5, -1, 0.3),
+                    scene
+                );
+                sunLight.intensity = 0.8;
+                sunLight.position = new BABYLON.Vector3(200, 300, -100);
+
+                const shadowGenerator = new BABYLON.ShadowGenerator(2048, sunLight);
+                shadowGenerator.useBlurExponentialShadowMap = true;
+                shadowGenerator.blurKernel = 32;
+
+                // Materials
+                const materials = this.createMaterials(scene);
+
+                // Build stadium
+                this.buildField(scene, materials, shadowGenerator);
+                this.buildSeatingBowl(scene, materials, shadowGenerator);
+                this.buildScoreboard(scene, materials, shadowGenerator);
+                this.buildLights(scene, materials);
+
+                // Ground
+                const ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 2000, height: 2000 }, scene);
+                ground.position.y = -1;
+                const groundMat = new BABYLON.StandardMaterial("groundMat", scene);
+                groundMat.diffuseColor = new BABYLON.Color3(0.35, 0.35, 0.35);
+                ground.material = groundMat;
+                ground.receiveShadows = true;
+
+                // Skybox
+                const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", { size: 5000 }, scene);
+                const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+                skyboxMaterial.backFaceCulling = false;
+                skyboxMaterial.disableLighting = true;
+                skybox.material = skyboxMaterial;
+                skybox.infiniteDistance = true;
+                skyboxMaterial.diffuseColor = new BABYLON.Color3(0.53, 0.81, 0.92);
+                skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+
+                // Fog
+                scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
+                scene.fogDensity = 0.0003;
+                scene.fogColor = new BABYLON.Color3(0.7, 0.8, 0.9);
+
+                // Create game ball
+                this.createGameBall(scene, materials);
+
+                // Create player representations
+                this.createPlayers(scene);
+
+                this.scene = scene;
+                this.camera = camera;
+            }
+
+            createMaterials(scene) {
+                const concreteMat = new BABYLON.StandardMaterial("concrete", scene);
+                concreteMat.diffuseColor = new BABYLON.Color3(0.65, 0.65, 0.65);
+                concreteMat.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+
+                const seatMat = new BABYLON.StandardMaterial("seats", scene);
+                seatMat.diffuseColor = new BABYLON.Color3(0.77, 0.12, 0.23);
+
+                const turfMat = new BABYLON.StandardMaterial("turf", scene);
+                turfMat.diffuseColor = new BABYLON.Color3(0.2, 0.65, 0.2);
+
+                const dirtMat = new BABYLON.StandardMaterial("dirt", scene);
+                dirtMat.diffuseColor = new BABYLON.Color3(0.65, 0.45, 0.3);
+
+                const warningMat = new BABYLON.StandardMaterial("warning", scene);
+                warningMat.diffuseColor = new BABYLON.Color3(0.55, 0.38, 0.25);
+
+                const wallMat = new BABYLON.StandardMaterial("wall", scene);
+                wallMat.diffuseColor = new BABYLON.Color3(0.1, 0.15, 0.35);
+
+                const poleMat = new BABYLON.StandardMaterial("pole", scene);
+                poleMat.diffuseColor = new BABYLON.Color3(0.95, 0.85, 0.1);
+                poleMat.emissiveColor = new BABYLON.Color3(0.2, 0.18, 0.02);
+
+                return { concreteMat, seatMat, turfMat, dirtMat, warningMat, wallMat, poleMat };
+            }
+
+            buildField(scene, materials, shadowGenerator) {
+                // Outfield
+                const outfield = BABYLON.MeshBuilder.CreateDisc("outfield", { radius: 414, tessellation: 64 }, scene);
+                outfield.rotation.x = Math.PI / 2;
+                outfield.position.y = 0.1;
+                outfield.material = materials.turfMat;
+                outfield.receiveShadows = true;
+
+                // Infield
+                const infieldDirt = BABYLON.MeshBuilder.CreateDisc("infield", { radius: 95, tessellation: 64 }, scene);
+                infieldDirt.rotation.x = Math.PI / 2;
+                infieldDirt.position.y = 0.2;
+                infieldDirt.material = materials.dirtMat;
+
+                // Pitcher's mound
+                const mound = BABYLON.MeshBuilder.CreateCylinder("mound", { diameter: 18, height: 1, tessellation: 32 }, scene);
+                mound.position = new BABYLON.Vector3(0, 0.5, -60.5);
+                mound.material = materials.dirtMat;
+
+                // Bases
+                const createBase = (name, x, z) => {
+                    const base = BABYLON.MeshBuilder.CreateBox(name, { width: 1.5, height: 0.4, depth: 1.5 }, scene);
+                    base.position = new BABYLON.Vector3(x, 0.4, z);
+                    const baseMat = new BABYLON.StandardMaterial(name + "Mat", scene);
+                    baseMat.diffuseColor = new BABYLON.Color3(0.95, 0.95, 0.95);
+                    base.material = baseMat;
+                    return base;
+                };
+
+                createBase("first", 63.6, -63.6);
+                createBase("second", 0, -127.3);
+                createBase("third", -63.6, -63.6);
+
+                // Outfield wall
+                const wallPath = [];
+                for (let i = 0; i <= 180; i += 2) {
+                    const angle = (i - 90) * Math.PI / 180;
+                    const radius = i <= 45 || i >= 135 ? 330 : 414;
+                    wallPath.push(new BABYLON.Vector3(
+                        Math.cos(angle) * radius,
+                        0,
+                        -Math.abs(Math.sin(angle) * radius)
+                    ));
+                }
+
+                const wall = BABYLON.MeshBuilder.CreateTube("wall", {
+                    path: wallPath,
+                    radius: 1.5,
+                    tessellation: 8,
+                    cap: BABYLON.Mesh.CAP_ALL
+                }, scene);
+                wall.position.y = 4;
+                wall.material = materials.wallMat;
+                shadowGenerator.addShadowCaster(wall);
+
+                // Foul poles
+                const createFoulPole = (x, z) => {
+                    const pole = BABYLON.MeshBuilder.CreateCylinder("foulPole", { diameter: 0.5, height: 40, tessellation: 16 }, scene);
+                    pole.position = new BABYLON.Vector3(x, 20, z);
+                    pole.material = materials.poleMat;
+                    shadowGenerator.addShadowCaster(pole);
+                };
+
+                createFoulPole(330, 0);
+                createFoulPole(-330, 0);
+            }
+
+            buildSeatingBowl(scene, materials, shadowGenerator) {
+                const createSeatingDeck = (name, innerRadius, outerRadius, height, yPos, rows) => {
+                    for (let row = 0; row < rows; row++) {
+                        const rowRadius = innerRadius + (outerRadius - innerRadius) * (row / rows);
+                        const rowY = yPos + (height / rows) * row;
+                        const rowDepth = (outerRadius - innerRadius) / rows;
+
+                        const seatSection = BABYLON.MeshBuilder.CreateTorus(`${name}_row${row}`, {
+                            diameter: rowRadius * 2,
+                            thickness: rowDepth,
+                            tessellation: 96
+                        }, scene);
+                        seatSection.rotation.x = Math.PI / 2;
+                        seatSection.position.y = rowY;
+                        seatSection.material = materials.seatMat;
+                        shadowGenerator.addShadowCaster(seatSection);
+                    }
+                };
+
+                createSeatingDeck("lowerDeck", 420, 500, 40, 5, 25);
+                createSeatingDeck("clubLevel", 500, 530, 15, 48, 8);
+                createSeatingDeck("upperDeck", 530, 620, 60, 65, 35);
+
+                // Exterior
+                const exterior = BABYLON.MeshBuilder.CreateCylinder("exterior", {
+                    diameter: 650,
+                    height: 130,
+                    tessellation: 96
+                }, scene);
+                exterior.position.y = 65;
+                exterior.material = materials.concreteMat;
+                shadowGenerator.addShadowCaster(exterior);
+
+                const interiorCutout = BABYLON.MeshBuilder.CreateCylinder("cutout", {
+                    diameter: 630,
+                    height: 135,
+                    tessellation: 96
+                }, scene);
+                interiorCutout.position.y = 65;
+
+                const exteriorCSG = BABYLON.CSG.FromMesh(exterior);
+                const cutoutCSG = BABYLON.CSG.FromMesh(interiorCutout);
+                const hollowStadium = exteriorCSG.subtract(cutoutCSG);
+
+                const finalExterior = hollowStadium.toMesh("stadiumShell", materials.concreteMat, scene);
+                shadowGenerator.addShadowCaster(finalExterior);
+
+                interiorCutout.dispose();
+                exterior.dispose();
+            }
+
+            buildScoreboard(scene, materials, shadowGenerator) {
+                const scoreboard = BABYLON.MeshBuilder.CreateBox("scoreboard", { width: 80, height: 40, depth: 5 }, scene);
+                scoreboard.position = new BABYLON.Vector3(0, 85, -420);
+
+                const scoreboardMat = new BABYLON.StandardMaterial("scoreboardMat", scene);
+                scoreboardMat.diffuseColor = new BABYLON.Color3(0.1, 0.1, 0.15);
+                scoreboardMat.emissiveColor = new BABYLON.Color3(0.05, 0.05, 0.08);
+                scoreboard.material = scoreboardMat;
+                shadowGenerator.addShadowCaster(scoreboard);
+
+                const ledPanel = BABYLON.MeshBuilder.CreatePlane("ledPanel", { width: 70, height: 30 }, scene);
+                ledPanel.position = new BABYLON.Vector3(0, 85, -417);
+
+                const ledMat = new BABYLON.StandardMaterial("ledMat", scene);
+                ledMat.diffuseColor = new BABYLON.Color3(0.1, 0.3, 0.1);
+                ledMat.emissiveColor = new BABYLON.Color3(0.05, 0.15, 0.05);
+                ledPanel.material = ledMat;
+            }
+
+            buildLights(scene, materials) {
+                const lightPositions = [
+                    { x: 450, z: -450 },
+                    { x: -450, z: -450 },
+                    { x: 450, z: 100 },
+                    { x: -450, z: 100 }
+                ];
+
+                lightPositions.forEach((pos, idx) => {
+                    const tower = BABYLON.MeshBuilder.CreateCylinder(`lightTower${idx}`, {
+                        diameter: 12,
+                        height: 180,
+                        tessellation: 16
+                    }, scene);
+                    tower.position = new BABYLON.Vector3(pos.x, 90, pos.z);
+                    tower.material = materials.concreteMat;
+
+                    const lightRack = BABYLON.MeshBuilder.CreateBox(`lightRack${idx}`, {
+                        width: 40,
+                        height: 8,
+                        depth: 20
+                    }, scene);
+                    lightRack.position = new BABYLON.Vector3(pos.x, 180, pos.z);
+                    lightRack.material = materials.concreteMat;
+
+                    const stadiumLight = new BABYLON.PointLight(`stadLight${idx}`, new BABYLON.Vector3(pos.x, 180, pos.z), scene);
+                    stadiumLight.intensity = 0.4;
+                    stadiumLight.range = 600;
+                });
+            }
+
+            createGameBall(scene, materials) {
+                const ball = BABYLON.MeshBuilder.CreateSphere("gameBall", { diameter: 3, segments: 16 }, scene);
+                ball.position = new BABYLON.Vector3(0, 1, -60);
+
+                const ballMat = new BABYLON.StandardMaterial("ballMat", scene);
+                ballMat.diffuseColor = new BABYLON.Color3(0.95, 0.95, 0.95);
+                ballMat.specularColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+                ball.material = ballMat;
+
+                this.ballMesh = ball;
+            }
+
+            createPlayers(scene) {
+                // Create batter
+                const batter = BABYLON.MeshBuilder.CreateCylinder("batter", {
+                    diameter: 4,
+                    height: 8,
+                    tessellation: 16
+                }, scene);
+                batter.position = new BABYLON.Vector3(8, 4, 0);
+
+                const batterMat = new BABYLON.StandardMaterial("batterMat", scene);
+                batterMat.diffuseColor = new BABYLON.Color3(0.8, 0.2, 0.2);
+                batter.material = batterMat;
+
+                this.batterMesh = batter;
+
+                // Create pitcher
+                const pitcher = BABYLON.MeshBuilder.CreateCylinder("pitcher", {
+                    diameter: 4,
+                    height: 8,
+                    tessellation: 16
+                }, scene);
+                pitcher.position = new BABYLON.Vector3(0, 4.5, -60);
+
+                const pitcherMat = new BABYLON.StandardMaterial("pitcherMat", scene);
+                pitcherMat.diffuseColor = new BABYLON.Color3(0.2, 0.2, 0.8);
+                pitcher.material = pitcherMat;
+            }
+
+            startGame() {
+                const { homeTeam, awayTeam } = createQuickTeams();
+                this.gameState.initializeGame(homeTeam, awayTeam);
+                this.updateUI();
+            }
+
+            setupInput() {
+                window.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space') {
+                        e.preventDefault();
+                        this.swing();
+                    } else if (e.code === 'KeyA') {
+                        this.toggleAuto();
+                    }
+                });
+
+                // Click swing button area
+                document.getElementById('swingBtn').addEventListener('click', () => {
+                    this.swing();
+                });
+            }
+
+            swing() {
+                if (this.gameState.gameOver) {
+                    this.startGame();
+                    return;
+                }
+
+                const timing = 0.4 + Math.random() * 0.2;
+                const power = 0.5 + Math.random() * 0.5;
+                const result = this.gameState.swingBat(timing, power);
+
+                this.animatePlay(result);
+                this.updateUI();
+
+                if (this.gameState.gameOver) {
+                    this.showGameOver();
+                }
+            }
+
+            toggleAuto() {
+                this.autoPlay = !this.autoPlay;
+
+                if (this.autoPlay) {
+                    document.getElementById('autoBtn').textContent = 'STOP AUTO (A)';
+                    document.getElementById('autoBtn').style.background = 'linear-gradient(135deg, #FF6B35 0%, #C41E3A 100%)';
+
+                    this.autoPlayTimer = setInterval(() => {
+                        if (!this.gameState.gameOver) {
+                            this.swing();
+                        } else {
+                            this.toggleAuto();
+                        }
+                    }, 1500);
+                } else {
+                    document.getElementById('autoBtn').textContent = 'AUTO-PLAY (A)';
+                    document.getElementById('autoBtn').style.background = 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)';
+
+                    if (this.autoPlayTimer) {
+                        clearInterval(this.autoPlayTimer);
+                        this.autoPlayTimer = null;
+                    }
+                }
+            }
+
+            animatePlay(result) {
+                // Animate ball based on result
+                if (result.hitType) {
+                    const hitMessages = {
+                        'homerun': '💥 HOME RUN!!!',
+                        'triple': '⚡ TRIPLE!',
+                        'double': '✨ DOUBLE!',
+                        'single': '✓ Single',
+                        'flyout': '✗ Fly Out',
+                        'groundout': '✗ Ground Out',
+                        'lineout': '✗ Line Out'
+                    };
+                    this.showPlayResult(hitMessages[result.hitType] || result.hitType);
+
+                    // Animate ball
+                    if (['homerun', 'triple', 'double'].includes(result.hitType)) {
+                        this.animateBall(result.hitType);
+                    }
+                } else {
+                    const messages = {
+                        'strike': '⚾ Strike!',
+                        'ball': '○ Ball',
+                        'foul': '⚠ Foul Ball'
+                    };
+                    this.showPlayResult(messages[result.type] || '');
+                }
+            }
+
+            animateBall(hitType) {
+                const startPos = this.ballMesh.position.clone();
+                const endPos = new BABYLON.Vector3(
+                    (Math.random() - 0.5) * 200,
+                    30,
+                    -150 - Math.random() * 150
+                );
+
+                if (hitType === 'homerun') {
+                    endPos.y = 50;
+                    endPos.z = -400;
+                }
+
+                const duration = 2000;
+                const startTime = Date.now();
+
+                const animate = () => {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    this.ballMesh.position = BABYLON.Vector3.Lerp(startPos, endPos, progress);
+                    this.ballMesh.position.y += Math.sin(progress * Math.PI) * 40;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        setTimeout(() => {
+                            this.ballMesh.position = startPos;
+                        }, 500);
+                    }
+                };
+
+                animate();
+            }
+
+            showPlayResult(message) {
+                const resultEl = document.getElementById('playResult');
+                resultEl.textContent = message;
+                resultEl.classList.add('show');
+
+                setTimeout(() => {
+                    resultEl.classList.remove('show');
+                }, 2000);
+            }
+
+            showGameOver() {
+                const messageEl = document.getElementById('gameMessage');
+                const winner = this.gameState.winner;
+
+                messageEl.innerHTML = `
+                    <h2>GAME OVER!</h2>
+                    <p>${winner.name} WIN!</p>
+                    <p>Final Score: ${this.gameState.awayTeam.score} - ${this.gameState.homeTeam.score}</p>
+                    <p style="margin-top: 20px; font-size: 18px;">Click SWING to play again</p>
+                `;
+                messageEl.classList.add('show');
+
+                setTimeout(() => {
+                    messageEl.classList.remove('show');
+                }, 5000);
+            }
+
+            updateUI() {
+                const gs = this.gameState;
+
+                // Scoreboard
+                document.getElementById('awayTeamName').textContent = gs.awayTeam.shortName;
+                document.getElementById('homeTeamName').textContent = gs.homeTeam.shortName;
+                document.getElementById('awayScore').textContent = gs.awayTeam.score;
+                document.getElementById('homeScore').textContent = gs.homeTeam.score;
+                document.getElementById('inningDisplay').textContent = `${gs.inningHalf.toUpperCase()} ${gs.inning}`;
+
+                // Count
+                document.getElementById('ballsCount').textContent = gs.balls;
+                document.getElementById('strikesCount').textContent = gs.strikes;
+                document.getElementById('outsCount').textContent = gs.outs;
+
+                // Batter info
+                if (gs.currentBatter) {
+                    document.getElementById('batterName').textContent = gs.currentBatter.name;
+                    document.getElementById('batterNickname').textContent = `"${gs.currentBatter.nickname}"`;
+                    document.getElementById('batterStats').innerHTML = `
+                        <div class="stat-item"><span>Batting:</span><span>${gs.currentBatter.stats.batting}</span></div>
+                        <div class="stat-item"><span>Power:</span><span>${gs.currentBatter.stats.power}</span></div>
+                        <div class="stat-item"><span>Speed:</span><span>${gs.currentBatter.stats.speed}</span></div>
+                        <div class="stat-item"><span>Fielding:</span><span>${gs.currentBatter.stats.fielding}</span></div>
+                    `;
+                }
+
+                // Bases
+                document.getElementById('base1').classList.toggle('occupied', !!gs.bases[1]);
+                document.getElementById('base2').classList.toggle('occupied', !!gs.bases[2]);
+                document.getElementById('base3').classList.toggle('occupied', !!gs.bases[3]);
+            }
+
+            update() {
+                // Update game logic here if needed
+            }
+        }
+
+        // Start the game when ready
+        const game = new BuschStadiumGame();
+    </script>
+</body>
+</html>
