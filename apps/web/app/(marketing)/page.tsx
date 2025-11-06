@@ -51,6 +51,8 @@ export default function HomePage() {
               alt="Abstract baseball field visualization"
               priority
               sizes="(max-width: 768px) 100vw, 960px"
+              width={960}
+              height={540}
               style={{ width: '100%', height: 'auto' }}
             />
           </div>
