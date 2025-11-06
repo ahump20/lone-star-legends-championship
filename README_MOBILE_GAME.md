@@ -493,12 +493,16 @@ For questions, feedback, or support:
 
 ---
 
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines on how to get involved.
+
 <div align="center">
 
 **⚾ Play Ball! ⚾**
 
 *Lone Star Legends Championship - Where Every Game is a Home Run*
 
-[Play Now](#) | [Learn More](./docs/MOBILE_GAME_DESIGN.md) | [Contribute](#contributing)
+[Play Now (Coming Soon)](#) | [Learn More](./docs/MOBILE_GAME_DESIGN.md) | [Contribute](#contributing)
 
 </div>
