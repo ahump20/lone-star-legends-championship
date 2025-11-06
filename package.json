@@ -10,8 +10,9 @@
     "build": "echo 'Building Blaze Intelligence platform...' && npm run build:games && npm run validate",
     "build:brand": "node scripts/build-brand-css.mjs",
     "build:og": "npm run build:brand && echo 'OG Remaster build complete'",
-    "build:games": "npm run build:phaser && npm run build:og && echo '✅ All games built successfully'",
+    "build:games": "npm run build:phaser && npm run build:og && npm run build:stadium && echo '✅ All games built successfully'",
     "build:phaser": "mkdir -p public/games && cp -r apps/games/phaser-bbp-web public/games/bbp-web && echo '✅ Phaser game built'",
+    "build:stadium": "node apps/games/three-busch-stadium/scripts/build.mjs",
     "build:demo": "node apps/og-remaster/build-demo.js",
     "demo": "npm run build:demo && npx http-server apps/og-remaster -p 8080 -o demo.html",
     "dev:og": "npm run build:brand && echo 'OG Remaster ready for development'",
@@ -60,6 +61,7 @@
     "ioredis": "^5.7.0",
     "openapi-typescript": "^7.9.1",
     "pg": "^8.16.3",
+    "three": "^0.160.0",
     "ws": "^8.18.3",
     "zod": "^4.1.1"
   },
@@ -68,6 +70,7 @@
     "@babel/preset-env": "^7.23.0",
     "@biomejs/biome": "^2.2.2",
     "@types/node": "^24.3.0",
+    "@types/three": "^0.181.0",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-jest": "^27.4.0",
@@ -83,7 +86,10 @@
   },
   "jest": {
     "testEnvironment": "jsdom",
-    "testMatch": ["**/tests/**/*.test.js", "**/__tests__/**/*.test.js"],
+    "testMatch": [
+      "**/tests/**/*.test.js",
+      "**/__tests__/**/*.test.js"
+    ],
     "collectCoverageFrom": [
       "js/**/*.js",
       "games/**/*.js",

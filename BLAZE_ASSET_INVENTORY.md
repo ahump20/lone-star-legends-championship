@@ -37,6 +37,7 @@
 - ✅ `proper-baseball-game.html` - **MERGE** - Game implementation
 - ✅ `lone-star-legends-game.html` - **MERGE** - Comprehensive game
 - ✅ `enhanced-stadium-demo.html` - **KEEP** - Stadium visualization
+- ✅ `public/games/busch-stadium-ii/` - **KEEP** - Hyperrealistic Busch Stadium II Three.js environment
 
 #### **Client & Business Tools**
 - ✅ `client-onboarding-enhanced.html` - **KEEP** - Client onboarding system

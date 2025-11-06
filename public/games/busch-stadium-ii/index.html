@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BlazeSportsIntel · Busch Stadium II Hyperrealistic Simulation</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/examples/jsm/controls/OrbitControls.js": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js",
+          "three/examples/jsm/objects/Sky.js": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/objects/Sky.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main class="stadium-shell">
+      <canvas id="stadium-canvas" aria-label="3D recreation of Busch Stadium II"></canvas>
+      <section class="hud" aria-live="polite">
+        <header class="hud__header">
+          <div class="hud__brand">
+            <span class="hud__badge">BlazeSportsIntel</span>
+            <h1>Busch Stadium II · Hyperrealistic Render</h1>
+            <p>Procedural geometry, volumetric lighting, live scoreboard overlays</p>
+          </div>
+          <div class="hud__time" id="hud-time">Loading atmosphere…</div>
+        </header>
+        <section class="hud__scoreboard" id="hud-scoreboard"></section>
+        <section class="hud__telemetry">
+          <div class="hud__metric">
+            <span class="hud__metric-label">Pitch Velocity</span>
+            <span class="hud__metric-value" id="hud-velocity">-- mph</span>
+          </div>
+          <div class="hud__metric">
+            <span class="hud__metric-label">Crowd Fill</span>
+            <span class="hud__metric-value" id="hud-crowd">--%</span>
+          </div>
+          <div class="hud__metric">
+            <span class="hud__metric-label">Lighting</span>
+            <span class="hud__metric-value" id="hud-lighting">-- lux</span>
+          </div>
+        </section>
+      </section>
+    </main>
+    <script type="module">
+      import { initializeBuschStadium } from './dist/index.js';
+
+      const canvas = document.getElementById('stadium-canvas');
+      if (!(canvas instanceof HTMLCanvasElement)) {
+        throw new Error('Stadium canvas missing from document');
+      }
+
+      const hudTime = document.getElementById('hud-time');
+      const hudVelocity = document.getElementById('hud-velocity');
+      const hudCrowd = document.getElementById('hud-crowd');
+      const hudLighting = document.getElementById('hud-lighting');
+      const hudScoreboard = document.getElementById('hud-scoreboard');
+
+      const inningTemplate = (label, away, home) => `
+        <div class="hud__inning">
+          <span class="hud__inning-label">${label}</span>
+          <span class="hud__inning-away">${away}</span>
+          <span class="hud__inning-home">${home}</span>
+        </div>
+      `;
+
+      const renderScoreboard = (data) => {
+        const innings = Math.max(data.away.innings.length, data.home.innings.length);
+        let rows = '';
+        for (let i = 0; i < innings; i += 1) {
+          rows += inningTemplate(
+            i + 1,
+            data.away.innings[i] ?? 0,
+            data.home.innings[i] ?? 0,
+          );
+        }
+        hudScoreboard.innerHTML = `
+          <div class="hud__clubs">
+            <div class="hud__club">
+              <span class="hud__club-label">Visitors</span>
+              <span class="hud__club-name">${data.awayTeam}</span>
+              <span class="hud__club-total">${data.away.totals}</span>
+            </div>
+            <div class="hud__club hud__club--home">
+              <span class="hud__club-label">Home</span>
+              <span class="hud__club-name">${data.homeTeam}</span>
+              <span class="hud__club-total">${data.home.totals}</span>
+            </div>
+          </div>
+          <div class="hud__innings">
+            ${rows}
+          </div>
+          <div class="hud__count">
+            <span>Balls ${data.count.balls}</span>
+            <span>Strikes ${data.count.strikes}</span>
+            <span>Outs ${data.count.outs}</span>
+          </div>
+        `;
+      };
+
+      const baseScoreboard = {
+        awayTeam: 'New York NL',
+        homeTeam: 'St. Louis',
+        away: { innings: [0, 0, 2, 0, 1], totals: 3 },
+        home: { innings: [1, 0, 0, 3, 0], totals: 4 },
+        count: { balls: 1, strikes: 2, outs: 1 },
+        pitchSpeedMph: 98.6,
+        batter: 'L. Brock',
+        pitcher: 'B. Gibson',
+        notes: '1968 Fall Classic · BlazeSportsIntel projection layer',
+      };
+
+      const instance = initializeBuschStadium(canvas, {
+        timeOfDay: 'goldenHour',
+        scoreboard: baseScoreboard,
+        lighting: { intensity: 1.35, color: '#fff7dd', spread: 0.75 },
+        crowd: { density: 0.92, palette: ['#b5121b', '#0f172a', '#ff9505', '#2563eb'] },
+        enableDowntownBackdrop: true,
+        enableArch: true,
+        animateAtmosphere: true,
+      });
+
+      renderScoreboard(baseScoreboard);
+      hudCrowd.textContent = `${Math.round(92)}%`;
+      hudVelocity.textContent = `${baseScoreboard.pitchSpeedMph.toFixed(1)} mph`;
+      hudLighting.textContent = `${(instance.renderer.toneMappingExposure * 950).toFixed(0)} lux`;
+
+      const updateAtmosphere = () => {
+        const now = new Date();
+        hudTime.textContent = now.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+      };
+      updateAtmosphere();
+      setInterval(updateAtmosphere, 1000 * 30);
+
+      let inning = 6;
+      setInterval(() => {
+        const noise = Math.random() * 0.8;
+        const nextScoreboard = {
+          ...baseScoreboard,
+          pitchSpeedMph: 95 + Math.random() * 6,
+          count: {
+            balls: Math.floor(Math.random() * 3),
+            strikes: Math.floor(Math.random() * 3),
+            outs: Math.floor(Math.random() * 3),
+          },
+          away: {
+            ...baseScoreboard.away,
+            innings: [...baseScoreboard.away.innings, Math.round(Math.random())],
+            totals: baseScoreboard.away.totals + Math.round(Math.random()),
+          },
+          home: {
+            ...baseScoreboard.home,
+            innings: [...baseScoreboard.home.innings, Math.round(Math.random())],
+            totals: baseScoreboard.home.totals + Math.round(Math.random()),
+          },
+          notes: `Inning ${inning} · Crowd energy ${(noise * 100).toFixed(0)}%`,
+        };
+        inning += 1;
+        renderScoreboard(nextScoreboard);
+        hudVelocity.textContent = `${nextScoreboard.pitchSpeedMph.toFixed(1)} mph`;
+        hudCrowd.textContent = `${Math.round(90 + noise * 10)}%`;
+        hudLighting.textContent = `${(instance.renderer.toneMappingExposure * (900 + noise * 120)).toFixed(0)} lux`;
+        instance.updateOptions({
+          scoreboard: nextScoreboard,
+          crowd: { density: 0.92 + noise * 0.04, palette: ['#b5121b', '#0f172a', '#ffb703', '#22d3ee'] },
+          lighting: { intensity: 1.2 + noise * 0.2, color: '#fff0d8', spread: 0.8 },
+        });
+      }, 35000);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,189 @@
+:root {
+  color-scheme: dark;
+  --hud-bg: rgba(6, 13, 23, 0.72);
+  --hud-border: rgba(148, 163, 184, 0.25);
+  --hud-highlight: #ffb703;
+  --hud-text: #e2e8f0;
+  --hud-muted: #94a3b8;
+  --hud-accent: #b5121b;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 20%, #0f172a 0%, #020617 75%);
+  color: var(--hud-text);
+  display: flex;
+  align-items: stretch;
+}
+
+.stadium-shell {
+  position: relative;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 2fr minmax(320px, 400px);
+  gap: 0;
+  overflow: hidden;
+}
+
+#stadium-canvas {
+  width: 100%;
+  height: 100vh;
+  display: block;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0.95) 100%);
+}
+
+.hud {
+  backdrop-filter: blur(16px);
+  background: var(--hud-bg);
+  border-left: 1px solid var(--hud-border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hud__header h1 {
+  font-size: 1.5rem;
+  margin: 4px 0;
+}
+
+.hud__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(181, 18, 27, 0.2);
+  color: #fca5a5;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hud__time {
+  font-variant-numeric: tabular-nums;
+  color: var(--hud-muted);
+}
+
+.hud__scoreboard {
+  display: grid;
+  gap: 16px;
+  border: 1px solid var(--hud-border);
+  border-radius: 16px;
+  padding: 16px;
+  background: rgba(2, 6, 23, 0.6);
+}
+
+.hud__clubs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.hud__club {
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  gap: 4px;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.hud__club--home {
+  border-color: rgba(37, 99, 235, 0.4);
+}
+
+.hud__club-label {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: var(--hud-muted);
+}
+
+.hud__club-total {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--hud-highlight);
+}
+
+.hud__innings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  gap: 8px;
+}
+
+.hud__inning {
+  display: grid;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(30, 41, 59, 0.35);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud__inning-label {
+  color: var(--hud-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.hud__count {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.5);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.hud__telemetry {
+  display: grid;
+  gap: 12px;
+}
+
+.hud__metric {
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  gap: 4px;
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.hud__metric-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hud-muted);
+}
+
+.hud__metric-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+  .stadium-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .hud {
+    position: absolute;
+    inset: 0;
+    width: min(420px, 100%);
+    margin: 16px;
+    border-radius: 20px;
+  }
+
+  #stadium-canvas {
+    height: 100vh;
+  }
+}
