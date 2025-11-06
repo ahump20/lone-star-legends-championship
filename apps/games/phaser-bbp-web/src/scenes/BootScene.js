@@ -45,13 +45,10 @@ class BootScene extends Phaser.Scene {
     });
 
     // Load assets
-    // Since we don't have actual image files, we'll generate them in create()
-    // For a production game, these would be actual sprite files:
+    // TODO: Replace procedural graphics with actual sprite files in production.
     // this.load.image('batter', 'assets/sprites/batter.png');
     // this.load.image('pitcher', 'assets/sprites/pitcher.png');
     // this.load.image('ball', 'assets/sprites/ball.png');
-
-    // Placeholder: We'll generate graphics procedurally
   }
 
   create() {
