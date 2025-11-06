@@ -6,7 +6,7 @@
 
 *Completely original IP - No copyright infringement*
 
-[Play Game](#) | [Documentation](./docs/MOBILE_GAME_DESIGN.md) | [Implementation Guide](./docs/IMPLEMENTATION_GUIDE.md)
+[Documentation](./docs/MOBILE_GAME_DESIGN.md) | [Implementation Guide](./docs/IMPLEMENTATION_GUIDE.md)
 
 </div>
 
