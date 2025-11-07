@@ -440,7 +440,5 @@ class FullGameEngine {
     }
 }
 
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = FullGameEngine;
-}
+// Export for ES modules
+export default FullGameEngine;

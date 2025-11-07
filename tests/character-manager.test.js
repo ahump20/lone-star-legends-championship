@@ -2,6 +2,8 @@
  * Tests for CharacterManager
  */
 
+import CharacterManager from '../js/character-manager.js';
+
 // Mock localStorage
 const localStorageMock = {
     store: {},
@@ -19,8 +21,6 @@ const localStorageMock = {
     },
 };
 global.localStorage = localStorageMock;
-
-const CharacterManager = require('../js/character-manager.js');
 
 describe('CharacterManager', () => {
     let manager;

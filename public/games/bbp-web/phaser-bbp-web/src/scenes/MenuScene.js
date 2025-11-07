@@ -193,7 +193,7 @@ This is an ORIGINAL game created for
 Blaze Sports Intelligence.
 
 ⚖️ NO IP INFRINGEMENT
-• No Backyard Baseball assets used
+• No third-party licensed content
 • All characters and assets are original
 • Generic baseball mechanics only
 
