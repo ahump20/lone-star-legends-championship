@@ -323,7 +323,5 @@ class CharacterManager {
     }
 }
 
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = CharacterManager;
-}
+// Export for ES modules
+export default CharacterManager;

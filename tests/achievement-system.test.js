@@ -2,7 +2,7 @@
  * Tests for AchievementSystem
  */
 
-const AchievementSystem = require('../js/achievement-system.js');
+import AchievementSystem from '../js/achievement-system.js';
 
 // Mock localStorage
 global.localStorage = {

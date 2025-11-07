@@ -430,7 +430,5 @@ class AchievementSystem {
     }
 }
 
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = AchievementSystem;
-}
+// Export for ES modules
+export default AchievementSystem;

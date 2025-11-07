@@ -2,7 +2,7 @@
  * Tests for FullGameEngine
  */
 
-const FullGameEngine = require('../js/full-game-engine.js');
+import FullGameEngine from '../js/full-game-engine.js';
 
 describe('FullGameEngine', () => {
     let engine;
